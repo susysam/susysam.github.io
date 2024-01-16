@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <style>
+    body {
+      background-color: #292929; /* Dark background */
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      font-family: sans-serif;
+    }
+
+    form {
+      background-color: #171717; /* Darker container background */
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      color: white;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 15px;
+      box-sizing: border-box;
+      background-color: #292929; /* Dark background for input */
+      color: white;
+      border: 1px solid #6C0BA9; /* Purple border */
+    }
+
+    button {
+      background-color: #6C0BA9; /* Purple */
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 5px;
+    }
+
+    button:hover {
+      background-color: #4F0672; /* Darker purple on hover */
+    }
+
+    .success-message {
+      color: #4CAF50; /* Green color for success */
+      font-size: 24px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    .circle-animation {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: black;
+      animation: colorChange 2s forwards;
+    }
+
+    @keyframes colorChange {
+      to {
+        background-color: white;
+      }
+    }
+
+    .error-message {
+      color: #FF0000; /* Red color for error */
+      font-size: 24px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    .wrong-animation {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: #FF0000; /* Red color */
+      animation: colorChangeWrong 2s forwards;
+    }
+
+    @keyframes colorChangeWrong {
+      to {
+        background-color: white;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <form id="loginForm">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" placeholder="Username" required>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" placeholder="Password" required>
+
+    <button type="button" onclick="attemptLogin()">Login</button>
+  </form>
+
+  <div id="successContainer" class="success-message" style="display: none;">Correct ✅</div>
+  <div id="wrongContainer" class="error-message" style="display: none;">Wrong ❌</div>
+  <div id="circleAnimation" class="circle-animation" style="display: none;"></div>
+  <div id="wrongAnimation" class="wrong-animation" style="display: none;"></div>
+
+  <script>
+    function attemptLogin() {
+      var username = document.getElementById("username").value;
+      var password = document.getElementById("password").value;
+
+      // Your validation logic here
+      if ((username === "Leo" && password === "2024") || (username === "Robloxislife" && password === "FriedChicken")) {
+        document.getElementById("circleAnimation").style.display = "block";
+        setTimeout(function () {
+          document.getElementById("circleAnimation").style.display = "none";
+          document.getElementById("successContainer").style.display = "block";
+          setTimeout(function () {
+            document.getElementById("successContainer").style.display = "none";
+            window.location.href = "https://freeleo2.github.io/start27.html";
+          }, 3000); // 3 seconds delay
+        }, 2000); // 2 seconds delay
+      } else {
+        document.getElementById("wrongAnimation").style.display = "block";
+        setTimeout(function () {
+          document.getElementById("wrongAnimation").style.display = "none";
+          document.getElementById("wrongContainer").style.display = "block";
+          setTimeout(function () {
+            document.getElementById("wrongContainer").style.display = "none";
+          }, 3000); // 3 seconds delay
+        }, 2000); // 2 seconds delay
+      }
+    }
+  </script>
+
+</body>
+
+</html>

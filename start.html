@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leo's Arcade</title>
+    <link rel="icon" href="https://user-images.githubusercontent.com/41707197/56105496-bc44bd80-5ef9-11e9-8f65-859cda5d8941.png" type="image/png">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 20px;
+            background-color: rgba(0, 0, 0, 0.7); /* Transparent black background */
+            color: #fff;
+        }
+
+        .nav {
+            background-color: #171717;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 18px;
+            font-size: 18px;
+            text-align: center; /* Center the text */
+        }
+
+        .nav a {
+            margin: 0 15px;
+            color: white;
+            transition: 0.2s;
+            padding: 8px 13px;
+            text-decoration: none;
+        }
+
+        .nav a:hover {
+            background-color: #6C0BA9;
+            border-radius: 27px;
+        }
+
+        .entertainment-button {
+            padding: 10px;
+            background-color: transparent;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none; /* Added this line to remove default link underline */
+        }
+
+        h1.logo {
+            font-family: 'Arial', sans-serif; /* Use Arial font for the logo */
+            color: black;
+            font-size: 69px;
+            background: linear-gradient(45deg,#FF0000,#FF7F00,#FFFF00,#00FF00,#0000FF,#04F26C,#6500FF,#04F297);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 400% 400%;
+            animation: rainbowanim 10s ease infinite;
+        }
+
+        @keyframes rainbowanim { 
+            0%{background-position:0% 50%}
+            50%{background-position:100% 50%}
+            100%{background-position:0% 50%}
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="nav">
+        <h1 class="logo">Leo's Arcade</h1>
+        <a href="game.html">Game</a>
+        <a href="proxy.html">Proxy</a>
+        <a href="https://movie-web.app/search/movie">Movie</a>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdS1tZ-sCsBZqEYHwDQj8181D5IH3U8UvEdopmaqX_CQ85NSw/viewform">Help</a>
+    </div>
+
+</body>
+
+</html>
