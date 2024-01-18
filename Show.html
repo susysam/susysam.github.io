@@ -1,1 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shows</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 20px;
+            background-color: #333;
+            color: #fff;
+        }
+
+        h1 {
+            color: #ffcc00;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .button {
+            margin: 20px;
+            padding: 20px;
+            background-color: #444;
+            border: 5px solid #fff;
+            border-radius: 15px;
+            text-decoration: none;
+            color: #fff;
+            transition: transform .2s ease-in-out;
+            display: inline-block;
+        }
+
+        .button:hover {
+            transform: scale(1.1);
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <h1>Explore Exciting Shows</h1>
+
+    <!-- Button Container -->
+    <div class="button-container">
+        <!-- Movies/Shows Button with Popup -->
+        <button class="button" onclick="showNoLinkPopup('Movies/Shows')">Movies/Shows</button>
+
+        <!-- Anime Button -->
+        <a href="https://kaido.to/home" class="button">
+            <h2>Anime</h2>
+            <p>Explore Anime</p>
+        </a>
+    </div>
+
+    <!-- JavaScript for Popup -->
+    <script>
+        function showNoLinkPopup(category) {
+            alert('No link available for ' + category);
+        }
+    </script>
+
+</body>
+
+</html>
