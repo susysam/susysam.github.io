@@ -2,103 +2,69 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      text-align: center;
-      margin: 20px;
-      background-color: #333;
-      color: #fff;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Games</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 20px;
+            background-color: #333;
+            color: #fff;
+        }
 
-    h1 {
-      margin-bottom: 30px;
-      color: #ffcc00;
-    }
+        h1 {
+            color: #ffcc00;
+        }
 
-    .container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
-    }
+        .game-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
 
-    .button {
-      width: 140px;
-      height: 50px;
-      font-size: 16px;
-      border-radius: 15px;
-      border: 5px solid #fff;
-      padding: 10px;
-      background: #ffcc00;
-      font-family: 'Trebuchet MS';
-      cursor: pointer;
-      transition: transform .2s ease-in-out;
-      text-decoration: none;
-      display: inline-block;
-      color: #000;
-      margin: 10px;
-    }
+        .game {
+            margin: 20px;
+            padding: 20px;
+            background-color: #444;
+            border: 5px solid #fff;
+            border-radius: 15px;
+            text-decoration: none;
+            color: #fff;
+            transition: transform .2s ease-in-out;
+            display: inline-block;
+        }
 
-    .button:hover {
-      transform: scale(1.1);
-    }
+        .game:hover {
+            transform: scale(1.1);
+        }
 
-    .arcade-machine {
-      width: 250px;
-      height: 350px;
-      background-color: #444;
-      border: 5px solid #fff;
-      border-radius: 15px;
-      margin: 20px;
-      display: inline-block;
-      padding: 20px;
-    }
-
-    .arcade-machine h2 {
-      color: #ffcc00;
-    }
-
-    .arcade-machine p {
-      color: #ccc;
-    }
-
-    .backup-button {
-      width: 140px;
-      height: 30px;
-      font-size: 14px;
-      border-radius: 10px;
-      border: 3px solid #fff;
-      padding: 5px;
-      background: #ffcc00;
-      font-family: 'Trebuchet MS';
-      cursor: pointer;
-      transition: transform .2s ease-in-out;
-      text-decoration: none;
-      display: inline-block;
-      color: #000;
-      margin-top: 10px;
-    }
-
-    .backup-button:hover {
-      transform: scale(1.1);
-    }
-  </style>
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+    </style>
 </head>
 
 <body>
 
-  <h1>Welcome to the Games Section</h1>
+    <h1>Explore Exciting Games</h1>
 
-  <!-- Updated Buttons in a Single Container -->
-  <div class="container">
-    <button class="button" onclick="window.location.href='https://a1rdrop.netlify.app/games'">A1R</button>
-    <button class="button" onclick="window.location.href='fortnite.html'">Fortnite</button>
-  </div>
+    <!-- Game Section -->
+    <div class="game-container">
+        <a href="fortnite.html" class="game">
+            <h2>Fortnite</h2>
+            <img src="https://cdn2.unrealengine.com/blade-2560x1440-2560x1440-d4e556fb8166.jpg" alt="Fortnite Image">
+            <p>A thrilling battle royale experience!</p>
+            <p>Play Now</p>
+        </a>
 
-  <p style="margin-top: 20px;">Experience the cozy vibes at Leo's Arcade 😎</p>
+        <!-- Add more games here if needed -->
+
+    </div>
 
 </body>
 
