@@ -56,40 +56,32 @@
       background-color: #4F0672; /* Darker purple on hover */
     }
 
-    .success-message {
-      color: #4CAF50; /* Green color for success */
+    .success-message, .error-message {
       font-size: 24px;
       font-weight: bold;
       margin-top: 20px;
     }
 
-    .circle-animation {
+    .circle-animation, .wrong-animation {
       width: 20px;
       height: 20px;
       border-radius: 50%;
       background-color: black;
+    }
+
+    .circle-animation {
       animation: colorChange 2s forwards;
+    }
+
+    .wrong-animation {
+      background-color: #FF0000; /* Red color */
+      animation: colorChangeWrong 2s forwards;
     }
 
     @keyframes colorChange {
       to {
         background-color: white;
       }
-    }
-
-    .error-message {
-      color: #FF0000; /* Red color for error */
-      font-size: 24px;
-      font-weight: bold;
-      margin-top: 20px;
-    }
-
-    .wrong-animation {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background-color: #FF0000; /* Red color */
-      animation: colorChangeWrong 2s forwards;
     }
 
     @keyframes colorChangeWrong {
@@ -131,8 +123,8 @@
           setTimeout(function () {
             document.getElementById("successContainer").style.display = "none";
             window.location.href = "https://freeleo2.github.io/start27.html";
-          }, 3000); // 3 seconds delay
-        }, 2000); // 2 seconds delay
+          }, 2000); // 2 seconds delay
+        }, 0); // No delay
       } else {
         document.getElementById("wrongAnimation").style.display = "block";
         setTimeout(function () {
@@ -140,8 +132,8 @@
           document.getElementById("wrongContainer").style.display = "block";
           setTimeout(function () {
             document.getElementById("wrongContainer").style.display = "none";
-          }, 3000); // 3 seconds delay
-        }, 2000); // 2 seconds delay
+          }, 2000); // 2 seconds delay
+        }, 0); // No delay
       }
     }
   </script>
