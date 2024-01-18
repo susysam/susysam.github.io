@@ -11,70 +11,41 @@
             font-family: 'Arial', sans-serif;
             text-align: center;
             margin: 20px;
-            background-color: rgba(0, 0, 0, 0.7); /* Transparent black background */
+            background-color: #171717; /* Dark background */
             color: #fff;
         }
 
-        .nav {
-            background-color: #171717;
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 80vh;
+        }
+
+        .button {
+            padding: 15px 30px;
+            font-size: 24px;
+            background-color: #6C0BA9; /* Purple */
             color: white;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 18px;
-            font-size: 18px;
-            text-align: center; /* Center the text */
-        }
-
-        .nav a {
-            margin: 0 15px;
-            color: white;
-            transition: 0.2s;
-            padding: 8px 13px;
-            text-decoration: none;
-        }
-
-        .nav a:hover {
-            background-color: #6C0BA9;
-            border-radius: 27px;
-        }
-
-        .entertainment-button {
-            padding: 10px;
-            background-color: transparent;
-            color: #fff;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            text-decoration: none; /* Added this line to remove default link underline */
+            text-decoration: none;
+            margin-bottom: 20px;
         }
 
-        h1.logo {
-            font-family: 'Arial', sans-serif; /* Use Arial font for the logo */
-            color: black;
-            font-size: 69px;
-            background: linear-gradient(45deg,#FF0000,#FF7F00,#FFFF00,#00FF00,#0000FF,#04F26C,#6500FF,#04F297);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-size: 400% 400%;
-            animation: rainbowanim 10s ease infinite;
-        }
-
-        @keyframes rainbowanim { 
-            0%{background-position:0% 50%}
-            50%{background-position:100% 50%}
-            100%{background-position:0% 50%}
+        .button:hover {
+            background-color: #4F0672; /* Darker purple on hover */
         }
     </style>
 </head>
 
 <body>
 
-    <div class="nav">
-        <h1 class="logo">Home</h1>
-        <a href="game.html">Game</a>
-        <a href="class.html">School</a>
+    <div class="button-container">
+        <a href="game.html" class="button">Game</a>
+        <a href="class.html" class="button">School</a>
     </div>
 
 </body>
