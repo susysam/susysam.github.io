@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shows</title>
+    <title>Welcome</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -18,54 +18,43 @@
             color: #ffcc00;
         }
 
-        .button-container {
+        .link-container {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            flex-wrap: wrap;
+            margin-top: 20px;
         }
 
-        .button {
-            margin: 20px;
-            padding: 20px;
+        .link {
+            margin: 10px;
+            padding: 10px;
             background-color: #444;
-            border: 5px solid #fff;
-            border-radius: 15px;
+            border: 3px solid #fff;
+            border-radius: 10px;
             text-decoration: none;
             color: #fff;
-            transition: transform .2s ease-in-out;
             display: inline-block;
         }
 
-        .button:hover {
-            transform: scale(1.1);
+        .link:hover {
+            background-color: #6C0BA9;
         }
-
     </style>
 </head>
 
 <body>
 
-    <h1>Explore Exciting Shows</h1>
+    <h1>Welcome to the Website</h1>
 
-    <!-- Button Container -->
-    <div class="button-container">
-        <!-- Movies/Shows Button with Popup -->
-        <button class="button" onclick="showNoLinkPopup('Movies/Shows')">Movies/Shows</button>
-
-        <!-- Anime Button -->
-        <a href="https://kaido.to/home" class="button">
-            <h2>Anime</h2>
-            <p>Explore Anime</p>
-        </a>
+    <!-- Link Container -->
+    <div class="link-container">
+        <a href="https://trainbrain.sbs" class="link">https://trainbrain.sbs</a>
+        <a href="https://mobile.surfskip.com/app" class="link">https://mobile.surfskip.com/app</a>
+        <a href="https://kappa.y.glenwaverleychurches.org" class="link">https://kappa.y.glenwaverleychurches.org</a>
+        <a href="https://have.towerchile.cl" class="link">https://have.towerchile.cl</a>
     </div>
 
-    <!-- JavaScript for Popup -->
-    <script>
-        function showNoLinkPopup(category) {
-            alert('No link available for ' + category);
-        }
-    </script>
+    <p>Type in <a href="https://movie-web.app" class="link">https://movie-web.app</a> for Movies and Anything else for anything else</p>
 
 </body>
 
