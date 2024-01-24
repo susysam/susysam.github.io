@@ -146,9 +146,28 @@
 
     <!-- JavaScript for Search, Popup, and Availabilities -->
     <script>
-        function searchGame() {
-            var searchInput = document.getElementById("searchInput").value.toLowerCase();
-            var gameContainers = document.querySelectorAll('.game-container .game');
-
             // Check if any game title matches the search input
-           
+            var found = Array.from(gameContainers).some(function (gameContainer) {
+                var gameTitle = gameContainer.querySelector('h2').innerText.toLowerCase();
+                return gameTitle.includes(searchInput);
+            });
+
+            // Show popup based on search result
+            var notFoundPopup = document.getElementById('notFoundPopup');
+            if (found) {
+                notFoundPopup.style.display = 'none';
+                // Add logic to show the Play Now button or take other actions based on the search
+            } else {
+                notFoundPopup.style.display = 'block';
+            }
+        }
+
+        function closePopup() {
+            var notFoundPopup = document.getElementById('notFoundPopup');
+            notFoundPopup.style.display = 'none';
+        }
+    </script>
+
+</body>
+
+</html>
