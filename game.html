@@ -14,8 +14,61 @@
             color: #fff;
         }
 
-        h1 {
-            color: #ffcc00;
+        .search-container {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        input {
+            padding: 10px;
+            width: 200px;
+            border: 2px solid #6C0BA9;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #6C0BA9;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #444;
+            border: 5px solid #fff;
+            border-radius: 15px;
+            text-align: center;
+            color: #fff;
+            z-index: 1;
+        }
+
+        .availabilities {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .availability-item {
+            margin: 10px;
+            padding: 10px;
+            background-color: #444;
+            border: 3px solid #fff;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #fff;
+            display: inline-block;
         }
 
         .game-container {
@@ -46,62 +99,10 @@
             height: auto;
             border-radius: 10px;
         }
-
-        .search-container {
-            margin-top: 20px;
-        }
-
-        input {
-            padding: 10px;
-            width: 200px;
-            border: 2px solid #6C0BA9;
-            border-radius: 5px;
-        }
-
-        button {
-            padding: 10px;
-            background-color: #6C0BA9;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 20px;
-            background-color: #444;
-            border: 5px solid #fff;
-            border-radius: 15px;
-            text-align: center;
-            color: #fff;
-            z-index: 1;
-        }
-
-        .availabilities {
-            margin-top: 20px;
-        }
-
-        .availability-item {
-            margin: 10px;
-            padding: 10px;
-            background-color: #444;
-            border: 3px solid #fff;
-            border-radius: 10px;
-            text-decoration: none;
-            color: #fff;
-            display: inline-block;
-        }
     </style>
 </head>
 
 <body>
-
-    <h1>Explore Exciting Games</h1>
 
     <!-- Search Bar UI -->
     <div class="search-container">
@@ -136,11 +137,11 @@
 
     <!-- Availabilities Section -->
     <div class="availabilities">
-        <div class="availability-item">YouTube ✅</div>
-        <div class="availability-item">Roblox ✅</div>
-        <div class="availability-item">A1R ✅</div>
-        <div class="availability-item">Fortnite ✅</div>
-        <div class="availability-item">Google ✅</div>
+        <div class="availability-item">YouTube</div>
+        <div class="availability-item">Roblox</div>
+        <div class="availability-item">A1R</div>
+        <div class="availability-item">Fortnite</div>
+        <div class="availability-item">Google</div>
     </div>
 
     <!-- JavaScript for Search, Popup, and Availabilities -->
@@ -150,26 +151,4 @@
             var gameContainers = document.querySelectorAll('.game-container .game');
 
             // Check if any game title matches the search input
-            var found = Array.from(gameContainers).some(function (gameContainer) {
-                var gameTitle = gameContainer.querySelector('h2').innerText.toLowerCase();
-                return gameTitle.includes(searchInput);
-            });
-
-            // Show popup based on search result
-            var notFoundPopup = document.getElementById('notFoundPopup');
-            if (found) {
-                notFoundPopup.style.display = 'none';
-            } else {
-                notFoundPopup.style.display = 'block';
-            }
-        }
-
-        function closePopup() {
-            var notFoundPopup = document.getElementById('notFoundPopup');
-            notFoundPopup.style.display = 'none';
-        }
-    </script>
-
-</body>
-
-</html>
+           
