@@ -14,19 +14,24 @@
             color: #fff;
         }
 
-        .search-container {
-            margin-top: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        h1 {
+            color: #ffcc00;
         }
 
-        input {
+        .search-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
             padding: 10px;
-            width: 200px;
-            border: 2px solid #6C0BA9;
+            font-size: 16px;
             border-radius: 5px;
+            border: none;
             margin-right: 10px;
+            width: 300px;
         }
 
         .game-container {
@@ -62,49 +67,42 @@
 
 <body>
 
-    <!-- Search Bar UI -->
+    <h1>Explore Exciting Games</h1>
+
+    <!-- Search Bar -->
     <div class="search-container">
         <input type="text" id="searchInput" placeholder="Search...">
-        <button onclick="searchGame()">Search</button>
     </div>
 
     <!-- Game Section -->
-    <div class="game-container">
-        <a href="https://thebritishempire.gaoxineducation.com/~/uv/hvtrs8%2F-wuw%2Cgmoelg.aoo%2F" class="game">
-            <h2 style="display: none;">Google</h2>
-            <!-- No picture for Google -->
-            <p>Play Now</p>
-        </a>
-
-        <a href="https://lambda.y.glenwaverleychurches.org/a/hvtrs8%2F-wuw%2Cgmoelg.aoo%2Fwrn%3Fs%3Djtvpq%3A-%2Flou.eg-arpq%2Fpo%60lmx%2Fcmrropavimn-514%3B%2Fpo%60lmx%2Chvmn%26qa%3FU%24vgd%3F2chWKGwkEx-pPkfgDCxZREjSIJcwrAgKQDnmEAAWQCg%24uqg%3FAMvTau0srgdU8sIFH4Gp5Roon%7BIP" class="game">
-            <h2 style="display: none;">Roblox</h2>
-            <!-- No picture for Roblox -->
-            <p>Play Now</p>
-        </a>
-
-        <a href="https://mocha.proudparrot2.tech/~/uv/aHR0cHM6Ly9wbGF5LmdlZm9yY2Vub3cuY29tLw%3D%3D" class="game">
-            <h2 style="display: none;">Fortnite</h2>
-            <!-- No picture for Fortnite -->
-            <p>Play Now</p>
-        </a>
-
-        <a href="https://thebritishempire.gaoxineducation.com/~/uv/hvtrs8%2F-m%2Cymuvu%60e%2Ccmm-" class="game">
-            <h2 style="display: none;">YouTube</h2>
-            <!-- No picture for YouTube -->
-            <p>Play Now</p>
-        </a>
-
-        <!-- Add more games here if needed -->
-
+    <div class="game-container" id="gameContainer">
+        <!-- Games will be dynamically added here -->
     </div>
 
-    <!-- JavaScript for Search -->
     <script>
-        function searchGame() {
-            var searchInput = document.getElementById("searchInput").value.toLowerCase();
+        const games = {
+            "A1R": "https://a1rdrop.netlify.app/games",
+            "Roblox": "https://lambda.y.glenwaverleychurches.org/a/hvtrs8%2F-wuw%2Cgmoelg.aoo%2Fwrn%3Fs%3Djtvpq%3A-%2Flou.eg-arpq%2Fpo%60lmx%2Fcmrropavimn-514%3B%2Fpo%60lmx%2Chvmn%26qa%3FU%24vgd%3F2chWKGwkEx-pPkfgDCxZREjSIJcwrAgKQDnmEAAWQCg%24uqg%3FAMvTau0srgdU8sIFH4Gp5Roon%7BIP",
+            "Fortnite": "https://mocha.proudparrot2.tech/~/uv/aHR0cHM6Ly9wbGF5LmdlZm9yY2Vub3cuY29tLw%3D%3D",
+            "YouTube": "https://thebritishempire.gaoxineducation.com/~/uv/hvtrs8%2F-m%2Cymuvu%60e%2Ccmm-",
+            "Google": "https://thebritishempire.gaoxineducation.com/~/uv/hvtrs8%2F-wuw%2Cgmoelg.aoo%2F"
+        };
 
-            // Redirect to the searched URL
-            window.location.href = `https://${searchInput}`;
+        const searchInput = document.getElementById("searchInput");
+        const gameContainer = document.getElementById("gameContainer");
+
+        // Add event listener for input change
+        searchInput.addEventListener("input", handleSearch);
+
+        function handleSearch() {
+            const searchTerm = searchInput.value.trim().toUpperCase();
+
+            if (games.hasOwnProperty(searchTerm)) {
+                window.location.href = games[searchTerm];
+            } else {
+                // Display a message or handle accordingly
+                // You can add a pop-up or other feedback for not found items
+            }
         }
     </script>
 
