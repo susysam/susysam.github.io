@@ -53,24 +53,6 @@
             z-index: 1;
         }
 
-        .availabilities {
-            margin-top: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .availability-item {
-            margin: 10px;
-            padding: 10px;
-            background-color: #444;
-            border: 3px solid #fff;
-            border-radius: 10px;
-            text-decoration: none;
-            color: #fff;
-            display: inline-block;
-        }
-
         .game-container {
             display: flex;
             justify-content: center;
@@ -107,7 +89,7 @@
     <!-- Search Bar UI -->
     <div class="search-container">
         <input type="text" id="searchInput" placeholder="Search...">
-        <button onclick="searchGame()">Search</button>
+        <button id="playNowButton" style="display: none;" onclick="playNow()">Play Now</button>
     </div>
 
     <!-- Game Section -->
@@ -135,31 +117,34 @@
         <button onclick="closePopup()">Close</button>
     </div>
 
-    <!-- Availabilities Section -->
-    <div class="availabilities">
-        <div class="availability-item">YouTube</div>
-        <div class="availability-item">Roblox</div>
-        <div class="availability-item">A1R</div>
-        <div class="availability-item">Fortnite</div>
-        <div class="availability-item">Google</div>
-    </div>
-
-    <!-- JavaScript for Search, Popup, and Availabilities -->
+    <!-- JavaScript for Search and Popup -->
     <script>
+        function searchGame() {
+            var searchInput = document.getElementById("searchInput").value.toLowerCase();
+            var gameContainers = document.querySelectorAll('.game-container .game');
+
             // Check if any game title matches the search input
             var found = Array.from(gameContainers).some(function (gameContainer) {
                 var gameTitle = gameContainer.querySelector('h2').innerText.toLowerCase();
                 return gameTitle.includes(searchInput);
             });
 
-            // Show popup based on search result
-            var notFoundPopup = document.getElementById('notFoundPopup');
+            // Show/hide Play Now button based on search result
+            var playNowButton = document.getElementById('playNowButton');
             if (found) {
-                notFoundPopup.style.display = 'none';
-                // Add logic to show the Play Now button or take other actions based on the search
+                playNowButton.style.display = 'inline-block';
             } else {
-                notFoundPopup.style.display = 'block';
+                playNowButton.style.display = 'none';
             }
+        }
+
+        function playNow() {
+            // Add logic for Play Now button action here
+            // For now, you can redirect to a specific page or perform other actions
+            var searchInput = document.getElementById("searchInput").value.toLowerCase();
+
+            // Example: Redirect to the searched URL
+            window.location.href = `https://${searchInput}`;
         }
 
         function closePopup() {
