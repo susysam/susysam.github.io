@@ -29,30 +29,6 @@
             margin-right: 10px;
         }
 
-        button {
-            padding: 10px;
-            background-color: #6C0BA9;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 20px;
-            background-color: #444;
-            border: 5px solid #fff;
-            border-radius: 15px;
-            text-align: center;
-            color: #fff;
-            z-index: 1;
-        }
-
         .game-container {
             display: flex;
             justify-content: center;
@@ -89,7 +65,7 @@
     <!-- Search Bar UI -->
     <div class="search-container">
         <input type="text" id="searchInput" placeholder="Search...">
-        <button id="playNowButton" style="display: none;" onclick="playNow()">Play Now</button>
+        <button onclick="searchGame()">Search</button>
     </div>
 
     <!-- Game Section -->
@@ -111,45 +87,13 @@
 
     </div>
 
-    <!-- Popup for Not Found -->
-    <div id="notFoundPopup" class="popup">
-        <p>Sorry, we don't have what you're looking for... yet!</p>
-        <button onclick="closePopup()">Close</button>
-    </div>
-
-    <!-- JavaScript for Search and Popup -->
+    <!-- JavaScript for Search -->
     <script>
         function searchGame() {
             var searchInput = document.getElementById("searchInput").value.toLowerCase();
-            var gameContainers = document.querySelectorAll('.game-container .game');
 
-            // Check if any game title matches the search input
-            var found = Array.from(gameContainers).some(function (gameContainer) {
-                var gameTitle = gameContainer.querySelector('h2').innerText.toLowerCase();
-                return gameTitle.includes(searchInput);
-            });
-
-            // Show/hide Play Now button based on search result
-            var playNowButton = document.getElementById('playNowButton');
-            if (found) {
-                playNowButton.style.display = 'inline-block';
-            } else {
-                playNowButton.style.display = 'none';
-            }
-        }
-
-        function playNow() {
-            // Add logic for Play Now button action here
-            // For now, you can redirect to a specific page or perform other actions
-            var searchInput = document.getElementById("searchInput").value.toLowerCase();
-
-            // Example: Redirect to the searched URL
+            // Redirect to the searched URL
             window.location.href = `https://${searchInput}`;
-        }
-
-        function closePopup() {
-            var notFoundPopup = document.getElementById('notFoundPopup');
-            notFoundPopup.style.display = 'none';
         }
     </script>
 
