@@ -71,7 +71,7 @@
 
     <!-- Search Bar -->
     <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Adding more apps and games!">
+        <input type="text" id="searchInput" placeholder="Search" required>
     </div>
 
     <!-- Game Section -->
@@ -79,18 +79,20 @@
         <!-- Games will be dynamically added here -->
     </div>
 
+    <!-- Disclaimer -->
+    <p>Disclaimer: You can only search for Roblox, YouTube, Anime, Google, and A1R.</p>
+
     <script>
         const games = {
             "A1R": "https://a1rdrop.netlify.app/games",
-            "Roblox": "https://lambda.y.glenwaverleychurches.org/a/hvtrs8%2F-wuw%2Cgmoelg.aoo%2Fwrn%3Fs%3Djtvpq%3A-%2Flou.eg-arpq%2Fpo%60lmx%2Fcmrropavimn-514%3B%2Fpo%60lmx%2Chvmn%26qa%3FU%24vgd%3F2chWKGwkEx-pPkfgDCxZREjSIJcwrAgKQDnmEAAWQCg%24uqg%3FAMvTau0srgdU8sIFH4Gp5Roon%7BIP",
+            "Roblox": "https://acb.caculatorgeo.one/demo",
             "Fortnite": "https://mocha.proudparrot2.tech/~/uv/aHR0cHM6Ly9wbGF5LmdlZm9yY2Vub3cuY29tLw%3D%3D",
             "YouTube": "https://thebritishempire.gaoxineducation.com/~/uv/hvtrs8%2F-m%2Cymuvu%60e%2Ccmm-",
-            "Google": "https://thebritishempire.gaoxineducation.com/~/uv/hvtrs8%2F-wuw%2Cgmoelg.aoo%2F"
-              "game": "https://google.com",
+            "Google": "https://thebritishempire.gaoxineducation.com/~/uv/hvtrs8%2F-wuw%2Cgmoelg.aoo%2F",
+            "Anime": "https://kaido.to/home"
         };
 
         const searchInput = document.getElementById("searchInput");
-        const gameContainer = document.getElementById("gameContainer");
 
         // Add event listener for input change
         searchInput.addEventListener("input", handleSearch);
