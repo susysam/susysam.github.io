@@ -1,1 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apps</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 20px;
+            background-color: #333;
+            color: #fff;
+        }
+
+        h1 {
+            color: #ffcc00;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            margin-right: 10px;
+            width: 300px;
+        }
+
+        .game-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .game {
+            margin: 20px;
+            padding: 20px;
+            background-color: #444;
+            border: 5px solid #fff;
+            border-radius: 15px;
+            text-decoration: none;
+            color: #fff;
+            transition: transform .2s ease-in-out;
+            display: inline-block;
+        }
+
+        .game:hover {
+            transform: scale(1.1);
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Explore Apps</h1>
+
+    <!-- Search Bar -->
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search" required>
+    </div>
+
+    <!-- App Section -->
+    <div class="game-container" id="gameContainer">
+        <!-- App will be dynamically added here -->
+    </div>
+
+   <script>
+    // Array of app objects
+    const games = [
+        {
+            name: "ShuttleAI",
+            link: "https://chat.shuttleai.app/",
+            image: "/shuttle.png"
+        },
+        {
+            name: "TikTok",
+            link: "https://tiktok.com/",
+            image: "https://upload.wikimedia.org/wikipedia/my/thumb/1/1c/Tiktok_logo.svg/2048px-Tiktok_logo.svg.png"
+        },
+        // Add other app objects with name, link, and image properties
+    ];
+
+    // Function to filter games based on search input
+    function filterGames() {
+        const searchInput = document.getElementById('searchInput').value.toLowerCase();
+        const gameContainer = document.getElementById('gameContainer');
+
+        // Clear previous content
+        gameContainer.innerHTML = '';
+
+        // Filter and display matching games
+        games.forEach(game => {
+            if (game.name.toLowerCase().includes(searchInput)) {
+                const gameElement = document.createElement('a');
+                gameElement.href = game.link;
+                gameElement.className = 'game';
+
+                const gameImage = document.createElement('img');
+                gameImage.src = game.image;
+                gameImage.alt = game.name;
+
+                const gameName = document.createElement('p');
+                gameName.textContent = game.name;
+
+                gameElement.appendChild(gameImage);
+                gameElement.appendChild(gameName);
+
+                gameContainer.appendChild(gameElement);
+            }
+        });
+    }
+
+    // Event listener for search input
+    document.getElementById('searchInput').addEventListener('input', filterGames);
+
+    // Initial display of all games
+    filterGames();
+</script>
+</body>
+
+</html>
