@@ -106,94 +106,94 @@
                 name: "Netflix",
                 link: "https://netflix.com/login",
                 image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Netflix-new-icon.png/480px-Netflix-new-icon.png"
-            }
+            }, // Add a comma here
             {
-            name: "Hulu",
-            link: "https://www.hulu.com/",
-            image: "https://i.pinimg.com/originals/6f/a7/4a/6fa74a49bf5b381e3e05c9e7470c2f0a.png"
-        },
-        {
-            name: "Amazon Prime Video",
-            link: "https://www.amazon.com/Prime-Video/",
-            image: "https://www.freepnglogos.com/uploads/amazon-prime-video-logo-png/amazon-prime-video-logo-brand-emblem-education-3.png"
-        },
-        {
-            name: "Spotify",
-            link: "https://www.spotify.com/",
-            image: "https://www.scdn.co/i/_global/open-graph-default.png"
-        },
-        {
-            name: "Apple Music",
-            link: "https://music.apple.com/",
-            image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Apple_Music_logo.png/640px-Apple_Music_logo.png"
-        },
-        {
-            name: "SoundCloud",
-            link: "https://soundcloud.com/",
-            image: "https://www.freeiconspng.com/uploads/soundcloud-logo-png-23.png"
-        },
-        {
-            name: "WhatsApp",
-            link: "https://web.whatsapp.com/",
-            image: "https://www.logo.wine/a/logo/WhatsApp/WhatsApp-Logo.wine.svg"
-        },
-        {
-            name: "Telegram",
-            link: "https://desktop.telegram.org/",
-            image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/512px-Telegram_logo.svg.png"
-        },
-        {
-            name: "Google Drive",
-            link: "https://drive.google.com/",
-            image: "https://icons-for-free.com/iconfiles/png/512/Google+Drive-1320568339880199516.png"
-        },
-        {
-            name: "Dropbox",
-            link: "https://www.dropbox.com/",
-            image: "https://www.freepnglogos.com/uploads/dropbox-logo/icon-dropbox-logo-2.png"
-        },
-        {
-            name: "Microsoft Office",
-            link: "https://www.office.com/",
-            image: "https://www.freepnglogos.com/uploads/microsoft-office-logo-icon/microsoft-office-logo-icon-icons-0.png"
+                name: "Hulu",
+                link: "https://www.hulu.com/",
+                image: "https://i.pinimg.com/originals/6f/a7/4a/6fa74a49bf5b381e3e05c9e7470c2f0a.png"
+            },
+            {
+                name: "Amazon Prime Video",
+                link: "https://www.amazon.com/Prime-Video/",
+                image: "https://www.freepnglogos.com/uploads/amazon-prime-video-logo-png/amazon-prime-video-logo-brand-emblem-education-3.png"
+            },
+            {
+                name: "Spotify",
+                link: "https://www.spotify.com/",
+                image: "https://www.scdn.co/i/_global/open-graph-default.png"
+            },
+            {
+                name: "Apple Music",
+                link: "https://music.apple.com/",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Apple_Music_logo.png/640px-Apple_Music_logo.png"
+            },
+            {
+                name: "SoundCloud",
+                link: "https://soundcloud.com/",
+                image: "https://www.freeiconspng.com/uploads/soundcloud-logo-png-23.png"
+            },
+            {
+                name: "WhatsApp",
+                link: "https://web.whatsapp.com/",
+                image: "https://www.logo.wine/a/logo/WhatsApp/WhatsApp-Logo.wine.svg"
+            },
+            {
+                name: "Telegram",
+                link: "https://desktop.telegram.org/",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/512px-Telegram_logo.svg.png"
+            },
+            {
+                name: "Google Drive",
+                link: "https://drive.google.com/",
+                image: "https://icons-for-free.com/iconfiles/png/512/Google+Drive-1320568339880199516.png"
+            },
+            {
+                name: "Dropbox",
+                link: "https://www.dropbox.com/",
+                image: "https://www.freepnglogos.com/uploads/dropbox-logo/icon-dropbox-logo-2.png"
+            },
+            {
+                name: "Microsoft Office",
+                link: "https://www.office.com/",
+                image: "https://www.freepnglogos.com/uploads/microsoft-office-logo-icon/microsoft-office-logo-icon-icons-0.png"
+            }
+        ];
+
+        // Function to display apps
+        function displayApps(searchTerm = "") {
+            const container = document.getElementById("gameContainer");
+            container.innerHTML = "";
+
+            // Filter apps based on search term
+            const filteredApps = games.filter(app => app.name.toLowerCase().includes(searchTerm.toLowerCase()));
+
+            // Display filtered apps
+            filteredApps.forEach(app => {
+                const appElement = document.createElement("a");
+                appElement.href = app.link;
+                appElement.target = "_blank";
+                appElement.classList.add("game");
+
+                const imgElement = document.createElement("img");
+                imgElement.src = app.image;
+                imgElement.alt = app.name;
+
+                const nameElement = document.createElement("p");
+                nameElement.textContent = app.name;
+
+                appElement.appendChild(imgElement);
+                appElement.appendChild(nameElement);
+
+                container.appendChild(appElement);
+            });
         }
-    ];
 
-    // Function to display apps
-    function displayApps(searchTerm = "") {
-        const container = document.getElementById("gameContainer");
-        container.innerHTML = "";
+        // Initial display of apps
+        displayApps();
 
-        // Filter apps based on search term
-        const filteredApps = games.filter(app => app.name.toLowerCase().includes(searchTerm.toLowerCase()));
-
-        // Display filtered apps
-        filteredApps.forEach(app => {
-            const appElement = document.createElement("a");
-            appElement.href = app.link;
-            appElement.target = "_blank";
-            appElement.classList.add("game");
-
-            const imgElement = document.createElement("img");
-            imgElement.src = app.image;
-            imgElement.alt = app.name;
-
-            const nameElement = document.createElement("p");
-            nameElement.textContent = app.name;
-
-            appElement.appendChild(imgElement);
-            appElement.appendChild(nameElement);
-
-            container.appendChild(appElement);
-        });
-    }
-
-    // Initial display of apps
-    displayApps();
-
-    // Event listener for search input
-    const searchInput = document.getElementById("searchInput");
-    searchInput.addEventListener("input", () => displayApps(searchInput.value));
+        // Event listener for search input
+        const searchInput = document.getElementById("searchInput");
+        searchInput.addEventListener("input", () => displayApps(searchInput.value));
     </script>
 </body>
 
