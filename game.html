@@ -71,7 +71,7 @@
 
     <!-- Search Bar -->
     <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Search" required>
+        <input type="text" id="searchInput" placeholder="Search" oninput="filterGames()" required>
     </div>
 
     <!-- Game Section -->
@@ -82,6 +82,11 @@
     <script>
         // Array of games
         const games = [
+            {
+                name: 'A1R',
+                image: '/IMG_0543.jpeg',
+                link: 'https://a1rdrop.netlify.app/games'
+            },
             {
                 name: 'Now.GG',
                 image: 'https://cdn.now.gg/apps-content/img/website/now.gg-og-dark.jpg',
@@ -101,37 +106,8 @@
                 name: 'Slope',
                 image: 'https://nointernetgame.com/wp-content/uploads/2023/03/Slope-Game-Icon.jpg',
                 link: 'https://games.odd.gay/play/slope/'
-            },
-            {
-                name: 'Happy Wheels',
-                image: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHCBYWFRgVFhISGRgYGBwcGRoZGhgYGRgaGBkZGhgYHBocIS4lHB4rIRgYJjgmKzAxNTU1HiQ7Tjs0Py40NTEBDAwMEA8QHxISHzQrJCE6ND82NDU0NDQ3NDY0MTY0NDQ2NDU0NDQ1NDE9NDQ2NDQ0NDQ0NDQ2PTQ0NDE0ND00Nv/AABEIAOEA4QMBIgACEQEDEQH/xAAcAAEAAQUBAQAAAAAAAAAAAAAABgIDBAUHAQj/xABGEAACAQICBgYGBwcCBQUAAAABAgADEQQFBhIhMUFRImFxgZGhBxMyUrHRQmJygrLB4rRQjM5KiwvAk8RUXQ5PiFiVEc9L/xAAZAQEAAwEBAAAAAAAAAAAAAAAAAgMEAQX/xAAsEQACAgIBBAAFAwUBAAAAAAAAAQISAxExBCFBURMycYGRImGhBRRCUu',
-                link: 'http://totaljerkface.com/happy_wheels.tjf'
-            },
-            {
-                name: 'Run 3',
-                image: 'https://image-cdn.essentiallysports.com/wp-content/uploads/20220110201412/Run-3-Title.jpg',
-                link: 'https://run3online.io/'
-            },
-            {
-                name: 'Krunker.io',
-                image: 'https://krunker.io/images/Krunker_Hub_Logo.png',
-                link: 'https://krunker.io/'
-            },
-            {
-                name: 'Slither.io',
-                image: 'https://i.pinimg.com/originals/2c/2b/d6/2c2bd6ea7585c1b94f35cc99a7b5d8a2.png',
-                link: 'http://slither.io/'
-            },
-            {
-                name: 'Among Us',
-                image: 'https://i.imgur.com/FTOv5SY.jpg',
-                link: 'https://www.innersloth.com/gameAmongUs.php'
-            },
-            {
-                name: 'Agar.io',
-                image: 'https://www.agar.bio/img/logo.png',
-                link: 'https://www.agar.bio/'
             }
+            // Add more games as needed
         ];
 
         // Function to filter games based on search input
@@ -163,9 +139,6 @@
                 }
             });
         }
-
-        // Event listener for search input
-        document.getElementById('searchInput').addEventListener('input', filterGames);
 
         // Initial display of all games
         filterGames();
