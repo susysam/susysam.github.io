@@ -79,36 +79,97 @@
         <!-- Games will be dynamically added here -->
     </div>
 
-    <!-- Disclaimer -->
-    <p>Disclaimer: You can only search for Roblox, YouTube, Anime, Google, and A1R.</p>
-
     <script>
-        const games = {
-            "A1R": "https://a1rdrop.netlify.app/games",
-            "Roblox": "https://acb.caculatorgeo.one/demo",
-            "Fortnite": "https://mocha.proudparrot2.tech/~/uv/aHR0cHM6Ly9wbGF5LmdlZm9yY2Vub3cuY29tLw%3D%3D",
-            "YouTube": "https://thebritishempire.gaoxineducation.com/~/uv/hvtrs8%2F-m%2Cymuvu%60e%2Ccmm-",
-            "Google": "https://thebritishempire.gaoxineducation.com/~/uv/hvtrs8%2F-wuw%2Cgmoelg.aoo%2F",
-            "Anime": "https://kaido.to/home"
-        };
-
-        const searchInput = document.getElementById("searchInput");
-
-        // Add event listener for input change
-        searchInput.addEventListener("input", handleSearch);
-
-        function handleSearch() {
-            const searchTerm = searchInput.value.trim().toUpperCase();
-
-            if (games.hasOwnProperty(searchTerm)) {
-                window.location.href = games[searchTerm];
-            } else {
-                // Display a message or handle accordingly
-                // You can add a pop-up or other feedback for not found items
+        // Array of games
+        const games = [
+            {
+                name: 'Now.GG',
+                image: 'https://cdn.now.gg/apps-content/img/website/now.gg-og-dark.jpg',
+                link: 'https://nowgg.me/'
+            },
+            {
+                name: 'Monkey Mart',
+                image: 'https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSuS_1o1Y9NcNUdufKrMVqREmiFOT1yYA5dVhr_PwJ39h29WVO1',
+                link: 'https://skooldeliver.github.io/skool-games/monkey-mart/'
+            },
+            {
+                name: '1v1.lol',
+                image: 'https://play-lh.googleusercontent.com/QYGRIDJbyVO7L7jH8CwiKJ4NumTGgcTVqU3ITooLWxro-eeNns1RZ0uwGGFe-r8M4co',
+                link: 'https://games.odd.gay/play/1v1/'
+            },
+            {
+                name: 'Slope',
+                image: 'https://nointernetgame.com/wp-content/uploads/2023/03/Slope-Game-Icon.jpg',
+                link: 'https://games.odd.gay/play/slope/'
+            },
+            {
+                name: 'Happy Wheels',
+                image: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHCBYWFRgVFhISGRgYGBwcGRoZGhgYGRgaGBkZGhgYHBocIS4lHB4rIRgYJjgmKzAxNTU1HiQ7Tjs0Py40NTEBDAwMEA8QHxISHzQrJCE6ND82NDU0NDQ3NDY0MTY0NDQ2NDU0NDQ1NDE9NDQ2NDQ0NDQ0NDQ2PTQ0NDE0ND00Nv/AABEIAOEA4QMBIgACEQEDEQH/xAAcAAEAAQUBAQAAAAAAAAAAAAAABgIDBAUHAQj/xABGEAACAQICBgYGBwcCBQUAAAABAgADEQQFBhIhMUFRImFxgZGhBxMyUrHRQmJygrLB4rRQjM5KiwvAk8RUXQ5PiFiVEc9L/xAAZAQEAAwEBAAAAAAAAAAAAAAAAAgMEAQX/xAAsEQACAgIBBAAFAwUBAAAAAAAAAQISAxExBCFBURMycYGRImGhBRRCUu',
+                link: 'http://totaljerkface.com/happy_wheels.tjf'
+            },
+            {
+                name: 'Run 3',
+                image: 'https://image-cdn.essentiallysports.com/wp-content/uploads/20220110201412/Run-3-Title.jpg',
+                link: 'https://run3online.io/'
+            },
+            {
+                name: 'Krunker.io',
+                image: 'https://krunker.io/images/Krunker_Hub_Logo.png',
+                link: 'https://krunker.io/'
+            },
+            {
+                name: 'Slither.io',
+                image: 'https://i.pinimg.com/originals/2c/2b/d6/2c2bd6ea7585c1b94f35cc99a7b5d8a2.png',
+                link: 'http://slither.io/'
+            },
+            {
+                name: 'Among Us',
+                image: 'https://i.imgur.com/FTOv5SY.jpg',
+                link: 'https://www.innersloth.com/gameAmongUs.php'
+            },
+            {
+                name: 'Agar.io',
+                image: 'https://www.agar.bio/img/logo.png',
+                link: 'https://www.agar.bio/'
             }
-        }
-    </script>
+        ];
 
+        // Function to filter games based on search input
+        function filterGames() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const gameContainer = document.getElementById('gameContainer');
+
+            // Clear previous content
+            gameContainer.innerHTML = '';
+
+            // Filter and display matching games
+            games.forEach(game => {
+                if (game.name.toLowerCase().includes(searchInput)) {
+                    const gameElement = document.createElement('a');
+                    gameElement.href = game.link;
+                    gameElement.className = 'game';
+
+                    const gameImage = document.createElement('img');
+                    gameImage.src = game.image;
+                    gameImage.alt = game.name;
+
+                    const gameName = document.createElement('p');
+                    gameName.textContent = game.name;
+
+                    gameElement.appendChild(gameImage);
+                    gameElement.appendChild(gameName);
+
+                    gameContainer.appendChild(gameElement);
+                }
+            });
+        }
+
+        // Event listener for search input
+        document.getElementById('searchInput').addEventListener('input', filterGames);
+
+        // Initial display of all games
+        filterGames();
+    </script>
 </body>
 
 </html>
