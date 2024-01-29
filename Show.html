@@ -22,7 +22,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: 20px;
+            margin-top: 50px;
         }
 
         .link {
@@ -55,7 +55,7 @@
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
             border-radius: 10px;
             z-index: 1;
-            text-align: right;
+            text-align: left;
             left: 50%;
             transform: translateX(-50%); /* Center the dropdown */
         }
@@ -71,13 +71,13 @@
             display: none;
         }
 
+        .dropdown-content .section:hover {
+            background-color: #6C0BA9;
+        }
+
         .dropdown-content .link {
             padding: 10px;
             cursor: pointer;
-        }
-
-        .dropdown-content .link:hover {
-            background-color: #6C0BA9;
         }
 
         .nav-bar {
@@ -118,13 +118,7 @@
             <button class="link" onclick="toggleDropdown()">Links</button>
             <div class="dropdown-content" id="linksDropdown">
                 <div class="section" onclick="toggleLinks('interstellar')">Interstellar</div>
-                <div class="link interstellar" onclick="navigateToGoogle()">Link 1</div>
-                <div class="link interstellar" onclick="navigateToGoogle()">Link 2</div>
-                <div class="link interstellar" onclick="navigateToGoogle()">Link 3</div>
-
                 <div class="section" onclick="toggleLinks('utopia')">Utopia</div>
-                <div class="link utopia" onclick="navigateToGoogle()">Link 4</div>
-                <div class="link utopia" onclick="navigateToGoogle()">Link 5</div>
             </div>
         </div>
     </div>
@@ -147,11 +141,6 @@
             links.forEach(link => {
                 link.style.display = (link.style.display === 'none' || link.style.display === '') ? 'block' : 'none';
             });
-        }
-
-        // Function to navigate to Google.com
-        function navigateToGoogle() {
-            window.location.href = 'https://www.google.com';
         }
     </script>
 
