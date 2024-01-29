@@ -1,6 +1,3 @@
-Certainly! Here's the modified code based on your provided template:
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -42,155 +39,23 @@ Certainly! Here's the modified code based on your provided template:
         .link:hover {
             background-color: #6C0BA9;
         }
-
-        .dropdown {
-            display: inline-block;
-            position: relative;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #444;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-            z-index: 1;
-            text-align: left;
-            left: 50%;
-            transform: translateX(-50%); /* Center the dropdown */
-        }
-
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        .dropdown-content .section {
-            font-weight: bold;
-            padding: 10px;
-            cursor: pointer;
-            display: none;
-        }
-
-        .dropdown-content .section:hover {
-            background-color: #6C0BA9;
-        }
-
-        .dropdown-content .link {
-            padding: 10px;
-            cursor: pointer;
-        }
-
-        .link-popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #444;
-            padding: 20px;
-            border-radius: 10px;
-            z-index: 2;
-        }
-
-        .link-popup-content {
-            color: #fff;
-            font-weight: bold;
-            cursor: pointer;
-            margin: 10px;
-        }
-
-        .link-popup-content:hover {
-            text-decoration: underline;
-        }
     </style>
 </head>
 
 <body>
 
+    <h1>Welcome to the Website</h1>
+
     <!-- Link Container -->
     <div class="link-container">
-        <div class="dropdown">
-            <button class="link" onclick="toggleLinkPopup('linksDropdown')">Links</button>
-            <div class="dropdown-content" id="linksDropdown">
-                <div class="section" onclick="toggleSectionPopup('interstellar')">Interstellar</div>
-                <div class="section" onclick="toggleSectionPopup('utopia')">Utopia</div>
-                <!-- Add more sections as needed -->
-            </div>
-        </div>
+        <a href="https://tech.chart.defcon-industries.com" class="link">https://tech.chart.defcon-industries.com</a>
+        <a href="https://lskibiditoilets.mooo.com" class="link">https://lskibiditoilets.mooo.com</a>
+        <a href="https://anura.pro" class="link">https://anura.pro</a>
+        <a href="https://have.towerchile.cl" class="link">https://have.towerchile.cl</a>
+        <a href="https://kumasushi.g2g.asia" class="link">https://kumasushi.g2g.asia</a>
+        <a href="https://z.d.2of1.org" class="link">https://z.d.2of1.org</a>
     </div>
 
-    <!-- Link Popups -->
-    <div class="link-popup" id="interstellarPopup">
-        <div class="link-popup-content" onclick="openLink('https://www.google.com')">Link 1</div>
-        <div class="link-popup-content" onclick="openLink('https://www.google.com')">Link 2</div>
-        <div class="link-popup-content" onclick="openLink('https://www.google.com')">Link 3</div>
-        <div class="link-popup-content" onclick="openLink('https://www.google.com')">Link 4</div>
-        <!-- Add more links as needed -->
-        <span class="link-popup-content" onclick="toggleSectionPopup('interstellar')">Close</span>
-    </div>
-
-    <div class="link-popup" id="utopiaPopup">
-        <div class="link-popup-content" onclick="openLink('https://www.google.com')">Link 1</div>
-        <div class="link-popup-content" onclick="openLink('https://www.google.com')">Link 2</div>
-        <div class="link-popup-content" onclick="openLink('https://www.google.com')">Link 3</div>
-        <div class="link-popup-content" onclick="openLink('https://www.google.com')">Link 4</div>
-        <!-- Add more links as needed -->
-        <span class="link-popup-content" onclick="toggleSectionPopup('utopia')">Close</span>
-    </div>
-
-    <script>
-        // Function to toggle visibility of link popup
-        function toggleLinkPopup(linkDropdownId) {
-            const linkPopup = document.getElementById('linkPopup');
-            linkPopup.style.display = (linkPopup.style.display === 'none' || linkPopup.style.display === '') ? 'block' : 'none';
-            hideSectionPopups();
-            hideLinkDropdowns(linkDropdownId);
-        }
-
-        // Function to toggle visibility of section popup
-        function toggleSectionPopup(sectionId) {
-            const sectionPopup = document.getElementById(sectionId + 'Popup');
-            sectionPopup.style.display = (sectionPopup.style.display === 'none' || sectionPopup.style.display === '') ? 'block' : 'none';
-        }
-
-        // Function to open a link
-        function openLink(link) {
-            window.open(link, '_blank');
-        }
-
-        // Function to hide all section popups
-        function hideSectionPopups() {
-            document.getElementById('utopiaPopup').style.display = 'none';
-            document.getElementById('interstellarPopup').style.display = 'none';
-            // Add more section popups as needed
-        }
-
-        // Function to hide all link dropdowns except the specified one
-        function hideLinkDropdowns(exceptDropdownId) {
-            const dropdowns = document.querySelectorAll('.dropdown-content');
-            dropdowns.forEach(dropdown => {
-                if (dropdown.id !== exceptDropdownId) {
-                    dropdown.style.display = 'none';
-                }
-            });
-        }
-
-        // Close popups if the user clicks outside of them
-        window.onclick = function (event) {
-            if (!event.target.matches('.link')) {
-                const dropdowns = document.querySelectorAll('.dropdown-content');
-                dropdowns.forEach(dropdown => {
-                    if (dropdown.style.display === 'block') {
-                        dropdown.style.display = 'none';
-                    }
-                });
-                hideSectionPopups();
-            }
-        };
-    </script>
 </body>
 
 </html>
-```
-
-This code should now match the styling and structure of your provided template while incorporating the requested dropdown functionality.
