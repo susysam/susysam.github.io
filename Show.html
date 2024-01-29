@@ -54,29 +54,33 @@
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
             border-radius: 10px;
             z-index: 1;
-            text-align: left;
-            overflow-y: auto; /* Added scrollbar for overflow */
-            max-height: 300px; /* Set maximum height */
+            text-align: right; /* Aligned text to the right */
+            left: -200px; /* Moved dropdown to the left */
         }
 
         .dropdown:hover .dropdown-content {
             display: block;
         }
 
-        .dropdown-content .link {
-            display: block;
-            font-weight: normal;
-            padding: 10px;
-        }
-
         .dropdown-content .section {
             font-weight: bold;
             padding: 10px;
+            cursor: pointer; /* Added cursor pointer for clickable effect */
+        }
+
+        .dropdown-content .link {
+            display: none; /* Initially hide the links */
+            padding: 10px;
+            cursor: pointer; /* Added cursor pointer for clickable effect */
+        }
+
+        .dropdown-content .link:hover {
+            background-color: #6C0BA9;
         }
 
         .nav-bar {
             display: flex;
-            flex-direction: column; /* Changed to column layout */
+            flex-direction: column;
             align-items: center;
             background-color: #444;
             padding: 10px;
@@ -89,7 +93,7 @@
         .back-button {
             margin: 0 10px;
             padding: 10px;
-            background-color: #333; /* Blend into background color */
+            background-color: #333;
             border: 3px solid #fff;
             border-radius: 10px;
             text-decoration: none;
@@ -111,23 +115,14 @@
         <div class="dropdown">
             <button class="link">Links</button>
             <div class="dropdown-content">
-                <div class="section">Interstellar</div>
-                <a href="#" class="link">Link 1</a>
-                <a href="#" class="link">Link 2</a>
-                <a href="#" class="link">Link 3</a>
+                <div class="section" onclick="toggleLinks('interstellar')">Interstellar</div>
+                <div class="link" id="interstellar-link1" onclick="navigateToGoogle()">Link 1</div>
+                <div class="link" id="interstellar-link2" onclick="navigateToGoogle()">Link 2</div>
+                <div class="link" id="interstellar-link3" onclick="navigateToGoogle()">Link 3</div>
 
-                <div class="section">Utopia</div>
-                <a href="#" class="link">Link 4</a>
-                <a href="#" class="link">Link 5</a>
-
-                <div class="section">Section 3</div>
-                <!-- Add links for Section 3 as needed -->
-
-                <div class="section">Section 4</div>
-                <!-- Add links for Section 4 as needed -->
-
-                <div class="section">Section 5</div>
-                <!-- Add links for Section 5 as needed -->
+                <div class="section" onclick="toggleLinks('utopia')">Utopia</div>
+                <div class="link" id="utopia-link4" onclick="navigateToGoogle()">Link 4</div>
+                <div class="link" id="utopia-link5" onclick="navigateToGoogle()">Link 5</div>
             </div>
         </div>
     </div>
@@ -136,6 +131,21 @@
     <div class="link-container">
         <!-- Removed unnecessary text -->
     </div>
+
+    <script>
+        // Function to toggle visibility of links for a section
+        function toggleLinks(sectionId) {
+            const links = document.querySelectorAll(`.${sectionId}`);
+            links.forEach(link => {
+                link.style.display = (link.style.display === 'none' || link.style.display === '') ? 'block' : 'none';
+            });
+        }
+
+        // Function to navigate to Google.com
+        function navigateToGoogle() {
+            window.location.href = 'https://www.google.com';
+        }
+    </script>
 
 </body>
 
