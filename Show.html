@@ -57,6 +57,21 @@
             display: block;
         }
 
+        .dropdown-content .dropdown {
+            display: block;
+        }
+
+        .dropdown-content .dropdown-content {
+            display: none;
+            position: absolute;
+            left: 100%;
+            top: 0;
+        }
+
+        .dropdown-content:hover .dropdown-content {
+            display: block;
+        }
+
         .dropdown-content a {
             color: #fff;
             padding: 12px 16px;
@@ -84,7 +99,7 @@
 
     <!-- Dropdown Menu -->
     <div class="dropdown">
-        <a class="link">Click me</a>
+        <a class="link">Links</a>
         <div class="dropdown-content">
             <div class="dropdown">
                 <a class="link">Section 1</a>
@@ -103,7 +118,24 @@
                     <!-- Add more links as needed -->
                 </div>
             </div>
-            <!-- Add more sections as needed -->
+            <div class="dropdown">
+                <a class="link">Section 3</a>
+                <div class="dropdown-content">
+                    <!-- Add links for Section 3 as needed -->
+                </div>
+            </div>
+            <div class="dropdown">
+                <a class="link">Section 4</a>
+                <div class="dropdown-content">
+                    <!-- Add links for Section 4 as needed -->
+                </div>
+            </div>
+            <div class="dropdown">
+                <a class="link">Section 5</a>
+                <div class="dropdown-content">
+                    <!-- Add links for Section 5 as needed -->
+                </div>
+            </div>
         </div>
     </div>
 
