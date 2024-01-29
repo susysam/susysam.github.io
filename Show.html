@@ -109,10 +109,10 @@
 
     <!-- Link Container -->
     <div class="link-container">
-        <!-- More Links Dropdown -->
+        <!-- Click to Get Links Dropdown -->
         <div class="dropdown">
-            <button class="link" onclick="toggleLinkPopup('moreLinksDropdown')">More Links</button>
-            <div class="dropdown-content" id="moreLinksDropdown">
+            <button class="link" onclick="toggleLinkPopup('clickToGetLinksDropdown')">Click to Get Links</button>
+            <div class="dropdown-content" id="clickToGetLinksDropdown">
                 <!-- Utopia Dropdown -->
                 <div class="section" onclick="toggleSectionPopup('utopia')">Utopia</div>
                 <!-- Interstellar Dropdown -->
@@ -125,16 +125,20 @@
     <!-- Link Popups -->
     <!-- Utopia Popup -->
     <div class="link-popup" id="utopiaPopup">
-        <div class="link-popup-content" onclick="openLink('https://www.google.com')">Utopia Link 1</div>
-        <div class="link-popup-content" onclick="openLink('https://www.google.com')">Utopia Link 2</div>
+        <div class="link-popup-content" onclick="openLink('https://www.google.com')">Link 1</div>
+        <div class="link-popup-content" onclick="openLink('https://www.google.com')">Link 2</div>
+        <div class="link-popup-content" onclick="openLink('https://www.google.com')">Link 3</div>
+        <div class="link-popup-content" onclick="openLink('https://www.google.com')">Link 4</div>
         <!-- Add more links as needed -->
         <span class="link-popup-content" onclick="toggleSectionPopup('utopia')">Close</span>
     </div>
 
     <!-- Interstellar Popup -->
     <div class="link-popup" id="interstellarPopup">
-        <div class="link-popup-content" onclick="openLink('https://www.google.com')">Interstellar Link 1</div>
-        <div class="link-popup-content" onclick="openLink('https://www.google.com')">Interstellar Link 2</div>
+        <div class="link-popup-content" onclick="openLink('https://www.google.com')">Link 1</div>
+        <div class="link-popup-content" onclick="openLink('https://www.google.com')">Link 2</div>
+        <div class="link-popup-content" onclick="openLink('https://www.google.com')">Link 3</div>
+        <div class="link-popup-content" onclick="openLink('https://www.google.com')">Link 4</div>
         <!-- Add more links as needed -->
         <span class="link-popup-content" onclick="toggleSectionPopup('interstellar')">Close</span>
     </div>
@@ -160,8 +164,7 @@
         }
 
         // Function to hide all section popups
-        function hideSectionPopups() 
-        {
+        function hideSectionPopups() {
             document.getElementById('utopiaPopup').style.display = 'none';
             document.getElementById('interstellarPopup').style.display = 'none';
             // Add more section popups as needed
