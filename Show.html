@@ -36,6 +36,7 @@
             font-weight: bold;
             font-size: 18px;
             display: inline-block;
+            cursor: pointer;
         }
 
         .link:hover {
@@ -54,8 +55,9 @@
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
             border-radius: 10px;
             z-index: 1;
-            text-align: right; /* Aligned text to the right */
-            left: -200px; /* Moved dropdown to the left */
+            text-align: right;
+            left: 50%;
+            transform: translateX(-50%); /* Center the dropdown */
         }
 
         .dropdown:hover .dropdown-content {
@@ -65,13 +67,13 @@
         .dropdown-content .section {
             font-weight: bold;
             padding: 10px;
-            cursor: pointer; /* Added cursor pointer for clickable effect */
+            cursor: pointer;
+            display: none;
         }
 
         .dropdown-content .link {
-            display: none; /* Initially hide the links */
             padding: 10px;
-            cursor: pointer; /* Added cursor pointer for clickable effect */
+            cursor: pointer;
         }
 
         .dropdown-content .link:hover {
@@ -80,8 +82,7 @@
 
         .nav-bar {
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            justify-content: space-between;
             background-color: #444;
             padding: 10px;
             position: fixed;
@@ -99,6 +100,7 @@
             text-decoration: none;
             color: #fff;
             display: inline-block;
+            cursor: pointer;
         }
 
         .back-button:hover {
@@ -113,16 +115,16 @@
     <div class="nav-bar">
         <a href="https://susysam.github.io/start27.html" class="back-button">Back</a>
         <div class="dropdown">
-            <button class="link">Links</button>
-            <div class="dropdown-content">
+            <button class="link" onclick="toggleDropdown()">Links</button>
+            <div class="dropdown-content" id="linksDropdown">
                 <div class="section" onclick="toggleLinks('interstellar')">Interstellar</div>
-                <div class="link" id="interstellar-link1" onclick="navigateToGoogle()">Link 1</div>
-                <div class="link" id="interstellar-link2" onclick="navigateToGoogle()">Link 2</div>
-                <div class="link" id="interstellar-link3" onclick="navigateToGoogle()">Link 3</div>
+                <div class="link interstellar" onclick="navigateToGoogle()">Link 1</div>
+                <div class="link interstellar" onclick="navigateToGoogle()">Link 2</div>
+                <div class="link interstellar" onclick="navigateToGoogle()">Link 3</div>
 
                 <div class="section" onclick="toggleLinks('utopia')">Utopia</div>
-                <div class="link" id="utopia-link4" onclick="navigateToGoogle()">Link 4</div>
-                <div class="link" id="utopia-link5" onclick="navigateToGoogle()">Link 5</div>
+                <div class="link utopia" onclick="navigateToGoogle()">Link 4</div>
+                <div class="link utopia" onclick="navigateToGoogle()">Link 5</div>
             </div>
         </div>
     </div>
@@ -133,6 +135,12 @@
     </div>
 
     <script>
+        // Function to toggle visibility of dropdown
+        function toggleDropdown() {
+            const dropdownContent = document.getElementById('linksDropdown');
+            dropdownContent.style.display = (dropdownContent.style.display === 'none' || dropdownContent.style.display === '') ? 'block' : 'none';
+        }
+
         // Function to toggle visibility of links for a section
         function toggleLinks(sectionId) {
             const links = document.querySelectorAll(`.${sectionId}`);
