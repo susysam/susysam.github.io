@@ -80,67 +80,69 @@
             cursor: pointer;
         }
 
-        .nav-bar {
-            display: flex;
-            justify-content: space-between;
-            background-color: #444;
-            padding: 10px;
+        .link-popup {
+            display: none;
             position: fixed;
-            width: 100%;
-            top: 0;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #444;
+            padding: 20px;
+            border-radius: 10px;
             z-index: 2;
         }
 
-        .back-button {
-            margin: 0 10px;
-            padding: 10px;
-            background-color: #333;
-            border: 3px solid #fff;
-            border-radius: 10px;
-            text-decoration: none;
+        .link-popup-content {
             color: #fff;
-            display: inline-block;
+            font-weight: bold;
             cursor: pointer;
+            margin: 10px;
         }
 
-        .back-button:hover {
-            background-color: #444;
+        .link-popup-content:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 
 <body>
 
-    <!-- Navigation Bar -->
-    <div class="nav-bar">
-        <a href="https://susysam.github.io/start27.html" class="back-button">Back</a>
+    <!-- Link Container -->
+    <div class="link-container">
         <div class="dropdown">
-            <button class="link" onclick="toggleDropdown()">Links</button>
+            <button class="link" onclick="toggleLinkPopup()">Links</button>
             <div class="dropdown-content" id="linksDropdown">
-                <div class="section" onclick="toggleLinks('interstellar')">Interstellar</div>
-                <div class="section" onclick="toggleLinks('utopia')">Utopia</div>
+                <div class="section" onclick="toggleSectionPopup('interstellar')">Interstellar</div>
+                <div class="section" onclick="toggleSectionPopup('utopia')">Utopia</div>
+                <!-- Add more sections as needed -->
             </div>
         </div>
     </div>
 
-    <!-- Link Container -->
-    <div class="link-container">
-        <!-- Removed unnecessary text -->
+    <!-- Link Popups -->
+    <div class="link-popup" id="linkPopup">
+        <div class="link-popup-content" onclick="openLink('https://www.google.com')">Link 1</div>
+        <div class="link-popup-content" onclick="openLink('https://www.google.com')">Link 2</div>
+        <!-- Add more links as needed -->
+        <span class="link-popup-content" onclick="toggleLinkPopup()">Close</span>
     </div>
 
     <script>
-        // Function to toggle visibility of dropdown
-        function toggleDropdown() {
-            const dropdownContent = document.getElementById('linksDropdown');
-            dropdownContent.style.display = (dropdownContent.style.display === 'none' || dropdownContent.style.display === '') ? 'block' : 'none';
+        // Function to toggle visibility of link popup
+        function toggleLinkPopup() {
+            const linkPopup = document.getElementById('linkPopup');
+            linkPopup.style.display = (linkPopup.style.display === 'none' || linkPopup.style.display === '') ? 'block' : 'none';
         }
 
-        // Function to toggle visibility of links for a section
-        function toggleLinks(sectionId) {
-            const links = document.querySelectorAll(`.${sectionId}`);
-            links.forEach(link => {
-                link.style.display = (link.style.display === 'none' || link.style.display === '') ? 'block' : 'none';
-            });
+        // Function to toggle visibility of section popup
+        function toggleSectionPopup(sectionId) {
+            const sectionPopup = document.getElementById(sectionId + 'Popup');
+            sectionPopup.style.display = (sectionPopup.style.display === 'none' || sectionPopup.style.display === '') ? 'block' : 'none';
+        }
+
+        // Function to open a link
+        function openLink(link) {
+            window.open(link, '_blank');
         }
     </script>
 
