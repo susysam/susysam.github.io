@@ -1,3 +1,6 @@
+Certainly! Here's the modified code based on your provided template:
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -22,7 +25,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: 50px;
+            margin-top: 20px;
         }
 
         .link {
@@ -33,10 +36,7 @@
             border-radius: 10px;
             text-decoration: none;
             color: #fff;
-            font-weight: bold;
-            font-size: 18px;
             display: inline-block;
-            cursor: pointer;
         }
 
         .link:hover {
@@ -109,31 +109,17 @@
 
     <!-- Link Container -->
     <div class="link-container">
-        <!-- Click to Get Links Dropdown -->
         <div class="dropdown">
-            <button class="link" onclick="toggleLinkPopup('clickToGetLinksDropdown')">Click to Get Links</button>
-            <div class="dropdown-content" id="clickToGetLinksDropdown">
-                <!-- Utopia Dropdown -->
-                <div class="section" onclick="toggleSectionPopup('utopia')">Utopia</div>
-                <!-- Interstellar Dropdown -->
+            <button class="link" onclick="toggleLinkPopup('linksDropdown')">Links</button>
+            <div class="dropdown-content" id="linksDropdown">
                 <div class="section" onclick="toggleSectionPopup('interstellar')">Interstellar</div>
+                <div class="section" onclick="toggleSectionPopup('utopia')">Utopia</div>
                 <!-- Add more sections as needed -->
             </div>
         </div>
     </div>
 
     <!-- Link Popups -->
-    <!-- Utopia Popup -->
-    <div class="link-popup" id="utopiaPopup">
-        <div class="link-popup-content" onclick="openLink('https://www.google.com')">Link 1</div>
-        <div class="link-popup-content" onclick="openLink('https://www.google.com')">Link 2</div>
-        <div class="link-popup-content" onclick="openLink('https://www.google.com')">Link 3</div>
-        <div class="link-popup-content" onclick="openLink('https://www.google.com')">Link 4</div>
-        <!-- Add more links as needed -->
-        <span class="link-popup-content" onclick="toggleSectionPopup('utopia')">Close</span>
-    </div>
-
-    <!-- Interstellar Popup -->
     <div class="link-popup" id="interstellarPopup">
         <div class="link-popup-content" onclick="openLink('https://www.google.com')">Link 1</div>
         <div class="link-popup-content" onclick="openLink('https://www.google.com')">Link 2</div>
@@ -141,6 +127,15 @@
         <div class="link-popup-content" onclick="openLink('https://www.google.com')">Link 4</div>
         <!-- Add more links as needed -->
         <span class="link-popup-content" onclick="toggleSectionPopup('interstellar')">Close</span>
+    </div>
+
+    <div class="link-popup" id="utopiaPopup">
+        <div class="link-popup-content" onclick="openLink('https://www.google.com')">Link 1</div>
+        <div class="link-popup-content" onclick="openLink('https://www.google.com')">Link 2</div>
+        <div class="link-popup-content" onclick="openLink('https://www.google.com')">Link 3</div>
+        <div class="link-popup-content" onclick="openLink('https://www.google.com')">Link 4</div>
+        <!-- Add more links as needed -->
+        <span class="link-popup-content" onclick="toggleSectionPopup('utopia')">Close</span>
     </div>
 
     <script>
@@ -196,3 +191,6 @@
 </body>
 
 </html>
+```
+
+This code should now match the styling and structure of your provided template while incorporating the requested dropdown functionality.
