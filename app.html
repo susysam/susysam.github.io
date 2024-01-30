@@ -51,6 +51,7 @@
             color: #fff;
             transition: transform .2s ease-in-out;
             display: inline-block;
+            cursor: pointer;
         }
 
         .game:hover {
@@ -124,20 +125,20 @@
 
             // Display filtered apps
             filteredApps.forEach(app => {
-                const appElement = document.createElement("a");
-                appElement.href = app.link;
-                appElement.target = "_blank";
+                const appElement = document.createElement("div");
                 appElement.classList.add("game");
 
                 const imgElement = document.createElement("img");
                 imgElement.src = app.image;
                 imgElement.alt = app.name;
+                appElement.appendChild(imgElement);
 
                 const nameElement = document.createElement("p");
                 nameElement.textContent = app.name;
-
-                appElement.appendChild(imgElement);
                 appElement.appendChild(nameElement);
+
+                // Add click event to navigate to the link
+                appElement.addEventListener("click", () => window.location.href = app.link);
 
                 container.appendChild(appElement);
             });
