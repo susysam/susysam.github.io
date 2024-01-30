@@ -51,6 +51,7 @@
             color: #fff;
             transition: transform .2s ease-in-out;
             display: inline-block;
+            cursor: pointer;
         }
 
         .game:hover {
@@ -91,8 +92,8 @@
     </div>
 
     <!-- Button for Broken/Want More -->
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdS1tZ-sCsBZqEYHwDQj8181D5IH3U8UvEdopmaqX_CQ85NSw/viewform" class="btn-more"
-        target="_blank">Broken/Want More?</a>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdS1tZ-sCsBZqEYHwDQj8181D5IH3U8UvEdopmaqX_CQ85NSw/viewform"
+        class="btn-more" target="_blank">Broken/Want More?</a>
 
     <script>
         // Array of games
@@ -112,7 +113,7 @@
                 image: 'https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSuS_1o1Y9NcNUdufKrMVqREmiFOT1yYA5dVhr_PwJ39h29WVO1',
                 link: 'https://skooldeliver.github.io/skool-games/monkey-mart/'
             },
-            {
+                        {
                 name: 'FNF',
                 image: 'https://w8.snokido.com/img/large/friday-night-funkin.jpg?280631',
                 link: 'https://www.snokido.com/game/friday-night-funkin'
@@ -131,20 +132,24 @@
             // Filter and display matching games
             games.forEach(game => {
                 if (game.name.toLowerCase().includes(searchInput)) {
-                    const gameElement = document.createElement('a');
-                    gameElement.href = game.link;
-                    gameElement.className = 'game';
+                    const gameElement = document.createElement('div');
+                    gameElement.classList.add('game');
 
                     const gameImage = document.createElement('img');
                     gameImage.src = game.image;
                     gameImage.alt = game.name;
+                    gameElement.appendChild(gameImage);
 
                     const gameName = document.createElement('p');
                     gameName.textContent = game.name;
-
-                    gameElement.appendChild(gameImage);
                     gameElement.appendChild(gameName);
 
+                    // Add an event listener to open the link on click
+                    gameElement.addEventListener('click', () => {
+                        window.location.href = game.link;
+                    });
+
+                    // Append the game element to the game container
                     gameContainer.appendChild(gameElement);
                 }
             });
