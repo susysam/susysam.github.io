@@ -77,12 +77,12 @@
 
     <!-- App Section -->
     <div class="game-container" id="gameContainer">
-        <!-- App will be dynamically added here -->
+        <!-- Apps will be dynamically added here -->
     </div>
 
     <script>
         // Array of app objects
-        const games = [
+        const apps = [
             {
                 name: "ShuttleAI",
                 link: "https://chat.shuttleai.app/",
@@ -113,6 +113,11 @@
                 link: "https://www.disneyplus.com",
                 image: "https://store-images.s-microsoft.com/image/apps.29046.14495311847124170.206992ba-abd1-4b2e-809c-d4bb3137de45.d1dee63c-b89e-4e43-9669-001800a5454f"
             },
+            {
+                name: "Google Chrome",
+                link: "https://anura.pro",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Google_Chrome_icon_%28February_2022%29.svg/1200px-Google_Chrome_icon_%28February_2022%29.svg.png"
+            },
         ];
 
         // Function to display apps
@@ -121,7 +126,7 @@
             container.innerHTML = "";
 
             // Filter apps based on search term
-            const filteredApps = games.filter(app => app.name.toLowerCase().includes(searchTerm.toLowerCase()));
+            const filteredApps = apps.filter(app => app.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
             // Display filtered apps
             filteredApps.forEach(app => {
