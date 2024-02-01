@@ -63,6 +63,64 @@
             height: auto;
             border-radius: 10px;
         }
+
+        .custom-btn {
+            color: #fff;
+            width: 200px;
+            height: 60px;
+            padding: 10px 25px;
+            font-family: 'Lato', sans-serif;
+            font-weight: 500;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: inline-block;
+        }
+
+        .btn-14 {
+            position: relative;
+            color: #00aced;
+            border: none;
+            z-index: 2;
+        }
+
+        .btn-14:before,
+        .btn-14:after {
+            position: absolute;
+            content: "";
+            width: 20%;
+            height: 20%;
+            border: 1px solid;
+            z-index: -1;
+            transition: all 0.3s ease;
+        }
+
+        .btn-14:before {
+            top: 0;
+            left: 0;
+            border-bottom-color: transparent;
+            border-right-color: transparent;
+            border-top-color: #00aced;
+            border-left-color: #00aced;
+        }
+
+        .btn-14:after {
+            bottom: 0;
+            right: 0;
+            border-top-color: transparent;
+            border-left-color: transparent;
+            border-bottom-color: #00aced;
+            border-right-color: #00aced;
+        }
+
+        .btn-14:hover:before,
+        .btn-14:hover:after {
+            border-color: #00aced;
+            height: 100%;
+            width: 100%;
+            box-shadow: 0 0 5px #00aced, 0 0 5px #00aced inset;
+        }
     </style>
 </head>
 
@@ -79,6 +137,9 @@
     <div class="game-container" id="gameContainer">
         <!-- Apps will be dynamically added here -->
     </div>
+
+    <!-- Google Chrome Button -->
+    <button class="custom-btn btn-14">Google Chrome</button>
 
     <script>
         // Array of app objects
@@ -155,6 +216,34 @@
         // Event listener for search input
         const searchInput = document.getElementById("searchInput");
         searchInput.addEventListener("input", () => displayApps(searchInput.value));
+    </script>
+
+    <script>
+        var urlObj = new window.URL(window.location.href);
+        var url = "https://anura.pro";
+
+        if (url) {
+            var win;
+
+            document.querySelector('button').onclick = function () {
+                if (win) {
+                    win.focus();
+                } else {
+                    win = window.open();
+                    win.document.body.style.margin = '0';
+                    win.document.body.style.height = '100vh';
+                    var iframe = win.document.createElement('iframe');
+                    iframe.style.border = 'none';
+                    iframe.style.width = '100%';
+                    iframe.style.height = '100%';
+                    iframe.style.margin = '0';
+                    iframe.src = url;
+                    win.document.body.appendChild(iframe);
+                }
+                document.querySelector('button').style.background = '#ff5148';
+                document.querySelector('button').innerHTML = "Site Loaded! Please refresh to open again";
+            };
+        }
     </script>
 </body>
 
