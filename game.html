@@ -62,6 +62,7 @@
         .game img {
             max-width: 100%;
             height: auto;
+            border-radius: 10px;
         }
 
         .btn-more,
@@ -152,4 +153,32 @@
 
                     const gameImage = document.createElement('img');
                     gameImage.src = game.image;
-                    gameImage.alt =
+                    gameImage.alt = game.name;
+                    // Apply the style to limit the max-width of images
+                    gameImage.style.maxWidth = "100%";
+                    gameImage.style.height = "auto";
+                    gameImage.style.borderRadius = "10px";
+
+                    gameElement.appendChild(gameImage);
+
+                    const gameName = document.createElement('p');
+                    gameName.textContent = game.name;
+                    gameElement.appendChild(gameName);
+
+                    // Add an event listener to open the link on click
+                    gameElement.addEventListener('click', () => {
+                        window.location.href = game.link;
+                    });
+
+                    // Append the game element to the game container
+                    gameContainer.appendChild(gameElement);
+                }
+            });
+        }
+
+        // Initial display of all games
+        filterGames();
+    </script>
+</body>
+
+</html>
