@@ -134,3 +134,44 @@
                 link: 'https://play.geforcenow.com/mall/'
             }
             // Add more games as needed
+            ];
+        // Function to filter games based on search input
+        function filterGames() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const gameContainer = document.getElementById('gameContainer');
+
+            // Clear previous content
+            gameContainer.innerHTML = '';
+
+            // Filter and display matching games
+            games.forEach(game => {
+                if (game.name.toLowerCase().includes(searchInput)) {
+                    const gameElement = document.createElement('div');
+                    gameElement.classList.add('game');
+
+                    const gameImage = document.createElement('img');
+                    gameImage.src = game.image;
+                    gameImage.alt = game.name;
+                    gameElement.appendChild(gameImage);
+
+                    const gameName = document.createElement('p');
+                    gameName.textContent = game.name;
+                    gameElement.appendChild(gameName);
+
+                    // Add an event listener to open the link on click
+                    gameElement.addEventListener('click', () => {
+                        window.location.href = game.link;
+                    });
+
+                    // Append the game element to the game container
+                    gameContainer.appendChild(gameElement);
+                }
+            });
+        }
+
+        // Initial display of all games
+        filterGames();
+    </script>
+</body>
+
+</html>
