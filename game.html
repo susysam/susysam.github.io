@@ -58,10 +58,10 @@
             transform: scale(1.1);
         }
 
-        img {
+        /* Style to limit max-width of images within game class */
+        .game img {
             max-width: 100%;
             height: auto;
-            border-radius: 10px;
         }
 
         .btn-more,
@@ -134,7 +134,8 @@
                 link: 'https://play.geforcenow.com/mall/'
             }
             // Add more games as needed
-            ];
+        ];
+
         // Function to filter games based on search input
         function filterGames() {
             const searchInput = document.getElementById('searchInput').value.toLowerCase();
@@ -151,27 +152,4 @@
 
                     const gameImage = document.createElement('img');
                     gameImage.src = game.image;
-                    gameImage.alt = game.name;
-                    gameElement.appendChild(gameImage);
-
-                    const gameName = document.createElement('p');
-                    gameName.textContent = game.name;
-                    gameElement.appendChild(gameName);
-
-                    // Add an event listener to open the link on click
-                    gameElement.addEventListener('click', () => {
-                        window.location.href = game.link;
-                    });
-
-                    // Append the game element to the game container
-                    gameContainer.appendChild(gameElement);
-                }
-            });
-        }
-
-        // Initial display of all games
-        filterGames();
-    </script>
-</body>
-
-</html>
+                    gameImage.alt =
