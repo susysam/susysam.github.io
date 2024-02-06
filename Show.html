@@ -22,31 +22,6 @@
             margin-top: 50px;
         }
 
-        .link-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .link {
-            margin: 10px;
-            padding: 10px 20px;
-            background-color: #1f1f1f;
-            border: 3px solid #fff;
-            border-radius: 10px;
-            text-decoration: none;
-            color: #fff;
-            display: inline-block;
-            transition: all 0.3s ease;
-        }
-
-        .link:hover {
-            background-color: #6C0BA9;
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-        }
-
         .button {
             margin: 10px;
             padding: 10px 20px;
@@ -72,49 +47,72 @@
 
     <h1>Welcome to the Website</h1>
 
-    <!-- Game Links Section -->
-    <div class="section">
-        <h2>Game Links</h2>
-        <div class="link-container">
-            <!-- Add Game Links here -->
-            <a href="https://a1rdrop.netlify.app/games" class="link">A1R</a>
-            <a href="https://nowgg.me/" class="link">Now.GG</a>
-        </div>
-    </div>
-
     <!-- Button Section -->
     <div class="section">
         <h2>Quick Links</h2>
-        <button class="button" onclick="window.location.href='https://x.e.adamandandrea.org'">Interstellar</button>
-        <button class="button" onclick="window.location.href='https://anura.pro/'">FakeOS</button>
-        <button class="button" onclick="window.location.href='https://add.tutor.hydraulik-handpumpen.com/'">Utopia</button>
-        <button class="button" onclick="window.location.href='https://movie-web.app/'">Movies</button>
+        <button class="button" onclick="redirect('Interstellar')">Interstellar</button>
+        <button class="button" onclick="redirect('FakeOS')">FakeOS</button>
+        <button class="button" onclick="redirect('Utopia')">Utopia</button>
+        <button class="button" onclick="redirect('Movies')">Movies</button>
     </div>
 
-    <!-- Movie Links Section -->
-    <div class="section">
-        <h2>Movie Links</h2>
-        <div class="link-container">
-            <!-- Add Movie Links here -->
-            <a href="https://movie-web.app/" class="link">Movie Web</a>
-            <a href="https://anix.to/" class="link">AnimeX</a>
-            <a href="https://movie-web.app/" class="link">movie-web</a>
-            <a href="https://watchflix.app/" class="link">watchflix</a>
-            <a href="https://teamberga.xyz/" class="link">teamberga</a>
-            <a href="https://scootydooter.vercel.app/" class="link">scootydooter</a>
-            <a href="https://movie-web-lac-six.vercel.app/" class="link">movie-web-lac-six</a>
-            <a href="https://movie-web-xlta.vercel.app/" class="link">movie-web-xlta</a>
-            <a href="https://ephemeral-cheesecake-17073d.netlify.app/" class="link">ephemeral-cheesecake-17073d</a>
-            <a href="https://dashing-starship-280785.netlify.app/" class="link">dashing-starship-280785</a>
-            <a href="https://admirable-kitten-4405b5.netlify.app/" class="link">admirable-kitten-4405b5</a>
-            <a href="https://dashing-starship-280785.netlify.app/" class="link">dashing-starship-280785</a>
-            <a href="https://majinitx12.github.io/#/search/movie" class="link">majinitx12</a>
-            <a href="https://ephemeral-cheesecake-17073d.netlify.app/" class="link">ephemeral-cheesecake-17073d</a>
-            <a href="https://movie-web-me.vercel.app/#/search/movie" class="link">movie-web-me</a>
-            <a href="https://movie-web-meta-refactor.vercel.app/#/search/movie" class="link">movie-web-meta-refactor</a>
-            <a href="https://movie-web.us/#/search/movie" class="link">movie-web-us</a>
-        </div>
-    </div>
+    <script>
+        function redirect(section) {
+            var interstellarLinks = [
+                "https://x.e.adamandandrea.org",
+                "https://us1.cambrianscientific.com/",
+                "https://w.e.adamandandrea.org",
+                "https://stats.volkszaehler.org/",
+                // Add more Interstellar links here
+            ];
+
+            var fakeOSLinks = [
+                "https://anura.pro/",
+                "https://anura.christmas/",
+                "https://integrated256.xyz/",
+                "https://onlineprogrammer.pro/",
+                // Add more FakeOS links here
+            ];
+
+            var utopiaLinks = [
+                "https://add.tutor.hydraulik-handpumpen.com/",
+                "https://area.brain.cravat-club.com/",
+                "https://area.state.wspaperbag.com/",
+                "https://atom.class.aviornstein.com/",
+                // Add more Utopia links here
+            ];
+
+            var moviesLinks = [
+                "https://movie-web.app/",
+                "https://anix.to/",
+                "https://watchflix.app/",
+                "https://teamberga.xyz/",
+                // Add more Movies links here
+            ];
+
+            var links;
+            switch (section) {
+                case 'Interstellar':
+                    links = interstellarLinks;
+                    break;
+                case 'FakeOS':
+                    links = fakeOSLinks;
+                    break;
+                case 'Utopia':
+                    links = utopiaLinks;
+                    break;
+                case 'Movies':
+                    links = moviesLinks;
+                    break;
+                default:
+                    links = [];
+            }
+
+            var randomIndex = Math.floor(Math.random() * links.length);
+            var randomLink = links[randomIndex];
+            window.location.href = randomLink;
+        }
+    </script>
 
 </body>
 
