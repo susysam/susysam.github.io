@@ -1,5 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter the Website</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Rubik', sans-serif;
+            background-color: #000;
+            color: white;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        h1 {
+            font-weight: 300;
+            font-size: 2rem;
+            margin-bottom: 40px;
+        }
+
+        button {
+            padding: 15px 30px;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            background-color: #f75dfc;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>Click the button to enter the website - Leo</h1>
+        <button onclick="goToWebsite()">Enter</button>
+    </div>
+
+    <script>
+        function goToWebsite() {
+            const url = 'https://susysam.github.io';
+            const newWindow = window.open(url, '_blank');
+            if (newWindow) {
+                newWindow.focus();
+            } else {
+                alert('Please allow popups for this website to proceed.');
+            }
+        }
+
+        // Allow pressing Enter key to trigger the button click
+        document.addEventListener('keyup', (event) => {
+            if (event.keyCode === 13) {
+                goToWebsite();
+            }
+        });
+    </script>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
