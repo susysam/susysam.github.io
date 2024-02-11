@@ -40,8 +40,8 @@
         </style>
     </head>
     <body>
-        <h1>Press [Enter] or tap/click anywhere to redirect</h1>
-        
+        <h1>This may not work on Proxys-Leo</h1>
+
         <script>
             function Go() {
                 let url = 'https://susysam.github.io/start27.html';
@@ -51,7 +51,7 @@
                 doc.title = '';
 
                 let embed = doc.createElement('embed');
-                
+
                 if (url.includes('https://') || url.includes('http://')) {
                     embed.src = url;
                 } else {
@@ -71,11 +71,11 @@
                         return "reloading the site will end the aboutblank session. Are you sure you want to continue?";
                     };
                 `;
-                
+
                 doc.body.appendChild(embed);
                 doc.body.appendChild(script);
 
-                window.location.href = 'https://google.com';
+                window.location.href = 'https://classroom.google.com/u/0/';
                 window.close();
             }
 
