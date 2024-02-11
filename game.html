@@ -60,7 +60,7 @@
 
         /* Style to limit max-width of images within game class */
         .game img {
-            max-width: 100%;
+            max-width: 100%; /* Limit the maximum width of images */
             height: auto;
             border-radius: 10px;
         }
@@ -154,10 +154,6 @@
                     const gameImage = document.createElement('img');
                     gameImage.src = game.image;
                     gameImage.alt = game.name;
-                    // Apply the style to limit the max-width of images
-                    gameImage.style.maxWidth = "100%";
-                    gameImage.style.height = "auto";
-                    gameImage.style.borderRadius = "10px";
 
                     gameElement.appendChild(gameImage);
 
