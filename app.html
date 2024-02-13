@@ -2,228 +2,258 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apps</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            text-align: center;
-            margin: 20px;
-            background-color: #333; /* Reverted to the old background color */
-            color: #fff;
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apps</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 20px;
+            background-color: #333;
+            color: #fff;
+        }
 
-        h1 {
-            color: #ffcc00;
-        }
+        h1 {
+            color: #ffcc00;
+        }
 
-        .search-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-        }
+        .search-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
 
-        input[type="text"] {
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 5px;
-            border: none;
-            margin-right: 10px;
-            width: 300px;
-        }
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            margin-right: 10px;
+            width: 300px;
+        }
 
-        .game-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-        }
+        .game-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
 
-        .game {
-            margin: 20px;
-            padding: 20px;
-            background-color: #444;
-            border: 5px solid #fff;
-            border-radius: 15px;
-            text-decoration: none;
-            color: #fff;
-            transition: transform .2s ease-in-out;
-            display: inline-block;
-            cursor: pointer;
-        }
+        .game {
+            margin: 20px;
+            padding: 20px;
+            background-color: #444;
+            border: 5px solid #fff;
+            border-radius: 15px;
+            text-decoration: none;
+            color: #fff;
+            transition: transform .2s ease-in-out;
+            display: inline-block;
+            cursor: pointer;
+        }
 
-        .game:hover {
-            transform: scale(1.1);
-        }
+        .game:hover {
+            transform: scale(1.1);
+        }
 
-        img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 10px;
-        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
 
-        .custom-btn {
-            color: #fff;
-            width: 200px;
-            height: 60px;
-            padding: 10px 25px;
-            font-family: 'Lato', sans-serif;
-            font-weight: 500;
-            background: transparent;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            display: inline-block;
-        }
+        .custom-btn {
+            color: #fff;
+            width: 200px;
+            height: 60px;
+            padding: 10px 25px;
+            font-family: 'Lato', sans-serif;
+            font-weight: 500;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: inline-block;
+        }
 
-        .btn-14 {
-            position: relative;
-            color: #00aced;
-            border: none;
-            z-index: 2;
-        }
+        .btn-14 {
+            position: relative;
+            color: #00aced;
+            border: none;
+            z-index: 2;
+        }
 
-        .btn-14:before,
-        .btn-14:after {
-            position: absolute;
-            content: "";
-            width: 20%;
-            height: 20%;
-            border: 1px solid;
-            z-index: -1;
-            transition: all 0.3s ease;
-        }
+        .btn-14:before,
+        .btn-14:after {
+            position: absolute;
+            content: "";
+            width: 20%;
+            height: 20%;
+            border: 1px solid;
+            z-index: -1;
+            transition: all 0.3s ease;
+        }
 
-        .btn-14:before {
-            top: 0;
-            left: 0;
-            border-bottom-color: transparent;
-            border-right-color: transparent;
-            border-top-color: #00aced;
-            border-left-color: #00aced;
-        }
+        .btn-14:before {
+            top: 0;
+            left: 0;
+            border-bottom-color: transparent;
+            border-right-color: transparent;
+            border-top-color: #00aced;
+            border-left-color: #00aced;
+        }
 
-        .btn-14:after {
-            bottom: 0;
-            right: 0;
-            border-top-color: transparent;
-            border-left-color: transparent;
-            border-bottom-color: #00aced;
-            border-right-color: #00aced;
-        }
+        .btn-14:after {
+            bottom: 0;
+            right: 0;
+            border-top-color: transparent;
+            border-left-color: transparent;
+            border-bottom-color: #00aced;
+            border-right-color: #00aced;
+        }
 
-        .btn-14:hover:before,
-        .btn-14:hover:after {
-            border-color: #00aced;
-            height: 100%;
-            width: 100%;
-            box-shadow: 0 0 5px #00aced, 0 0 5px #00aced inset;
-        }
-    </style>
+        .btn-14:hover:before,
+        .btn-14:hover:after {
+            border-color: #00aced;
+            height: 100%;
+            width: 100%;
+            box-shadow: 0 0 5px #00aced, 0 0 5px #00aced inset;
+        }
+    </style>
 </head>
 
 <body>
-    <!-- Back Button -->
-    <a href="https://susysam.github.io/start27.html" class="btn-back">&lt; Back</a>
+ <!-- Back Button -->
+    <a href="https://susysam.github.io/start27.html" class="btn-back">&lt; Back</a>
 
-    <h1>Apps</h1>
+    <h1>Apps</h1>
 
-    <!-- Search Bar -->
-    <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Search" required>
-    </div>
+    <!-- Search Bar -->
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search" required>
+    </div>
 
-    <!-- App Section -->
-    <div class="game-container" id="gameContainer">
-        <!-- Apps will be dynamically added here -->
-    </div>
+    <!-- App Section -->
+    <div class="game-container" id="gameContainer">
+        <!-- Apps will be dynamically added here -->
+    </div>
 
-    <!-- Proxy Button -->
-    <button class="custom-btn btn-14" onclick="openLink('https://freeleo27.github.io/home.html')">Proxy</button>
+    <!-- Google Chrome Button -->
+    <button class="custom-btn btn-14" onclick="openLink('https://www.google.com/')">Google Chrome</button>
 
-    <script>
-        // Array of app objects
-        const apps = [
-            {
-                name: "Ai",
-                link: "https://www.blackbox.ai",
-                image: "/shuttle.png"
-            },
-            {
-                name: "TikTok",
-                link: "https://tiktok.com/",
-                image: "https://upload.wikimedia.org/wikipedia/my/thumb/1/1c/Tiktok_logo.svg/2048px-Tiktok_logo.svg.png"
-            },
-            {
-                name: "Discord",
-                link: "https://discord.com/app",
-                image: "https://play-lh.googleusercontent.com/0oO5sAneb9lJP6l8c6DH4aj6f85qNpplQVHmPmbbBxAukDnlO7DarDW0b-kEIHa8SQ"
-            },
-            {
-                name: "Youtube",
-                link: "https://youtube.com/",
-                image: "https://img.freepik.com/premium-vector/red-youtube-logo-social-media-logo_197792-1803.jpg"
-            },
-            {
-                name: "Netflix",
-                link: "https://netflix.com/login",
-                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Netflix-new-icon.png/480px-Netflix-new-icon.png"
-            },
-            {
-                name: "Disney+",
-                link: "https://www.disneyplus.com",
-                image: "https://store-images.s-microsoft.com/image/apps.29046.14495311847124170.206992ba-abd1-4b2e-809c-d4bb3137de45.d1dee63c-b89e-4e43-9669-001800a5454f"
-            },
-            {
-                name: "Flixhq",
-                link: "https://flixhq.to",
-                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIZMFgcLqi_0nHN1B_RegUkPkW3ula3qPvLZvuoo_tfQ&s"
-            },
-        ];
+    <!-- Proxy Button -->
+    <button class="custom-btn btn-14" onclick="openLink('https://freeleo27.github.io/home.html')">Proxy</button>
 
-        // Function to display apps
-        function displayApps(searchTerm = "") {
-            const container = document.getElementById("gameContainer");
-            container.innerHTML = "";
+    <script>
+        // Array of app objects
+        const apps = [
+            {
+                name: "Ai",
+                link: "https://www.blackbox.ai",
+                image: "/shuttle.png"
+            },
+            {
+                name: "Proxy",
+                link: "https://freeleo27.github.io/home.html",
+            },
+            {
+                name: "Discord",
+                link: "https://discord.com/app",
+                image: "https://play-lh.googleusercontent.com/0oO5sAneb9lJP6l8c6DH4aj6f85qNpplQVHmPmbbBxAukDnlO7DarDW0b-kEIHa8SQ"
+            },
+            {
+                name: "Youtube",
+                link: "https://youtube.com/",
+                image: "https://img.freepik.com/premium-vector/red-youtube-logo-social-media-logo_197792-1803.jpg"
+            },
+            {
+                name: "Netflix",
+                link: "https://netflix.com/login",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Netflix-new-icon.png/480px-Netflix-new-icon.png"
+            },
+            {
+                name: "Disney+",
+                link: "https://www.disneyplus.com",
+                image: "https://store-images.s-microsoft.com/image/apps.29046.14495311847124170.206992ba-abd1-4b2e-809c-d4bb3137de45.d1dee63c-b89e-4e43-9669-001800a5454f"
+            },
+            {
+                name: "Flixhq",
+                link: "https://flixhq.to",
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIZMFgcLqi_0nHN1B_RegUkPkW3ula3qPvLZvuoo_tfQ&s"
+            },
+        ];
 
-            // Filter apps based on search term
-            const filteredApps = apps.filter(app => app.name.toLowerCase().includes(searchTerm.toLowerCase()));
+        // Function to display apps
+        function displayApps(searchTerm = "") {
+            const container = document.getElementById("gameContainer");
+            container.innerHTML = "";
 
-            // Display filtered apps
-            filteredApps.forEach(app => {
-                const appElement = document.createElement("div");
-                appElement.classList.add("game");
+            // Filter apps based on search term
+            const filteredApps = apps.filter(app => app.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
-                const imgElement = document.createElement("img");
-                imgElement.src = app.image;
-                imgElement.alt = app.name;
-                appElement.appendChild(imgElement);
+            // Display filtered apps
+            filteredApps.forEach(app => {
+                const appElement = document.createElement("div");
+                appElement.classList.add("game");
 
-                const nameElement = document.createElement("p");
-                nameElement.textContent = app.name;
-                appElement.appendChild(nameElement);
+                const imgElement = document.createElement("img");
+                imgElement.src = app.image;
+                imgElement.alt = app.name;
+                appElement.appendChild(imgElement);
 
-                // Add click event to navigate to the link
-                appElement.addEventListener("click", () => window.location.href = app.link);
+                const nameElement = document.createElement("p");
+                nameElement.textContent = app.name;
+                appElement.appendChild(nameElement);
 
-                container.appendChild(appElement);
-            });
-        }
+                // Add click event to navigate to the link
+                appElement.addEventListener("click", () => window.location.href = app.link);
 
-        // Initial display of apps
-        displayApps();
+                container.appendChild(appElement);
+            });
+        }
 
-        // Event listener for search input
-        const searchInput = document.getElementById("searchInput");
-        searchInput.addEventListener("input", () => displayApps(searchInput.value));
+        // Initial display of apps
+        displayApps();
 
-        // Function to open link in a new tab
-        function openLink(url) {
-            window.open(url, '_blank');
-        }
-    </script>
+        // Event listener for search input
+        const searchInput = document.getElementById("searchInput");
+        searchInput.addEventListener("input", () => displayApps(searchInput.value));
+
+        // Function to open a link in a new tab
+        function openLink(link) {
+            window.open(link, "_blank");
+        }
+    </script>
+
+    <script>
+        var urlObj = new window.URL(window.location.href);
+        var url = "https://anura.pro";
+
+        if (url) {
+            var win;
+
+            document.querySelector('button').onclick = function () {
+                if (win) {
+                    win.focus();
+                } else {
+                    win = window.open();
+                    win.document.body.style.margin = '0';
+                    win.document.body.style.height = '100vh';
+                    var iframe = win.document.createElement('iframe');
+                    iframe.style.border = 'none';
+                    iframe.style.width = '100%';
+                    iframe.style.height = '100%';
+                    iframe.style.margin = '0';
+                    iframe.src = url;
+                    win.document.body.appendChild(iframe);
+                }
+                document.querySelector('button').style.background = '#ff5148';
+                document.querySelector('button').innerHTML = "Site Loaded! Please refresh to open again";
+            };
+        }
+    </script>
 </body>
 
 </html>
