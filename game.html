@@ -32,11 +32,10 @@
         }
 
         .game-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            justify-items: center;
+            display: flex;
+            flex-direction: column;
             align-items: center;
+            gap: 20px;
             margin: 0 auto;
             max-width: 1200px;
         }
@@ -50,6 +49,8 @@
             color: #fff;
             transition: transform .2s ease-in-out;
             cursor: pointer;
+            width: 300px;
+            box-sizing: border-box;
         }
 
         .game:hover {
@@ -58,6 +59,12 @@
 
         .game p {
             margin: 10px 0;
+        }
+
+        .disclaimer {
+            color: #ccc;
+            font-style: italic;
+            margin-bottom: 20px;
         }
 
         .btn-more,
@@ -81,6 +88,9 @@
     <a href="https://susysam.github.io/start27.html" class="btn-back">&lt; Back</a>
 
     <h1>Games</h1>
+
+    <!-- Disclaimer -->
+    <p class="disclaimer">IF A GAME IS BLOCKED, PLEASE MAKE SURE YOU ARE ON ABOUT:BLANK.</p>
 
     <!-- Search Bar -->
     <div class="search-container">
@@ -137,6 +147,12 @@
 
             // Clear previous content
             gameContainer.innerHTML = '';
+
+            // Add disclaimer
+            const disclaimer = document.createElement('p');
+            disclaimer.textContent = 'IF A GAME IS BLOCKED, PLEASE MAKE SURE YOU ARE ON ABOUT:BLANK.';
+            disclaimer.classList.add('disclaimer');
+            gameContainer.appendChild(disclaimer);
 
             // Filter and display matching games
             games.forEach(game => {
