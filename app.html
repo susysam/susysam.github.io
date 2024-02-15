@@ -36,13 +36,14 @@
 
         .game-container {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            flex-wrap: wrap;
+            gap: 20px;
+            margin: 0 auto;
+            max-width: 1200px;
         }
 
         .game {
-            margin: 20px;
             padding: 20px;
             background-color: #444;
             border: 5px solid #fff;
@@ -50,85 +51,30 @@
             text-decoration: none;
             color: #fff;
             transition: transform .2s ease-in-out;
-            display: inline-block;
             cursor: pointer;
+            width: 300px;
+            box-sizing: border-box;
         }
 
         .game:hover {
             transform: scale(1.1);
         }
 
-        img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 10px;
-        }
-
-        .custom-btn {
-            color: #fff;
-            width: 200px;
-            height: 60px;
-            padding: 10px 25px;
-            font-family: 'Lato', sans-serif;
-            font-weight: 500;
-            background: transparent;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            display: inline-block;
-        }
-
-        .btn-14 {
-            position: relative;
-            color: #00aced;
-            border: none;
-            z-index: 2;
-        }
-
-        .btn-14:before,
-        .btn-14:after {
-            position: absolute;
-            content: "";
-            width: 20%;
-            height: 20%;
-            border: 1px solid;
-            z-index: -1;
-            transition: all 0.3s ease;
-        }
-
-        .btn-14:before {
-            top: 0;
-            left: 0;
-            border-bottom-color: transparent;
-            border-right-color: transparent;
-            border-top-color: #00aced;
-            border-left-color: #00aced;
-        }
-
-        .btn-14:after {
-            bottom: 0;
-            right: 0;
-            border-top-color: transparent;
-            border-left-color: transparent;
-            border-bottom-color: #00aced;
-            border-right-color: #00aced;
-        }
-
-        .btn-14:hover:before,
-        .btn-14:hover:after {
-            border-color: #00aced;
-            height: 100%;
-            width: 100%;
-            box-shadow: 0 0 5px #00aced, 0 0 5px #00aced inset;
+        .disclaimer {
+            color: #ccc;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 
 <body>
- <!-- Back Button -->
+    <!-- Back Button -->
     <a href="https://susysam.github.io/start27.html" class="btn-back">&lt; Back</a>
 
     <h1>Apps</h1>
+
+    <!-- Disclaimer -->
+    <p class="disclaimer">Fixed Search Bar-Leo</p>
 
     <!-- Search Bar -->
     <div class="search-container">
@@ -140,51 +86,40 @@
         <!-- Apps will be dynamically added here -->
     </div>
 
-    <!-- Google Chrome Button -->
-    <button class="custom-btn btn-14">Google Chrome</button>
-
     <script>
         // Array of app objects
         const apps = [
             {
                 name: "Ai",
                 link: "https://www.blackbox.ai",
-                image: "/shuttle.png"
             },
             {
                 name: "Proxy",
                 link: "https://freeleo27.github.io/service/hvtrs8%2F-wuw%2Cgmoelg.aoo%2Fqecrah%3Dq%3Fgmoelg",
-                image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARMAAAC3CAMAAAAGjUrGAAAANlBMVEX///8AAACcnJz4+PjX19c8PDxqamrt7e1UVFTf39+MjIzU1NSzs7NJSUmWlpb7+/teXl6/v7+zr/B8AAAAhElEQVR4nO3QtxGEQBAAQQ6t/8k/WQpwcLF2je4IpqaqAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADIq2miC7Jpu1J6V96GchmjM1Kp7ydliu7IZH6eLNEdmazPkyG6I5XtWrJHV+Tyq//9ER0BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfnCWcAMtCFcL3AAAAAElFTkSuQmCC"
             },
             {
                 name: "Discord",
                 link: "https://discord.com/app",
-                image: "https://play-lh.googleusercontent.com/0oO5sAneb9lJP6l8c6DH4aj6f85qNpplQVHmPmbbBxAukDnlO7DarDW0b-kEIHa8SQ"
             },
             {
                 name: "Youtube",
                 link: "https://youtube.com/",
-                image: "https://img.freepik.com/premium-vector/red-youtube-logo-social-media-logo_197792-1803.jpg"
             },
             {
                 name: "Netflix",
                 link: "https://netflix.com/login",
-                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Netflix-new-icon.png/480px-Netflix-new-icon.png"
             },
             {
                 name: "Disney+",
                 link: "https://www.disneyplus.com",
-                image: "https://store-images.s-microsoft.com/image/apps.29046.14495311847124170.206992ba-abd1-4b2e-809c-d4bb3137de45.d1dee63c-b89e-4e43-9669-001800a5454f"
             },
             {
                 name: "Flixhq",
                 link: "https://flixhq.to",
-                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIZMFgcLqi_0nHN1B_RegUkPkW3ula3qPvLZvuoo_tfQ&s"
             },
             {
                 name: "Xivi",
                 link: "https://xivi.me/login.php",
-                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIZMFgcLqi_0nHN1B_RegUkPkW3ula3qPvLZvuoo_tfQ&s"
             },
         ];
 
@@ -200,11 +135,6 @@
             filteredApps.forEach(app => {
                 const appElement = document.createElement("div");
                 appElement.classList.add("game");
-
-                const imgElement = document.createElement("img");
-                imgElement.src = app.image;
-                imgElement.alt = app.name;
-                appElement.appendChild(imgElement);
 
                 const nameElement = document.createElement("p");
                 nameElement.textContent = app.name;
