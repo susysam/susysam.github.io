@@ -19,9 +19,6 @@
         }
 
         .search-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
             margin-bottom: 20px;
         }
 
@@ -35,14 +32,16 @@
         }
 
         .game-container {
-            display: flex;
-            justify-content: center;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            justify-items: center;
             align-items: center;
-            flex-wrap: wrap;
+            margin: 0 auto;
+            max-width: 1200px;
         }
 
         .game {
-            margin: 20px;
             padding: 20px;
             background-color: #444;
             border: 5px solid #fff;
@@ -50,7 +49,6 @@
             text-decoration: none;
             color: #fff;
             transition: transform .2s ease-in-out;
-            display: inline-block;
             cursor: pointer;
         }
 
@@ -58,11 +56,8 @@
             transform: scale(1.1);
         }
 
-        /* Style to limit max-width of images within game class */
-        .game img {
-            max-width: 100%; /* Limit the maximum width of images */
-            height: auto;
-            border-radius: 10px;
+        .game p {
+            margin: 10px 0;
         }
 
         .btn-more,
@@ -106,33 +101,31 @@
         const games = [
             {
                 name: 'A1R',
-                image: '/IMG_0540.jpeg',
                 link: 'https://a1rdrop.netlify.app/games'
             },
             {
-                name: 'Now.GG',
-                image: 'https://cdn.now.gg/apps-content/img/website/now.gg-og-dark.jpg',
-                link: 'https://nowgg.me/'
+                name: 'Roblox',
+                link: 'https://nowgg.me/play/roblox-corporation/5349/roblox'
             },
             {
                 name: 'Monkey Mart',
-                image: 'https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSuS_1o1Y9NcNUdufKrMVqREmiFOT1yYA5dVhr_PwJ39h29WVO1',
                 link: 'https://skooldeliver.github.io/skool-games/monkey-mart/'
             },
             {
                 name: 'FNF',
-                image: 'https://w8.snokido.com/img/large/friday-night-funkin.jpg?280631',
                 link: 'https://www.snokido.com/game/friday-night-funkin'
             },
             {
                 name: 'Rocket League',
-                image: 'https://assets.nintendo.com/image/upload/c_fill,w_1200/q_auto:best/f_auto/dpr_2.0/ncom/software/switch/70010000000457/f36446968c0f3475a52c44e628c3d28f635af18d82d0d70b3ffdf9dbe9344da2',
                 link: 'https://play.geforcenow.com/mall/'
             },
             {
                 name: 'Fortnite',
-                image: 'https://cdn2.unrealengine.com/blade-2560x1440-2560x1440-d4e556fb8166.jpg',
                 link: 'https://play.geforcenow.com/mall/'
+            },
+            {
+                name: 'Andriod OS',
+                link: 'https://nowgg.me/play/uncube/7074/now'
             }
             // Add more games as needed
         ];
@@ -150,12 +143,6 @@
                 if (game.name.toLowerCase().includes(searchInput)) {
                     const gameElement = document.createElement('div');
                     gameElement.classList.add('game');
-
-                    const gameImage = document.createElement('img');
-                    gameImage.src = game.image;
-                    gameImage.alt = game.name;
-
-                    gameElement.appendChild(gameImage);
 
                     const gameName = document.createElement('p');
                     gameName.textContent = game.name;
