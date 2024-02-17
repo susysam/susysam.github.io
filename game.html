@@ -122,8 +122,14 @@
         class="btn-more" target="_blank">Broken/Want More?</a>
 
     <!-- Button for Blocked -->
-    <a href="https://s.cambrianscientific.com/a/hvtrs8%2F-sws%7Bscm%2Cgktju%60.ko-svapt07%2Chvmn"
-        class="btn-blocked" target="_blank">If Blocked Click Here-Leo</a>
+    <a href="#" class="btn-blocked" onclick="openBlockedLinks()">If Blocked Click Here-Leo</a>
+
+    <!-- Steps -->
+    <div class="steps">
+        <p>Step 1: Search up IMDb and find the show u want!</p>
+        <p>Step 2: Copy the URL.</p>
+        <p>Step 3: Go back to my website and fill in the blanks. Your show URL should look like tt1942683. After that, type the season and episode, then click Find It.</p>
+    </div>
 
     <script>
         // Array of games
@@ -192,6 +198,24 @@
                     gameContainer.appendChild(gameElement);
                 }
             });
+        }
+
+        // Function to open blocked links in the same page
+        function openBlockedLinks() {
+            const blockedLinks = [
+                "https://area.brain.cravat-club.com/math/hvtrs8%2F-sws%7Bscm%2Cgktju%60.ko-svapt07%2Chvmn",
+                "https://add.tutor.hydraulik-handpumpen.com/math/hvtrs8%2F-sws%7Bscm%2Cgktju%60.ko-svapt07%2Chvmn",
+                "https://n.c.gracemp.org/a/hvtrs8%2F-sws%7Bscm%2Cgktju%60.ko-svapt07%2Chvmn",
+                "https://anura.pro/service/ultraviolet/hvtrs8%2F-sws%7Bscm%2Cgktju%60.ko-svapt07%2Chvmn",
+                "https://anura.christmas/service/ultraviolet/hvtrs8%2F-sws%7Bscm%2Cgktju%60.ko-svapt07%2Chvmn"
+            ];
+
+            // Randomly select a blocked link
+            const randomIndex = Math.floor(Math.random() * blockedLinks.length);
+            const blockedLink = blockedLinks[randomIndex];
+
+            // Open the selected blocked link in the same page
+            window.location.href = blockedLink;
         }
 
         // Initial display of all games
