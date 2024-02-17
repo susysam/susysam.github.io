@@ -1,1 +1,152 @@
-<!DOCTYPE html> <html lang="en">  <head>     <meta charset="UTF-8">     <meta name="viewport" content="width=device-width, initial-scale=1.0">     <title>Games</title>     <style>         body {             font-family: 'Arial', sans-serif;             text-align: center;             margin: 20px;             background-color: #333;             color: #fff;         }          h1 {             color: #ffcc00;             margin-bottom: 20px;         }          .search-container {             margin-bottom: 20px;         }          input[type="text"] {             padding: 10px;             font-size: 16px;             border-radius: 5px;             border: none;             margin-right: 10px;             width: 300px;         }          .game-container {             display: flex;             flex-wrap: wrap;             justify-content: center;             gap: 20px;             margin: 0 auto;             max-width: 1200px;         }          .game {             padding: 20px;             background-color: #444;             border: 5px solid #fff;             border-radius: 15px;             text-decoration: none;             color: #fff;             transition: transform .2s ease-in-out;             cursor: pointer;             width: 300px;             box-sizing: border-box;         }          .game:hover {             transform: scale(1.1);         }          .game p {             margin: 10px 0;             font-size: 20px;             color: #fff;         }          .disclaimer {             color: #ccc;             font-style: italic;             margin-bottom: 20px;         }          .btn-more,         .btn-back,         .btn-blocked {             display: inline-block;             padding: 10px 20px;             background-color: #6C0BA9;             color: #fff;             text-decoration: none;             border-radius: 5px;             font-size: 16px;             cursor: pointer;             transition: background-color 0.3s ease;             margin-right: 10px;         }          .btn-more:hover,         .btn-back:hover,         .btn-blocked:hover {             background-color: #4F0672;         }     </style> </head>  <body>      <!-- Back Button -->     <a href="https://susysam.github.io/start27.html" class="btn-back">&lt; Back</a>      <h1>Games</h1>      <!-- Disclaimer -->     <p class="disclaimer">Fixed Search Bar-Leo</p>      <!-- Search Bar -->     <div class="search-container">         <input type="text" id="searchInput" placeholder="Search" oninput="filterGames()" required>     </div>      <!-- Game Section -->     <div class="game-container" id="gameContainer">         <!-- Games will be dynamically added here -->     </div>      <!-- Button for Broken/Want More -->     <a href="https://docs.google.com/forms/d/e/1FAIpQLSdS1tZ-sCsBZqEYHwDQj8181D5IH3U8UvEdopmaqX_CQ85NSw/viewform"         class="btn-more" target="_blank">Broken/Want More?</a>      <!-- Button for Blocked -->     <a href="https://s.cambrianscientific.com/a/hvtrs8%2F-sws%7Bscm%2Cgktju%60.ko-svapt07%2Chvmn"         class="btn-blocked" target="_blank">If Blocked Click Here-Leo</a>      <script>         // Array of games         const games = [             {                 name: 'A1R',                 link: 'https://a1rdrop.netlify.app/games'             },             {                 name: 'Roblox',                 link: 'https://nowgg.me/play/roblox-corporation/5349/roblox'             },             {                 name: 'Monkey Mart',                 link: 'https://skooldeliver.github.io/skool-games/monkey-mart/'             },             {                 name: 'FNF',                 link: 'https://www.snokido.com/game/friday-night-funkin'             },             {                 name: 'Rocket League',                 link: 'https://play.geforcenow.com/mall/'             },             {                 name: 'Fortnite',                 link: 'https://play.geforcenow.com/mall/'             },             {                 name: 'Andriod OS',                 link: 'https://nowgg.me/play/uncube/7074/now'             }             // Add more games as needed         ];          // Function to filter games based on search input         function filterGames() {             const searchInput = document.getElementById('searchInput').value.toLowerCase();             const gameContainer = document.getElementById('gameContainer');              // Clear previous content             gameContainer.innerHTML = '';              // Add disclaimer             const disclaimer = document.createElement('p');             disclaimer.textContent = 'IF A GAME IS BLOCKED, PLEASE MAKE SURE YOU ARE ON ABOUT:BLANK!';             disclaimer.classList.add('disclaimer');             gameContainer.appendChild(disclaimer);              // Filter and display matching games             games.forEach(game => {                 if (game.name.toLowerCase().includes(searchInput)) {                     const gameElement = document.createElement('div');                     gameElement.classList.add('game');                      const gameName = document.createElement('p');                     gameName.textContent = game.name;                     gameElement.appendChild(gameName);                      // Add an event listener to open the link on click                     gameElement.addEventListener('click', () => {                         window.location.href = game.link;                     });                      // Append the game element to the game container                     gameContainer.appendChild(gameElement);                 }             });         }          // Initial display of all games         filterGames();     </script> </body>  </html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <style>
+    body {
+      background-color: #292929; /* Dark background */
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      font-family: sans-serif;
+    }
+
+    form {
+      background-color: #171717; /* Darker container background */
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      animation: fadeIn 1s ease forwards; /* Fade in animation */
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      color: white;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 15px;
+      box-sizing: border-box;
+      background-color: #292929; /* Dark background for input */
+      color: white;
+      border: 1px solid #6C0BA9; /* Purple border */
+      border-radius: 5px;
+      transition: border-color 0.3s ease; /* Smooth transition for border color */
+    }
+
+    input:focus {
+      border-color: #4F0672; /* Darker purple on focus */
+    }
+
+    button {
+      background-color: #6C0BA9; /* Purple */
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 5px;
+      transition: background-color 0.3s ease; /* Smooth transition for background color */
+    }
+
+    button:hover {
+      background-color: #4F0672; /* Darker purple on hover */
+    }
+
+    .success-message, .error-message {
+      font-size: 24px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    .circle-animation, .wrong-animation {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: black;
+      position: absolute;
+      transition: opacity 0.3s ease; /* Smooth transition for opacity */
+    }
+
+    .circle-animation {
+      animation: colorChange 2s forwards;
+    }
+
+    .wrong-animation {
+      background-color: #FF0000; /* Red color */
+      animation: colorChangeWrong 2s forwards;
+    }
+
+    @keyframes colorChange {
+      to {
+        background-color: white;
+      }
+    }
+
+    @keyframes colorChangeWrong {
+      to {
+        background-color: white;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <form id="loginForm">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" placeholder="Username" required>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" placeholder="Password" required>
+
+    <button type="button" onclick="attemptLogin()">Login</button>
+  </form>
+
+  <div id="successContainer" class="success-message" style="display: none;">Correct ✅</div>
+  <div id="wrongContainer" class="error-message" style="display: none;">Wrong ❌</div>
+  <div id="circleAnimation" class="circle-animation" style="display: none;"></div>
+  <div id="wrongAnimation" class="wrong-animation" style="display: none;"></div>
+
+  <script>
+    function attemptLogin() {
+      var username = document.getElementById("username").value;
+      var password = document.getElementById("password").value;
+
+      // Your validation logic here
+      if ((username === "Leo" && password === "2024") || (username === "Robloxislife" && password === "FriedChicken")) {
+        document.getElementById("circleAnimation").style.display = "block";
+        document.getElementById("successContainer").style.display = "block";
+        window.location.href = "https://susysam.github.io/start27.html";
+      } else {
+        document.getElementById("wrongAnimation").style.display = "block";
+        document.getElementById("wrongContainer").style.display = "block";
+      }
+    }
+  </script>
+
+</body>
+
+</html>
