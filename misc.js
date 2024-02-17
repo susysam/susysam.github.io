@@ -1,53 +1,149 @@
 <!DOCTYPE html>
 <html lang="en-US">
   <head>
+    <title>Projects | 3kh0</title>
+    <meta name="keywords" content="front-end web developer, unblocked, games, google sites, unblocked games mom, ublocked, code, coding, programmer, development, javascript, jquery, bootstrap, sass, less, git" />
+    <meta property="og:title" content="Welcome to 3kh0 lite, a lightweight, fast, and clean game site." />
+    <meta property="og:site_name" content="3kh0.github.io" />
+    <meta property="og:description" content="Welcome to 3kh0 lite, a lightweight, fast, and clean game site." />
+    <meta name="description" content="Welcome to 3kh0 lite, a lightweight, fast, and clean game site." />
+    <meta name="author" content="3kh0" />
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <title>Miscellaneous | 3kh0</title>
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="shortcut-icon" href="/favicon.ico" />
+    <script src="/js/main.js"></script>
     <style>
-      .text-center {
+      p {
         text-align: center;
+        max-width: 600px;
+        margin: 20px auto;
+      }
+      button {
+        cursor: pointer;
+        background-color: #22c55e;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        border-radius: 20px;
+        margin-top: 20px;
+      }
+      .game-link {
+        height: 400px;
+        width: 300px;
+        text-decoration: none;
+      }
+      .game-tile {
+        background-color: #949494;
+        height: 400px;
+        width: 300px;
+        border-radius: 30px;
+      }
+      .game-icon {
+        border-radius: 30px;
+        width: 300px;
+        height: 300px;
+      }
+      .game-title {
+        font-size: 30px;
+        font-weight: bold;
+        color: #000000;
+        text-align: center;
+        margin: auto;
+      }
+      .flex-container {
+        display: flex;
+        flex-direction: row;
+        order: 0;
+        flex-grow: 0;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+      }
+      .container {
+        padding: 10px;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
       }
     </style>
   </head>
-  <body style="background-color: #121212; color: #ffffff; font-family: 'Roboto', sans-serif; margin: 0; padding: 5%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-    <h2 style="text-align: center; font-size: 2em; margin-bottom: 1em;">Miscellaneous stuff</h2>
-    <div style="width: 100%; max-width: 600px; margin-bottom: 2em;">
-      <div>
-        <h1>about:blank</h1>
-        <div>
-          <p>Enter a URL you want to be opened in a about:blank page below:</p>
-          <p><input id="url-target" type="url" pattern="https://.*" placeholder="Enter a website URL" autocomplete="on" style="width: 100%; padding: 10px; border: none; border-radius: 10px; background-color: #2c2c2c; color: #ffffff;" /></p>
-          <p>Note this will not work with some websites, but you can copy the link of this website and put it in for extra privacy.</p>
-        </div>
-      </div>
-      <div style="display: flex; justify-content: space-between; margin-top: 1em;">
-        <button id="create" style="padding: 10px 20px; border: none; border-radius: 10px; background-color: #b625cc; color: #ffffff;">Create page</button>
-      </div>
-    </div>
-    <div style="width: 100%; max-width: 600px;">
-      <div>
-        <h1>Tab Cloaker</h1>
-        <p>Enter a new tab title or a image URL below. What you set will be used on the whole site.</p>
-        <p>
-          <input id="userinput" type="url" placeholder="Enter a title or image URL" autocomplete="on" style="width: 100%; padding: 10px; border: none; border-radius: 10px; background-color: #2c2c2c; color: #ffffff;" />
-        </p>
-        <p id="console-output"></p>
-      </div>
-      <div class="button-wrapper" style="display: flex; justify-content: space-between; margin-top: 1em;">
-        <button onclick="changeTabTitle();" style="padding: 10px 20px; border: none; border-radius: 10px; background-color: #b625cc; color: #ffffff;">Set Title</button>
-        <button onclick="changeTabIcon();" style="padding: 10px 20px; border: none; border-radius: 10px; background-color: #b625cc; color: #ffffff;">Set Icon</button>
-        <button onclick="resetTabSettings();" style="padding: 10px 20px; border: none; border-radius: 10px; background-color: #b625cc; color: #ffffff;">Reset</button>
-      </div>
-    </div>
-    <p style="text-align: center; margin-top: 2em;">
+  <body style="background-color: #121212; color: #ffffff; font-family: sans-serif; text-decoration: none; text-align: center;">
+    <h1 style="font-size: 3em; text-align: center;">Projects</h1>
+    <input type="text" id="search" onkeyup="searchGames()" placeholder="Search for games..." style="width: 100%; font-size: 18px; padding: 6px 20px; margin: auto; border-radius: 30px; max-width: 600px; margin-bottom: 10px;" />
+    <div id="loader" style="display: block; border: 16px solid #f3f3f3; border-top: 16px solid #3498db; border-radius: 50%; width: 120px; height: 120px; animation: spin 2s linear infinite; margin: auto; margin-top: 1rem;"></div>
+    <div id="game-container" class="flex-container"></div>
+    <p class="text-center">
       <a href="/index.html" style="text-decoration: none;">
-        <button style="cursor: pointer; background-color: #22c55e; border: none; color: white; padding: 15px 32px; text-decoration: none; display: inline-block; font-size: 16px; border-radius: 20px; margin-top: 5px;">
+        <button style="cursor: pointer; background-color: #b625cc; border: none; color: white; padding: 15px 32px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; border-radius: 20px; margin-top: 5px;">
           Go to the homepage
         </button>
       </a>
     </p>
-    <script src="/js/misc.js"></script>
-    <script src="/js/main.js"></script>
+    <button id="back-to-top" style="display: none; position: fixed; bottom: 20px; right: 20px;">Back to top</button>
+    <script>
+      let games = [];
+      fetch("config/games.json")
+      .then((response) => response.json())
+      .then((data) => {
+        games = data;
+        const container = document.getElementById("game-container");
+        data.forEach((project) => {
+          const game = document.createElement("a");
+          game.href = project.link;
+            game.className = "game-link container";
+            game.innerHTML = `
+            <div class="game-tile">
+              <img class="game-icon" src="${project.imgSrc}" alt="icon" />
+              <p class="game-title">${project.title}</p>
+              </div>`;
+              container.appendChild(game);
+          });
+          document.getElementById("loader").style.display = "none";
+        })
+        .catch((error) => console.error("Error:", error));
+
+      function searchGames() {
+        const input = document.getElementById("search");
+        const filter = input.value.toUpperCase();
+        const container = document.getElementById("game-container");
+        container.innerHTML = "";
+        games
+          .filter((game) => game.title.toUpperCase().includes(filter))
+          .forEach((project) => {
+            const game = document.createElement("a");
+            game.href = project.link;
+            game.className = "game-link container";
+            game.innerHTML = `
+            <div class="game-tile">
+              <img class="game-icon" src="${project.imgSrc}" alt="icon" loading="lazy" />
+              <p class="game-title">${project.title}</p>
+              </div>`;
+            container.appendChild(game);
+          });
+        }
+        const backToTopButton = document.getElementById('back-to-top');
+        window.onscroll = function () {
+          if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+            backToTopButton.style.display = "block";
+          } else {
+          backToTopButton.style.display = "none";
+        }
+      };
+
+      backToTopButton.onclick = function () {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+      };
+    </script>
   </body>
 </html>
