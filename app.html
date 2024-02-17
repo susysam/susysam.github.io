@@ -34,16 +34,16 @@
             width: 300px;
         }
 
-        .game-container {
+        .app-container {
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
             gap: 20px;
             margin: 0 auto;
             max-width: 1200px;
         }
 
-        .game {
+        .app {
             padding: 20px;
             background-color: #444;
             border: 5px solid #fff;
@@ -56,8 +56,12 @@
             box-sizing: border-box;
         }
 
-        .game:hover {
+        .app:hover {
             transform: scale(1.1);
+        }
+
+        .app p {
+            margin: 10px 0;
         }
 
         .disclaimer {
@@ -82,10 +86,11 @@
     </div>
 
     <!-- App Section -->
-    <div class="game-container" id="gameContainer">
+    <div class="app-container" id="appContainer">
         <!-- Apps will be dynamically added here -->
     </div>
 
+    <!-- Script for displaying apps -->
     <script>
         // Array of app objects
         const apps = [
@@ -125,7 +130,7 @@
 
         // Function to display apps
         function displayApps(searchTerm = "") {
-            const container = document.getElementById("gameContainer");
+            const container = document.getElementById("appContainer");
             container.innerHTML = "";
 
             // Filter apps based on search term
@@ -134,7 +139,7 @@
             // Display filtered apps
             filteredApps.forEach(app => {
                 const appElement = document.createElement("div");
-                appElement.classList.add("game");
+                appElement.classList.add("app");
 
                 const nameElement = document.createElement("p");
                 nameElement.textContent = app.name;
@@ -153,34 +158,6 @@
         // Event listener for search input
         const searchInput = document.getElementById("searchInput");
         searchInput.addEventListener("input", () => displayApps(searchInput.value));
-    </script>
-
-    <script>
-        var urlObj = new window.URL(window.location.href);
-        var url = "https://anura.pro";
-
-        if (url) {
-            var win;
-
-            document.querySelector('button').onclick = function () {
-                if (win) {
-                    win.focus();
-                } else {
-                    win = window.open();
-                    win.document.body.style.margin = '0';
-                    win.document.body.style.height = '100vh';
-                    var iframe = win.document.createElement('iframe');
-                    iframe.style.border = 'none';
-                    iframe.style.width = '100%';
-                    iframe.style.height = '100%';
-                    iframe.style.margin = '0';
-                    iframe.src = url;
-                    win.document.body.appendChild(iframe);
-                }
-                document.querySelector('button').style.background = '#ff5148';
-                document.querySelector('button').innerHTML = "Site Loaded! Please refresh to open again";
-            };
-        }
     </script>
 </body>
 
