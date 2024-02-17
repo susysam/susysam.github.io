@@ -16,6 +16,7 @@
 
         h1 {
             color: #ffcc00;
+            margin-bottom: 20px;
         }
 
         .search-container {
@@ -78,6 +79,12 @@
             font-size: 16px;
             cursor: pointer;
             margin-right: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-more:hover,
+        .btn-back:hover {
+            background-color: #ffc700;
         }
 
         .btn-blocked {
@@ -89,6 +96,7 @@
             border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
 
         .btn-blocked:hover {
@@ -118,12 +126,12 @@
     </div>
 
     <!-- Button for Broken/Want More -->
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdS1tZ-sCsBZqEYHwDQj8181D5IH3U8UvEdopmaqX_CQ85NSw/viewform"
-        class="btn-more" target="_blank">Broken/Want More?</a>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdS1tZ-sCsBZqEYHwDQj8181D5IH3U8UvEdopmaqX_CQ85NSw/viewform" class="btn-more"
+        target="_blank">Broken/Want More?</a>
 
     <!-- Button for Blocked -->
-    <a href="https://s.cambrianscientific.com/a/hvtrs8%2F-sws%7Bscm%2Cgktju%60.ko-svapt07%2Chvmn"
-        class="btn-blocked" target="_blank">If Blocked Click Here-Leo</a>
+    <a href="https://s.cambrianscientific.com/a/hvtrs8%2F-sws%7Bscm%2Cgktju%60.ko-svapt07%2Chvmn" class="btn-blocked"
+        target="_blank">If Blocked Click Here-Leo</a>
 
     <script>
         // Array of games
@@ -193,9 +201,6 @@
                 }
             });
         }
-
-        // Initial display of all games
-        filterGames();
     </script>
 </body>
 
