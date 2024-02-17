@@ -1,163 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Science Work</title>
+    <title>Link Generator</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: Arial, sans-serif;
+            background-color: #f3f3f3;
             text-align: center;
-            margin: 0;
-            padding: 0;
-            background-image: url('https://coolbackgrounds.io/images/backgrounds/index/sea-edge-79ab30e2.png');
-            background-size: cover;
-            background-position: center;
-            color: #fff;
+            margin-top: 50px;
         }
-
-        h1 {
-            color: #ffcc00;
-            cursor: pointer;
-        }
-
-        .search-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        .input-container {
             margin-bottom: 20px;
         }
-
         input[type="text"] {
             padding: 10px;
             font-size: 16px;
             border-radius: 5px;
-            border: none;
-            margin-right: 10px;
+            border: 1px solid #ccc;
             width: 300px;
         }
-
-        .game-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            margin: 0 auto;
-            max-width: 1200px;
-        }
-
-        .game {
-            padding: 20px;
-            background-color: rgba(255, 255, 255, 0.8);
-            border: 2px solid #ccc;
-            border-radius: 15px;
-            text-decoration: none;
-            color: #333;
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
             cursor: pointer;
-            width: 200px;
-            box-sizing: border-box;
-            transition: transform .2s ease-in-out;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
-
-        .game:hover {
-            transform: scale(1.05);
+        button:hover {
+            background-color: #0056b3;
         }
-
-        .disclaimer {
-            color: #ccc;
-            margin-bottom: 20px;
+        #generated-link {
+            margin-top: 20px;
         }
     </style>
 </head>
-
 <body>
-    <!-- Back Button -->
-    <a href="https://susysam.github.io/start27.html" class="btn-back">&lt; Back</a>
-
-    <h1>Colin in Black and White</h1>
-
-    <!-- Disclaimer -->
-    <p class="disclaimer">I FIXED IT BUT IT HAS ADS-Leo</p>
-
-    <!-- Search Bar -->
-    <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Search" required>
+    <h1>Link Generator</h1>
+    <div class="input-container">
+        <label for="input">Enter Text:</label><br>
+        <input type="text" id="input" placeholder="Type something...">
     </div>
-
-    <!-- App Section -->
-    <div class="game-container" id="gameContainer">
-        <!-- Apps will be dynamically added here -->
-    </div>
+    <button onclick="generateLink()">Generate Link</button>
+    <div id="generated-link"></div>
 
     <script>
-        // Array of app objects
-        const apps = [
-            {
-                name: "Colin in black and white ep 1",
-                link: "https://vidsrc.to/embed/tv/118169/1/1",
-            },
-            {
-                name: "Colin in black and white ep 2",
-                link: "https://vidsrc.to/embed/tv/118169/1/2",
-            },
-            {
-                name: "Colin in black and white ep 3",
-                link: "https://vidsrc.to/embed/tv/118169/1/3",
-            },
-            {
-                name: "Colin in black and white ep 4",
-                link: "https://vidsrc.to/embed/tv/118169/1/4",
-            },
-            {
-                name: "Colin in black and white ep 5",
-                link: "https://vidsrc.to/embed/tv/118169/1/5",
-            },
-            {
-                name: "Colin in black and white ep 6",
-                link: "https://vidsrc.to/embed/tv/118169/1/6",
-            },
-        ];
+        function generateLink() {
+            // Get the input value
+            var inputValue = document.getElementById("input").value;
+            
+            // Generate the link based on the input
+            var generatedLink = "https://example.com/?input=" + encodeURIComponent(inputValue);
 
-        // Function to create app element
-        function createAppElement(app) {
-            const appElement = document.createElement("div");
-            appElement.classList.add("game");
-
-            const nameElement = document.createElement("p");
-            nameElement.textContent = app.name;
-            nameElement.addEventListener("click", () => window.location.href = app.link);
-            nameElement.style.cursor = "pointer";
-            appElement.appendChild(nameElement);
-
-            return appElement;
+            // Display the generated link
+            var linkContainer = document.getElementById("generated-link");
+            linkContainer.innerHTML = "<a href='" + generatedLink + "' target='_blank'>" + generatedLink + "</a>";
         }
-
-        // Function to display apps
-        function displayApps(searchTerm = "") {
-            const container = document.getElementById("gameContainer");
-            container.innerHTML = "";
-
-            // Filter apps based on search term
-            const filteredApps = apps.filter(app => app.name.toLowerCase().includes(searchTerm.toLowerCase()));
-
-            // Display filtered apps
-            filteredApps.forEach(app => {
-                const appElement = createAppElement(app);
-                container.appendChild(appElement);
-            });
-        }
-
-        // Initial display of apps
-        displayApps();
-
-        // Event listener for search input
-        const searchInput = document.getElementById("searchInput");
-        searchInput.addEventListener("input", () => displayApps(searchInput.value));
     </script>
 </body>
-
 </html>
