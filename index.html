@@ -24,6 +24,18 @@
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
       text-align: center;
+      animation: fadeIn 1s ease forwards; /* Fade in animation */
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     label {
@@ -40,6 +52,12 @@
       background-color: #292929; /* Dark background for input */
       color: white;
       border: 1px solid #6C0BA9; /* Purple border */
+      border-radius: 5px;
+      transition: border-color 0.3s ease; /* Smooth transition for border color */
+    }
+
+    input:focus {
+      border-color: #4F0672; /* Darker purple on focus */
     }
 
     button {
@@ -50,6 +68,7 @@
       border-radius: 5px;
       cursor: pointer;
       margin: 5px;
+      transition: background-color 0.3s ease; /* Smooth transition for background color */
     }
 
     button:hover {
@@ -67,6 +86,8 @@
       height: 20px;
       border-radius: 50%;
       background-color: black;
+      position: absolute;
+      transition: opacity 0.3s ease; /* Smooth transition for opacity */
     }
 
     .circle-animation {
