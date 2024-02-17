@@ -19,6 +19,9 @@
         }
 
         .search-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
             margin-bottom: 20px;
         }
 
@@ -33,8 +36,8 @@
 
         .game-container {
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
             gap: 20px;
             margin: 0 auto;
             max-width: 1200px;
@@ -98,7 +101,6 @@
 </head>
 
 <body>
-
     <!-- Back Button -->
     <a href="https://susysam.github.io/start27.html" class="btn-back">&lt; Back</a>
 
@@ -109,7 +111,7 @@
 
     <!-- Search Bar -->
     <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Search" oninput="filterGames()" required>
+        <input type="text" id="searchInput" placeholder="Search" required>
     </div>
 
     <!-- Game Section -->
