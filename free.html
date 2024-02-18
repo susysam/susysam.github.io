@@ -1,57 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="referrer" content="no-referrer" />
-    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN" />
-    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-    <link rel="shortcut icon" id="tab-favicon" href="favicon.png" />
-    <title id="tab-title">Search Engine</title>
-    <link rel="stylesheet" href="assets/styles/frame.css?v=3" />
-    <link rel="stylesheet" href="/assets/styles/themes/default.css?v=2" />
-    <script src="/assets/scripts/global.js?v=7"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Engine</title>
     <style>
-        /* Custom styles for the search engine */
-        .search-results {
-            margin-top: 20px;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f3f3;
+            text-align: center;
+            margin-top: 50px;
         }
-        .search-results li {
-            margin-bottom: 10px;
+        .input-container {
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 300px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
-    <div class="nav-bar">
-        <div class="nav-container">
-            <div class="nav-left">
-                <button id="home-page" class="nav-button" onclick="reload()">
-                    <i class="fa-solid fa-house"></i>
-                </button>
-                <button title="nav-button" id="nav-button" class="nav-button" onclick="goBack()">
-                    <i class="fa-solid fa-arrow-left"></i>
-                </button>
-                <button title="nav-button" id="nav-button" class="nav-button" onclick="goForward()">
-                    <i class="fa-solid fa-arrow-right"></i>
-                </button>
-                <button onclick="reload()" class="nav-button">
-                    <i class="fa-solid fa-rotate-right"></i>
-                </button>
-                <form id="fs" class="navpost" method="GET" action="https://www.google.com/search">
-                    <input id="is" class="navsearch" name="q" placeholder="Search Google" type="text" />
-                    <input type="submit" value="Search">
-                </form>
-            </div>
-            <div class="nav-right">
-                <button id="fullscreen-button" class="nav-button nav-btn-right">
-                    <i class="fa-solid fa-expand"></i>
-                </button>
-                <button id="eruda-button" class="nav-button nav-btn-right" onclick="erudaToggle()">
-                    <i class="fa-solid fa-code"></i>
-                </button>
-            </div>
-        </div>
+    <h1>Search Engine</h1>
+    <div class="input-container">
+        <label for="search-query">Enter your search query:</label><br>
+        <input type="text" id="search-query" placeholder="Enter your search query"><br><br>
     </div>
-    <!-- Other content -->
-    <!-- JavaScript and other scripts -->
+    <button onclick="search()">Search</button>
+
+    <script>
+        function search() {
+            // Get the search query
+            var searchQuery = document.getElementById("search-query").value.trim();
+            
+            // Check if the search query is empty
+            if (!searchQuery) {
+                alert("Please enter a search query.");
+                return;
+            }
+
+            // Construct the search engine URL
+            var searchURL = "https://www.google.com/search?q=" + encodeURIComponent(searchQuery);
+
+            // Redirect to the search results page
+            window.location.href = searchURL;
+        }
+    </script>
 </body>
 </html>
