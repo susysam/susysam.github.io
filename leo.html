@@ -46,10 +46,6 @@
     <div class="input-container">
         <label for="imdb-id">IMDb ID (with "tt" prefix):</label><br>
         <input type="text" id="imdb-id" placeholder="Example would be: tt18382028"><br><br>
-        <label for="season">Season Number:</label><br>
-        <input type="text" id="season" placeholder="e.g., 1"><br><br>
-        <label for="episode">Episode Number:</label><br>
-        <input type="text" id="episode" placeholder="e.g., 5">
     </div>
     <button onclick="findMovie()">Find It</button>
     <div id="generated-link"></div>
@@ -58,24 +54,22 @@
         <h2>How to Use:</h2>
         <p>Step 1: Search up IMDb and find the Tv-show you want.</p>
         <p>Step 2: Copy the URL.</p>
-        <p>Step 3: Go back to this website and fill in the blanks. Your movie URL should look like "tt1942683". After that, type the season and episode then click "Find It".</p>
+        <p>Step 3: Go back to this website and fill in the IMDb ID. Your TV-show URL should look like "tt1942683". After that, click "Find It".</p>
     </div>
 
     <script>
         function findMovie() {
-            // Get the input values
+            // Get the input value
             var imdbId = document.getElementById("imdb-id").value.trim();
-            var seasonNumber = document.getElementById("season").value.trim();
-            var episodeNumber = document.getElementById("episode").value.trim();
             
-            // Check if any input field is empty
-            if (!imdbId || !seasonNumber || !episodeNumber) {
-                alert("Please fill in all fields.");
+            // Check if the input field is empty
+            if (!imdbId) {
+                alert("Please fill in the IMDb ID field.");
                 return;
             }
 
             // Generate the link
-            var generatedLink = "https://vidsrc.to/embed/tv/" + imdbId + "/" + seasonNumber + "/" + episodeNumber;
+            var generatedLink = "https://vidsrc.to/embed/tv/" + imdbId;
 
             // Redirect to the generated link
             window.location.href = generatedLink;
