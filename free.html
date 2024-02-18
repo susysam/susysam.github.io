@@ -38,19 +38,12 @@
 <body>
     <h1>Search Engine</h1>
     <div class="input-container">
-        <form id="search-form">
-            <label for="search-query">Enter your search query:</label><br>
-            <input type="text" id="search-query" placeholder="Enter your search query"><br><br>
-            <button type="submit">Search</button>
-        </form>
+        <label for="search-query">Enter your search query:</label><br>
+        <input type="text" id="search-query" placeholder="Enter your search query"><br><br>
     </div>
+    <button onclick="search()">Search</button>
 
     <script>
-        document.getElementById("search-form").addEventListener("submit", function(event) {
-            event.preventDefault();
-            search();
-        });
-
         function search() {
             // Get the search query
             var searchQuery = document.getElementById("search-query").value.trim();
@@ -67,14 +60,6 @@
             // Redirect to the search results page
             window.location.href = searchURL;
         }
-    </script>
-
-    <!-- Original scripts from the first HTML file -->
-    <script src="/./assets/scripts/global.js?v=6"></script>
-    <script src="/./assets/scripts/tabs.js?v=1"></script>
-    <script src="https://kit.fontawesome.com/1237c86ba0.js" crossorigin="anonymous"></script>
-    <script>
-        window.addEventListener('resize', navigator.keyboard.lock(['Escape']))
     </script>
 </body>
 </html>
