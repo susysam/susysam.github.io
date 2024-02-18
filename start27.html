@@ -56,6 +56,11 @@
         .button:hover {
             background-color: #4F0672; /* Darker purple on hover */
         }
+
+        /* Remove link preview on hover */
+        .button:hover::before {
+            content: none;
+        }
     </style>
 </head>
 
@@ -63,11 +68,11 @@
 
     <div class="button-container">
         <p class="prompt">What would you like to access?</p>
-        <a href="game.html" class="button">Games</a>
-        <a href="Show.html" class="button">Links</a>
-        <a href="app.html" class="button">Apps</a>
-        <a href="leo.html" class="button">TV-Show Player</a>
-        <a href="movie.html" class="button">Movie Player</a>
+        <a href="game.html" class="button" title="">Games</a>
+        <a href="Show.html" class="button" title="">Links</a>
+        <a href="app.html" class="button" title="">Apps</a>
+        <a href="leo.html" class="button" title="">TV-Show Player</a>
+        <a href="movie.html" class="button" title="">Movie Player</a>
     </div>
 
 </body>
