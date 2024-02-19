@@ -10,7 +10,7 @@
             font-family: 'Arial', sans-serif;
             text-align: center;
             margin: 20px;
-            background-color: #333;
+            background-color: #222; /* Darker background color */
             color: #fff;
         }
 
@@ -25,8 +25,10 @@
         input[type="text"] {
             padding: 10px;
             font-size: 16px;
-            border-radius: 5px;
-            border: none;
+            border-radius: 20px; /* Rounded corners */
+            border: 1px solid #fff;
+            background-color: #444; /* Darker background color */
+            color: #fff;
             margin-right: 10px;
             width: 300px;
         }
@@ -42,7 +44,7 @@
 
         .game {
             padding: 20px;
-            background-color: #444;
+            background-color: #555; /* Darker game card background color */
             border: 5px solid #fff;
             border-radius: 15px;
             text-decoration: none;
@@ -54,7 +56,7 @@
         }
 
         .game:hover {
-            transform: scale(1.1);
+            transform: scale(1.05); /* Slightly smaller scale on hover */
         }
 
         .game p {
@@ -68,35 +70,25 @@
         }
 
         .btn-more,
-        .btn-back {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #ffcc00;
-            color: #333;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-
-        .btn-back {
-            background-color: #6C0BA9; /* Purple */
-        }
-
+        .btn-back,
         .btn-blocked {
             margin-top: 20px;
             padding: 10px 20px;
-            background-color: #6C0BA9;
+            background-color: #6C0BA9; /* Purple button background color */
             color: #fff;
             text-decoration: none;
-            border-radius: 5px;
+            border-radius: 20px; /* Rounded corners */
             font-size: 16px;
             cursor: pointer;
+            margin-right: 10px;
+            transition: background-color 0.3s ease; /* Smooth transition */
+            border: none;
         }
 
+        .btn-more:hover,
+        .btn-back:hover,
         .btn-blocked:hover {
-            background-color: #1f1f1f;
+            background-color: #4F0672; /* Darker purple on hover */
         }
     </style>
 </head>
