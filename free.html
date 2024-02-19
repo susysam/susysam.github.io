@@ -3,20 +3,39 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Redirect Tool</title>
+    <title>Loading...</title>
     <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Style for the loading animation */
+        .loading-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #2f2f2f;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-size: 24px;
+            font-family: 'Montserrat', sans-serif;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1 class="title">Redirect Tool</h1>
-        <form>
-            <label for="url-input">Enter a URL:</label>
-            <input type="text" id="url-input" name="url-input">
-            <button type="submit" id="submit-btn">Redirect</button>
-        </form>
+    <!-- Loading Animation -->
+    <div class="loading-container">
+        <p>Loading...</p>
     </div>
-    <p class="disclaimer">Work in progress, may not work.</p>
-    <script src="script.js"></script>
+
+    <script>
+        // Simulate a 3.2 second delay before redirection
+        setTimeout(function() {
+            // Redirect to the desired URL
+            window.location.href = "https://albibos.github.io/googleyay/";
+        }, 3200); // 3.2 seconds
+    </script>
 </body>
 </html>
