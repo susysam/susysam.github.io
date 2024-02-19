@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TV-Show Player</title>
+    <title>Tv-Show Player</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -20,7 +20,6 @@
             border-radius: 5px;
             border: 1px solid #ccc;
             width: 300px;
-            outline: none;
         }
         button {
             padding: 10px 20px;
@@ -30,16 +29,12 @@
             color: #fff;
             border: none;
             cursor: pointer;
-            transition: background-color 0.3s ease;
         }
         button:hover {
             background-color: #0056b3;
         }
         #generated-link {
             margin-top: 20px;
-            font-size: 18px;
-            color: #007bff;
-            font-weight: bold;
         }
         .steps {
             margin-top: 50px;
@@ -50,16 +45,16 @@
     <h1>TV-Show Player</h1>
     <div class="input-container">
         <label for="imdb-id">IMDb ID (with "tt" prefix):</label><br>
-        <input type="text" id="imdb-id" placeholder="Example: tt18382028"><br><br>
+        <input type="text" id="imdb-id" placeholder="Example would be: tt18382028"><br><br>
     </div>
     <button onclick="findMovie()">Find It</button>
     <div id="generated-link"></div>
 
     <div class="steps">
         <h2>How to Use:</h2>
-        <p>Step 1: Search for the TV show on IMDb and find its IMDb ID.</p>
-        <p>Step 2: Copy the IMDb ID (e.g., tt18382028).</p>
-        <p>Step 3: Paste the IMDb ID into the input field and click "Find It".</p>
+        <p>Step 1: Search up IMDb and find the Tv-show you want.</p>
+        <p>Step 2: Copy the URL.</p>
+        <p>Step 3: Go back to this website and fill in the IMDb ID. Your TV-show URL should look like "tt1942683". After that, click "Find It".</p>
     </div>
 
     <script>
@@ -76,9 +71,8 @@
             // Generate the link
             var generatedLink = "https://vidsrc.to/embed/tv/" + imdbId;
 
-            // Display the generated link
-            var linkContainer = document.getElementById("generated-link");
-            linkContainer.innerHTML = "Generated Link: <a href='" + generatedLink + "' target='_blank'>" + generatedLink + "</a>";
+            // Redirect to the generated link
+            window.location.href = generatedLink;
         }
     </script>
 </body>
