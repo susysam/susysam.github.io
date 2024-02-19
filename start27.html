@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -51,30 +50,48 @@
             text-decoration: none;
             margin-bottom: 20px;
             transition: background-color 0.3s ease; /* Smooth transition for background color */
+            position: relative;
+            overflow: hidden;
+        }
+
+        .button::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            transform: translate(-50%, -50%) scale(0);
+            z-index: 0;
+        }
+
+        .button:hover::after {
+            transform: translate(-50%, -50%) scale(3);
+        }
+
+        .button span {
+            position: relative;
+            z-index: 1;
         }
 
         .button:hover {
             background-color: #4F0672; /* Darker purple on hover */
         }
-
-        /* Remove link preview on hover */
-        .button:hover::after {
-            content: none;
-        }
     </style>
 </head>
-
 <body>
 
     <div class="button-container">
         <p class="prompt">What would you like to access?</p>
-        <a href="game.html" class="button" title="">Games</a>
-        <a href="Show.html" class="button" title="">Links</a>
-        <a href="app.html" class="button" title="">Apps</a>
-        <a href="leo.html" class="button" title="">TV-Show Player</a>
-        <a href="movie.html" class="button" title="">Movie Player</a>
+        <a href="game.html" class="button"><span>Games</span></a>
+        <a href="Show.html" class="button"><span>Links</span></a>
+        <a href="app.html" class="button"><span>Apps</span></a>
+        <a href="leo.html" class="button"><span>TV-Show Player</span></a>
+        <a href="movie.html" class="button"><span>Movie Player</span></a>
     </div>
 
 </body>
-
 </html>
