@@ -1,65 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Engine</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f3f3f3;
-            text-align: center;
-            margin-top: 50px;
-        }
-        .input-container {
-            margin-bottom: 20px;
-        }
-        input[type="text"] {
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            width: 300px;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Redirect Tool</title>
+	<link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Search Engine</h1>
-    <div class="input-container">
-        <label for="search-query">Enter your search query:</label><br>
-        <input type="text" id="search-query" placeholder="Enter your search query"><br><br>
-    </div>
-    <button onclick="search()">Search</button>
-
-    <script>
-        function search() {
-            // Get the search query
-            var searchQuery = document.getElementById("search-query").value.trim();
-            
-            // Check if the search query is empty
-            if (!searchQuery) {
-                alert("Please enter a search query.");
-                return;
-            }
-
-            // Construct the search engine URL
-            var searchURL = "https://www.google.com/search?q=" + encodeURIComponent(searchQuery);
-
-            // Redirect to the search results page
-            window.location.href = searchURL;
-        }
-    </script>
+	<div class="container">
+		<h1 class="title">Redirect Tool</h1>
+		<form>
+			<label for="url-input">Enter a URL:</label>
+			<input type="text" id="url-input" name="url-input">
+			<button type="submit" id="submit-btn">Redirect</button>
+		</form>
+	</div>
+	<script src="script.js"></script>
 </body>
 </html>
