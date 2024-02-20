@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Loading...</title>
+    <title>?</title>
     <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
@@ -31,10 +31,35 @@
     </div>
 
     <script>
+        // Array of available links
+        const links = [
+            "https://nweatestingsite.glitch.me/location.html",
+            "https://funschoolprojects.glitch.me/location.html",
+            "https://educationalinsights.netlify.app/location",
+            "https://schoolapplications.onrender.com/location.html",
+            "https://algebratutors.onrender.com/location.html",
+            "https://education.disciplinary.design/location.html",
+            "https://yourlocalsciencegrades.dcmusic.ca/location.html",
+            "https://schooltutoring.dcmusic.ca/location.html",
+            "https://schoollessons.pages.dev/location"
+        ];
+
+        // Function to shuffle an array
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Shuffle the links array to ensure randomness
+        shuffle(links);
+
         // Simulate a 3.2 second delay before redirection
         setTimeout(function() {
-            // Redirect to the desired URL
-            window.location.href = "https://albibos.github.io/googleyay/";
+            // Redirect to one of the shuffled links
+            window.location.href = links[0];
         }, 3200); // 3.2 seconds
     </script>
 </body>
