@@ -9,16 +9,12 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            text-align: center;
-            margin: 20px;
-            background-color: #f5f5f5; /* Default light mode background color */
-            color: #333; /* Default light mode text color */
-        }
-
-        /* Dark mode styles */
-        body.dark-mode {
-            background-color: #333; /* Dark mode background color */
-            color: #f5f5f5; /* Dark mode text color */
+            background: linear-gradient(45deg, #8e2de2, #4a00e0);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
 
         form {
@@ -28,16 +24,84 @@
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
             text-align: center;
             animation: fadeIn 1s ease forwards;
-            position: relative; /* Add position relative to contain buttons */
+            position: relative; /* Added for positioning toggle */
         }
 
-        /* Rest of your CSS styles remain the same */
-
-        /* Dark mode button style */
-        .dark-mode-button {
+        /* Toggle switch styles */
+        .toggle-container {
             position: absolute;
-            top: 20px;
-            left: 20px;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .toggle-label {
+            margin-right: 10px;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .toggle {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+            background-color: #ccc;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .toggle-thumb {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 20px;
+            height: 20px;
+            background-color: #fff;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+
+        /* Checked state styles */
+        .toggle input:checked + .toggle-thumb {
+            transform: translateX(20px);
+        }
+
+        /* Rest of your CSS remains the same */
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 18px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            background-color: #f5f5f5;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
             background-color: #4a00e0;
             color: white;
             padding: 12px 20px;
@@ -48,8 +112,49 @@
             transition: background-color 0.3s ease;
         }
 
-        .dark-mode-button:hover {
+        button:hover {
             background-color: #6c5ce7;
+        }
+
+        .message {
+            font-size: 18px;
+            margin-top: 20px;
+            color: #333;
+        }
+
+        .animation-container {
+            position: relative;
+        }
+
+        .circle-animation,
+        .wrong-animation {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: black;
+            position: absolute;
+            transition: opacity 0.3s ease;
+        }
+
+        .circle-animation {
+            animation: colorChange 2s forwards;
+        }
+
+        .wrong-animation {
+            background-color: #FF0000;
+            animation: colorChangeWrong 2s forwards;
+        }
+
+        @keyframes colorChange {
+            to {
+                background-color: white;
+            }
+        }
+
+        @keyframes colorChangeWrong {
+            to {
+                background-color: white;
+            }
         }
     </style>
 </head>
@@ -57,8 +162,15 @@
 <body>
 
     <form id="loginForm">
-        <button class="dark-mode-button" onclick="toggleDarkMode()">Dark Mode</button>
-        <button class="dark-mode-button" onclick="toggleLightMode()">Light Mode</button>
+        <div class="toggle-container">
+            <label class="toggle-label">Dark Mode</label>
+            <label class="toggle">
+                <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()">
+                <span class="toggle-thumb"></span>
+            </label>
+            <label class="toggle-label">Light Mode</label>
+        </div>
+
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" placeholder="Username" required>
 
@@ -69,25 +181,37 @@
     </form>
 
     <div class="message" id="successContainer" style="display: none;">Welcome! ✔️</div>
-    <div class="message" id="wrongContainer" style="display: none;">Incorrect Credentials ❌</div>
+    <div class="message" id="wrongContainer" style="display: none;">Incorrect credentials ❌</div>
     <div class="animation-container">
-        <!-- Your animation containers -->
+        <div class="circle-animation" id="circleAnimation" style="display: none;"></div>
+        <div class="wrong-animation" id="wrongAnimation" style="display: none;"></div>
     </div>
 
     <script>
-        // Function to toggle dark mode
-        function toggleDarkMode() {
-            document.body.classList.add('dark-mode');
-        }
-
-        // Function to toggle light mode
-        function toggleLightMode() {
-            document.body.classList.remove('dark-mode');
-        }
-
-        // Your login form submission logic remains the same
         function attemptLogin() {
-            // Your login form submission logic
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+
+            // Your validation logic here
+            if ((username === "Leo" && password === "2024") || (username === "Robloxislife" && password === "FriedChicken")) {
+                document.getElementById("circleAnimation").style.display = "block";
+                document.getElementById("successContainer").style.display = "block";
+                setTimeout(function () {
+                    window.location.href = "https://susysam.github.io/about.html";
+                }, 2000); // Redirect after 2 seconds
+            } else {
+                document.getElementById("wrongAnimation").style.display = "block";
+                document.getElementById("wrongContainer").style.display = "block";
+            }
+        }
+
+        function toggleDarkMode() {
+            var darkModeToggle = document.getElementById("darkModeToggle");
+            if (darkModeToggle.checked) {
+                document.body.classList.add('dark-mode');
+            } else {
+                document.body.classList.remove('dark-mode');
+            }
         }
     </script>
 
