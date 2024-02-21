@@ -94,9 +94,8 @@
 </head>
 
 <body>
-
     <!-- Back Button -->
-    <a href="https://susysam.github.io/start27.html" class="btn-back" title="">&lt; Back</a>
+    <div class="button" onclick="open2()"><span>Back</span></div>
 
     <h1>Games</h1>
 
@@ -121,6 +120,10 @@
     <a href="#" class="btn-blocked" onclick="openBlockedLinks()">If Blocked Click Here-Leo</a>
 
     <script>
+        function open2() {
+            window.location.href = "start27.html";
+        }
+
         // Array of games
         const games = [
             {
