@@ -89,11 +89,20 @@
         <a href="game.html" class="button"><span>Games</span></a>
         <a href="Show.html" class="button"><span>Links</span></a>
         <a href="app.html" class="button"><span>Apps</span></a>
-        <a href="leo.html" class="button"><span>TV-Show Player</span></a>
-        <a href="movie.html" class="button"><span>Movie Player</span></a>
+        <div class="button" onclick="openTvShowPlayer()"><span>TV-Show Player</span></div>
+        <div class="button" onclick="openMoviePlayer()"><span>Movie Player</span></div>
         <a href="free.html" class="button"><span>Plexile Arcade</span></a>
-
     </div>
+
+    <script>
+        function openTvShowPlayer() {
+            window.location.href = "leo.html";
+        }
+
+        function openMoviePlayer() {
+            window.location.href = "movie.html";
+        }
+    </script>
 
 </body>
 </html>
