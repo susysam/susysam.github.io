@@ -86,21 +86,29 @@
 
     <div class="button-container">
         <p class="prompt">What would you like to access?</p>
-        <a href="game.html" class="button"><span>Games</span></a>
-        <a href="Show.html" class="button"><span>Links</span></a>
-        <a href="app.html" class="button"><span>Apps</span></a>
-        <div class="button" onclick="openTvShowPlayer()"><span>TV-Show Player</span></div>
-        <div class="button" onclick="openMoviePlayer()"><span>Movie Player</span></div>
-        <a href="free.html" class="button"><span>Plexile Arcade</span></a>
+        <div class="button" onclick="openlinks()"><span>Links</span></div>
+        <div class="button" onclick="openGames()"><span>Game</span></div>
+        <div class="button" onclick="openapps()"><span>Apps</span></div>
+        <div class="button" onclick="openTvShowPlayer()"><span>Movie+TV Player</span></div>
+        <div class="button" onclick="openPlexileArcade()"><span>Plexile Arcade</span></div>
     </div>
 
     <script>
         function openTvShowPlayer() {
-            window.location.href = "leo.html";
+            window.location.href = "movie+tv.html";
         }
 
-        function openMoviePlayer() {
-            window.location.href = "movie.html";
+        function openPlexileArcade() {
+            window.location.href = "free.html";
+        }
+         function openApps() {
+            window.location.href = "app.html";
+        }
+         function openGames() {
+            window.location.href = "game.html";
+        }
+         function openlinks() {
+            window.location.href = "Show.html";
         }
     </script>
 
