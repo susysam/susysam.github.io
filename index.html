@@ -24,52 +24,7 @@
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
             text-align: center;
             animation: fadeIn 1s ease forwards;
-            position: relative; /* Added for positioning toggle */
         }
-
-        /* Toggle switch styles */
-        .toggle-container {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-        }
-
-        .toggle-label {
-            margin-right: 10px;
-            color: #333;
-            font-size: 16px;
-        }
-
-        .toggle {
-            position: relative;
-            display: inline-block;
-            width: 40px;
-            height: 20px;
-            background-color: #ccc;
-            border-radius: 20px;
-            cursor: pointer;
-        }
-
-        .toggle-thumb {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 20px;
-            height: 20px;
-            background-color: #fff;
-            border-radius: 50%;
-            transition: transform 0.3s ease;
-        }
-
-        /* Checked state styles */
-        .toggle input:checked + .toggle-thumb {
-            transform: translateX(20px);
-        }
-
-        /* Rest of your CSS remains the same */
 
         @keyframes fadeIn {
             from {
@@ -85,7 +40,7 @@
 
         label {
             display: block;
-            margin-bottom: 20px; /* Increased margin */
+            margin-bottom: 10px;
             color: #333;
             font-size: 18px;
         }
@@ -93,7 +48,7 @@
         input {
             width: 100%;
             padding: 10px;
-            margin-bottom: 20px; /* Increased margin */
+            margin-bottom: 15px;
             box-sizing: border-box;
             background-color: #f5f5f5;
             border: none;
@@ -110,7 +65,10 @@
             cursor: pointer;
             font-size: 18px;
             transition: background-color 0.3s ease;
-            margin-bottom: 20px; /* Increased margin */
+        }
+
+        button:hover {
+            background-color: #6c5ce7;
         }
 
         .message {
@@ -123,8 +81,7 @@
             position: relative;
         }
 
-        .circle-animation,
-        .wrong-animation {
+        .circle-animation, .wrong-animation {
             width: 20px;
             height: 20px;
             border-radius: 50%;
@@ -159,15 +116,6 @@
 <body>
 
     <form id="loginForm">
-        <div class="toggle-container">
-            <label class="toggle-label">Dark Mode</label>
-            <label class="toggle">
-                <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()">
-                <span class="toggle-thumb"></span>
-            </label>
-            <label class="toggle-label">Light Mode</label>
-        </div>
-
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" placeholder="Username" required>
 
@@ -193,21 +141,12 @@
             if ((username === "Leo" && password === "2024") || (username === "Robloxislife" && password === "FriedChicken")) {
                 document.getElementById("circleAnimation").style.display = "block";
                 document.getElementById("successContainer").style.display = "block";
-                setTimeout(function () {
+                setTimeout(function() {
                     window.location.href = "https://susysam.github.io/about.html";
                 }, 2000); // Redirect after 2 seconds
             } else {
                 document.getElementById("wrongAnimation").style.display = "block";
                 document.getElementById("wrongContainer").style.display = "block";
-            }
-        }
-
-        function toggleDarkMode() {
-            var darkModeToggle = document.getElementById("darkModeToggle");
-            if (darkModeToggle.checked) {
-                document.body.classList.add('dark-mode');
-            } else {
-                document.body.classList.remove('dark-mode');
             }
         }
     </script>
