@@ -28,12 +28,16 @@
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
             text-align: center;
             animation: fadeIn 1s ease forwards;
+            position: relative; /* Add position relative to contain buttons */
         }
 
         /* Rest of your CSS styles remain the same */
 
         /* Dark mode button style */
         .dark-mode-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
             background-color: #4a00e0;
             color: white;
             padding: 12px 20px;
@@ -42,7 +46,6 @@
             cursor: pointer;
             font-size: 18px;
             transition: background-color 0.3s ease;
-            margin-right: 10px;
         }
 
         .dark-mode-button:hover {
@@ -54,20 +57,22 @@
 <body>
 
     <form id="loginForm">
-        <!-- Your login form -->
+        <button class="dark-mode-button" onclick="toggleDarkMode()">Dark Mode</button>
+        <button class="dark-mode-button" onclick="toggleLightMode()">Light Mode</button>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" placeholder="Username" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" placeholder="Password" required>
+
+        <button type="button" onclick="attemptLogin()">Login</button>
     </form>
 
     <div class="message" id="successContainer" style="display: none;">Welcome! ✔️</div>
-    <div class="message" id="wrongContainer" style="display: none;">Incorrect credentials ❌</div>
+    <div class="message" id="wrongContainer" style="display: none;">Incorrect Credentials ❌</div>
     <div class="animation-container">
         <!-- Your animation containers -->
     </div>
-
-    <!-- Dark mode button -->
-    <button class="dark-mode-button" onclick="toggleDarkMode()">Dark Mode</button>
-
-    <!-- Light mode button -->
-    <button class="dark-mode-button" onclick="toggleLightMode()">Light Mode</button>
 
     <script>
         // Function to toggle dark mode
