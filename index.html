@@ -2,150 +2,154 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
-  <style>
-    body {
-      background-color: #292929; /* Dark background */
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-      font-family: sans-serif;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(45deg, #8e2de2, #4a00e0);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
 
-    form {
-      background-color: #171717; /* Darker container background */
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-      text-align: center;
-      animation: fadeIn 1s ease forwards; /* Fade in animation */
-    }
+        form {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            animation: fadeIn 1s ease forwards;
+        }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
 
-    label {
-      display: block;
-      margin-bottom: 10px;
-      color: white;
-    }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-    input {
-      width: 100%;
-      padding: 8px;
-      margin-bottom: 15px;
-      box-sizing: border-box;
-      background-color: #292929; /* Dark background for input */
-      color: white;
-      border: 1px solid #6C0BA9; /* Purple border */
-      border-radius: 5px;
-      transition: border-color 0.3s ease; /* Smooth transition for border color */
-    }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 18px;
+        }
 
-    input:focus {
-      border-color: #4F0672; /* Darker purple on focus */
-    }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            background-color: #f5f5f5;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
 
-    button {
-      background-color: #6C0BA9; /* Purple */
-      color: white;
-      padding: 10px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      margin: 5px;
-      transition: background-color 0.3s ease; /* Smooth transition for background color */
-    }
+        button {
+            background-color: #4a00e0;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
 
-    button:hover {
-      background-color: #4F0672; /* Darker purple on hover */
-    }
+        button:hover {
+            background-color: #6c5ce7;
+        }
 
-    .success-message, .error-message {
-      font-size: 24px;
-      font-weight: bold;
-      margin-top: 20px;
-    }
+        .message {
+            font-size: 18px;
+            margin-top: 20px;
+            color: #333;
+        }
 
-    .circle-animation, .wrong-animation {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background-color: black;
-      position: absolute;
-      transition: opacity 0.3s ease; /* Smooth transition for opacity */
-    }
+        .animation-container {
+            position: relative;
+        }
 
-    .circle-animation {
-      animation: colorChange 2s forwards;
-    }
+        .circle-animation, .wrong-animation {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: black;
+            position: absolute;
+            transition: opacity 0.3s ease;
+        }
 
-    .wrong-animation {
-      background-color: #FF0000; /* Red color */
-      animation: colorChangeWrong 2s forwards;
-    }
+        .circle-animation {
+            animation: colorChange 2s forwards;
+        }
 
-    @keyframes colorChange {
-      to {
-        background-color: white;
-      }
-    }
+        .wrong-animation {
+            background-color: #FF0000;
+            animation: colorChangeWrong 2s forwards;
+        }
 
-    @keyframes colorChangeWrong {
-      to {
-        background-color: white;
-      }
-    }
-  </style>
+        @keyframes colorChange {
+            to {
+                background-color: white;
+            }
+        }
+
+        @keyframes colorChangeWrong {
+            to {
+                background-color: white;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-  <form id="loginForm">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" placeholder="Username" required>
+    <form id="loginForm">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" placeholder="Username" required>
 
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" placeholder="Password" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" placeholder="Password" required>
 
-    <button type="button" onclick="attemptLogin()">Login</button>
-  </form>
+        <button type="button" onclick="attemptLogin()">Login</button>
+    </form>
 
-  <div id="successContainer" class="success-message" style="display: none;">Correct ✅</div>
-  <div id="wrongContainer" class="error-message" style="display: none;">Wrong ❌</div>
-  <div id="circleAnimation" class="circle-animation" style="display: none;"></div>
-  <div id="wrongAnimation" class="wrong-animation" style="display: none;"></div>
+    <div class="message" id="successContainer" style="display: none;">Welcome! ✔️</div>
+    <div class="message" id="wrongContainer" style="display: none;">Incorrect credentials ❌</div>
+    <div class="animation-container">
+        <div class="circle-animation" id="circleAnimation" style="display: none;"></div>
+        <div class="wrong-animation" id="wrongAnimation" style="display: none;"></div>
+    </div>
 
-  <script>
-    function attemptLogin() {
-      var username = document.getElementById("username").value;
-      var password = document.getElementById("password").value;
+    <script>
+        function attemptLogin() {
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
 
-      // Your validation logic here
-      if ((username === "Leo" && password === "2024") || (username === "Robloxislife" && password === "FriedChicken")) {
-        document.getElementById("circleAnimation").style.display = "block";
-        document.getElementById("successContainer").style.display = "block";
-        window.location.href = "https://susysam.github.io/about.html";
-      } else {
-        document.getElementById("wrongAnimation").style.display = "block";
-        document.getElementById("wrongContainer").style.display = "block";
-      }
-    }
-  </script>
+            // Your validation logic here
+            if ((username === "Leo" && password === "2024") || (username === "Robloxislife" && password === "FriedChicken")) {
+                document.getElementById("circleAnimation").style.display = "block";
+                document.getElementById("successContainer").style.display = "block";
+                setTimeout(function() {
+                    window.location.href = "https://susysam.github.io/about.html";
+                }, 2000); // Redirect after 2 seconds
+            } else {
+                document.getElementById("wrongAnimation").style.display = "block";
+                document.getElementById("wrongContainer").style.display = "block";
+            }
+        }
+    </script>
 
 </body>
 
