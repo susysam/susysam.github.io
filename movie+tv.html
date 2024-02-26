@@ -53,7 +53,7 @@
     </style>
 </head>
 <body>
-    <h1>TV + Movie Player</h1>
+    <h1>Entertainment Player</h1>
     <div class="input-container">
         <label for="imdb-id">IMDb ID (with "tt"):</label><br>
         <input type="text" id="imdb-id" placeholder="Example: tt1942683"><br><br>
@@ -88,7 +88,19 @@
         }
 
         function openAnime() {
-            window.location.href = "https://unime.vercel.app/eng";
+            // Array of Anime streaming links
+            var animeLinks = [
+                "https://unime.vercel.app/eng",
+                "https://kitsunee.me/",
+                "https://anify.tv/anime"
+            ];
+
+            // Randomly select an Anime streaming link
+            var randomIndex = Math.floor(Math.random() * animeLinks.length);
+            var selectedAnimeLink = animeLinks[randomIndex];
+
+            // Redirect to the selected Anime streaming link
+            window.location.href = selectedAnimeLink;
         }
     </script>
 </body>
