@@ -57,11 +57,30 @@
         // Shuffle the links array to ensure randomness
         shuffle(links);
 
-        // Simulate a 3.2 second delay before redirection
-        setTimeout(function() {
-            // Redirect to one of the shuffled links
-            window.location.href = links[0];
-        }, 3200); // 3.2 seconds
+        // Messages to display sequentially
+        const messages = [
+            "Your website is loading!",
+            "W Leo",
+            "404?"
+        ];
+
+        // Index to keep track of the current message
+        let messageIndex = 0;
+
+        // Function to display the next message
+        function displayNextMessage() {
+            if (messageIndex < messages.length) {
+                document.querySelector('.loading-container p').textContent = messages[messageIndex];
+                messageIndex++;
+            } else {
+                clearInterval(messageInterval);
+                // Redirect to one of the shuffled links
+                window.location.href = links[0];
+            }
+        }
+
+        // Display messages sequentially every 2 seconds
+        const messageInterval = setInterval(displayNextMessage, 2000);
     </script>
 </body>
 </html>
