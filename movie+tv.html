@@ -69,6 +69,9 @@
         <p>Step 3: Paste the IMDb ID into the input field and click "Find Movie" or "Find TV Show".</p>
     </div>
 
+    <!-- Back Button -->
+    <div class="button" onclick="openPreviousPage()"><span>Back</span></div>
+
     <script>
         function findMedia(mediaType) {
             // Get the input value
@@ -101,6 +104,10 @@
 
             // Redirect to the selected Anime streaming link
             window.location.href = selectedAnimeLink;
+        }
+
+        function openPreviousPage() {
+            window.location.href = "start27.html";
         }
     </script>
 </body>
