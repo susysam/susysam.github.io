@@ -33,9 +33,6 @@
         button:hover {
             background-color: #0056b3;
         }
-        #generated-link {
-            margin-top: 20px;
-        }
         .steps {
             margin-top: 50px;
         }
@@ -45,21 +42,20 @@
     <h1>TV + Movie Player</h1>
     <div class="input-container">
         <label for="imdb-id">IMDb ID (with "tt"):</label><br>
-        <input type="text" id="imdb-id" placeholder="Example:It should look like tt1942683"><br><br>
+        <input type="text" id="imdb-id" placeholder="Example: tt1942683"><br><br>
     </div>
-    <button onclick="findMedia()">Find It</button>
-    <div id="generated-link"></div>
+    <button onclick="findMedia('movie')">Find Movie</button>
+    <button onclick="findMedia('tv')">Find TV Show</button>
 
     <div class="steps">
         <h2>How to Use:</h2>
         <p>Step 1: Search up IMDb and find the TV-show or movie you want.</p>
         <p>Step 2: Copy the IMDb ID (with "tt").</p>
-        <p>Step 3: Paste the IMDb ID into the input field and click "Find It".
-        <p>Step 4:W Leo</p>
+        <p>Step 3: Paste the IMDb ID into the input field and click "Find Movie" or "Find TV Show".</p>
     </div>
 
     <script>
-        function findMedia() {
+        function findMedia(mediaType) {
             // Get the input value
             var imdbId = document.getElementById("imdb-id").value.trim();
             
@@ -69,10 +65,7 @@
                 return;
             }
 
-            // Determine whether it's a TV-show or movie
-            var mediaType = imdbId.startsWith("tt") ? "tv" : "movie";
-
-            // Generate the link
+            // Generate the link based on media type
             var generatedLink = "https://vidsrc.to/embed/" + mediaType + "/" + imdbId;
 
             // Redirect to the generated link
