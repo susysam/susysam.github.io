@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TV + Movie Player</title>
+    <title>Entertainment Player</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -29,12 +29,26 @@
             color: #fff;
             border: none;
             cursor: pointer;
+            margin-right: 10px;
         }
         button:hover {
             background-color: #0056b3;
         }
         .steps {
             margin-top: 50px;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #6C0BA9;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+        .button:hover {
+            background-color: #4F0672;
         }
     </style>
 </head>
@@ -46,6 +60,7 @@
     </div>
     <button onclick="findMedia('movie')">Find Movie</button>
     <button onclick="findMedia('tv')">Find TV Show</button>
+    <button onclick="openAnime()">Anime</button>
 
     <div class="steps">
         <h2>How to Use:</h2>
@@ -70,6 +85,10 @@
 
             // Redirect to the generated link
             window.location.href = generatedLink;
+        }
+
+        function openAnime() {
+            window.location.href = "https://unime.vercel.app/eng";
         }
     </script>
 </body>
