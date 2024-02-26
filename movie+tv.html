@@ -35,11 +35,6 @@
         }
         .steps {
             margin-top: 50px;
-            opacity: 0;
-            transition: opacity 1s ease-in;
-        }
-        .fade-in {
-            opacity: 1;
         }
     </style>
 </head>
@@ -57,7 +52,6 @@
         <p>Step 1: Search up IMDb and find the TV-show or movie you want.</p>
         <p>Step 2: Copy the IMDb ID (with "tt").</p>
         <p>Step 3: Paste the IMDb ID into the input field and click "Find Movie" or "Find TV Show".</p>
-        <p id="step-4" class="fade-in" style="display: none;">W Leo 😎</p>
     </div>
 
     <script>
@@ -76,13 +70,6 @@
 
             // Redirect to the generated link
             window.location.href = generatedLink;
-
-            // Show Step 4 with a slide-in animation
-            var step4 = document.getElementById("step-4");
-            step4.style.display = "block";
-            setTimeout(function() {
-                step4.classList.add("fade-in");
-            }, 100);
         }
     </script>
 </body>
