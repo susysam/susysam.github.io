@@ -1,54 +1,57 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Settings</title>
+    <title>Redirect Button</title>
+    <style>
+        html {
+            margin-top: 15px;
+            background-color: #000000;
+            color: white;
+            font-family: 'Rubik', sans-serif;
+            text-align: center;
+        }
+        h1 {
+            font-weight: 100;
+            font-size: 1.5rem;
+        }
+        button {
+            padding: 20px 40px;
+            border: none;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 1.3rem;
+            font-family: 'Rubik', sans-serif;
+            cursor: pointer;
+            background-color: #f75dfc;
+            border-radius: 20px;
+            transition: transform 0.1s ease;
+            margin-top: 50px;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+    </style>
 </head>
 <body>
-    <!-- Hidden Mode Section -->
-    <h2>Hidden Mode</h2>
-    <input type="checkbox" id="hiddenMode" />
-    <label for="hiddenMode">Enable Hidden Mode</label>
-    <br />
-    <button id="autoHiddenMode">Automatic Hidden Mode</button>
-
-    <!-- Tab Cloak Section -->
-    <h2>Tab Cloak</h2>
-    <input type="checkbox" id="tab_cloak" />
-    <label for="tab_cloak">Enable Tab Cloak</label>
-    <br />
-    <button id="removeBtn" style="display:none;">Cancel Tab Cloak</button>
-    <div id="cloakTitle">Title: none</div>
-    <div id="cloakIcon">Icon: none</div>
-    <button id="openBlank" style="display:none;">Open Blank Tab</button>
-
-    <!-- Quick Links Section -->
-    <h2>Quick Links</h2>
-    <input type="checkbox" id="quick_links" />
-    <label for="quick_links">Enable Quick Links</label>
-    <div class="quickies" style="display:none;">
-        <div class="dropdown-links">
-            <a href="settings.html"><span class="material-symbols-outlined" style="font-size:14px;">add_circle</span>&nbsp;Add links in <span style="text-decoration: underline;">Settings</span></a>
-        </div>
-        <button class="add">Add Quick Link</button>
-        <button class="rm">Remove Quick Link</button>
-    </div>
-
-    <!-- Other Settings -->
-    <!-- Add your other settings here -->
+    <h1>Press [Enter] or tap/click the button to redirect</h1>
+    <button onclick="redirect()">Redirect Now</button>
 
     <script>
-        // Get the Hidden Mode checkbox and the Automatic Hidden Mode button
-        const hiddenModeCheckbox = document.getElementById('hiddenMode');
-        const autoHiddenModeButton = document.getElementById('autoHiddenMode');
+        function redirect() {
+            let url = 'https://totallyscience.co'; // Change the URL here
+            let newWindow = window.open(url);
+            window.location.href = 'https://google.com'; // Redirect the current window
+        }
 
-        // Add a click event listener to the Automatic Hidden Mode button
-        autoHiddenModeButton.addEventListener('click', function() {
-            // Toggle the Hidden Mode checkbox when the button is clicked
-            hiddenModeCheckbox.checked = !hiddenModeCheckbox.checked;
+        // Handle pressing Enter key
+        document.addEventListener('keyup', (event) => {
+            if (event.keyCode === 13) {
+                redirect();
+            }
         });
-
-        // Additional functionality for Tab Cloak and Quick Links can be added here
-        // Make sure to add appropriate event listeners and functions for each setting
     </script>
 </body>
 </html>
