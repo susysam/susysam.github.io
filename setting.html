@@ -1,90 +1,54 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Hidden Mode Example</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: rgba(243, 243, 243, 0.5); /* Transparent background */
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center; /* Center horizontally */
-            align-items: center;
-            height: 100vh;
-            overflow: hidden; /* Hide overflow */
-        }
-
-        .start-button {
-            padding: 15px 30px;
-            font-size: 18px;
-            border: none;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: #fff;
-            cursor: pointer;
-            transition: opacity 0.5s ease;
-        }
-
-        .start-button:hover {
-            background-color: #0056b3;
-        }
-
-        .content {
-            opacity: 0;
-            max-width: 800px;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            font-size: 18px;
-            line-height: 1.5;
-            transition: opacity 1s ease, transform 1s ease; /* Added transform */
-            transform: translateY(-100%); /* Initially hide content above the screen */
-        }
-
-        .show {
-            opacity: 1;
-            transform: translateY(0); /* Move content down to show */
-        }
-    </style>
+    <title>Settings</title>
 </head>
 <body>
-    <div>
-        <input type="checkbox" id="hiddenMode" />
-        <label for="hiddenMode">Hidden Mode</label>
-        <br />
-        <button class="start-button" onclick="showContent()">Start</button>
+    <!-- Hidden Mode Section -->
+    <h2>Hidden Mode</h2>
+    <input type="checkbox" id="hiddenMode" />
+    <label for="hiddenMode">Enable Hidden Mode</label>
+    <br />
+    <button id="autoHiddenMode">Automatic Hidden Mode</button>
+
+    <!-- Tab Cloak Section -->
+    <h2>Tab Cloak</h2>
+    <input type="checkbox" id="tab_cloak" />
+    <label for="tab_cloak">Enable Tab Cloak</label>
+    <br />
+    <button id="removeBtn" style="display:none;">Cancel Tab Cloak</button>
+    <div id="cloakTitle">Title: none</div>
+    <div id="cloakIcon">Icon: none</div>
+    <button id="openBlank" style="display:none;">Open Blank Tab</button>
+
+    <!-- Quick Links Section -->
+    <h2>Quick Links</h2>
+    <input type="checkbox" id="quick_links" />
+    <label for="quick_links">Enable Quick Links</label>
+    <div class="quickies" style="display:none;">
+        <div class="dropdown-links">
+            <a href="settings.html"><span class="material-symbols-outlined" style="font-size:14px;">add_circle</span>&nbsp;Add links in <span style="text-decoration: underline;">Settings</span></a>
+        </div>
+        <button class="add">Add Quick Link</button>
+        <button class="rm">Remove Quick Link</button>
     </div>
 
-    <div class="content" id="content">
-        <p>1. Introduction:<br>
-            - My name is Obiora Okafor, I'm in the 8th grade, and I'm really good at coding.</p>
-        <p>2. Passions and Interests:<br>
-            - I'm passionate about coding, and my interests include playing Games and Watching Anime</p>
-        <p>3. Achievements:<br>
-            - For now, nothing specific to mention.</p>
-        <p>4. Goals and Aspirations:<br>
-            - My goal is to become better at coding and video games, and I hope to accomplish these goals.</p>
-        <p>5. Values:<br>
-            - Kindness is an important value to me.</p>
-        <p>6. Fun Facts:<br>
-            - I enjoy coding websites and video games.</p>
-        <p>7. Conclusion:<br>
-            - So yeah, that's everything about me.</p>
-    </div>
+    <!-- Other Settings -->
+    <!-- Add your other settings here -->
 
     <script>
-        function showContent() {
-            var startButton = document.querySelector(".start-button");
-            var content = document.getElementById("content");
+        // Get the Hidden Mode checkbox and the Automatic Hidden Mode button
+        const hiddenModeCheckbox = document.getElementById('hiddenMode');
+        const autoHiddenModeButton = document.getElementById('autoHiddenMode');
 
-            // Fade out the start button
-            startButton.style.opacity = 0;
+        // Add a click event listener to the Automatic Hidden Mode button
+        autoHiddenModeButton.addEventListener('click', function() {
+            // Toggle the Hidden Mode checkbox when the button is clicked
+            hiddenModeCheckbox.checked = !hiddenModeCheckbox.checked;
+        });
 
-            // Show the content with smooth transition
-            content.classList.add("show");
-        }
+        // Additional functionality for Tab Cloak and Quick Links can be added here
+        // Make sure to add appropriate event listeners and functions for each setting
     </script>
 </body>
 </html>
