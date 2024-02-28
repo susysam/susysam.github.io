@@ -83,34 +83,40 @@
     </style>
 </head>
 <body>
+<div class="button-container">
+    <p class="prompt">What would you like to access?</p>
+    <div class="button" onclick="openlinks()"><span>Links</span></div>
+    <div class="button" onclick="openGames()"><span>Game</span></div>
+    <div class="button" onclick="openApps()"><span>Apps</span></div>
+    <div class="button" onclick="openTvShowPlayer()"><span>Entertainment Player</span></div>
+    <div class="button" onclick="openPlexileArcade()"><span>Plexile Arcade</span></div>
+    <div class="button" onclick="openSettings()"><span>Settings</span></div> <!-- New button for Settings -->
+</div>
 
-    <div class="button-container">
-        <p class="prompt">What would you like to access?</p>
-        <div class="button" onclick="openlinks()"><span>Links</span></div>
-        <div class="button" onclick="openGames()"><span>Game</span></div>
-        <div class="button" onclick="openApps()"><span>Apps</span></div>
-        <div class="button" onclick="openTvShowPlayer()"><span>Entertainment Player</span></div>
-        <div class="button" onclick="openPlexileArcade()"><span>Plexile Arcade</span></div>
-    </div>
+<script>
+    function openTvShowPlayer() {
+        window.location.href = "movie+tv.html";
+    }
 
-    <script>
-        function openTvShowPlayer() {
-            window.location.href = "movie+tv.html";
-        }
+    function openPlexileArcade() {
+        window.location.href = "free.html";
+    }
 
-        function openPlexileArcade() {
-            window.location.href = "free.html";
-        }
-         function openApps() {
-            window.location.href = "app.html";
-        }
-         function openGames() {
-            window.location.href = "game.html";
-        }
-         function openlinks() {
-            window.location.href = "Show.html";
-        }
-    </script>
+    function openApps() {
+        window.location.href = "app.html";
+    }
 
+    function openGames() {
+        window.location.href = "game.html";
+    }
+
+    function openlinks() {
+        window.location.href = "Show.html";
+    }
+
+    function openSettings() {
+        window.location.href = "setting.html"; // Redirect to setting.html
+    }
+</script>
 </body>
 </html>
