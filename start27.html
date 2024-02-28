@@ -86,12 +86,11 @@
 
     <div class="button-container">
         <p class="prompt">What would you like to access?</p>
-        <div class="button" onclick="openGames()"><span>🎮 Games</span></div>
-        <div class="button" onclick="openApps()"><span>📱 Apps</span></div>
-        <div class="button" onclick="openseT()"><span>⚙️ Settings</span></div>
-        <div class="button" onclick="openTvShowPlayer()"><span>🎬 Entertainment Player</span></div>
-        <div class="button" onclick="openPlexileArcade()"><span>🕹️ Plexile Arcade</span></div>
-        <div class="button" onclick="openlinks()"><span>🔗 Links</span></div>
+        <div class="button" onclick="openlinks()"><span>Links</span></div>
+        <div class="button" onclick="openGames()"><span>Game</span></div>
+        <div class="button" onclick="openApps()"><span>Apps</span></div>
+        <div class="button" onclick="openTvShowPlayer()"><span>Movie+TV Player</span></div>
+        <!-- Removed Plexile Arcade Button -->
     </div>
 
     <script>
@@ -110,9 +109,6 @@
         }
          function openlinks() {
             window.location.href = "Show.html";
-        }
-         function openseT() {
-            window.location.href = "setting.html";
         }
     </script>
 
