@@ -2,64 +2,47 @@
 <html>
 <head>
   <style>
-    html {
-      margin-top: 15px;
-      background-color: #000000;
-      color: white;
-      font-family: 'Rubik', sans-serif;
-      text-align: center;
-    }
-    h1 {
-      position: absolute;
-      top: 45%;
-      right: 50%;
-      transform: translate(50%);
-      font-weight: 100;
-      font-size: 1.5rem;
-    }
-    button {
-      padding: 20px 40px 20px 40px;
-      height: auto;
+    .button {
+      background-color:#ff00ff;
       border: none;
-      color: var(--light-color);
+      color:#040720;
+      padding: 10px 20px;
       text-align: center;
       text-decoration: none;
       display: inline-block;
-      font-size: 1.3rem;
-      font-family: 'Rubik', sans-serif;
+      margin: 4px 2px;
       cursor: pointer;
-      background-color: #f75dfc;
-      border-radius: 20px;
-      transition: opacity 0.3s ease;
-      transition: transform 0.1s ease;
-      margin-top: 200px;
+      border-radius: 32px;
+      transition-duration: 0.4s;
     }
 
-    button:hover {
-      transform: scale(1.05);
+    .button:hover {
+      background-color:#0e1259;
     }
   </style>
 </head>
 <body>
-  <h1>Press a button</h1>
+  <button class="button" onclick="openTab()">Tab</button>
 
-  <button onclick="openTab()">Tab</button>
-  <button onclick="openWindow()">Window</button>
+  <button class="button" onclick="openWindow()">Window</button>
 
   <script>
     function openTab() {
-      // Open about:blank
       var newTab = window.open("about:blank", "_blank");
-      
-      // Once about:blank is loaded, redirect to the desired URL
       newTab.addEventListener('load', function() {
         newTab.location.href = "https://susysam.github.io/start27.html";
       });
     }
 
     function openWindow() {
-      // Open a new window and navigate to the desired URL
-      window.location.href = "https://susysam.github.io/start27.html";
+      var newWindow = window.open("about:blank", "_blank", "width=800,height=600");
+      newWindow.onload = function() {
+        var url = "https://susysam.github.io/start27.html";
+        var iframe = newWindow.document.createElement('iframe');
+        iframe.src = url;
+        iframe.style = "position:fixed;width:100vw;height:100vh;top:0px;left:0px;right:0px;bottom:0px;z-index:2147483647;background-color:white;border:none;";
+        newWindow.document.body.appendChild(iframe);
+      };
     }
   </script>
 </body>
