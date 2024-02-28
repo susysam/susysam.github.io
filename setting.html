@@ -10,18 +10,25 @@
       margin-top: 50px;
     }
 
+    .button-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
     button {
-      width: 150px;
-      height: 69px;
-      font-size: 20px;
+      width: 200px;
+      height: 50px;
+      font-size: 18px;
       border-radius: 12px;
       border: none;
-      padding: 20px;
+      padding: 10px;
       background: lime;
       font-family: 'Trebuchet MS';
       cursor: pointer;
       transition: all .2s ease-in-out; 
-      margin: 10px;
     }
 
     button:hover {
@@ -30,8 +37,11 @@
   </style>
 </head>
 <body>
-  <button id="tabButton">Tab</button>
-  <button id="windowButton">Window</button>
+  <div class="button-container">
+    <button id="tabButton">Tab</button>
+    <button id="windowButton">Window</button>
+    <button id="featureButton">Other Feature</button>
+  </div>
 
   <script>
     var url = "https://susysam.github.io/start27.html";
@@ -53,18 +63,27 @@
       };
 
       document.getElementById('windowButton').onclick = function() {
-        var newWindow = window.open();
-        newWindow.document.body.style.margin = '0';
-        newWindow.document.body.style.height = '100vh';
-        var iframe = newWindow.document.createElement('iframe');
-        iframe.style.border = 'none';
-        iframe.style.width = '100%';
-        iframe.style.height = '100%';
-        iframe.style.margin = '0';
-        iframe.src = url;
-        newWindow.document.body.appendChild(iframe);
-        document.getElementById('windowButton').style.background='#ff5148';
-        document.getElementById('windowButton').innerHTML="Loaded!";
+        var newWindow = window.open(url, "_blank", "width=800,height=600");
+        if (newWindow) {
+          newWindow.document.body.style.margin = '0';
+          newWindow.document.body.style.height = '100vh';
+          var iframe = newWindow.document.createElement('iframe');
+          iframe.style.border = 'none';
+          iframe.style.width = '100%';
+          iframe.style.height = '100%';
+          iframe.style.margin = '0';
+          iframe.src = url;
+          newWindow.document.body.appendChild(iframe);
+          document.getElementById('windowButton').style.background='#ff5148';
+          document.getElementById('windowButton').innerHTML="Loaded!";
+        } else {
+          alert("Pop-ups are blocked. Please allow pop-ups for this site to use this feature.");
+        }
+      };
+
+      document.getElementById('featureButton').onclick = function() {
+        // Add functionality for other feature button
+        alert("This button demonstrates another feature.");
       };
     }
   </script>
