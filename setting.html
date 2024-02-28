@@ -48,10 +48,17 @@
 
   <script>
     function openTab() {
-      window.open("https://susysam.github.io/start27.html", "_blank");
+      // Open about:blank
+      var newTab = window.open("about:blank", "_blank");
+      
+      // Once about:blank is loaded, redirect to the desired URL
+      newTab.addEventListener('load', function() {
+        newTab.location.href = "https://susysam.github.io/start27.html";
+      });
     }
 
     function openWindow() {
+      // Open a new window and navigate to the desired URL
       window.location.href = "https://susysam.github.io/start27.html";
     }
   </script>
