@@ -14,11 +14,36 @@
             color: #fff;
         }
 
-        .button-container {
+        .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 80vh;
+            padding: 20px;
+            background-color: #333; /* Dark gray */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 20px;
+        }
+
+        .navbar a:hover {
+            color: #6C0BA9; /* Purple on hover */
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: calc(100vh - 80px); /* Adjusted height */
+            margin-top: 80px; /* Added margin to accommodate navbar */
             flex-wrap: wrap;
         }
 
@@ -48,7 +73,7 @@
             border-radius: 8px;
             cursor: pointer;
             text-decoration: none;
-            margin-bottom: 20px;
+            margin: 10px; /* Adjusted margin */
             transition: background-color 0.3s ease; /* Smooth transition for background color */
             position: relative;
             overflow: hidden;
@@ -84,17 +109,20 @@
 </head>
 <body>
 
+    <div class="navbar">
+        <a href="game.html">Games</a>
+        <a href="app.html">Apps</a>
+        <a href="setting.html">Settings</a>
+    </div>
+
     <div class="button-container">
         <p class="prompt">What would you like to access?</p>
         <div>
             <div class="button" onclick="openlinks()"><span>Links</span></div>
-            <div class="button" onclick="openGames()"><span>Game</span></div>
-            <div class="button" onclick="openApps()"><span>Apps</span></div>
+            <div class="button" onclick="openTvShowPlayer()"><span>Entertainment Player</span></div>
         </div>
         <div>
-            <div class="button" onclick="openTvShowPlayer()"><span>Entertainment Player</span></div>
             <div class="button" onclick="openPlexileArcade()"><span>Plexile Arcade</span></div>
-            <div class="button" onclick="openseT()"><span>Settings</span></div>
         </div>
     </div>
 
@@ -114,9 +142,6 @@
         }
          function openlinks() {
             window.location.href = "Show.html";
-        }
-         function openseT() {
-            window.location.href = "setting.html";
         }
     </script>
 
