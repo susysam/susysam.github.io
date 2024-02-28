@@ -1,47 +1,68 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <base target="_blank">
   <style>
-    .button {
-      background-color:#ff00ff;
-      border: none;
-      color:#040720;
-      padding: 10px 20px;
+    * {
+      color: white; 
+      font-family: 'Titan One', cursive;
       text-align: center;
-      text-decoration: none;
-      display: inline-block;
-      margin: 4px 2px;
-      cursor: pointer;
-      border-radius: 32px;
-      transition-duration: 0.4s;
     }
 
-    .button:hover {
-      background-color:#0e1259;
+    button {
+      width: 150px;
+      height: 69px;
+      font-size: 20px;
+      border-radius: 12px;
+      border: none;
+      padding: 20px;
+      background: lime;
+      font-family: 'Trebuchet MS';
+      cursor: pointer;
+      transition: all .2s ease-in-out; 
+    }
+
+    button:hover {
+      transform: scale(1.1); 
     }
   </style>
 </head>
 <body>
-  <button class="button" onclick="openTab()">Tab</button>
-
-  <button class="button" onclick="openWindow()">Window</button>
+  <button id="tabButton">Open In Another Tab</button>
+  <button id="windowButton">Open In Another Window</button>
 
   <script>
-    function openTab() {
-      var newTab = window.open("about:blank", "_blank");
-      newTab.addEventListener('load', function() {
-        newTab.location.href = "https://susysam.github.io/start27.html";
-      });
-    }
+    var url = "https://susysam.github.io/start27.html";
 
-    function openWindow() {
-      var newWindow = window.open("about:blank", "_blank", "width=800,height=600");
-      newWindow.onload = function() {
-        var url = "https://susysam.github.io/start27.html";
-        var iframe = newWindow.document.createElement('iframe');
+    if (url) {
+      document.getElementById('tabButton').onclick = function() {
+        var newTab = window.open();
+        newTab.document.body.style.margin = '0';
+        newTab.document.body.style.height = '100vh';
+        var iframe = newTab.document.createElement('iframe');
+        iframe.style.border = 'none';
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.style.margin = '0';
         iframe.src = url;
-        iframe.style = "position:fixed;width:100vw;height:100vh;top:0px;left:0px;right:0px;bottom:0px;z-index:2147483647;background-color:white;border:none;";
+        newTab.document.body.appendChild(iframe);
+        document.getElementById('tabButton').style.background='#ff5148';
+        document.getElementById('tabButton').innerHTML="Loaded!";
+      };
+
+      document.getElementById('windowButton').onclick = function() {
+        var newWindow = window.open();
+        newWindow.document.body.style.margin = '0';
+        newWindow.document.body.style.height = '100vh';
+        var iframe = newWindow.document.createElement('iframe');
+        iframe.style.border = 'none';
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.style.margin = '0';
+        iframe.src = url;
         newWindow.document.body.appendChild(iframe);
+        document.getElementById('windowButton').style.background='#ff5148';
+        document.getElementById('windowButton').innerHTML="Loaded!";
       };
     }
   </script>
