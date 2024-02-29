@@ -68,18 +68,27 @@
             color: #ccc;
             margin-bottom: 20px;
         }
+
+        /* Styles for iframe */
+        .iframe-container {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 aspect ratio */
+        }
+
+        .iframe-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
     </style>
 </head>
 
 <body>
     <!-- Back Button -->
     <div class="button" onclick="open27()"><span>Back</span></div>
-
-    <script>
-        function open27() {
-            window.location.href = "start27.html";
-        }
-    </script>
 
     <h1>Apps</h1>
 
@@ -107,10 +116,6 @@
             {
                 name: "Discord",
                 link: "https://discord.com/app",
-            },
-            {
-                name: "Youtube",
-                link: "https://youtube.com/",
             },
             {
                 name: "Netflix",
@@ -160,6 +165,26 @@
         // Event listener for search input
         const searchInput = document.getElementById("searchInput");
         searchInput.addEventListener("input", () => displayApps(searchInput.value));
+    </script>
+
+    <!-- Utopia (Doge UN) Button -->
+    <button class="button" onclick="openDogeUN()">Doge UN</button>
+
+    <!-- Function to open Doge UN within an iframe -->
+    <script>
+        function openDogeUN() {
+            const iframeContainer = document.createElement("div");
+            iframeContainer.classList.add("iframe-container");
+
+            const iframe = document.createElement("iframe");
+            iframe.setAttribute("src", "https://base.aksnapshots.com/mobile.html");
+            iframe.setAttribute("frameborder", "0");
+            iframe.setAttribute("allowfullscreen", "");
+
+            iframeContainer.appendChild(iframe);
+
+            document.body.appendChild(iframeContainer);
+        }
     </script>
 </body>
 
