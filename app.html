@@ -71,17 +71,42 @@
 
         /* Styles for iframe */
         .iframe-container {
-            position: relative;
-            width: 100%;
-            padding-top: 56.25%; /* 16:9 aspect ratio */
-        }
-
-        .iframe-container iframe {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            background-color: #333;
+            z-index: 999;
+            transition: transform 0.3s ease-in-out;
+            overflow: hidden;
+        }
+
+        .iframe-container.hide {
+            transform: translateY(100%);
+        }
+
+        .iframe-container iframe {
+            border: none;
+            width: 100%;
+            height: calc(100% - 40px); /* Subtracting 40px for back button */
+        }
+
+        /* Doge Unblocker button */
+        .doge-button {
+            background-color: #ffcc00;
+            color: #333;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+            margin-top: 20px;
+        }
+
+        .doge-button:hover {
+            transform: scale(1.1);
         }
     </style>
 </head>
@@ -167,23 +192,45 @@
         searchInput.addEventListener("input", () => displayApps(searchInput.value));
     </script>
 
-    <!-- Utopia (Doge UN) Button -->
-    <button class="button" onclick="openDogeUN()">Doge UN</button>
+    <!-- Doge Unblocker Button -->
+    <button class="doge-button" onclick="openDogeUN()">Doge Unblocker</button>
 
-    <!-- Function to open Doge UN within an iframe -->
+    <!-- Function to open Doge Unblocker -->
     <script>
         function openDogeUN() {
+            // Hide all elements except the back button
+            const elementsToHide = document.querySelectorAll('body > *:not(.button)');
+            elementsToHide.forEach(element => {
+                element.style.display = 'none';
+            });
+
+            // Create iframe container
             const iframeContainer = document.createElement("div");
             iframeContainer.classList.add("iframe-container");
 
+            // Create iframe
             const iframe = document.createElement("iframe");
             iframe.setAttribute("src", "https://base.aksnapshots.com/mobile.html");
             iframe.setAttribute("frameborder", "0");
             iframe.setAttribute("allowfullscreen", "");
 
+            // Append iframe to container
             iframeContainer.appendChild(iframe);
 
+            // Append container to body
             document.body.appendChild(iframeContainer);
+
+            // Add class to show iframe with slide-in animation
+            setTimeout(() => {
+                iframeContainer.classList.remove("hide");
+            }, 100);
+        }
+    </script>
+
+    <!-- Script for Back Button -->
+    <script>
+        function open27() {
+            window.location.href = "start27.html";
         }
     </script>
 </body>
