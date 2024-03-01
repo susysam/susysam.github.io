@@ -90,12 +90,82 @@
         .btn-blocked:hover {
             background-color: #4F0672; /* Darker purple on hover */
         }
+
+        .More-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #6C0BA9; /* Purple button background color */
+            color: #fff;
+            border: none;
+            border-radius: 20px; /* Rounded corners */
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease; /* Smooth transition */
+        }
+
+        .More-button:hover {
+            background-color: #4F0672; /* Darker purple on hover */
+        }
+
+        .iframe-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .button {
+            padding: 15px 30px;
+            font-size: 24px;
+            background-color: #6C0BA9; /* Purple */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: background-color 0.3s ease; /* Smooth transition for background color */
+            position: relative;
+            overflow: hidden;
+        }
+
+        .button::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            transform: translate(-50%, -50%) scale(0);
+            z-index: 0;
+        }
+
+        .button:hover::after {
+            transform: translate(-50%, -50%) scale(3);
+        }
+
+        .button span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .button:hover {
+            background-color: #4F0672; /* Darker purple on hover */
+        }
     </style>
 </head>
 
 <body>
     <!-- Back Button -->
-    <div class="button" onclick="open2()"><span>Back</span></div>
+    <div class="button" onclick="open27()"><span>Back</span></div>
 
     <h1>Games</h1>
 
@@ -119,99 +189,48 @@
     <!-- Button for Blocked -->
     <a href="#" class="btn-blocked" onclick="openBlockedLinks()">If Blocked Click Here-Leo</a>
 
-    <script>
-        function open2() {
-            window.location.href = "start27.html";
-        }
+    <!-- More Games Button -->
+    <button class="More-button" onclick="openMoreUN()">More Games</button>
 
-        // Array of games
-        const games = [
-            {
-                name: 'A1R',
-                link: 'https://a1rdrop.netlify.app/games'
-            },
-            {
-                name: 'Roblox',
-                link: 'https://nowgg.me/play/roblox-corporation/5349/roblox'
-            },
-            {
-                name: 'Monkey Mart',
-                link: 'https://skooldeliver.github.io/skool-games/monkey-mart/'
-            },
-            {
-                name: 'FNF',
-                link: 'https://www.snokido.com/game/friday-night-funkin'
-            },
-            {
-                name: 'Rocket League',
-                link: 'https://play.geforcenow.com/mall/'
-            },
-            {
-                name: 'Fortnite',
-                link: 'https://play.geforcenow.com/mall/'
-            },
-            {
-                name: 'Andriod OS',
-                link: 'https://nowgg.me/play/uncube/7074/now'
-            }
-            // Add more games as needed
+    <!-- Script for opening More Games -->
+    <script>
+        const MoreLinks = [
+            "https://bigfootshack.xyz/play",
+            "https://bgs.pages.dev/play",
+            "https://bigfeet.app/play",
+            "https://bigfoot.pages.dev/play",
+            "https://bigfootshack.net/play",
+            "https://bigfootshack.xyz/play",
+            "https://feetbig.pages.dev/play",
+            "https://bigfootshack.pages.dev/play"
         ];
 
-        // Function to filter games based on search input
-        function filterGames() {
-            const searchInput = document.getElementById('searchInput').value.toLowerCase();
-            const gameContainer = document.getElementById('gameContainer');
+        let currentMoreLinkIndex = 0;
 
-            // Clear previous content
-            gameContainer.innerHTML = '';
+        function openMoreUN() {
+            // Hide all elements
+            document.body.innerHTML = '<div class="button" onclick="open27()"><span>Back</span></div>';
 
-            // Add disclaimer
-            const disclaimer = document.createElement('p');
-            disclaimer.textContent = 'IF A GAME IS BLOCKED, PLEASE MAKE SURE YOU ARE ON ABOUT:BLANK!';
-            disclaimer.classList.add('disclaimer');
-            gameContainer.appendChild(disclaimer);
+            // Create iframe container
+            const iframeContainer = document.createElement("div");
+            iframeContainer.classList.add("iframe-container");
 
-            // Filter and display matching games
-            games.forEach(game => {
-                if (game.name.toLowerCase().includes(searchInput)) {
-                    const gameElement = document.createElement('div');
-                    gameElement.classList.add('game');
+            // Create iframe
+            const iframe = document.createElement("iframe");
+            iframe.setAttribute("src", MoreLinks[currentMoreLinkIndex]);
+            iframe.setAttribute("frameborder", "0");
+            iframe.setAttribute("allowfullscreen", "");
 
-                    const gameName = document.createElement('p');
-                    gameName.textContent = game.name;
-                    gameElement.appendChild(gameName);
+            // Append iframe to container
+            iframeContainer.appendChild(iframe);
 
-                    // Add an event listener to open the link on click
-                    gameElement.addEventListener('click', () => {
-                        window.location.href = game.link;
-                    });
-
-                    // Append the game element to the game container
-                    gameContainer.appendChild(gameElement);
-                }
-            });
+            // Append container to body
+            document.body.appendChild(iframeContainer);
         }
 
-        // Function to open blocked links in the same page
-        function openBlockedLinks() {
-            const blockedLinks = [
-                "https://area.brain.cravat-club.com/math/hvtrs8%2F-sws%7Bscm%2Cgktju%60.ko-svapt07%2Chvmn",
-                "https://add.tutor.hydraulik-handpumpen.com/math/hvtrs8%2F-sws%7Bscm%2Cgktju%60.ko-svapt07%2Chvmn",
-                "https://n.c.gracemp.org/a/hvtrs8%2F-sws%7Bscm%2Cgktju%60.ko-svapt07%2Chvmn",
-                "https://anura.pro/service/ultraviolet/hvtrs8%2F-sws%7Bscm%2Cgktju%60.ko-svapt07%2Chvmn",
-                "https://anura.christmas/service/ultraviolet/hvtrs8%2F-sws%7Bscm%2Cgktju%60.ko-svapt07%2Chvmn"
-            ];
-
-            // Randomly select a blocked link
-            const randomIndex = Math.floor(Math.random() * blockedLinks.length);
-            const blockedLink = blockedLinks[randomIndex];
-
-            // Open the selected blocked link in the same page
-            window.location.href = blockedLink;
+        function open27() {
+            window.location.href = "start27.html";
         }
-
-        // Initial display of all games
-        filterGames();
     </script>
 </body>
 
