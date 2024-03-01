@@ -76,10 +76,15 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: #333;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
             z-index: 999;
             transition: transform 0.3s ease-in-out;
             overflow: hidden;
+            display: none; /* Hide initially */
+        }
+
+        .iframe-container.active {
+            display: block; /* Show when active */
         }
 
         .iframe-container iframe {
@@ -119,6 +124,7 @@
     <!-- Search Bar -->
     <div class="search-container">
         <input type="text" id="searchInput" placeholder="Search" required>
+        <button onclick="openSearch()">Search</button> <!-- Added search button -->
     </div>
 
     <!-- App Section -->
@@ -186,6 +192,15 @@
         // Event listener for search input
         const searchInput = document.getElementById("searchInput");
         searchInput.addEventListener("input", () => displayApps(searchInput.value));
+
+        // Function to open search in iframe
+        function openSearch() {
+            const searchTerm = document.getElementById("searchInput").value;
+            const iframeContainer = document.createElement("div");
+            iframeContainer.classList.add("iframe-container");
+            iframeContainer.innerHTML = `<iframe src="https://www.google.com/search?q=${searchTerm}" frameborder="0" allowfullscreen></iframe>`;
+            document.body.appendChild(iframeContainer);
+        }
     </script>
 
     <!-- Doge Unblocker Button -->
