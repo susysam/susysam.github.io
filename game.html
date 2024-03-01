@@ -174,7 +174,7 @@
 
     <!-- Search Bar -->
     <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Search" oninput="filterGames()" required>
+        <input type="text" id="searchInput" placeholder="Search" onkeydown="if(event.keyCode==13) filterGames()" required>
     </div>
 
     <!-- Game Section -->
