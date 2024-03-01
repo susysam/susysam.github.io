@@ -200,7 +200,7 @@
         function openSearch() {
             const searchTerm = document.getElementById("searchInput").value;
             const iframeContainer = document.createElement("div");
-            iframeContainer.classList.add("iframe-container");
+            iframeContainer.classList.add("iframe-container", "active");
             iframeContainer.innerHTML = `<iframe src="https://${searchTerm}" frameborder="0" allowfullscreen></iframe>`;
             document.body.appendChild(iframeContainer);
         }
