@@ -18,13 +18,17 @@
             font-family: 'Montserrat', sans-serif;
         }
 
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+        }
+
         .login-box {
-            position: absolute;
-            top: 50%;
-            left: 50%;
             width: 400px;
             padding: 40px;
-            transform: translate(-50%, -50%);
             background: linear-gradient(#006992, #2E1760);
             box-sizing: border-box;
             box-shadow: 0 15px 25px rgba(0, 0, 0, .6);
@@ -211,23 +215,25 @@
 
 <body>
 
-    <div class="login-box">
-        <h2>Login</h2>
-        <div class="user-box">
-            <input type="text" id="username" required="">
-            <label for="username">Username</label>
+    <div class="login-container">
+        <div class="login-box">
+            <h2>Login</h2>
+            <div class="user-box">
+                <input type="text" id="username" required="">
+                <label for="username">Username</label>
+            </div>
+            <div class="user-box">
+                <input type="password" id="password" required="">
+                <label for="password">Password</label>
+            </div>
+            <a href="#" onclick="attemptLogin()">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                Submit
+            </a>
         </div>
-        <div class="user-box">
-            <input type="password" id="password" required="">
-            <label for="password">Password</label>
-        </div>
-        <a href="#" onclick="attemptLogin()">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            Submit
-        </a>
     </div>
 
     <div id="successContainer" class="success-message" style="display: none;">Correct ✅</div>
