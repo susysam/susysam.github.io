@@ -1,3 +1,6 @@
+Certainly! Here is a combined version of the HTML and CSS code to create a modern login form with animations:
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
-      background-color: #292929;
+      background: linear-gradient(#171738, #2E1760);
       color: white;
       display: flex;
       align-items: center;
@@ -19,170 +22,203 @@
       font-family: 'Montserrat', sans-serif;
     }
 
-    form {
-      background-color: #171717;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-      text-align: center;
-      animation: fadeIn 1s ease forwards;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    label {
-      display: block;
-      margin-bottom: 10px;
-      color: white;
-    }
-
-    input {
-      width: 100%;
-      padding: 8px;
-      margin-bottom: 15px;
-      box-sizing: border-box;
-      background-color: #292929;
-      color: white;
-      border: 1px solid #6C0BA9;
-      border-radius: 5px;
-      transition: border-color 0.3s ease;
-    }
-
-    input:focus {
-      border-color: #4F0672;
-    }
-
-    button {
-      background-color: #6C0BA9;
-      color: white;
-      padding: 10px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      margin: 5px;
-      transition: background-color 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #4F0672;
-    }
-
-    .success-message, .error-message {
-      font-size: 24px;
-      font-weight: bold;
-      margin-top: 20px;
-    }
-
-    .circle-animation, .wrong-animation {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background-color: black;
+    .login-box {
       position: absolute;
-      transition: opacity 0.3s ease;
+      top: 50%;
+      left: 50%;
+      width: 400px;
+      padding: 40px;
+      transform: translate(-50%, -50%);
+      background: linear-gradient(#006992, #2E1760);
+      box-sizing: border-box;
+      box-shadow: 0 15px 25px rgba(0,0,0,.6);
+      border-radius: 10px;
     }
 
-    .circle-animation {
-      animation: colorChange 2s forwards;
+    .login-box h2 {
+      margin: 0 0 30px;
+      padding: 0;
+      color: #fff;
+      text-align: center;
     }
 
-    .wrong-animation {
-      background-color: #FF0000;
-      animation: colorChangeWrong 2s forwards;
+    .user-box {
+      position: relative;
     }
 
-    @keyframes colorChange {
-      to {
-        background-color: white;
-      }
+    .user-box input {
+      width: 100%;
+      padding: 10px 0;
+      font-size: 16px;
+      color: #fff;
+      margin-bottom: 30px;
+      border: none;
+      border-bottom: 1px solid #fff;
+      outline: none;
+      background-color: transparent;
     }
 
-    @keyframes colorChangeWrong {
-      to {
-        background-color: white;
-      }
+    .user-box label {
+        position:absolute; 
+        top:.5em; 
+        left:.5em; 
+        color:#fff; 
+        transition:.5s
     }
 
-    /* Additional animations */
-    @keyframes slideInFromLeft {
-      from {
-        transform: translateX(-100%);
-        opacity: 0;
-      }
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
+    .user-box input:focus ~ label,
+    .user-box input:not(:placeholder-shown) ~ label {
+        top:-20px; 
+        left:-5px; 
+        color:#03e9f4; 
+        font-size:.8em; 
     }
 
-    @keyframes slideInFromRight {
-      from {
-        transform: translateX(100%);
-        opacity: 0;
-      }
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
+    form a {
+        position:relative; 
+        display:inline-block; 
+        padding:.5em; 
+        color:#03e9f4; 
+        font-size:.8em; 
+        text-decoration:none; 
+        text-transform:none; 
+        overflow:hidden; 
+        transition:.5s; 
+        margin-top:.8em; 
+        letter-spacing:.2em
     }
 
-    @keyframes fadeInFromBottom {
-      from {
-        transform: translateY(50%);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
+    a:hover {
+        background:#03e9f4; 
+        color:#fff; 
+        border-radius:.3em
     }
-  </style>
+
+    a span {
+        position:absolute; 
+        display:block
+    }
+
+    a span:nth-child(1) {
+        top:-100%; 
+        left:-100%; 
+        width:auto; 
+        height:auto
+    }
+
+    a span:nth-child(2) {
+        top:-100%; 
+        right:-100%; 
+        width:auto; 
+        height:auto
+    }
+
+    a span:nth-child(3) {
+        bottom:-100%; 
+        right:-100%; 
+        width:auto; 
+        height:auto
+    }
+
+    a span:nth-child(4) {
+       bottom:-100%;  
+       left:-100%;  
+       width:auto;  
+       height:auto
+     }
+    
+     /* Additional Animations */
+    
+     @keyframes slideInFromLeft {  
+       from { transform : translateX(-100%); opacity :0 }  
+       to { transform : translateX(0); opacity :1 }  
+     }
+    
+     @keyframes fadeInFromBottom {  
+       from { transform : translateY(50%); opacity :0 }  
+       to { transform : translateY(0); opacity :1 }  
+     }
+    
+     @keyframes btn-anim1 {  
+       from { left : -100% }  
+       to { left :100% }  
+     }
+    
+     @keyframes btn-anim2 {  
+       from { top : -100% }  
+       to { top :100% }  
+     }
+    
+     @keyframes btn-anim3 {  
+       from { right : -100% }  
+       to { right :100% }  
+     }
+    
+     @keyframes btn-anim4 {  
+       from { bottom : -100% }  
+       to { bottom :100% }  
+     }
+    
+     button:hover{ background-color:#4F0672 }
+    
+     input:focus{ border-color:#4F0672 }
+    
+     button{ transition:.3s ease;background-color:#6C0BA9;color:white;padding:.5em;border:none;border-radius:.3em;margin:.3em;font-size:.8em;text-transform:none}
+    
+     label{ color:white;font-size:.8em;margin-bottom:.5em;display:block}
+    
+     input{ transition:border-color .3s ease;width:auto;padding:.5em;margin-bottom:.8em;background-color:#292929;color:white;border-radius:.3em;border:solid #6C0BA9}
+   </style>
 </head>
 
 <body>
 
-  <form id="loginForm" style="animation: slideInFromLeft 1s ease forwards;">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" placeholder="Username" required>
+<div class="login-box" style="animation-name: slideInFromLeft;">
+   <h2>Login</h2>
+   <form>
+       <div class="user-box">
+           <input type="text" name="" required="">
+           <label>Username</label>
+       </div>
+       <div class="user-box">
+           <input type="password" name="" required="">
+           <label>Password</label>
+       </div>
+       <a href="#">
+           <span></span>
+           <span></span>
+           <span></span>
+           <span></span>
+           Submit
+       </a>
+   </form>
+</div>
 
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" placeholder="Password" required>
+<script>
+   function attemptLogin() {
+       var username = document.querySelector('input[type="text"]').value.trim();
+       var password = document.querySelector('input[type="password"]').value.trim();
 
-    <button type="button" onclick="attemptLogin()" style="animation: fadeInFromBottom 1s ease forwards;">Login</button>
-  </form>
+       if (username === "YourUsername" && password === "YourPassword") {
+           // Successful login animation
+           document.querySelectorAll('.circle-animation').forEach(elem => elem.style.display = 'block');
+           document.getElementById('successContainer').style.display = 'block';
+           // Redirect to a new page after successful login
+           window.location.href = "https://yourwebsite.com/dashboard";
+       } else {
+           // Wrong login animation
+           document.querySelectorAll('.wrong-animation').forEach(elem => elem.style.display = 'block');
+           document.getElementById('wrongContainer').style.display = 'block';
+       }
+   }
+</script>
 
-  <div id="successContainer" class="success-message" style="display: none;">Correct ✅</div>
-  <div id="wrongContainer" class="error-message" style="display: none;">Wrong ❌</div>
-  <div id="circleAnimation" class="circle-animation" style="display: none;"></div>
-  <div id="wrongAnimation" class="wrong-animation" style="display: none;"></div>
-
-  <script>
-    function attemptLogin() {
-      var username = document.getElementById("username").value;
-      var password = document.getElementById("password").value;
-
-      // Your validation logic here
-      if ((username === "Leo" && password === "2024") || (username === "Robloxislife" && password === "FriedChicken")) {
-        document.getElementById("circleAnimation").style.display = "block";
-        document.getElementById("successContainer").style.display = "block";
-        window.location.href = "https://susysam.github.io/about.html";
-      } else {
-        document.getElementById("wrongAnimation").style.display = "block";
-        document.getElementById("wrongContainer").style.display = "block";
-      }
-    }
-  </script>
+<div id="successContainer" class="success-message" style="display:none;">Correct ✅</div>
+<div id="wrongContainer" class="error-message" style="display:none;">Wrong ❌</div>
 
 </body>
 
 </html>
+```
+
+This code combines the HTML structure with CSS styling and animations to create an interactive and visually appealing login form. You can further customize it according to your preferences. If you have any more
