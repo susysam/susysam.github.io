@@ -192,22 +192,113 @@
     <!-- More Games Button -->
     <button class="More-button" onclick="openMoreUN()">More Games</button>
 
-    <!-- Script for opening More Games -->
+    <!-- Script for displaying games -->
     <script>
-        const MoreLinks = [
-            "https://bigfootshack.xyz/play",
-            "https://bgs.pages.dev/play",
-            "https://bigfeet.app/play",
-            "https://bigfoot.pages.dev/play",
-            "https://bigfootshack.net/play",
-            "https://bigfootshack.xyz/play",
-            "https://feetbig.pages.dev/play",
-            "https://bigfootshack.pages.dev/play"
+        function open27() {
+            window.location.href = "start27.html";
+        }
+
+        // Array of games
+        const games = [
+            {
+                name: 'A1R',
+                link: 'https://a1rdrop.netlify.app/games'
+            },
+            {
+                name: 'Roblox',
+                link: 'https://nowgg.me/play/roblox-corporation/5349/roblox'
+            },
+            {
+                name: 'Monkey Mart',
+                link: 'https://skooldeliver.github.io/skool-games/monkey-mart/'
+            },
+            {
+                name: 'FNF',
+                link: 'https://www.snokido.com/game/friday-night-funkin'
+            },
+            {
+                name: 'Rocket League',
+                link: 'https://play.geforcenow.com/mall/'
+            },
+            {
+                name: 'Fortnite',
+                link: 'https://play.geforcenow.com/mall/'
+            },
+            {
+                name: 'Andriod OS',
+                link: 'https://nowgg.me/play/uncube/7074/now'
+            }
+            // Add more games as needed
         ];
 
-        let currentMoreLinkIndex = 0;
+        // Function to filter games based on search input
+        function filterGames() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const gameContainer = document.getElementById('gameContainer');
 
+            // Clear previous content
+            gameContainer.innerHTML = '';
+
+            // Add disclaimer
+            const disclaimer = document.createElement('p');
+            disclaimer.textContent = 'IF A GAME IS BLOCKED, PLEASE MAKE SURE YOU ARE ON ABOUT:BLANK!';
+            disclaimer.classList.add('disclaimer');
+            gameContainer.appendChild(disclaimer);
+
+            // Filter and display matching games
+            games.forEach(game => {
+                if (game.name.toLowerCase().includes(searchInput)) {
+                    const gameElement = document.createElement('div');
+                    gameElement.classList.add('game');
+
+                    const gameName = document.createElement('p');
+                    gameName.textContent = game.name;
+                    gameElement.appendChild(gameName);
+
+                    // Add an event listener to open the link on click
+                    gameElement.addEventListener('click', () => {
+                        window.location.href = game.link;
+                    });
+
+                    // Append the game element to the game container
+                    gameContainer.appendChild(gameElement);
+                }
+            });
+        }
+
+        // Function to open blocked links in the same page
+        function openBlockedLinks() {
+            const blockedLinks = [
+                "https://area.brain.cravat-club.com/math/hvtrs8%2F-sws%7Bscm%2Cgktju%60.ko-svapt07%2Chvmn",
+                "https://add.tutor.hydraulik-handpumpen.com/math/hvtrs8%2F-sws%7Bscm%2Cgktju%60.ko-svapt07%2Chvmn",
+                "https://n.c.gracemp.org/a/hvtrs8%2F-sws%7Bscm%2Cgktju%60.ko-svapt07%2Chvmn",
+                "https://anura.pro/service/ultraviolet/hvtrs8%2F-sws%7Bscm%2Cgktju%60.ko-svapt07%2Chvmn",
+                "https://anura.christmas/service/ultraviolet/hvtrs8%2F-sws%7Bscm%2Cgktju%60.ko-svapt07%2Chvmn"
+            ];
+
+            // Randomly select a blocked link
+            const randomIndex = Math.floor(Math.random() * blockedLinks.length);
+            const blockedLink = blockedLinks[randomIndex];
+
+            // Open the selected blocked link in the same page
+            window.location.href = blockedLink;
+        }
+
+        // Function to open more games
         function openMoreUN() {
+            const MoreLinks = [
+                "https://bigfootshack.xyz/play",
+                "https://bgs.pages.dev/play",
+                "https://bigfeet.app/play",
+                "https://bigfoot.pages.dev/play",
+                "https://bigfootshack.net/play",
+                "https://bigfootshack.xyz/play",
+                "https://feetbig.pages.dev/play",
+                "https://bigfootshack.pages.dev/play"
+            ];
+
+            let currentMoreLinkIndex = 0;
+
             // Hide all elements
             document.body.innerHTML = '<div class="button" onclick="open27()"><span>Back</span></div>';
 
@@ -228,9 +319,8 @@
             document.body.appendChild(iframeContainer);
         }
 
-        function open27() {
-            window.location.href = "start27.html";
-        }
+        // Initial display of all games
+        filterGames();
     </script>
 </body>
 
