@@ -124,7 +124,6 @@
     <!-- Search Bar -->
     <div class="search-container">
         <input type="text" id="searchInput" placeholder="Search" required>
-        <button onclick="openSearch()">Search</button> <!-- Added search button -->
     </div>
 
     <!-- App Section -->
@@ -191,14 +190,18 @@
 
         // Event listener for search input
         const searchInput = document.getElementById("searchInput");
-        searchInput.addEventListener("input", () => displayApps(searchInput.value));
+        searchInput.addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                openSearch();
+            }
+        });
 
         // Function to open search in iframe
         function openSearch() {
             const searchTerm = document.getElementById("searchInput").value;
             const iframeContainer = document.createElement("div");
             iframeContainer.classList.add("iframe-container");
-            iframeContainer.innerHTML = `<iframe src="https://www.google.com/search?q=${searchTerm}" frameborder="0" allowfullscreen></iframe>`;
+            iframeContainer.innerHTML = `<iframe src="https://${searchTerm}" frameborder="0" allowfullscreen></iframe>`;
             document.body.appendChild(iframeContainer);
         }
     </script>
