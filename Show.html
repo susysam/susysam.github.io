@@ -156,11 +156,24 @@
                     const randomLink = links[randomIndex];
                     const iframe = document.getElementById('contentFrame');
                     iframe.src = randomLink;
+                    openFullscreen(iframe);
                 } else {
                     const randomIndex = Math.floor(Math.random() * links.length);
                     const randomLink = links[randomIndex];
                     window.open(randomLink, '_blank');
                 }
+            }
+        }
+
+        function openFullscreen(elem) {
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.mozRequestFullScreen) { /* Firefox */
+                elem.mozRequestFullScreen();
+            } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { /* IE/Edge */
+                elem.msRequestFullscreen();
             }
         }
     </script>
