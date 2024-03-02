@@ -18,58 +18,22 @@
             color: #ffcc00;
         }
 
-        .search-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        input[type="text"] {
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 5px;
+        .button {
+            background-color: #ffcc00;
+            color: #333;
+            padding: 10px 20px;
             border: none;
-            margin-right: 10px;
-            width: 300px;
-        }
-
-        .app-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            margin: 0 auto;
-            max-width: 1200px;
-        }
-
-        .app {
-            padding: 20px;
-            background-color: #444;
-            border: 5px solid #fff;
-            border-radius: 15px;
-            text-decoration: none;
-            color: #fff;
-            transition: transform .2s ease-in-out;
+            border-radius: 5px;
+            font-size: 16px;
             cursor: pointer;
-            width: 300px;
-            box-sizing: border-box;
+            transition: transform 0.3s ease-in-out;
+            margin-top: 20px;
         }
 
-        .app:hover {
+        .button:hover {
             transform: scale(1.1);
         }
 
-        .app p {
-            margin: 10px 0;
-        }
-
-        .disclaimer {
-            color: #ccc;
-            margin-bottom: 20px;
-        }
-
-        /* Styles for iframe */
         .iframe-container {
             position: fixed;
             top: 0;
@@ -92,23 +56,6 @@
             width: 100%;
             height: 100%;
         }
-
-        /* Doge Unblocker button */
-        .doge-button {
-            background-color: #ffcc00;
-            color: #333;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: transform 0.3s ease-in-out;
-            margin-top: 20px;
-        }
-
-        .doge-button:hover {
-            transform: scale(1.1);
-        }
     </style>
 </head>
 
@@ -121,16 +68,13 @@
     <!-- Disclaimer -->
     <p class="disclaimer">Fixed Search Bar-Leo</p>
 
-    <!-- Search Bar -->
-    <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Search" required>
-        <button onclick="openSearch()">Search</button> <!-- Added search button -->
-    </div>
-
     <!-- App Section -->
     <div class="app-container" id="appContainer">
         <!-- Apps will be dynamically added here -->
     </div>
+
+    <!-- Doge Unblocker Button -->
+    <button class="button" onclick="openDogeUN()">Doge Unblocker</button>
 
     <!-- Script for displaying apps -->
     <script>
@@ -163,15 +107,12 @@
         ];
 
         // Function to display apps
-        function displayApps(searchTerm = "") {
+        function displayApps() {
             const container = document.getElementById("appContainer");
             container.innerHTML = "";
 
-            // Filter apps based on search term
-            const filteredApps = apps.filter(app => app.name.toLowerCase().includes(searchTerm.toLowerCase()));
-
-            // Display filtered apps
-            filteredApps.forEach(app => {
+            // Display all apps
+            apps.forEach(app => {
                 const appElement = document.createElement("div");
                 appElement.classList.add("app");
 
@@ -189,10 +130,6 @@
         // Initial display of apps
         displayApps();
 
-        // Event listener for search input
-        const searchInput = document.getElementById("searchInput");
-        searchInput.addEventListener("input", () => displayApps(searchInput.value));
-
         // Function to open search in iframe
         function openSearch() {
             const searchTerm = document.getElementById("searchInput").value;
@@ -201,38 +138,31 @@
             iframeContainer.innerHTML = `<iframe src="https://www.google.com/search?q=${searchTerm}" frameborder="0" allowfullscreen></iframe>`;
             document.body.appendChild(iframeContainer);
         }
-    </script>
 
-    <!-- Doge Unblocker Button -->
-    <button class="doge-button" onclick="openDogeUN()">Doge Unblocker</button>
-
-    <!-- Script for opening Doge Unblocker -->
-    <script>
-        const dogeLinks = [
-    "https://algebra.thehorseplace.us/mobile.html",
-    "https://k12.folklandmanagement.com/mobile.html",
-    "https://info.svmblocker.com/mobile.html",
-    "https://government.sotna.org/mobile.html",
-    "https://teams.prosports.cl/mobile.html",
-    "https://en.silentpatriot.com/mobile.html",
-    "https://help.robot-agachado.net/mobile.html",
-    "https://worksheets.hidict.cn/mobile.html",
-    "https://geoquiz.goncharmaster.ru/mobile.html",
-    "https://login.cloudbusinessportal.com/mobile.html",
-    "https://edu.mazovec.ru/mobile.html",
-    "https://go.jaleh.info/mobile.html",
-    "https://xfinitywebdev.github.io/rival-unblocker/",
-    "https://cool.blinklab.com/home.html",
-    "https://serrcosswilsonmallcreepscensions0phunky.eithermouse.com/",
-    "https://sjqwzv-8080.csb.app/",
-    "https://69.sixtygrade.site/",
-    "https://typeanytext.sixtygrade.site/",
-    "https://monkeytype.gq/"
-        ];
-
-        let currentDogeLinkIndex = 0;
-
+        // Function to open Doge Unblocker
         function openDogeUN() {
+            const dogeLinks = [
+                "https://algebra.thehorseplace.us/mobile.html",
+                "https://k12.folklandmanagement.com/mobile.html",
+                "https://info.svmblocker.com/mobile.html",
+                "https://government.sotna.org/mobile.html",
+                "https://teams.prosports.cl/mobile.html",
+                "https://en.silentpatriot.com/mobile.html",
+                "https://help.robot-agachado.net/mobile.html",
+                "https://worksheets.hidict.cn/mobile.html",
+                "https://geoquiz.goncharmaster.ru/mobile.html",
+                "https://login.cloudbusinessportal.com/mobile.html",
+                "https://edu.mazovec.ru/mobile.html",
+                "https://go.jaleh.info/mobile.html",
+                "https://xfinitywebdev.github.io/rival-unblocker/",
+                "https://cool.blinklab.com/home.html",
+                "https://serrcosswilsonmallcreepscensions0phunky.eithermouse.com/",
+                "https://sjqwzv-8080.csb.app/",
+                "https://69.sixtygrade.site/",
+                "https://typeanytext.sixtygrade.site/",
+                "https://monkeytype.gq/"
+            ];
+
             // Hide all elements
             document.body.innerHTML = '<div class="button" onclick="open27()"><span>Back</span></div>';
 
@@ -242,7 +172,7 @@
 
             // Create iframe
             const iframe = document.createElement("iframe");
-            iframe.setAttribute("src", dogeLinks[currentDogeLinkIndex]);
+            iframe.setAttribute("src", dogeLinks[0]);
             iframe.setAttribute("frameborder", "0");
             iframe.setAttribute("allowfullscreen", "");
 
@@ -253,6 +183,7 @@
             document.body.appendChild(iframeContainer);
         }
 
+        // Function to navigate back
         function open27() {
             window.location.href = "start27.html";
         }
