@@ -65,9 +65,6 @@
 
     <h1>Apps</h1>
 
-    <!-- Disclaimer -->
-    <p class="disclaimer">Fixed Search Bar-Leo</p>
-
     <!-- App Section -->
     <div class="app-container" id="appContainer">
         <!-- Apps will be dynamically added here -->
@@ -76,7 +73,7 @@
     <!-- Doge Unblocker Button -->
     <button class="button" onclick="openDogeUN()">Doge Unblocker</button>
 
-    <!-- Script for displaying apps -->
+    <!-- Script for displaying apps and opening Doge Unblocker -->
     <script>
         // Array of app objects
         const apps = [
@@ -130,15 +127,6 @@
         // Initial display of apps
         displayApps();
 
-        // Function to open search in iframe
-        function openSearch() {
-            const searchTerm = document.getElementById("searchInput").value;
-            const iframeContainer = document.createElement("div");
-            iframeContainer.classList.add("iframe-container");
-            iframeContainer.innerHTML = `<iframe src="https://www.google.com/search?q=${searchTerm}" frameborder="0" allowfullscreen></iframe>`;
-            document.body.appendChild(iframeContainer);
-        }
-
         // Function to open Doge Unblocker
         function openDogeUN() {
             const dogeLinks = [
@@ -163,9 +151,6 @@
                 "https://monkeytype.gq/"
             ];
 
-            // Hide all elements
-            document.body.innerHTML = '<div class="button" onclick="open27()"><span>Back</span></div>';
-
             // Create iframe container
             const iframeContainer = document.createElement("div");
             iframeContainer.classList.add("iframe-container");
@@ -179,8 +164,9 @@
             // Append iframe to container
             iframeContainer.appendChild(iframe);
 
-            // Append container to body
-            document.body.appendChild(iframeContainer);
+            // Clear the body and append iframe container
+            document.body.innerHTML = ''; // Clear the body
+            document.body.appendChild(iframeContainer); // Append iframe container
         }
 
         // Function to navigate back
