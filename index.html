@@ -227,13 +227,7 @@
                 <label for="password">Password</label>
             </div>
             <!-- Modified button -->
-            <a href="#" onclick="attemptLogin()">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                Submit
-            </a>
+            <div class="button" onclick="openTV()"><span>Login</span></div>
             <!-- End of modification -->
         </div>
     </div>
@@ -257,6 +251,10 @@
                 document.getElementById("wrongAnimation").style.display = "block";
                 document.getElementById("wrongContainer").style.display = "block";
             }
+        }
+
+        function openTV() {
+            window.location.href = "about.html";
         }
     </script>
 
