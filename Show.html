@@ -150,31 +150,35 @@
 
             const links = categories[category];
             if (links) {
-                const choice = prompt(`Do you want to open '${category}' links in an iframe? Type I for iframe or N for new Tab.`);
-                if (choice && choice.toUpperCase() === 'I') {
-                    const randomIndex = Math.floor(Math.random() * links.length);
-                    const randomLink = links[randomIndex];
-                    const iframe = document.getElementById('contentFrame');
-                    iframe.src = randomLink;
-                    openFullscreen(iframe);
-                } else {
-                    const randomIndex = Math.floor(Math.random() * links.length);
-                    const randomLink = links[randomIndex];
-                    window.open(randomLink, '_blank');
-                }
+                document.getElementById("contentFrame").src = ""; // Reset iframe content
+
+                const button1 = document.createElement("button");
+                button1.innerText = "Open link in Iframe";
+                button1.onclick = function () {
+                    openLinkInIframe(category, links);
+                };
+
+                const button2 = document.createElement("button");
+                button2.innerText = "Open link in New tab";
+                button2.onclick = function () {
+                    openLinkInNewTab(links);
+                };
+
+                document.body.appendChild(button1);
+                document.body.appendChild(button2);
             }
         }
 
-        function openFullscreen(elem) {
-            if (elem.requestFullscreen) {
-                elem.requestFullscreen();
-            } else if (elem.mozRequestFullScreen) { /* Firefox */
-                elem.mozRequestFullScreen();
-            } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
-                elem.webkitRequestFullscreen();
-            } else if (elem.msRequestFullscreen) { /* IE/Edge */
-                elem.msRequestFullscreen();
-            }
+        function openLinkInIframe(category, links) {
+            const randomIndex = Math.floor(Math.random() * links.length);
+            const randomLink = links[randomIndex];
+            document.getElementById('contentFrame').src = randomLink;
+        }
+
+        function openLinkInNewTab(links) {
+            const randomIndex = Math.floor(Math.random() * links.length);
+            const randomLink = links[randomIndex];
+            window.open(randomLink, '_blank');
         }
     </script>
 </body>
