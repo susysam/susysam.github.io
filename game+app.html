@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Games & Apps</title>
+    <title>Ultimate Entertainment</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
             text-align: center;
             margin: 20px;
-            background-color: #333;
+            background-color: #222;
             color: #fff;
         }
 
@@ -20,49 +20,65 @@
 
         .container {
             display: flex;
-            flex-wrap: wrap;
             justify-content: center;
             gap: 20px;
-            margin-top: 20px;
+            margin-top: 40px;
         }
 
         .item {
-            background-color: #555;
-            padding: 20px;
-            border: 5px solid #fff;
-            border-radius: 15px;
+            background-color: #6C0BA9;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
             color: #fff;
             text-decoration: none;
-            transition: transform .2s ease-in-out;
-            width: 300px;
-            box-sizing: border-box;
+            font-size: 18px;
             cursor: pointer;
+            transition: transform .2s ease-in-out;
         }
 
         .item:hover {
             transform: scale(1.05);
         }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background-color: #ffcc00;
+            color: #222;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform .2s ease-in-out;
+        }
+
+        .back-button:hover {
+            transform: scale(1.1);
+        }
     </style>
 </head>
 
 <body>
-    <h1>Games & Apps</h1>
+    <button class="back-button" onclick="goBack()">Back</button>
+    <h1>Ultimate Entertainment</h1>
 
-    <!-- Games Section -->
-    <h2>Games</h2>
-    <div class="container" id="gameContainer">
-        <!-- Games will be dynamically added here -->
+    <div class="container">
+        <div id="gamesContainer">
+            <!-- Games buttons will be dynamically added here -->
+        </div>
+        <div id="appsContainer">
+            <!-- Apps buttons will be dynamically added here -->
+        </div>
     </div>
 
-    <!-- Apps Section -->
-    <h2>Apps</h2>
-    <div class="container" id="appContainer">
-        <!-- Apps will be dynamically added here -->
-    </div>
-
-    <!-- Script for displaying games and apps -->
     <script>
-        // Array of games
+        function goBack() {
+            window.location.href = "start27.html";
+        }
+
         const games = [
             {
                 name: 'A1R',
@@ -92,10 +108,8 @@
                 name: 'Andriod OS',
                 link: 'https://nowgg.me/play/uncube/7074/now'
             }
-            // Add more games as needed
         ];
 
-        // Array of apps
         const apps = [
             {
                 name: "Ai",
@@ -123,42 +137,26 @@
             },
         ];
 
-        // Function to display games
-        function displayGames() {
-            const container = document.getElementById("gameContainer");
-            container.innerHTML = "";
+        const gamesContainer = document.getElementById("gamesContainer");
+        const appsContainer = document.getElementById("appsContainer");
 
-            // Display all games
-            games.forEach(game => {
-                const gameElement = createItem(game.name, game.link);
-                container.appendChild(gameElement);
-            });
+        games.forEach(game => {
+            const button = createButton(game.name, game.link);
+            gamesContainer.appendChild(button);
+        });
+
+        apps.forEach(app => {
+            const button = createButton(app.name, app.link);
+            appsContainer.appendChild(button);
+        });
+
+        function createButton(name, link) {
+            const button = document.createElement("button");
+            button.textContent = name;
+            button.classList.add("item");
+            button.addEventListener("click", () => window.location.href = link);
+            return button;
         }
-
-        // Function to display apps
-        function displayApps() {
-            const container = document.getElementById("appContainer");
-            container.innerHTML = "";
-
-            // Display all apps
-            apps.forEach(app => {
-                const appElement = createItem(app.name, app.link);
-                container.appendChild(appElement);
-            });
-        }
-
-        // Function to create a game/app element
-        function createItem(name, link) {
-            const item = document.createElement("div");
-            item.classList.add("item");
-            item.textContent = name;
-            item.addEventListener("click", () => window.location.href = link);
-            return item;
-        }
-
-        // Initial display of games and apps
-        displayGames();
-        displayApps();
     </script>
 </body>
 
