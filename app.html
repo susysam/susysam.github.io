@@ -93,8 +93,8 @@
             height: 100%;
         }
 
-        /* Proxy Unblocker button */
-        .Proxy-button {
+        /* Doge Unblocker button */
+        .doge-button {
             background-color: #ffcc00;
             color: #333;
             padding: 10px 20px;
@@ -106,7 +106,7 @@
             margin-top: 20px;
         }
 
-        .Proxy-button:hover {
+        .doge-button:hover {
             transform: scale(1.1);
         }
     </style>
@@ -119,7 +119,7 @@
     <h1>Apps</h1>
 
     <!-- Disclaimer -->
-    <p class="disclaimer">Click Proxy Unblocker for more Links.</p>
+    <p class="disclaimer">Fixed Search Bar-Leo</p>
 
     <!-- Search Bar -->
     <div class="search-container">
@@ -200,38 +200,35 @@
         function openSearch() {
             const searchTerm = document.getElementById("searchInput").value;
             const iframeContainer = document.createElement("div");
-            iframeContainer.classList.add("iframe-container", "active");
+            iframeContainer.classList.add("iframe-container");
             iframeContainer.innerHTML = `<iframe src="https://${searchTerm}" frameborder="0" allowfullscreen></iframe>`;
             document.body.appendChild(iframeContainer);
         }
     </script>
 
-    <!-- Proxy Unblocker Button -->
-    <button class="Proxy-button" onclick="openProxyUN()">Proxy Unblocker</button>
+    <!-- Doge Unblocker Button -->
+    <button class="doge-button" onclick="openDogeUN()">Doge Unblocker</button>
 
-    <!-- Script for opening Proxy Unblocker -->
+    <!-- Script for opening Doge Unblocker -->
     <script>
-        const ProxyLinks = [
-            "https://a1rdrop.netlify.app/games",
-            "https://nowgg.me/play/roblox-corporation/5349/roblox",
-            "https://skooldeliver.github.io/skool-games/monkey-mart/",
-            "https://www.snokido.com/game/friday-night-funkin",
-            "https://play.geforcenow.com/mall/",
-            "https://play.geforcenow.com/mall/",
-            "https://nowgg.me/play/uncube/7074/now",
-            "https://bigfootshack.xyz/play",
-            "https://bgs.pages.dev/play",
-            "https://bigfeet.app/play",
-            "https://bigfoot.pages.dev/play",
-            "https://bigfootshack.net/play",
-            "https://bigfootshack.xyz/play",
-            "https://feetbig.pages.dev/play",
-            "https://bigfootshack.pages.dev/play"
+        const dogeLinks = [
+            "https://algebra.thehorseplace.us/mobile.html",
+            "https://k12.folklandmanagement.com/mobile.html",
+            "https://info.svmblocker.com/mobile.html",
+            "https://government.sotna.org/mobile.html",
+            "https://teams.prosports.cl/mobile.html",
+            "https://en.silentpatriot.com/mobile.html",
+            "https://help.robot-agachado.net/mobile.html",
+            "https://worksheets.hidict.cn/mobile.html",
+            "https://geoquiz.goncharmaster.ru/mobile.html",
+            "https://login.cloudbusinessportal.com/mobile.html",
+            "https://edu.mazovec.ru/mobile.html",
+            "https://go.jaleh.info/mobile.html"
         ];
 
-        let currentProxyLinkIndex = 0;
+        let currentDogeLinkIndex = 0;
 
-        function openProxyUN() {
+        function openDogeUN() {
             // Hide all elements
             document.body.innerHTML = '<div class="button" onclick="open27()"><span>Back</span></div>';
 
@@ -241,7 +238,7 @@
 
             // Create iframe
             const iframe = document.createElement("iframe");
-            iframe.setAttribute("src", ProxyLinks[currentProxyLinkIndex]);
+            iframe.setAttribute("src", dogeLinks[currentDogeLinkIndex]);
             iframe.setAttribute("frameborder", "0");
             iframe.setAttribute("allowfullscreen", "");
 
