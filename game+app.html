@@ -190,6 +190,7 @@
                 });
                 gamesContainer.appendChild(gameElement);
             });
+            gamesContainer.style.display = 'flex'; // Show games
         }
 
         // Function to display apps
@@ -204,6 +205,7 @@
                 });
                 appsContainer.appendChild(appElement);
             });
+            appsContainer.style.display = 'flex'; // Show apps
         }
 
         // Function to load iframe with the provided link
@@ -232,7 +234,7 @@
             appsContainer.style.display = 'none';
         }
 
-        // Initialize the page
+        // Display games and apps initially
         displayGames();
         displayApps();
     </script>
