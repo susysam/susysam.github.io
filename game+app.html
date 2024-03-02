@@ -182,6 +182,8 @@
             gamesSection.addEventListener('click', () => {
                 gamesContainer.style.display = 'flex'; // Show the games section
                 appsContainer.style.display = 'none'; // Hide the apps section
+                iframe.style.display = 'none'; // Hide the iframe
+                fullscreenButton.style.display = 'none'; // Hide the fullscreen button
             });
         }
 
@@ -197,12 +199,15 @@
             appsSection.addEventListener('click', () => {
                 appsContainer.style.display = 'flex'; // Show the apps section
                 gamesContainer.style.display = 'none'; // Hide the games section
+                iframe.style.display = 'none'; // Hide the iframe
+                fullscreenButton.style.display = 'none'; // Hide the fullscreen button
             });
         }
 
         // Function to load iframe with the provided link
         function loadIframe(link) {
             iframe.src = link;
+            iframe.style.display = 'block'; // Show the iframe
             fullscreenButton.style.display = 'block'; // Show the fullscreen button
         }
 
