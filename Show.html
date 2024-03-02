@@ -55,7 +55,8 @@
         }
 
         /* Added styles for the new buttons */
-        .new-tab-btn, .iframe-btn {
+        .new-tab-btn,
+        .iframe-btn {
             margin-top: 20px;
             padding: 10px 20px;
             background-color: #6C0BA9;
@@ -69,7 +70,8 @@
             display: none; /* Initially hidden */
         }
 
-        .new-tab-btn:hover, .iframe-btn:hover {
+        .new-tab-btn:hover,
+        .iframe-btn:hover {
             background-color: #1f1f1f;
         }
     </style>
@@ -77,6 +79,9 @@
 
 <body>
     <h1>Links</h1>
+
+    <!-- Back Button -->
+    <div class="button" onclick="goBack()"><span>Back</span></div>
 
     <!-- Button Section -->
     <div class="section">
@@ -96,6 +101,10 @@
 
     <script>
         let currentLink = '';
+
+        function goBack() {
+            window.location.href = "start27.html";
+        }
 
         function openCategory(category) {
             const categories = {
@@ -158,28 +167,16 @@
 
         function openInNewTab() {
             window.open(currentLink, '_blank');
+            document.querySelector('.new-tab-btn').style.display = 'none'; // Hide the button after clicking
+            document.querySelector('.iframe-btn').style.display = 'none'; // Hide the other button after one is clicked
         }
 
         function openInIframe() {
-            const choice = confirm('Do you want to open the link in Fullscreen mode?');
             const iframe = document.getElementById('contentFrame');
             iframe.src = currentLink;
-            if (choice) {
-                openFullscreen(iframe);
-                alert('If you leave Fullscreen mode, it will be disabled.');
-            }
-        }
-
-        function openFullscreen(elem) {
-            if (elem.requestFullscreen) {
-                elem.requestFullscreen();
-            } else if (elem.mozRequestFullScreen) { /* Firefox */
-                elem.mozRequestFullScreen();
-            } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
-                elem.webkitRequestFullscreen();
-            } else if (elem.msRequestFullscreen) { /* IE/Edge */
-                elem.msRequestFullscreen();
-            }
+            iframe.requestFullscreen(); // Open iframe in fullscreen
+            document.querySelector('.new-tab-btn').style.display = 'none'; // Hide the button after clicking
+            document.querySelector('.iframe-btn').style.display = 'none'; // Hide the other button after one is clicked
         }
     </script>
 </body>
