@@ -124,6 +124,7 @@
     <!-- Search Bar -->
     <div class="search-container">
         <input type="text" id="searchInput" placeholder="Search" required>
+        <button onclick="openSearch()">Search</button> <!-- Added search button -->
     </div>
 
     <!-- App Section -->
@@ -190,18 +191,14 @@
 
         // Event listener for search input
         const searchInput = document.getElementById("searchInput");
-        searchInput.addEventListener("keydown", function(event) {
-            if (event.key === "Enter") {
-                openSearch();
-            }
-        });
+        searchInput.addEventListener("input", () => displayApps(searchInput.value));
 
         // Function to open search in iframe
         function openSearch() {
             const searchTerm = document.getElementById("searchInput").value;
             const iframeContainer = document.createElement("div");
             iframeContainer.classList.add("iframe-container");
-            iframeContainer.innerHTML = `<iframe src="https://${searchTerm}" frameborder="0" allowfullscreen></iframe>`;
+            iframeContainer.innerHTML = `<iframe src="https://www.google.com/search?q=${searchTerm}" frameborder="0" allowfullscreen></iframe>`;
             document.body.appendChild(iframeContainer);
         }
     </script>
@@ -212,27 +209,25 @@
     <!-- Script for opening Doge Unblocker -->
     <script>
         const dogeLinks = [
-            "https://algebra.thehorseplace.us/mobile.html",
-            "https://k12.folklandmanagement.com/mobile.html",
-            "https://info.svmblocker.com/mobile.html",
-            "https://government.sotna.org/mobile.html",
-            "https://teams.prosports.cl/mobile.html",
-            "https://en.silentpatriot.com/mobile.html",
-            "https://help.robot-agachado.net/mobile.html",
-            "https://worksheets.hidict.cn/mobile.html",
-            "https://geoquiz.goncharmaster.ru/mobile.html",
-            "https://login.cloudbusinessportal.com/mobile.html",
-            "https://edu.mazovec.ru/mobile.html",
-            "https://go.jaleh.info/mobile.html",
-            "https://xfinitywebdev.github.io/rival-unblocker/",
-            "https://cool.blinklab.com/home.html",
-            "https://serrcosswilsonmallcreepscensions0phunky.eithermouse.com/",
-            "https://sjqwzv-8080.csb.app/",
-            "https://hi.sashimimi.com/",
-            "https://leo.sashimimi.com/",
-            "https://69.sixtygrade.site/",
-            "https://typeanytext.sixtygrade.site/",
-            "https://monkeytype.gq/"
+    "https://algebra.thehorseplace.us/mobile.html",
+    "https://k12.folklandmanagement.com/mobile.html",
+    "https://info.svmblocker.com/mobile.html",
+    "https://government.sotna.org/mobile.html",
+    "https://teams.prosports.cl/mobile.html",
+    "https://en.silentpatriot.com/mobile.html",
+    "https://help.robot-agachado.net/mobile.html",
+    "https://worksheets.hidict.cn/mobile.html",
+    "https://geoquiz.goncharmaster.ru/mobile.html",
+    "https://login.cloudbusinessportal.com/mobile.html",
+    "https://edu.mazovec.ru/mobile.html",
+    "https://go.jaleh.info/mobile.html",
+    "https://xfinitywebdev.github.io/rival-unblocker/",
+    "https://cool.blinklab.com/home.html",
+    "https://serrcosswilsonmallcreepscensions0phunky.eithermouse.com/",
+    "https://sjqwzv-8080.csb.app/",
+    "https://69.sixtygrade.site/",
+    "https://typeanytext.sixtygrade.site/",
+    "https://monkeytype.gq/"
         ];
 
         let currentDogeLinkIndex = 0;
