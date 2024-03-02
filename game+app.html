@@ -176,7 +176,10 @@
                 const gameElement = document.createElement('div');
                 gameElement.classList.add('game');
                 gameElement.innerHTML = `<p>${game.name}</p>`;
-                gameElement.addEventListener('click', () => loadIframe(game.link));
+                gameElement.addEventListener('click', () => {
+                    loadIframe(game.link);
+                    hideSections();
+                });
                 gamesContainer.appendChild(gameElement);
             });
             gamesSection.addEventListener('click', () => {
@@ -193,7 +196,10 @@
                 const appElement = document.createElement('div');
                 appElement.classList.add('app');
                 appElement.innerHTML = `<p>${app.name}</p>`;
-                appElement.addEventListener('click', () => loadIframe(app.link));
+                appElement.addEventListener('click', () => {
+                    loadIframe(app.link);
+                    hideSections();
+                });
                 appsContainer.appendChild(appElement);
             });
             appsSection.addEventListener('click', () => {
@@ -222,7 +228,13 @@
             }
         }
 
-        // Display games and apps
+        // Function to hide sections
+        function hideSections() {
+            gamesContainer.style.display = 'none';
+            appsContainer.style.display = 'none';
+        }
+
+        // Initialize the page
         displayGames();
         displayApps();
     </script>
