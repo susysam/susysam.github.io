@@ -43,26 +43,7 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
         }
 
-        .back-button {
-            margin-top: 20px;
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #6C0BA9;
-            border: 3px solid #fff;
-            border-radius: 10px;
-            text-decoration: none;
-            color: #fff;
-            transition: all 0.3s ease;
-            font-size: 18px;
-            outline: none;
-        }
-
-        .back-button:hover {
-            background-color: #1f1f1f;
-        }
-
-        .button:focus,
-        .back-button:focus {
+        .button:focus {
             box-shadow: 0 0 0 3px #6C0BA9;
         }
 
@@ -72,14 +53,30 @@
             margin: 20px auto;
             border: none;
         }
+
+        /* Added styles for the new buttons */
+        .new-tab-btn, .iframe-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #6C0BA9;
+            border: 3px solid #fff;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #fff;
+            transition: all 0.3s ease;
+            font-size: 18px;
+            outline: none;
+            display: none; /* Initially hidden */
+        }
+
+        .new-tab-btn:hover, .iframe-btn:hover {
+            background-color: #1f1f1f;
+        }
     </style>
 </head>
 
 <body>
     <h1>Links</h1>
-
-    <!-- Back Button -->
-    <div class="button" onclick="goBack()"><span>Back</span></div>
 
     <!-- Button Section -->
     <div class="section">
@@ -91,12 +88,14 @@
         <button class="button" onclick="openCategory('More')">More</button>
     </div>
 
+    <!-- Initially hidden buttons -->
+    <button class="new-tab-btn" onclick="openInNewTab()">Open link in New tab</button>
+    <button class="iframe-btn" onclick="openInIframe()">Open link in Iframe</button>
+
     <iframe id="contentFrame"></iframe>
 
     <script>
-        function goBack() {
-            window.location.href = "start27.html";
-        }
+        let currentLink = '';
 
         function openCategory(category) {
             const categories = {
@@ -150,35 +149,37 @@
 
             const links = categories[category];
             if (links) {
-                document.getElementById("contentFrame").src = ""; // Reset iframe content
-
-                const button1 = document.createElement("button");
-                button1.innerText = "Open link in Iframe";
-                button1.onclick = function () {
-                    openLinkInIframe(category, links);
-                };
-
-                const button2 = document.createElement("button");
-                button2.innerText = "Open link in New tab";
-                button2.onclick = function () {
-                    openLinkInNewTab(links);
-                };
-
-                document.body.appendChild(button1);
-                document.body.appendChild(button2);
+                const randomIndex = Math.floor(Math.random() * links.length);
+                currentLink = links[randomIndex];
+                document.querySelector('.new-tab-btn').style.display = 'inline-block';
+                document.querySelector('.iframe-btn').style.display = 'inline-block';
             }
         }
 
-        function openLinkInIframe(category, links) {
-            const randomIndex = Math.floor(Math.random() * links.length);
-            const randomLink = links[randomIndex];
-            document.getElementById('contentFrame').src = randomLink;
+        function openInNewTab() {
+            window.open(currentLink, '_blank');
         }
 
-        function openLinkInNewTab(links) {
-            const randomIndex = Math.floor(Math.random() * links.length);
-            const randomLink = links[randomIndex];
-            window.open(randomLink, '_blank');
+        function openInIframe() {
+            const choice = confirm('Do you want to open the link in Fullscreen mode?');
+            const iframe = document.getElementById('contentFrame');
+            iframe.src = currentLink;
+            if (choice) {
+                openFullscreen(iframe);
+                alert('If you leave Fullscreen mode, it will be disabled.');
+            }
+        }
+
+        function openFullscreen(elem) {
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.mozRequestFullScreen) { /* Firefox */
+                elem.mozRequestFullScreen();
+            } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { /* IE/Edge */
+                elem.msRequestFullscreen();
+            }
         }
     </script>
 </body>
