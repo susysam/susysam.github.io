@@ -150,8 +150,8 @@
 
             const links = categories[category];
             if (links) {
-                const choice = confirm(`Do you want to open '${category}' links in an iframe? Click OK for iframe or Cancel for a new tab.`);
-                if (choice) {
+                const choice = prompt(`Do you want to open '${category}' links in an iframe? Type I for iframe or N for new Tab.`);
+                if (choice && choice.toUpperCase() === 'I') {
                     const randomIndex = Math.floor(Math.random() * links.length);
                     const randomLink = links[randomIndex];
                     const iframe = document.getElementById('contentFrame');
