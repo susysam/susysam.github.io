@@ -86,11 +86,10 @@
 
     <div class="button-container">
         <p class="prompt">What would you like to access?</p>
-        <div class="button" onclick="openlinks()"><span>Links</span></div>
-        <div class="button" onclick="openGames()"><span>Game</span></div>
-        <div class="button" onclick="openApps()"><span>Apps</span></div>
         <div class="button" onclick="openTvShowPlayer()"><span>Movie+TV Player</span></div>
         <div class="button" onclick="openSettings()"><span>Settings</span></div>
+        <div class="button" onclick="openGameApps()"><span>Games & Apps</span></div>
+        <div class="button" onclick="openlinks()"><span>Links</span></div>
     </div>
 
     <script>
@@ -101,13 +100,12 @@
         function openSettings() {
             window.location.href = "setting.html";
         }
-         function openApps() {
-            window.location.href = "app.html";
+
+        function openGameApps() {
+            window.location.href = "game+app.html";
         }
-         function openGames() {
-            window.location.href = "game.html";
-        }
-         function openlinks() {
+
+        function openlinks() {
             window.location.href = "Show.html";
         }
     </script>
