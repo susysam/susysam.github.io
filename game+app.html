@@ -80,6 +80,13 @@
             height: 70vh; /* Initial height */
             border: none;
         }
+
+        .opening-msg {
+            color: #fff;
+            font-size: 24px;
+            margin-top: 50px;
+            display: none; /* Initially hidden */
+        }
     </style>
 </head>
 <body>
@@ -101,6 +108,8 @@
     </button>
 
     <iframe id="appIframe" src="" frameborder="0"></iframe>
+
+    <p class="opening-msg" id="openingMsg">Opening, please wait...</p>
 
     <script>
         const games = [
@@ -165,10 +174,9 @@
 
         const gamesContainer = document.getElementById('gamesContainer');
         const appsContainer = document.getElementById('appsContainer');
-        const gamesSection = document.getElementById('gamesSection');
-        const appsSection = document.getElementById('appsSection');
         const iframe = document.getElementById('appIframe');
         const fullscreenButton = document.querySelector('.fullscreen-button');
+        const openingMsg = document.getElementById('openingMsg');
 
         // Function to display games
         function displayGames() {
@@ -177,16 +185,10 @@
                 gameElement.classList.add('game');
                 gameElement.innerHTML = `<p>${game.name}</p>`;
                 gameElement.addEventListener('click', () => {
+                    openingMsg.style.display = 'block';
                     loadIframe(game.link);
-                    hideSections();
                 });
                 gamesContainer.appendChild(gameElement);
-            });
-            gamesSection.addEventListener('click', () => {
-                gamesContainer.style.display = 'flex'; // Show the games section
-                appsContainer.style.display = 'none'; // Hide the apps section
-                iframe.style.display = 'none'; // Hide the iframe
-                fullscreenButton.style.display = 'none'; // Hide the fullscreen button
             });
         }
 
@@ -197,16 +199,10 @@
                 appElement.classList.add('app');
                 appElement.innerHTML = `<p>${app.name}</p>`;
                 appElement.addEventListener('click', () => {
+                    openingMsg.style.display = 'block';
                     loadIframe(app.link);
-                    hideSections();
                 });
                 appsContainer.appendChild(appElement);
-            });
-            appsSection.addEventListener('click', () => {
-                appsContainer.style.display = 'flex'; // Show the apps section
-                gamesContainer.style.display = 'none'; // Hide the games section
-                iframe.style.display = 'none'; // Hide the iframe
-                fullscreenButton.style.display = 'none'; // Hide the fullscreen button
             });
         }
 
@@ -215,6 +211,8 @@
             iframe.src = link;
             iframe.style.display = 'block'; // Show the iframe
             fullscreenButton.style.display = 'block'; // Show the fullscreen button
+            hideSections(); // Hide game and app sections
+            openingMsg.style.display = 'none'; // Hide the opening message
         }
 
         // Function to toggle fullscreen mode
@@ -228,7 +226,7 @@
             }
         }
 
-        // Function to hide sections
+        // Function to hide game and app sections
         function hideSections() {
             gamesContainer.style.display = 'none';
             appsContainer.style.display = 'none';
