@@ -65,6 +65,13 @@
         .back-button:focus {
             box-shadow: 0 0 0 3px #6C0BA9;
         }
+
+        iframe {
+            width: 90%;
+            height: 80vh;
+            margin: 20px auto;
+            border: none;
+        }
     </style>
 </head>
 
@@ -83,6 +90,8 @@
         <button class="button" onclick="openCategory('PlexileArcade')">Plexile Arcade</button>
         <button class="button" onclick="openCategory('More')">More</button>
     </div>
+
+    <iframe id="contentFrame"></iframe>
 
     <script>
         function goBack() {
@@ -145,12 +154,8 @@
                 if (choice) {
                     const randomIndex = Math.floor(Math.random() * links.length);
                     const randomLink = links[randomIndex];
-                    const iframe = document.createElement('iframe');
+                    const iframe = document.getElementById('contentFrame');
                     iframe.src = randomLink;
-                    iframe.style.width = '100%';
-                    iframe.style.height = '80vh';
-                    document.body.innerHTML = '';
-                    document.body.appendChild(iframe);
                 } else {
                     const randomIndex = Math.floor(Math.random() * links.length);
                     const randomLink = links[randomIndex];
