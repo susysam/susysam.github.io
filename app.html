@@ -1,179 +1,101 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apps</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            text-align: center;
-            margin: 20px;
-            background-color: #333;
-            color: #fff;
-        }
 
-        h1 {
-            color: #ffcc00;
-        }
+    <title>movie/series Finder</title>
 
-        .button {
-            background-color: #ffcc00;
-            color: #333;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: transform 0.3s ease-in-out;
-            margin-top: 20px;
-        }
+    <link rel="stylesheet" href="style.css">
 
-        .button:hover {
-            transform: scale(1.1);
-        }
+    <!-- Bootstrap CSS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
-        .iframe-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-            z-index: 999;
-            transition: transform 0.3s ease-in-out;
-            overflow: hidden;
-            display: none; /* Hide initially */
-        }
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
-        .iframe-container.active {
-            display: block; /* Show when active */
-        }
-
-        .iframe-container iframe {
-            border: none;
-            width: 100%;
-            height: 100%;
-        }
-    </style>
 </head>
 
 <body>
-    <!-- Back Button -->
-    <div class="button" onclick="open27()"><span>Back</span></div>
+    
 
-    <h1>Apps</h1>
+    <!-- Bootstrap Toast for Note -->
 
-    <!-- App Section -->
-    <div class="app-container" id="appContainer">
-        <!-- Apps will be dynamically added here -->
+    <div class="alert alert-info" role="alert" id="alert">
+
+        Press the search button everytime to regenerate the URL
+
+      </div>
+
+
+
+    <div class="container">
+
+        <div class="container">
+
+            <div class="section movie-section">
+
+                <h1>Movie Finder</h1>
+
+                <label for="movieName">Enter Movie Name:</label>
+
+                <input type="text" id="movieName" oninput="getMovieSuggestions()" />
+
+                <ul id="movieSuggestions"></ul>
+
+                <button onclick="searchMovie()">Search</button>
+
+                <p id="movieResult"></p>
+
+
+                <p id="movieResult2"></p>
+                <button id="movieCopyButton" onclick="copyMovieToClipboard()">Copy Movie URL</button>
+
+            </div>
+
+        
+
+            <div class="section series-section">
+
+                <h1>Series Finder</h1>
+
+                <label for="seriesName">Enter Series Name:</label>
+
+                <input type="text" id="seriesName" oninput="getSeriesSuggestions()" />
+
+                <ul id="seriesSuggestions"></ul>
+
+                <button onclick="searchSeries()">Search</button>
+
+                <p id="seriesResult"></p>
+
+                <button id="seriesCopyButton" onclick="copySeriesToClipboard()">Copy Series URL</button>
+
+
+            </div>
+
+        </div>
+
     </div>
 
-    <!-- Doge Unblocker Button -->
-    <button class="button" onclick="openDogeUN()">Doge Unblocker</button>
 
-    <!-- Script for displaying apps and opening Doge Unblocker -->
-    <script>
-        // Array of app objects
-        const apps = [
-            {
-                name: "Ai",
-                link: "https://www.blackbox.ai",
-            },
-            {
-                name: "Discord",
-                link: "https://discord.com/app",
-            },
-            {
-                name: "Netflix",
-                link: "https://netflix.com/login",
-            },
-            {
-                name: "Disney+",
-                link: "https://www.disneyplus.com",
-            },
-            {
-                name: "Flixhq",
-                link: "https://flixhq.to",
-            },
-            {
-                name: "Xivi",
-                link: "https://xivi.me/login.php",
-            },
-        ];
+    <!-- Bootstrap JS and Popper.js -->
 
-        // Function to display apps
-        function displayApps() {
-            const container = document.getElementById("appContainer");
-            container.innerHTML = "";
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 
-            // Display all apps
-            apps.forEach(app => {
-                const appElement = document.createElement("div");
-                appElement.classList.add("app");
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
 
-                const nameElement = document.createElement("p");
-                nameElement.textContent = app.name;
-                appElement.appendChild(nameElement);
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-                // Add click event to navigate to the link
-                appElement.addEventListener("click", () => window.location.href = app.link);
+    <script src="main.js"></script>
 
-                container.appendChild(appElement);
-            });
-        }
+       <!-- Script to initialize the toast -->
 
-        // Initial display of apps
-        displayApps();
+     
 
-        // Function to open Doge Unblocker
-        function openDogeUN() {
-            const dogeLinks = [
-                "https://algebra.thehorseplace.us/mobile.html",
-                "https://k12.folklandmanagement.com/mobile.html",
-                "https://info.svmblocker.com/mobile.html",
-                "https://government.sotna.org/mobile.html",
-                "https://teams.prosports.cl/mobile.html",
-                "https://en.silentpatriot.com/mobile.html",
-                "https://help.robot-agachado.net/mobile.html",
-                "https://worksheets.hidict.cn/mobile.html",
-                "https://geoquiz.goncharmaster.ru/mobile.html",
-                "https://login.cloudbusinessportal.com/mobile.html",
-                "https://edu.mazovec.ru/mobile.html",
-                "https://go.jaleh.info/mobile.html",
-                "https://xfinitywebdev.github.io/rival-unblocker/",
-                "https://cool.blinklab.com/home.html",
-                "https://serrcosswilsonmallcreepscensions0phunky.eithermouse.com/",
-                "https://sjqwzv-8080.csb.app/",
-                "https://69.sixtygrade.site/",
-                "https://typeanytext.sixtygrade.site/",
-                "https://monkeytype.gq/"
-            ];
-
-            // Create iframe container
-            const iframeContainer = document.createElement("div");
-            iframeContainer.classList.add("iframe-container");
-
-            // Create iframe
-            const iframe = document.createElement("iframe");
-            iframe.setAttribute("src", dogeLinks[0]);
-            iframe.setAttribute("frameborder", "0");
-            iframe.setAttribute("allowfullscreen", "");
-
-            // Append iframe to container
-            iframeContainer.appendChild(iframe);
-
-            // Clear the body and append iframe container
-            document.body.innerHTML = ''; // Clear the body
-            document.body.appendChild(iframeContainer); // Append iframe container
-        }
-
-        // Function to navigate back
-        function open27() {
-            window.location.href = "start27.html";
-        }
-    </script>
 </body>
 
 </html>
