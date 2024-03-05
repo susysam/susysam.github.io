@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Entertainment Player</title>
+    <title>404</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -84,24 +84,16 @@
         <p>Step 3: Paste the IMDb ID into the input field and click "Find Movie" or "Find TV Show".</p>
     </div>
 
-    <!-- Back Button -->
-    <div class="button" onclick="openPreviousPage()"><span>Back</span></div>
-
     <!-- Iframe Container -->
     <div class="iframe-container" id="iframe-container"></div>
 
     <script>
         function findMedia(mediaType) {
-            // Get the input value
             var imdbId = document.getElementById("imdb-id").value.trim();
-            
-            // Check if the input field is empty
             if (!imdbId) {
                 alert("Please fill in the IMDb ID field.");
                 return;
             }
-
-            // Generate the link based on media type
             var generatedLink = "https://vidsrc.to/embed/" + mediaType + "/" + imdbId;
 
             // Create the iframe element
@@ -126,18 +118,13 @@
         }
 
         function openAnime() {
-            // Array of Anime streaming links
             var animeLinks = [
                 "https://unime.vercel.app/eng",
                 "https://kitsunee.me/",
                 "https://anify.tv/anime"
             ];
-
-            // Randomly select an Anime streaming link
             var randomIndex = Math.floor(Math.random() * animeLinks.length);
             var selectedAnimeLink = animeLinks[randomIndex];
-
-            // Redirect to the selected Anime streaming link
             window.location.href = selectedAnimeLink;
         }
 
