@@ -4,111 +4,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Games</title>
+    <title>Entertainment Player</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: Arial, sans-serif;
+            background-color: #f3f3f3;
             text-align: center;
-            margin: 20px;
-            background-color: #222; /* Darker background color */
-            color: #fff;
+            margin-top: 50px;
         }
 
-        h1 {
-            color: #ffcc00;
-        }
-
-        .search-container {
+        .input-container {
             margin-bottom: 20px;
         }
 
         input[type="text"] {
             padding: 10px;
             font-size: 16px;
-            border-radius: 20px; /* Rounded corners */
-            border: 1px solid #fff;
-            background-color: #444; /* Darker background color */
-            color: #fff;
-            margin-right: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
             width: 300px;
         }
 
-        .game-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            margin: 0 auto;
-            max-width: 1200px;
-        }
-
-        .game {
-            padding: 20px;
-            background-color: #555; /* Darker game card background color */
-            border: 5px solid #fff;
-            border-radius: 15px;
-            text-decoration: none;
-            color: #fff;
-            transition: transform .2s ease-in-out;
-            cursor: pointer;
-            width: 300px;
-            box-sizing: border-box;
-        }
-
-        .game:hover {
-            transform: scale(1.05); /* Slightly smaller scale on hover */
-        }
-
-        .game p {
-            margin: 10px 0;
-        }
-
-        .disclaimer {
-            color: #ccc;
-            font-style: italic;
-            margin-bottom: 20px;
-        }
-
-        .btn-more,
-        .btn-back {
-            margin-top: 20px;
+        button {
             padding: 10px 20px;
-            background-color: #6C0BA9; /* Purple button background color */
-            color: #fff;
-            text-decoration: none;
-            border-radius: 20px; /* Rounded corners */
             font-size: 16px;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
             cursor: pointer;
             margin-right: 10px;
-            transition: background-color 0.3s ease; /* Smooth transition */
-            border: none;
         }
 
-        .btn-more:hover,
-        .btn-back:hover {
-            background-color: #4F0672; /* Darker purple on hover */
+        button:hover {
+            background-color: #0056b3;
         }
 
-        .More-button {
-            margin-top: 20px;
+        .steps {
+            margin-top: 50px;
+        }
+
+        .button {
+            display: inline-block;
             padding: 10px 20px;
-            background-color: #6C0BA9; /* Purple button background color */
+            background-color: #6C0BA9;
             color: #fff;
-            border: none;
-            border-radius: 20px; /* Rounded corners */
-            font-size: 16px;
+            border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s ease; /* Smooth transition */
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
         }
 
-        .More-button:hover {
-            background-color: #4F0672; /* Darker purple on hover */
+        .button:hover {
+            background-color: #4F0672;
         }
 
         .iframe-container {
-            position: relative;
             width: 100%;
-            height: 100vh;
+            height: 100vh; /* Adjust height as needed */
+            margin-top: 20px;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
 
         iframe {
@@ -116,188 +73,66 @@
             height: 100%;
             border: none;
         }
-
-        .button {
-            padding: 15px 30px;
-            font-size: 24px;
-            background-color: #6C0BA9; /* Purple */
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            text-decoration: none;
-            margin-bottom: 20px;
-            transition: background-color 0.3s ease; /* Smooth transition for background color */
-            position: relative;
-            overflow: hidden;
-        }
-
-        .button::after {
-            content: "";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 300%;
-            height: 300%;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            transition: all 0.3s ease;
-            transform: translate(-50%, -50%) scale(0);
-            z-index: 0;
-        }
-
-        .button:hover::after {
-            transform: translate(-50%, -50%) scale(3);
-        }
-
-        .button span {
-            position: relative;
-            z-index: 1;
-        }
-
-        .button:hover {
-            background-color: #4F0672; /* Darker purple on hover */
-        }
     </style>
 </head>
 
 <body>
-    <!-- Back Button -->
-    <div class="button" onclick="open27()"><span>Back</span></div>
+    <h1>Entertainment Player</h1>
+    <div class="input-container">
+        <label for="imdb-id">IMDb ID (with "tt"):</label><br>
+        <input type="text" id="imdb-id" placeholder="Example: tt1942683"><br><br>
+    </div>
+    <button onclick="findMedia('movie')">Find Movie</button>
+    <button onclick="findMedia('tv')">Find TV Show</button>
+    <button onclick="openAnime()">Anime</button>
 
-    <h1>Games</h1>
-
-    <!-- Disclaimer -->
-    <p class="disclaimer">Fixed Search Bar-Leo</p>
-
-    <!-- Search Bar -->
-    <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Search" onkeydown="if(event.keyCode==13) filterGames()" required>
+    <div class="steps">
+        <h2>How to Use:</h2>
+        <p>Step 1: Search up IMDb and find the TV-show or movie you want.</p>
+        <p>Step 2: Copy the IMDb ID (with "tt").</p>
+        <p>Step 3: Paste the IMDb ID into the input field and click "Find Movie" or "Find TV Show".</p>
     </div>
 
-    <!-- Game Section -->
-    <div class="game-container" id="gameContainer">
-        <!-- Games will be dynamically added here -->
-    </div>
+    <!-- Iframe Container -->
+    <div class="iframe-container" id="iframe-container"></div>
 
-    <!-- Button for Broken/Want More -->
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdS1tZ-sCsBZqEYHwDQj8181D5IH3U8UvEdopmaqX_CQ85NSw/viewform"
-        class="btn-more" target="_blank">Broken/Want More?</a>
-
-    <!-- More Games Button -->
-    <button class="More-button" onclick="openMoreUN()">More Games</button>
-
-    <!-- Script for displaying games -->
     <script>
-        function open27() {
-            window.location.href = "start27.html";
-        }
+        function findMedia(mediaType) {
+            var imdbId = document.getElementById("imdb-id").value.trim();
 
-        // Array of games
-        const games = [
-            {
-                name: 'A1R',
-                link: 'https://a1rdrop.netlify.app/games'
-            },
-            {
-                name: 'Roblox',
-                link: 'https://nowgg.me/play/roblox-corporation/5349/roblox'
-            },
-            {
-                name: 'Monkey Mart',
-                link: 'https://skooldeliver.github.io/skool-games/monkey-mart/'
-            },
-            {
-                name: 'FNF',
-                link: 'https://www.snokido.com/game/friday-night-funkin'
-            },
-            {
-                name: 'Rocket League',
-                link: 'https://play.geforcenow.com/mall/'
-            },
-            {
-                name: 'Fortnite',
-                link: 'https://play.geforcenow.com/mall/'
-            },
-            {
-                name: 'Andriod OS',
-                link: 'https://nowgg.me/play/uncube/7074/now'
+            if (!imdbId) {
+                alert("Please fill in the IMDb ID field.");
+                return;
             }
-            // Add more games as needed
-        ];
 
-        // Function to filter games based on search input
-        function filterGames() {
-            const searchInput = document.getElementById('searchInput').value.toLowerCase();
-            const gameContainer = document.getElementById('gameContainer');
-
-            // Clear previous content
-            gameContainer.innerHTML = '';
-
-            // Add disclaimer
-            const disclaimer = document.createElement('p');
-            disclaimer.textContent = 'IF A GAME IS BLOCKED, PLEASE MAKE SURE YOU ARE ON ABOUT:BLANK!';
-            disclaimer.classList.add('disclaimer');
-            gameContainer.appendChild(disclaimer);
-
-            // Filter and display matching games
-            games.forEach(game => {
-                if (game.name.toLowerCase().includes(searchInput)) {
-                    const gameElement = document.createElement('div');
-                    gameElement.classList.add('game');
-
-                    const gameName = document.createElement('p');
-                    gameName.textContent = game.name;
-                    gameElement.appendChild(gameName);
-
-                    // Add an event listener to open the link on click
-                    gameElement.addEventListener('click', () => {
-                        window.location.href = game.link;
-                    });
-
-                    // Append the game element to the game container
-                    gameContainer.appendChild(gameElement);
-                }
-            });
-        }
-
-        // Function to open more games
-        function openMoreUN() {
-            const MoreLinks = [
-                "https://bigfootshack.xyz/play",
-                "https://bgs.pages.dev/play",
-                "https://bigfeet.app/play",
-                "https://bigfoot.pages.dev/play",
-                "https://bigfootshack.net/play",
-                "https://bigfootshack.xyz/play",
-                "https://feetbig.pages.dev/play",
-                "https://bigfootshack.pages.dev/play"
+            var links = [
+                "https://vidsrc.in/embed/",
+                "https://vidsrc.pm/embed/",
+                "https://vidsrc.xyz/embed/",
+                "https://vidsrc.net/embed/"
             ];
 
-            let currentMoreLinkIndex = 0;
+            var randomIndex = Math.floor(Math.random() * links.length);
+            var selectedLink = links[randomIndex];
 
-            // Hide all elements
-            document.body.innerHTML = '<div class="button" onclick="open27()"><span>Back</span></div>';
+            var generatedLink = selectedLink + mediaType + "/?imdb=" + imdbId;
 
-            // Create iframe container
-            const iframeContainer = document.createElement("div");
-            iframeContainer.classList.add("iframe-container");
-
-            // Create iframe
-            const iframe = document.createElement("iframe");
-            iframe.setAttribute("src", MoreLinks[currentMoreLinkIndex]);
-            iframe.setAttribute("frameborder", "0");
-            iframe.setAttribute("allowfullscreen", "");
-
-            // Append iframe to container
-            iframeContainer.appendChild(iframe);
-
-            // Append container to body
-            document.body.appendChild(iframeContainer);
+            // Update the iframe source
+            document.getElementById("iframe-container").innerHTML = `<iframe src="${generatedLink}" frameborder="0" allowfullscreen></iframe>`;
         }
 
-        // Initial display of all games
-        filterGames();
+        function openAnime() {
+            var animeLinks = [
+                "https://unime.vercel.app/eng",
+                "https://kitsunee.me/",
+                "https://anify.tv/anime"
+            ];
+
+            var randomIndex = Math.floor(Math.random() * animeLinks.length);
+            var selectedAnimeLink = animeLinks[randomIndex];
+
+            window.open(selectedAnimeLink, '_blank');
+        }
     </script>
 </body>
 
