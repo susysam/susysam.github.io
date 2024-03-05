@@ -11,6 +11,7 @@
             background-color: #f3f3f3;
             text-align: center;
             margin-top: 50px;
+            overflow: hidden;
         }
 
         .input-container {
@@ -59,10 +60,38 @@
             background-color: #4F0672;
         }
 
+        .fade-out {
+            animation: fadeOut 0.5s ease;
+            animation-fill-mode: forwards;
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
         .iframe-container {
             width: 100%;
-            height: 80vh; /* Adjust height as needed */
-            margin-top: 20px;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            animation: fallDown 0.5s ease;
+            animation-fill-mode: forwards;
+            display: none;
+        }
+
+        @keyframes fallDown {
+            from {
+                transform: translateY(-100%);
+            }
+            to {
+                transform: translateY(0);
+            }
         }
 
         iframe {
@@ -90,9 +119,6 @@
         <p>Step 3: Paste the IMDb ID into the input field and click "Find Movie" or "Find TV Show".</p>
     </div>
 
-    <!-- Back Button -->
-    <div class="button" onclick="openPreviousPage()"><span>Back</span></div>
-
     <!-- Iframe Container -->
     <div class="iframe-container" id="iframe-container"></div>
 
@@ -105,10 +131,22 @@
                 return;
             }
 
-            var generatedLink = "https://vidsrc.to/embed/" + mediaType + "/" + imdbId;
+            var generatedLink = "https://vidsrc.xyz/embed/" + mediaType + "/?imdb=" + imdbId;
 
-            // Update the iframe source
-            document.getElementById("iframe-container").innerHTML = `<iframe src="${generatedLink}" frameborder="0" allowfullscreen></iframe>`;
+            // Add fade-out animation to other elements
+            var elementsToFadeOut = document.querySelectorAll('.input-container, button, .steps');
+            elementsToFadeOut.forEach(element => {
+                element.classList.add('fade-out');
+            });
+
+            // Display the iframe container
+            var iframeContainer = document.getElementById("iframe-container");
+            iframeContainer.style.display = "block";
+
+            // Set iframe source after animation completes
+            setTimeout(() => {
+                iframeContainer.innerHTML = `<iframe src="${generatedLink}" frameborder="0" allowfullscreen></iframe>`;
+            }, 500);
         }
 
         function openAnime() {
@@ -122,10 +160,6 @@
             var selectedAnimeLink = animeLinks[randomIndex];
 
             window.open(selectedAnimeLink, '_blank');
-        }
-
-        function openPreviousPage() {
-            window.location.href = "start27.html";
         }
     </script>
 </body>
