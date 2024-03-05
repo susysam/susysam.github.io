@@ -30,7 +30,8 @@
             border: none;
             cursor: pointer;
             margin-right: 10px;
-            z-index: 1; /* Ensure buttons are clickable */
+            position: relative;
+            z-index: 2; /* Ensure buttons are clickable */
         }
         button:hover {
             background-color: #0056b3;
@@ -47,6 +48,8 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
             margin-top: 10px;
+            position: relative;
+            z-index: 2; /* Ensure buttons are clickable */
         }
         .button:hover {
             background-color: #4F0672;
@@ -59,7 +62,7 @@
             top: 0;
             left: 0;
             transition: all 0.5s ease;
-            z-index: 0; /* Lower z-index to allow buttons to be clickable */
+            z-index: 1; /* Lower z-index to allow buttons to be clickable */
         }
         iframe {
             width: 100%;
