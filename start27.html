@@ -52,6 +52,20 @@
             font-size: 20px;
             margin-top: 20px;
         }
+
+        #backgroundBtn {
+            display: none;
+            margin-top: 20px;
+        }
+
+        #backgroundInput {
+            display: none;
+            margin-top: 20px;
+            width: 80%;
+            max-width: 400px;
+            padding: 10px;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
@@ -63,7 +77,9 @@
     </div>
     <p id="placeholder"></p>
     <p id="time"></p>
-
+    <button id="backgroundBtn" onclick="showBackgroundOptions()">Does the page look boring? Well that's ok now you can change up the background.</button>
+    <input type="text" id="backgroundInput" placeholder="Enter background URL">
+    
     <script>
         const options = [
             "Over 5 Users in 2024!",
@@ -124,6 +140,13 @@
 
         function openlinks() {
             window.location.href = "Show.html";
+        }
+
+        function showBackgroundOptions() {
+            const backgroundBtn = document.getElementById("backgroundBtn");
+            const backgroundInput = document.getElementById("backgroundInput");
+            backgroundBtn.style.display = "none";
+            backgroundInput.style.display = "block";
         }
     </script>
 </body>
