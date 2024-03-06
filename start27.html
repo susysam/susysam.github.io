@@ -175,6 +175,7 @@
 
         function removeBackgroundButton() {
             document.getElementById("button-container").innerHTML = '';
+            resetBackground();
         }
 
         function showBackgroundInput() {
@@ -186,7 +187,12 @@
             document.body.style.backgroundImage = `url('${backgroundUrl}')`;
             localStorage.setItem("backgroundUrl", backgroundUrl);
             document.getElementById("background-input").style.display = "none"; // Hide background input
-            removeBackgroundButton(); // Hide background buttons
+            document.getElementById("button-container").innerHTML = ''; // Hide background buttons
+        }
+
+        function resetBackground() {
+            document.body.style.backgroundImage = '';
+            localStorage.removeItem("backgroundUrl");
         }
 
         // Check if background URL is stored in local storage
