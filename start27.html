@@ -80,16 +80,22 @@
         .button:hover {
             background-color: #4F0672; /* Darker purple on hover */
         }
+
+        /* New class for active button */
+        .active {
+            background-color: #4F0672 !important; /* Darker purple */
+        }
     </style>
 </head>
 <body>
 
     <div class="button-container">
         <p class="prompt">What would you like to access?</p>
-        <div class="button" onclick="openGameApps()"><span>Games & Apps</span></div>
-        <div class="button" onclick="openlinks()"><span>Links</span></div>
-        <div class="button" onclick="openSettings()"><span>Settings</span></div>
-        <div class="button" onclick="openTvShowPlayer()"><span>Movie+TV Player</span></div>
+        <!-- Added IDs to each button for easier selection in JavaScript -->
+        <div class="button" id="gamesApps" onclick="openGameApps()"><span>Games & Apps</span></div>
+        <div class="button" id="links" onclick="openlinks()"><span>Links</span></div>
+        <div class="button" id="settings" onclick="openSettings()"><span>Settings</span></div>
+        <div class="button" id="tvPlayer" onclick="openTvShowPlayer()"><span>Movie+TV Player</span></div>
     </div>
 
     <script>
@@ -108,6 +114,20 @@
         function openlinks() {
             window.location.href = "Show.html";
         }
+
+        // JavaScript to toggle the 'active' class on button click
+        document.getElementById('gamesApps').onclick = function() {
+            this.classList.toggle('active');
+        };
+        document.getElementById('links').onclick = function() {
+            this.classList.toggle('active');
+        };
+        document.getElementById('settings').onclick = function() {
+            this.classList.toggle('active');
+        };
+        document.getElementById('tvPlayer').onclick = function() {
+            this.classList.toggle('active');
+        };
     </script>
 
 </body>
