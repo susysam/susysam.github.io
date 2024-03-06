@@ -110,10 +110,21 @@
         updateClock();
         setInterval(updateClock, 1000);
 
-        // Add the following code to refresh the placeholder text on page load
-        window.onload = function() {
-            setRandomPlaceholder();
-        };
+        function openTvShowPlayer() {
+            window.location.href = "movie+tv.html";
+        }
+
+        function openSettings() {
+            window.location.href = "setting.html";
+        }
+
+        function openGameApps() {
+            window.location.href = "game+app.html";
+        }
+
+        function openlinks() {
+            window.location.href = "Show.html";
+        }
     </script>
 </body>
 </html>
