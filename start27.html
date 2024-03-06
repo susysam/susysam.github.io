@@ -31,6 +31,7 @@
             text-decoration: none;
             border-radius: 5px;
             margin-left: 10px;
+            cursor: pointer; /* Add cursor pointer */
             transition: background-color 0.3s ease; /* Smooth transition for background color */
         }
 
@@ -55,10 +56,10 @@
 </head>
 <body>
     <div class="navbar">
-        <a href="game+app.html">Games & Apps</a>
-        <a href="Show.html">Links</a>
-        <a href="setting.html">Settings</a>
-        <a href="movie+tv.html">Movie+TV Player</a>
+        <a onclick="openGameApps()"><span>Games & Apps</span></a>
+        <a onclick="openlinks()"><span>Links</span></a>
+        <a onclick="openSettings()"><span>Settings</span></a>
+        <a onclick="openTvShowPlayer()"><span>Movie+TV Player</span></a>
     </div>
     <p id="placeholder"></p>
     <p id="time"></p>
@@ -108,6 +109,11 @@
 
         updateClock();
         setInterval(updateClock, 1000);
+
+        // Add the following code to refresh the placeholder text on page load
+        window.onload = function() {
+            setRandomPlaceholder();
+        };
     </script>
 </body>
 </html>
