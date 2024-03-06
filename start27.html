@@ -150,16 +150,16 @@
         updateClock();
         setInterval(updateClock, 1000);
 
-        function openTvShowPlayer() {
-            window.location.href = "movie+tv.html";
+        function openGameApps() {
+            window.location.href = "game+app.html";
         }
 
         function openSettings() {
             window.location.href = "setting.html";
         }
 
-        function openGameApps() {
-            window.location.href = "game+app.html";
+        function openTvShowPlayer() {
+            window.location.href = "movie+tv.html";
         }
 
         function openlinks() {
@@ -185,6 +185,8 @@
             const backgroundUrl = document.getElementById("background-url").value;
             document.body.style.backgroundImage = `url('${backgroundUrl}')`;
             localStorage.setItem("backgroundUrl", backgroundUrl);
+            document.getElementById("background-input").style.display = "none"; // Hide background input
+            removeBackgroundButton(); // Hide background buttons
         }
 
         // Check if background URL is stored in local storage
