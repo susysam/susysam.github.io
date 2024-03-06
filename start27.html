@@ -12,17 +12,20 @@
             margin: 20px;
             background-color: #171717; /* Dark background */
             color: #fff;
+            position: relative;
         }
 
         .button-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 80vh;
+            position: absolute;
+            top: 20px;
+            right: 20px;
         }
 
-        .prompt {
+        .welcome-menu {
+            margin-top: 100px;
+        }
+
+        .menu-item {
             font-size: 24px;
             margin-bottom: 20px;
             animation: fadeIn 1s ease forwards; /* Fade in animation */
@@ -85,36 +88,30 @@
         .active {
             background-color: #4F0672 !important; /* Darker purple */
         }
+
+        /* Custom cursor */
+        body {
+            cursor: url('https://upload.wikimedia.org/wikipedia/commons/5/51/Cursor_hand.svg'), auto;
+        }
     </style>
 </head>
 <body>
 
     <div class="button-container">
-        <p class="prompt">What would you like to access?</p>
-        <!-- Added IDs to each button for easier selection in JavaScript -->
-        <div class="button" id="gamesApps" onclick="openGameApps()"><span>Games & Apps</span></div>
-        <div class="button" id="links" onclick="openlinks()"><span>Links</span></div>
-        <div class="button" id="settings" onclick="openSettings()"><span>Settings</span></div>
-        <div class="button" id="tvPlayer" onclick="openTvShowPlayer()"><span>Movie+TV Player</span></div>
+        <!-- Use <a> tags with href attributes for navigation -->
+        <a href="game+app.html" class="button" id="gamesApps"><span>Games & Apps</span></a>
+        <a href="Show.html" class="button" id="links"><span>Links</span></a>
+        <a href="setting.html" class="button" id="settings"><span>Settings</span></a>
+        <a href="movie+tv.html" class="button" id="tvPlayer"><span>Movie+TV Player</span></a>
+    </div>
+
+    <!-- Welcome theme menu in the middle -->
+    <div class="welcome-menu">
+        <p class="menu-item">Welcome to the Entertainment Hub</p>
+        <p class="menu-item">Explore our exciting features!</p>
     </div>
 
     <script>
-        function openTvShowPlayer() {
-            window.location.href = "movie+tv.html";
-        }
-
-        function openSettings() {
-            window.location.href = "setting.html";
-        }
-
-        function openGameApps() {
-            window.location.href = "game+app.html";
-        }
-
-        function openlinks() {
-            window.location.href = "Show.html";
-        }
-
         // JavaScript to toggle the 'active' class on button click
         document.getElementById('gamesApps').onclick = function() {
             this.classList.toggle('active');
