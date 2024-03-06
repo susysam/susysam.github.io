@@ -4,47 +4,134 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
-    <link rel="shortcut icon" id="tab-favicon" href="favicon.png" />
-    <link rel="stylesheet" href="/assets/styles/main.css?v=2" />
-    <link rel="stylesheet" href="/assets/styles/themes/default.css?v=4" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Wx8H5Fh03F7bmlI/t2OQ8zDpFdq2omv6C+37DYb7v+IXsZV0k/LweZ+ziFOSJumrO9koPTKMSQrOYztZ4sHhOg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    <script src="/assets/scripts/home.min.js?v=9"></script>
-    <script src="assets/scripts/index.js?v=5"></script>
-    <script src="./m/bundle.js"></script>
-    <script src="./m/config.js"></script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WKJQ5QHQTJ"></script>
-    <script>
-      window.dataLayer = window.dataLayer || []
-      function gtag() { dataLayer.push(arguments) }
-      gtag('js', new Date())
-      gtag('config', 'G-WKJQ5QHQTJ')
-    </script>
-    <script src="/assets/scripts/main.min.js?v=3"></script>
+    <link rel="icon" href="https://user-images.githubusercontent.com/41707197/56105496-bc44bd80-5ef9-11e9-8f65-859cda5d8941.png" type="image/png">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 20px;
+            background-color: #171717; /* Dark background */
+            color: #fff;
+        }
+
+        .navbar {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar a:hover {
+            color: #6C0BA9; /* Purple on hover */
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 80vh;
+        }
+
+        .prompt {
+            font-size: 24px;
+            margin-bottom: 20px;
+            animation: fadeIn 1s ease forwards; /* Fade in animation */
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .button {
+            padding: 15px 30px;
+            font-size: 24px;
+            background-color: #6C0BA9; /* Purple */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: background-color 0.3s ease; /* Smooth transition for background color */
+            position: relative;
+            overflow: hidden;
+        }
+
+        .button::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            transform: translate(-50%, -50%) scale(0);
+            z-index: 0;
+        }
+
+        .button:hover::after {
+            transform: translate(-50%, -50%) scale(3);
+        }
+
+        .button span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .button:hover {
+            background-color: #4F0672; /* Darker purple on hover */
+        }
+    </style>
 </head>
-<body class="center" onload="splashtext()">
-    <div class="fixed-nav-bar">
-        <div class="fixed-nav-bar-container">
-            <a class="icon" href="/./"><img alt="nav" id="INImg" src="/assets/media/favicon/main.png" /></a>
-        </div>
-        <div class="fixed-nav-bar-right">
-            <a class="navbar-link" href="/./-"><i class="fas fa-gamepad navbar-icon"></i>Games</a>
-            <a class="navbar-link" href="/./~"><i class="fas fa-phone navbar-icon"></i>Apps</a>
-            <a class="navbar-link" href="/./0"><i class="fas fa-laptop navbar-icon"></i>Tabs</a>
-            <a class="navbar-link" href="/./!"><i class="fas fa-gear navbar-icon settings-icon"></i>Settings</a>
-        </div>
+<body>
+    <div class="navbar">
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
     </div>
-    <div id="particles-js">
-        <div class="main">
-            <h1 class="title">Interstellar</h1>
-            <p id="splash">Unknown</p>
-            <div class="search-container">
-                <form id="fs" method="POST">
-                    <input id="is" class="main-search" placeholder="Search with Google or enter address" type="text" />
-                </form>
-            </div>
-        </div>
+
+    <div class="button-container">
+        <p class="prompt">Welcome to your personalized homepage!</p>
+        <div class="button" onclick="openGameApps()"><span>Games & Apps</span></div>
+        <div class="button" onclick="openlinks()"><span>Links</span></div>
+        <div class="button" onclick="openSettings()"><span>Settings</span></div>
+        <div class="button" onclick="openTvShowPlayer()"><span>Movie+TV Player</span></div>
     </div>
+
+    <script>
+        function openTvShowPlayer() {
+            window.location.href = "movie+tv.html";
+        }
+
+        function openSettings() {
+            window.location.href = "setting.html";
+        }
+
+        function openGameApps() {
+            window.location.href = "game+app.html";
+        }
+
+        function openlinks() {
+            window.location.href = "Show.html";
+        }
+    </script>
+
 </body>
 </html>
