@@ -53,18 +53,35 @@
             margin-top: 20px;
         }
 
-        #backgroundBtn {
+        .button-container {
+            margin-top: 20px;
+        }
+
+        .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #6C0BA9; /* Purple */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease; /* Smooth transition for background color */
+            margin: 0 10px;
+        }
+
+        .button:hover {
+            background-color: #4F0672; /* Darker purple on hover */
+        }
+
+        #background-input {
             display: none;
             margin-top: 20px;
         }
 
-        #backgroundInput {
-            display: none;
-            margin-top: 20px;
-            width: 80%;
-            max-width: 400px;
-            padding: 10px;
-            font-size: 16px;
+        #background-input input[type="text"] {
+            padding: 5px;
+            font-size: 14px;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -77,9 +94,16 @@
     </div>
     <p id="placeholder"></p>
     <p id="time"></p>
-    <button id="backgroundBtn" onclick="showBackgroundOptions()">Does the page look boring? Well that's ok now you can change up the background.</button>
-    <input type="text" id="backgroundInput" placeholder="Enter background URL">
-    
+
+    <div class="button-container" id="button-container">
+        <button class="button" onclick="showBackgroundButton()">Does the page look boring? Well that's ok now you can change up the background.</button>
+    </div>
+
+    <div id="background-input">
+        <input type="text" id="background-url" placeholder="Enter background URL">
+        <button class="button" onclick="changeBackground()">Change Background</button>
+    </div>
+
     <script>
         const options = [
             "Over 5 Users in 2024!",
@@ -142,11 +166,31 @@
             window.location.href = "Show.html";
         }
 
-        function showBackgroundOptions() {
-            const backgroundBtn = document.getElementById("backgroundBtn");
-            const backgroundInput = document.getElementById("backgroundInput");
-            backgroundBtn.style.display = "none";
-            backgroundInput.style.display = "block";
+        function showBackgroundButton() {
+            document.getElementById("button-container").innerHTML = `
+                <button class="button" onclick="removeBackgroundButton()">No thank you</button>
+                <button class="button" onclick="showBackgroundInput()">Yea sure</button>
+            `;
+        }
+
+        function removeBackgroundButton() {
+            document.getElementById("button-container").innerHTML = '';
+        }
+
+        function showBackgroundInput() {
+            document.getElementById("background-input").style.display = "block";
+        }
+
+        function changeBackground() {
+            const backgroundUrl = document.getElementById("background-url").value;
+            document.body.style.backgroundImage = `url('${backgroundUrl}')`;
+            localStorage.setItem("backgroundUrl", backgroundUrl);
+        }
+
+        // Check if background URL is stored in local storage
+        const storedBackgroundUrl = localStorage.getItem("backgroundUrl");
+        if (storedBackgroundUrl) {
+            document.body.style.backgroundImage = `url('${storedBackgroundUrl}')`;
         }
     </script>
 </body>
