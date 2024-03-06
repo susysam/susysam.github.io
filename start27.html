@@ -99,30 +99,55 @@
             background-color: #4F0672; /* Darker purple on hover */
         }
 
-        .splash-text {
-            font-size: 18px;
+        #placeholder {
+            font-size: 20px;
             margin-top: 20px;
         }
     </style>
 </head>
 <body>
     <div class="navbar">
-        <a href="#">Games & Apps</a>
-        <a href="#">Links</a>
-        <a href="#">Settings</a>
-        <a href="#">Movie+TV Player</a>
+        <a href="game+app.html">Games & Apps</a>
+        <a href="Show.html">Links</a>
+        <a href="setting.html">Settings</a>
+        <a href="movie+tv.html">Movie+TV Player</a>
     </div>
 
     <div class="button-container">
         <p class="prompt">Welcome to your personalized homepage!</p>
-        <div class="splash-text">Over 5 Users in 2024!</div>
-        <div class="splash-text">Fastest growing proxy server!</div>
-        <div class="splash-text">Made by Leo!</div>
-        <div class="splash-text">Thanks for using the site</div>
-        <div class="splash-text">Check out the settings page</div>
+        <div class="button" onclick="openGameApps()"><span>Games & Apps</span></div>
+        <div class="button" onclick="openlinks()"><span>Links</span></div>
+        <div class="button" onclick="openSettings()"><span>Settings</span></div>
+        <div class="button" onclick="openTvShowPlayer()"><span>Movie+TV Player</span></div>
+        <p id="placeholder"></p>
     </div>
 
     <script>
+        const options = [
+            "Over 5 Users in 2024!",
+            "Fastest growing proxy server!",
+            "Made by Leo!",
+            "Thanks for using the site",
+            "Set a custom background in settings.",
+            "Tab Cloaking is highly recommended",
+            "About:Blank Cloak is highly recommended",
+            "Finally, an actual site unblocker that works fast!",
+            "It is not recommended to share this link with anyone.",
+            "© Copyright 2024 Leo's Network. All Rights Reserved."
+        ];
+
+        function getRandomOption() {
+            const randomNumber = Math.floor(Math.random() * options.length);
+            return options[randomNumber];
+        }
+
+        function setRandomPlaceholder() {
+            const placeholder = document.getElementById("placeholder");
+            placeholder.textContent = getRandomOption();
+        }
+
+        setRandomPlaceholder();
+
         function openTvShowPlayer() {
             window.location.href = "movie+tv.html";
         }
@@ -139,6 +164,5 @@
             window.location.href = "Show.html";
         }
     </script>
-
 </body>
 </html>
