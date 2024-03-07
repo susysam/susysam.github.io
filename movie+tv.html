@@ -54,6 +54,9 @@
 </head>
 <body>
     <h1>Entertainment Player</h1>
+
+    <p>Reminder: If anime is blocked, go to links and type in this link: <a href="https://kaido.to/">https://kaido.to/</a></p>
+
     <div class="input-container">
         <label for="imdb-id">IMDb ID (with "tt"):</label><br>
         <input type="text" id="imdb-id" placeholder="Example: tt1942683"><br><br>
@@ -91,8 +94,20 @@
         }
 
         function openAnime() {
-            // Reminder message for blocked anime
-            alert("If anime is blocked, go to links and type in this link: https://kaido.to/");
+            // Array of Anime streaming links
+            var animeLinks = [
+                "https://unime.vercel.app/eng",
+                "https://kitsunee.me/",
+                "https://anify.tv/anime",
+                "https://kaido.to/"
+            ];
+
+            // Randomly select an Anime streaming link
+            var randomIndex = Math.floor(Math.random() * animeLinks.length);
+            var selectedAnimeLink = animeLinks[randomIndex];
+
+            // Redirect to the selected Anime streaming link
+            window.location.href = selectedAnimeLink;
         }
 
         function openPreviousPage() {
