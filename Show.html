@@ -20,6 +20,9 @@
             font-weight: 100;
             font-size: 1.5rem;
         }
+        .button-container {
+            margin-top: 20px;
+        }
         .button {
             padding: 20px 40px;
             height: auto;
@@ -41,67 +44,135 @@
         .button:hover {
             transform: scale(1.05);
         }
+
+        .options-container {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .option-button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            background-color: #6C0BA9;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            outline: none;
+        }
+
+        .option-button:hover {
+            background-color: #4F0672;
+        }
+
+        #fullscreen-button {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <h1>Press [Enter] or tap/click anywhere to redirect</h1>
     
-    <button class="button" onclick="openCategory('Interstellar')">Interstellar</button>
-    <button class="button" onclick="openCategory('ChromeOS')">ChromeOS</button>
-    <button class="button" onclick="openCategory('Utopia')">Utopia</button>
-    <button class="button" onclick="openCategory('PlexileArcade')">Plexile Arcade</button>
-    <button class="button" onclick="openCategory('More')">More</button>
+    <div class="button-container">
+        <button class="button" onclick="openCategory('Interstellar')">Interstellar</button>
+        <button class="button" onclick="openCategory('ChromeOS')">ChromeOS</button>
+        <button class="button" onclick="openCategory('Utopia')">Utopia</button>
+        <button class="button" onclick="openCategory('PlexileArcade')">Plexile Arcade</button>
+        <button class="button" onclick="openCategory('More')">More</button>
+    </div>
+
+    <div class="options-container" id="optionsContainer">
+        <button class="option-button" onclick="openInNewTab()">Open in New Tab</button>
+        <button class="option-button" onclick="openInIframe()">Open in Iframe</button>
+    </div>
+
+    <button id="fullscreen-button" class="option-button" onclick="toggleFullscreen()">Fullscreen</button>
 
     <script>
-        function openCategory(category) {
-            const categories = {
-                'Interstellar': [
-                    "https://1.australianhuntermag.com.au",
-                    "https://testing.development.sanluix.org",
-                    "https://cultures.linexedu.eu",
-                    "https://n.c.gracemp.org",
-                    "https://x.o.h4xxel.org",
-                    "https://tools.development.sanluix.org",
-                    "https://forum.cloud.rigaprecast.com/",
-                    "https://s.cambrianscientific.com",
-                ],
-                'ChromeOS': [
-                    "https://anura.pro/",
-                    "https://anura.christmas/",
-                ],
-                'Utopia': [
-                    "https://add.tutor.hydraulik-handpumpen.com/",
-                    "https://area.brain.cravat-club.com/",
-                ],
-                'PlexileArcade': [
-                    "https://nweatestingsite.glitch.me/location.html",
-                    "https://funschoolprojects.glitch.me/location.html",
-                    "https://schoolapplications.onrender.com/location.html",
-                    "https://algebratutors.onrender.com/location.html",
-                    "https://education.disciplinary.design/location.html",
-                    "https://yourlocalsciencegrades.dcmusic.ca/location.html",
-                    "https://schooltutoring.dcmusic.ca/location.html",
-                    "https://schoollessons.pages.dev/location"
-                ],
-                'More': [
-                    "https://info.svmblocker.com/mobile.html",
-                    "https://login.cloudbusinessportal.com/mobile.html",
-                    "https://portal.customintegrator.info/mobile.html",
-                    "https://articles.theeduweb.com/mobile.html"
-                ],
-            };
+        const categories = {
+            'Interstellar': [
+                "https://testing.development.sanluix.org",
+                "https://cultures.linexedu.eu",
+                "https://n.c.gracemp.org",
+                "https://x.o.h4xxel.org",
+                "https://tools.development.sanluix.org",
+                "https://forum.cloud.rigaprecast.com/",
+                "https://s.cambrianscientific.com",
+            ],
+            'ChromeOS': [
+                "https://anura.pro/",
+                "https://anura.christmas/",
+            ],
+            'Utopia': [
+                "https://add.tutor.hydraulik-handpumpen.com/",
+                "https://area.brain.cravat-club.com/",
+            ],
+            'PlexileArcade': [
+                "https://nweatestingsite.glitch.me/location.html",
+                "https://funschoolprojects.glitch.me/location.html",
+                "https://schoolapplications.onrender.com/location.html",
+                "https://algebratutors.onrender.com/location.html",
+                "https://education.disciplinary.design/location.html",
+                "https://yourlocalsciencegrades.dcmusic.ca/location.html",
+                "https://schooltutoring.dcmusic.ca/location.html",
+                "https://schoollessons.pages.dev/location"
+            ],
+            'More': [
+                "https://info.svmblocker.com/mobile.html",
+                "https://login.cloudbusinessportal.com/mobile.html",
+                "https://portal.customintegrator.info/mobile.html",
+                "https://articles.theeduweb.com/mobile.html"
+            ],
+        };
 
+        let currentLink = '';
+
+        function openCategory(category) {
             const links = categories[category];
             if (links) {
                 const randomIndex = Math.floor(Math.random() * links.length);
-                const currentLink = links[randomIndex];
-                openInNewTab(currentLink);
+                currentLink = links[randomIndex];
+                document.getElementById('optionsContainer').style.display = 'block';
             }
         }
 
-        function openInNewTab(url) {
-            window.open(url, '_blank');
+        function openInNewTab() {
+            window.open(currentLink, '_blank');
         }
+
+        function openInIframe() {
+            const iframe = document.createElement('iframe');
+            iframe.src = currentLink;
+            iframe.style.border = 'none';
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+            document.body.appendChild(iframe);
+            document.getElementById('optionsContainer').style.display = 'none';
+            document.getElementById('fullscreen-button').style.display = 'block';
+        }
+
+        function toggleFullscreen() {
+            const iframe = document.querySelector('iframe');
+            if (iframe.requestFullscreen) {
+                iframe.requestFullscreen();
+            } else if (iframe.mozRequestFullScreen) { /* Firefox */
+                iframe.mozRequestFullScreen();
+            } else if (iframe.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+                iframe.webkitRequestFullscreen();
+            } else if (iframe.msRequestFullscreen) { /* IE/Edge */
+                iframe.msRequestFullscreen();
+            }
+        }
+
+        document.addEventListener('keyup', (event) => {
+            if (event.keyCode === 13) {
+                openInIframe();
+            }
+        });
+        document.body.addEventListener('click', () => {
+            openInIframe();
+        });
     </script>
 </body>
 </html>
