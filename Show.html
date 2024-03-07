@@ -74,6 +74,25 @@
         .iframe-btn:hover {
             background-color: #1f1f1f;
         }
+
+        /* Fullscreen button */
+        .fullscreen-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #6C0BA9;
+            border: 3px solid #fff;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #fff;
+            transition: all 0.3s ease;
+            font-size: 18px;
+            outline: none;
+            display: none; /* Initially hidden */
+        }
+
+        .fullscreen-btn:hover {
+            background-color: #1f1f1f;
+        }
     </style>
 </head>
 
@@ -86,97 +105,104 @@
     <!-- Button Section -->
     <div class="section">
         <h2>Choose a Category 🚀</h2>
-        <button class="button" onclick="openCategory('Interstellar', this)">Interstellar</button>
-        <button class="button" onclick="openCategory('ChromeOS', this)">ChromeOS</button>
-        <button class="button" onclick="openCategory('Utopia', this)">Utopia</button>
-        <button class="button" onclick="openCategory('PlexileArcade', this)">Plexile Arcade</button>
-        <button class="button" onclick="openCategory('More', this)">More</button>
+        <button class="button" onclick="openCategory('Interstellar')">Interstellar</button>
+        <button class="button" onclick="openCategory('ChromeOS')">ChromeOS</button>
+        <button class="button" onclick="openCategory('Utopia')">Utopia</button>
+        <button class="button" onclick="openCategory('PlexileArcade')">Plexile Arcade</button>
+        <button class="button" onclick="openCategory('More')">More</button>
     </div>
 
     <!-- Initially hidden buttons -->
     <button class="new-tab-btn" onclick="openInNewTab()">Open link in New tab</button>
     <button class="iframe-btn" onclick="openInIframe()">Open link in Iframe</button>
 
+    <!-- Fullscreen button -->
+    <button class="fullscreen-btn" onclick="toggleFullscreen()">Fullscreen</button>
+
     <iframe id="contentFrame"></iframe>
 
     <script>
         let currentLink = '';
-        let maxClicks = 5;
-        let buttonsClicked = {
-            'Interstellar': 0,
-            'ChromeOS': 0,
-            'Utopia': 0,
-            'PlexileArcade': 0,
-            'More': 0
-        };
+        let currentIframe = null;
 
         function goBack() {
             window.location.href = "start27.html";
         }
 
-        function openCategory(category, button) {
-            if (buttonsClicked[category] < maxClicks) {
-                buttonsClicked[category]++;
-                const categories = {
-                    'Interstellar': [
-                        "https://testing.development.sanluix.org",
-                        "https://cultures.linexedu.eu",
-                        "https://n.c.gracemp.org",
-                        "https://x.o.h4xxel.org",
-                        "https://tools.development.sanluix.org",
-                        "https://forum.cloud.rigaprecast.com/",
-                        "https://s.cambrianscientific.com",
-                    ],
-                    'ChromeOS': [
-                        "https://anura.pro/",
-                        "https://anura.christmas/",
-                    ],
-                    'Utopia': [
-                        "https://add.tutor.hydraulik-handpumpen.com/",
-                        "https://area.brain.cravat-club.com/",
-                    ],
-                    'PlexileArcade': [
-                        "https://nweatestingsite.glitch.me/location.html",
-                        "https://funschoolprojects.glitch.me/location.html",
-                        "https://schoolapplications.onrender.com/location.html",
-                        "https://algebratutors.onrender.com/location.html",
-                        "https://education.disciplinary.design/location.html",
-                        "https://yourlocalsciencegrades.dcmusic.ca/location.html",
-                        "https://schooltutoring.dcmusic.ca/location.html",
-                        "https://schoollessons.pages.dev/location"
-                    ],
-                    'More': [
-                        "https://info.svmblocker.com/mobile.html",
-                        "https://login.cloudbusinessportal.com/mobile.html",
-                        "https://portal.customintegrator.info/mobile.html",
-                        "https://articles.theeduweb.com/mobile.html"
-                    ],
-                };
+        function openCategory(category) {
+            const categories = {
+                'Interstellar': [
+                    "https://testing.development.sanluix.org",
+                    "https://cultures.linexedu.eu",
+                    "https://n.c.gracemp.org",
+                    "https://x.o.h4xxel.org",
+                    "https://tools.development.sanluix.org",
+                    "https://forum.cloud.rigaprecast.com/",
+                    "https://s.cambrianscientific.com",
+                ],
+                'ChromeOS': [
+                    "https://anura.pro/",
+                    "https://anura.christmas/",
+                ],
+                'Utopia': [
+                    "https://add.tutor.hydraulik-handpumpen.com/",
+                    "https://area.brain.cravat-club.com/",
+                ],
+                'PlexileArcade': [
+                    "https://nweatestingsite.glitch.me/location.html",
+                    "https://funschoolprojects.glitch.me/location.html",
+                    "https://schoolapplications.onrender.com/location.html",
+                    "https://algebratutors.onrender.com/location.html",
+                    "https://education.disciplinary.design/location.html",
+                    "https://yourlocalsciencegrades.dcmusic.ca/location.html",
+                    "https://schooltutoring.dcmusic.ca/location.html",
+                    "https://schoollessons.pages.dev/location"
+                ],
+                'More': [
+                    "https://info.svmblocker.com/mobile.html",
+                    "https://login.cloudbusinessportal.com/mobile.html",
+                    "https://portal.customintegrator.info/mobile.html",
+                    "https://articles.theeduweb.com/mobile.html"
+                ],
+            };
 
-                const links = categories[category];
-                if (links) {
-                    const randomIndex = Math.floor(Math.random() * links.length);
-                    currentLink = links[randomIndex];
-                    document.querySelector('.new-tab-btn').style.display = 'inline-block';
-                    document.querySelector('.iframe-btn').style.display = 'inline-block';
+            const links = categories[category];
+            if (links) {
+                const randomIndex = Math.floor(Math.random() * links.length);
+                currentLink = links[randomIndex];
+                // Remove previous iframe if exists
+                if (currentIframe) {
+                    document.getElementById('contentFrame').removeChild(currentIframe);
                 }
-            } else {
-                button.disabled = true; // Disable button after reaching max clicks
+                const iframe = document.createElement('iframe');
+                iframe.src = currentLink;
+                iframe.id = 'currentIframe';
+                document.getElementById('contentFrame').appendChild(iframe);
+                currentIframe = iframe;
+                // Display buttons
+                document.querySelector('.new-tab-btn').style.display = 'inline-block';
+                document.querySelector('.iframe-btn').style.display = 'inline-block';
+                document.querySelector('.fullscreen-btn').style.display = 'inline-block';
             }
         }
 
         function openInNewTab() {
             window.open(currentLink, '_blank');
-            document.querySelector('.new-tab-btn').style.display = 'none'; // Hide the button after clicking
-            document.querySelector('.iframe-btn').style.display = 'none'; // Hide the other button after one is clicked
         }
 
         function openInIframe() {
-            const iframe = document.getElementById('contentFrame');
-            iframe.src = currentLink;
-            iframe.requestFullscreen(); // Open iframe in fullscreen
-            document.querySelector('.new-tab-btn').style.display = 'none'; // Hide the button after clicking
-            document.querySelector('.iframe-btn').style.display = 'none'; // Hide the other button after one is clicked
+            currentIframe.src = currentLink;
+            document.querySelector('.fullscreen-btn').style.display = 'inline-block';
+        }
+
+        function toggleFullscreen() {
+            if (currentIframe.requestFullscreen) {
+                currentIframe.requestFullscreen();
+            } else if (currentIframe.webkitRequestFullscreen) { /* Safari */
+                currentIframe.webkitRequestFullscreen();
+            } else if (currentIframe.msRequestFullscreen) { /* IE11 */
+                currentIframe.msRequestFullscreen();
+            }
         }
     </script>
 </body>
