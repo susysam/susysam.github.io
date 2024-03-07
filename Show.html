@@ -1,80 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Links</title>
     <style>
-        html {
-            margin-top: 15px;
-            background-color: #000000;
-            color: white;
-            font-family: 'Rubik', sans-serif;
+        body {
+            font-family: 'Arial', sans-serif;
             text-align: center;
+            margin: 20px;
+            background-color: #161616;
+            color: #fff;
         }
+
         h1 {
-            position: absolute;
-            top: 45%;
-            right: 50%;
-            transform: translate(50%);
-            font-weight: 100;
-            font-size: 1.5rem;
+            color: #ffcc00;
         }
-        .button-container {
-            margin-top: 20px;
+
+        .section {
+            margin-top: 50px;
         }
+
         .button {
-            padding: 20px 40px;
-            height: auto;
-            border: none;
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 1.3rem;
-            font-family: 'Rubik', sans-serif;
-            cursor: pointer;
-            background-color: #f75dfc;
-            border-radius: 20px;
-            transition: opacity 0.3s ease;
-            transition: transform 0.1s ease;
-            margin-top: 20px;
-        }
-
-        .button:hover {
-            transform: scale(1.05);
-        }
-
-        .options-container {
-            display: none;
-            margin-top: 20px;
-        }
-
-        .option-button {
+            margin: 10px;
             padding: 10px 20px;
-            margin: 0 10px;
-            background-color: #6C0BA9;
-            color: white;
-            border: none;
-            border-radius: 5px;
+            background-color: #1f1f1f;
+            border: 3px solid #fff;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #fff;
+            display: inline-block;
+            transition: all 0.3s ease;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            font-size: 18px;
             outline: none;
         }
 
-        .option-button:hover {
-            background-color: #4F0672;
+        .button:hover {
+            background-color: #6C0BA9;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
         }
 
-        #fullscreen-button {
-            display: none;
+        .button:focus {
+            box-shadow: 0 0 0 3px #6C0BA9;
+        }
+
+        iframe {
+            width: 90%;
+            height: 90vh; /* Increased height for better visibility */
+            margin: 20px auto;
+            border: none;
+        }
+
+        /* Added styles for the new buttons */
+        .new-tab-btn,
+        .iframe-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #6C0BA9;
+            border: 3px solid #fff;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #fff;
+            transition: all 0.3s ease;
+            font-size: 18px;
+            outline: none;
+            display: none; /* Initially hidden */
+        }
+
+        .new-tab-btn:hover,
+        .iframe-btn:hover {
+            background-color: #1f1f1f;
         }
     </style>
 </head>
+
 <body>
-    <h1>Press [Enter] or tap/click anywhere to redirect</h1>
-    
-    <div class="button-container">
+    <h1>Links</h1>
+
+    <!-- Back Button -->
+    <div class="button" onclick="goBack()"><span>Back</span></div>
+
+    <!-- Button Section -->
+    <div class="section">
+        <h2>Choose a Category 🚀</h2>
         <button class="button" onclick="openCategory('Interstellar')">Interstellar</button>
         <button class="button" onclick="openCategory('ChromeOS')">ChromeOS</button>
         <button class="button" onclick="openCategory('Utopia')">Utopia</button>
@@ -82,97 +93,83 @@
         <button class="button" onclick="openCategory('More')">More</button>
     </div>
 
-    <div class="options-container" id="optionsContainer">
-        <button class="option-button" onclick="openInNewTab()">Open in New Tab</button>
-        <button class="option-button" onclick="openInIframe()">Open in Iframe</button>
-    </div>
+    <!-- Initially hidden buttons -->
+    <button class="new-tab-btn" onclick="openInNewTab()">Open link in New tab</button>
+    <button class="iframe-btn" onclick="openInIframe()">Open link in Iframe</button>
 
-    <button id="fullscreen-button" class="option-button" onclick="toggleFullscreen()">Fullscreen</button>
+    <iframe id="contentFrame"></iframe>
 
     <script>
-        const categories = {
-            'Interstellar': [
-                "https://testing.development.sanluix.org",
-                "https://cultures.linexedu.eu",
-                "https://n.c.gracemp.org",
-                "https://x.o.h4xxel.org",
-                "https://tools.development.sanluix.org",
-                "https://forum.cloud.rigaprecast.com/",
-                "https://s.cambrianscientific.com",
-            ],
-            'ChromeOS': [
-                "https://anura.pro/",
-                "https://anura.christmas/",
-            ],
-            'Utopia': [
-                "https://add.tutor.hydraulik-handpumpen.com/",
-                "https://area.brain.cravat-club.com/",
-            ],
-            'PlexileArcade': [
-                "https://nweatestingsite.glitch.me/location.html",
-                "https://funschoolprojects.glitch.me/location.html",
-                "https://schoolapplications.onrender.com/location.html",
-                "https://algebratutors.onrender.com/location.html",
-                "https://education.disciplinary.design/location.html",
-                "https://yourlocalsciencegrades.dcmusic.ca/location.html",
-                "https://schooltutoring.dcmusic.ca/location.html",
-                "https://schoollessons.pages.dev/location"
-            ],
-            'More': [
-                "https://info.svmblocker.com/mobile.html",
-                "https://login.cloudbusinessportal.com/mobile.html",
-                "https://portal.customintegrator.info/mobile.html",
-                "https://articles.theeduweb.com/mobile.html"
-            ],
-        };
-
         let currentLink = '';
+        let buttonsClicked = false;
+
+        function goBack() {
+            window.location.href = "start27.html";
+        }
 
         function openCategory(category) {
-            const links = categories[category];
-            if (links) {
-                const randomIndex = Math.floor(Math.random() * links.length);
-                currentLink = links[randomIndex];
-                document.getElementById('optionsContainer').style.display = 'block';
+            if (!buttonsClicked) {
+                buttonsClicked = true;
+                const categories = {
+                    'Interstellar': [
+                        "https://testing.development.sanluix.org",
+                        "https://cultures.linexedu.eu",
+                        "https://n.c.gracemp.org",
+                        "https://x.o.h4xxel.org",
+                        "https://tools.development.sanluix.org",
+                        "https://forum.cloud.rigaprecast.com/",
+                        "https://s.cambrianscientific.com",
+                    ],
+                    'ChromeOS': [
+                        "https://anura.pro/",
+                        "https://anura.christmas/",
+                    ],
+                    'Utopia': [
+                        "https://add.tutor.hydraulik-handpumpen.com/",
+                        "https://area.brain.cravat-club.com/",
+                    ],
+                    'PlexileArcade': [
+                        "https://nweatestingsite.glitch.me/location.html",
+                        "https://funschoolprojects.glitch.me/location.html",
+                        "https://schoolapplications.onrender.com/location.html",
+                        "https://algebratutors.onrender.com/location.html",
+                        "https://education.disciplinary.design/location.html",
+                        "https://yourlocalsciencegrades.dcmusic.ca/location.html",
+                        "https://schooltutoring.dcmusic.ca/location.html",
+                        "https://schoollessons.pages.dev/location"
+                    ],
+                    'More': [
+                        "https://info.svmblocker.com/mobile.html",
+                        "https://login.cloudbusinessportal.com/mobile.html",
+                        "https://portal.customintegrator.info/mobile.html",
+                        "https://articles.theeduweb.com/mobile.html"
+                    ],
+                };
+
+                const links = categories[category];
+                if (links) {
+                    const randomIndex = Math.floor(Math.random() * links.length);
+                    currentLink = links[randomIndex];
+                    document.querySelector('.new-tab-btn').style.display = 'inline-block';
+                    document.querySelector('.iframe-btn').style.display = 'inline-block';
+                }
             }
         }
 
         function openInNewTab() {
             window.open(currentLink, '_blank');
+            document.querySelector('.new-tab-btn').style.display = 'none'; // Hide the button after clicking
+            document.querySelector('.iframe-btn').style.display = 'none'; // Hide the other button after one is clicked
         }
 
         function openInIframe() {
-            const iframe = document.createElement('iframe');
+            const iframe = document.getElementById('contentFrame');
             iframe.src = currentLink;
-            iframe.style.border = 'none';
-            iframe.style.width = '100%';
-            iframe.style.height = '100%';
-            document.body.appendChild(iframe);
-            document.getElementById('optionsContainer').style.display = 'none';
-            document.getElementById('fullscreen-button').style.display = 'block';
+            iframe.requestFullscreen(); // Open iframe in fullscreen
+            document.querySelector('.new-tab-btn').style.display = 'none'; // Hide the button after clicking
+            document.querySelector('.iframe-btn').style.display = 'none'; // Hide the other button after one is clicked
         }
-
-        function toggleFullscreen() {
-            const iframe = document.querySelector('iframe');
-            if (iframe.requestFullscreen) {
-                iframe.requestFullscreen();
-            } else if (iframe.mozRequestFullScreen) { /* Firefox */
-                iframe.mozRequestFullScreen();
-            } else if (iframe.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
-                iframe.webkitRequestFullscreen();
-            } else if (iframe.msRequestFullscreen) { /* IE/Edge */
-                iframe.msRequestFullscreen();
-            }
-        }
-
-        document.addEventListener('keyup', (event) => {
-            if (event.keyCode === 13) {
-                openInIframe();
-            }
-        });
-        document.body.addEventListener('click', () => {
-            openInIframe();
-        });
     </script>
 </body>
+
 </html>
