@@ -49,14 +49,12 @@
 
         iframe {
             width: 90%;
-            height: 90vh; /* Increased height for better visibility */
+            height: 90vh;
             margin: 20px auto;
             border: none;
         }
 
-        /* Added styles for the new buttons */
-        .new-tab-btn,
-        .iframe-btn {
+        .fullscreen-btn {
             margin-top: 20px;
             padding: 10px 20px;
             background-color: #6C0BA9;
@@ -67,11 +65,10 @@
             transition: all 0.3s ease;
             font-size: 18px;
             outline: none;
-            display: none; /* Initially hidden */
+            display: none;
         }
 
-        .new-tab-btn:hover,
-        .iframe-btn:hover {
+        .fullscreen-btn:hover {
             background-color: #1f1f1f;
         }
     </style>
@@ -96,6 +93,7 @@
     <!-- Initially hidden buttons -->
     <button class="new-tab-btn" onclick="openInNewTab()">Open link in New tab</button>
     <button class="iframe-btn" onclick="openInIframe()">Open link in Iframe</button>
+    <button class="fullscreen-btn" onclick="toggleFullScreen()">Fullscreen</button>
 
     <iframe id="contentFrame"></iframe>
 
@@ -150,21 +148,39 @@
                 currentLink = links[randomIndex];
                 document.querySelector('.new-tab-btn').style.display = 'inline-block';
                 document.querySelector('.iframe-btn').style.display = 'inline-block';
+                document.querySelector('.fullscreen-btn').style.display = 'inline-block'; // Show the Fullscreen button
             }
         }
 
         function openInNewTab() {
             window.open(currentLink, '_blank');
-            document.querySelector('.new-tab-btn').style.display = 'none'; // Hide the button after clicking
-            document.querySelector('.iframe-btn').style.display = 'none'; // Hide the other button after one is clicked
+            hideButtons();
         }
 
         function openInIframe() {
             const iframe = document.getElementById('contentFrame');
             iframe.src = currentLink;
-            iframe.requestFullscreen(); // Open iframe in fullscreen
-            document.querySelector('.new-tab-btn').style.display = 'none'; // Hide the button after clicking
-            document.querySelector('.iframe-btn').style.display = 'none'; // Hide the other button after one is clicked
+            iframe.requestFullscreen();
+            hideButtons();
+        }
+
+        function toggleFullScreen() {
+            const iframe = document.getElementById('contentFrame');
+            if (iframe.requestFullscreen) {
+                iframe.requestFullscreen();
+            } else if (iframe.mozRequestFullScreen) { /* Firefox */
+                iframe.mozRequestFullScreen();
+            } else if (iframe.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+                iframe.webkitRequestFullscreen();
+            } else if (iframe.msRequestFullscreen) { /* IE/Edge */
+                iframe.msRequestFullscreen();
+            }
+        }
+
+        function hideButtons() {
+            document.querySelector('.new-tab-btn').style.display = 'none'; // Hide the New tab button
+            document.querySelector('.iframe-btn').style.display = 'none'; // Hide the Iframe button
+            document.querySelector('.fullscreen-btn').style.display = 'none'; // Hide the Fullscreen button
         }
     </script>
 </body>
