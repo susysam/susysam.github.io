@@ -5,133 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game+Apps</title>
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            text-align: center;
-            margin: 20px;
-            background-color: #171717; /* Dark background */
-            color: #fff;
-        }
-
-        .container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .button {
-            padding: 15px 30px;
-            font-size: 24px;
-            background-color: #6C0BA9; /* Purple */
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: background-color 0.3s ease; /* Smooth transition for background color */
-            position: relative;
-            overflow: hidden;
-        }
-
-        .button::after {
-            content: "";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 300%;
-            height: 300%;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            transition: all 0.3s ease;
-            transform: translate(-50%, -50%) scale(0);
-            z-index: 0;
-        }
-
-        .button:hover::after {
-            transform: translate(-50%, -50%) scale(3);
-        }
-
-        .button span {
-            position: relative;
-            z-index: 1;
-        }
-
-        .button:hover {
-            background-color: #4F0672; /* Darker purple on hover */
-        }
-
-        .iframe-container {
-            margin-top: 20px;
-            position: relative;
-            width: 100%;
-            height: 80vh; /* Adjust height as needed */
-        }
-
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        .loading-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1;
-        }
-
-        .loading-text {
-            color: #fff;
-            font-size: 24px;
-        }
-
-        .fade-out {
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
+        /* Your CSS styles here */
     </style>
 </head>
 <body>
 
-    <!-- Back Button -->
-    <div class="button" onclick="goBack()"><span>Back</span></div>
+    <!-- Your HTML content here -->
 
     <div class="container">
         <!-- Buttons for Games -->
         <div class="game-buttons">
             <button class="button" onclick="openGame('A1R')"><span>A1R</span></button>
-            <button class="button" onclick="openGame('Roblox')"><span>Roblox</span></button>
-            <button class="button" onclick="openGame('Monkey Mart')"><span>Monkey Mart</span></button>
-            <button class="button" onclick="openGame('FNF')"><span>FNF</span></button>
-            <button class="button" onclick="openGame('Rocket League')"><span>Rocket League</span></button>
-            <button class="button" onclick="openGame('Fortnite')"><span>Fortnite</span></button>
-            <button class="button" onclick="openGame('Andriod OS')"><span>Andriod OS</span></button>
-            <!-- Button for YouTube -->
-            <button class="button" onclick="openYouTube()"><span>YouTube</span></button>
+            <!-- Add more buttons here -->
         </div>
 
         <!-- Buttons for Apps -->
         <div class="app-buttons">
             <button class="button" onclick="openApp('Ai')"><span>Ai</span></button>
-            <button class="button" onclick="openApp('Discord')"><span>Discord</span></button>
-            <button class="button" onclick="openApp('Netflix')"><span>Netflix</span></button>
-            <button class="button" onclick="openApp('Disney+')"><span>Disney+</span></button>
-            <button class="button" onclick="openApp('Flixhq')"><span>Flixhq</span></button>
-            <button class="button" onclick="openApp('Xivi')"><span>Xivi</span></button>
+            <!-- Add more buttons here -->
         </div>
     </div>
 
     <!-- Iframe container -->
     <div class="iframe-container">
-        <div class="loading-overlay">
+        <div class="loading-overlay" id="loading-overlay">
             <span class="loading-text">Loading...</span>
         </div>
         <iframe id="gameAppFrame" src="" frameborder="0"></iframe>
@@ -144,85 +41,33 @@
 
         function openGame(name) {
             var iframe = document.getElementById('gameAppFrame');
-            var loadingOverlay = document.querySelector('.loading-overlay');
-            loadingOverlay.style.display = 'flex'; // Show loading overlay
-            iframe.src = getGameLink(name);
-            iframe.onload = function() {
-                loadingOverlay.style.display = 'none'; // Hide loading overlay after iframe content loads
-            };
-            showIframe();
+            var loadingOverlay = document.getElementById('loading-overlay');
+            loadingOverlay.style.display = 'block'; // Show loading overlay
+            iframe.style.display = 'none'; // Hide iframe initially
+            setTimeout(function() {
+                iframe.src = getGameLink(name);
+                iframe.onload = function() {
+                    loadingOverlay.style.display = 'none'; // Hide loading overlay after iframe content loads
+                    iframe.style.display = 'block'; // Show iframe after content loads
+                };
+            }, 3000); // Show "Loading..." for 3 seconds before loading iframe content
         }
 
         function openApp(name) {
             var iframe = document.getElementById('gameAppFrame');
-            var loadingOverlay = document.querySelector('.loading-overlay');
-            loadingOverlay.style.display = 'flex'; // Show loading overlay
-            iframe.src = getAppLink(name);
-            iframe.onload = function() {
-                loadingOverlay.style.display = 'none'; // Hide loading overlay after iframe content loads
-            };
-            showIframe();
+            var loadingOverlay = document.getElementById('loading-overlay');
+            loadingOverlay.style.display = 'block'; // Show loading overlay
+            iframe.style.display = 'none'; // Hide iframe initially
+            setTimeout(function() {
+                iframe.src = getAppLink(name);
+                iframe.onload = function() {
+                    loadingOverlay.style.display = 'none'; // Hide loading overlay after iframe content loads
+                    iframe.style.display = 'block'; // Show iframe after content loads
+                };
+            }, 3000); // Show "Loading..." for 3 seconds before loading iframe content
         }
 
-        function showIframe() {
-            var container = document.querySelector('.container');
-            container.classList.add('fade-out');
-            setTimeout(() => {
-                container.style.display = 'none';
-            }, 500);
-        }
-
-        function getGameLink(name) {
-            switch (name) {
-                case 'A1R':
-                    return 'https://a1rdrop.netlify.app/games';
-                case 'Roblox':
-                    return 'https://nowgg.me/play/roblox-corporation/5349/roblox';
-                case 'Monkey Mart':
-                    return 'https://skooldeliver.github.io/skool-games/monkey-mart/';
-                case 'FNF':
-                    return 'https://www.snokido.com/game/friday-night-funkin';
-                case 'Rocket League':
-                    return 'https://play.geforcenow.com/mall/';
-                case 'Fortnite':
-                    return 'https://play.geforcenow.com/mall/';
-                case 'Andriod OS':
-                    return 'https://nowgg.me/play/uncube/7074/now';
-                default:
-                    return '';
-            }
-        }
-
-        function getAppLink(name) {
-            switch (name) {
-                case 'Ai':
-                    return 'https://www.blackbox.ai';
-                case 'Discord':
-                    return 'https://discord.com/app';
-                case 'Netflix':
-                    return 'https://netflix.com/login';
-                case 'Disney+':
-                    return 'https://www.disneyplus.com';
-                case 'Flixhq':
-                    return 'https://flixhq.to';
-                case 'Xivi':
-                    return 'https://xivi.me/login.php';
-                default:
-                    return '';
-            }
-        }
-
-        // Function to open YouTube link
-        function openYouTube() {
-            var iframe = document.getElementById('gameAppFrame');
-            var loadingOverlay = document.querySelector('.loading-overlay');
-            loadingOverlay.style.display = 'flex'; // Show loading overlay
-            iframe.src = 'https://i.hectorhector.com/pframe.html?frame=https:/youtube.com';
-            iframe.onload = function() {
-                loadingOverlay.style.display = 'none'; // Hide loading overlay after iframe content loads
-            };
-            showIframe();
-        }
+        // Add more functions and event listeners as needed
     </script>
 
 </body>
