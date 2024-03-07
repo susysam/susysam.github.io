@@ -1,109 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Links</title>
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
+        html {
+            margin-top: 15px;
+            background-color: #000000;
+            color: white;
+            font-family: 'Rubik', sans-serif;
             text-align: center;
-            margin: 20px;
-            background-color: #161616;
-            color: #fff;
         }
-
         h1 {
-            color: #ffcc00;
+            position: absolute;
+            top: 45%;
+            right: 50%;
+            transform: translate(50%);
+            font-weight: 100;
+            font-size: 1.5rem;
         }
-
-        .section {
-            margin-top: 50px;
-        }
-
         .button {
-            margin: 10px;
-            padding: 10px 20px;
-            background-color: #1f1f1f;
-            border: 3px solid #fff;
-            border-radius: 10px;
+            padding: 20px 40px;
+            height: auto;
+            border: none;
+            color: white;
+            text-align: center;
             text-decoration: none;
-            color: #fff;
             display: inline-block;
-            transition: all 0.3s ease;
+            font-size: 1.3rem;
+            font-family: 'Rubik', sans-serif;
             cursor: pointer;
-            font-size: 18px;
-            outline: none;
+            background-color: #f75dfc;
+            border-radius: 20px;
+            transition: opacity 0.3s ease;
+            transition: transform 0.1s ease;
+            margin-top: 20px;
         }
 
         .button:hover {
-            background-color: #6C0BA9;
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-        }
-
-        .button:focus {
-            box-shadow: 0 0 0 3px #6C0BA9;
-        }
-
-        iframe {
-            width: 90%;
-            height: 90vh;
-            margin: 20px auto;
-            border: none;
-        }
-
-        .fullscreen-btn {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #6C0BA9;
-            border: 3px solid #fff;
-            border-radius: 10px;
-            text-decoration: none;
-            color: #fff;
-            transition: all 0.3s ease;
-            font-size: 18px;
-            outline: none;
-            display: none;
-        }
-
-        .fullscreen-btn:hover {
-            background-color: #1f1f1f;
+            transform: scale(1.05);
         }
     </style>
 </head>
-
 <body>
-    <h1>Links</h1>
-
-    <!-- Back Button -->
-    <div class="button" onclick="goBack()"><span>Back</span></div>
-
-    <!-- Button Section -->
-    <div class="section">
-        <h2>Choose a Category 🚀</h2>
-        <button class="button" onclick="openCategory('Interstellar')">Interstellar</button>
-        <button class="button" onclick="openCategory('ChromeOS')">ChromeOS</button>
-        <button class="button" onclick="openCategory('Utopia')">Utopia</button>
-        <button class="button" onclick="openCategory('PlexileArcade')">Plexile Arcade</button>
-        <button class="button" onclick="openCategory('More')">More</button>
-    </div>
-
-    <!-- Initially hidden buttons -->
-    <button class="new-tab-btn" onclick="openInNewTab()">Open link in New tab</button>
-    <button class="iframe-btn" onclick="openInIframe()">Open link in Iframe</button>
-    <button class="fullscreen-btn" onclick="toggleFullScreen()">Fullscreen</button>
-
-    <iframe id="contentFrame"></iframe>
+    <h1>Press [Enter] or tap/click anywhere to redirect</h1>
+    
+    <button class="button" onclick="openCategory('Interstellar')">Interstellar</button>
+    <button class="button" onclick="openCategory('ChromeOS')">ChromeOS</button>
+    <button class="button" onclick="openCategory('Utopia')">Utopia</button>
+    <button class="button" onclick="openCategory('PlexileArcade')">Plexile Arcade</button>
+    <button class="button" onclick="openCategory('More')">More</button>
 
     <script>
-        let currentLink = '';
-
-        function goBack() {
-            window.location.href = "start27.html";
-        }
-
         function openCategory(category) {
             const categories = {
                 'Interstellar': [
@@ -145,44 +94,14 @@
             const links = categories[category];
             if (links) {
                 const randomIndex = Math.floor(Math.random() * links.length);
-                currentLink = links[randomIndex];
-                document.querySelector('.new-tab-btn').style.display = 'inline-block';
-                document.querySelector('.iframe-btn').style.display = 'inline-block';
-                document.querySelector('.fullscreen-btn').style.display = 'inline-block'; // Show the Fullscreen button
+                const currentLink = links[randomIndex];
+                openInNewTab(currentLink);
             }
         }
 
-        function openInNewTab() {
-            window.open(currentLink, '_blank');
-            hideButtons();
-        }
-
-        function openInIframe() {
-            const iframe = document.getElementById('contentFrame');
-            iframe.src = currentLink;
-            iframe.requestFullscreen();
-            hideButtons();
-        }
-
-        function toggleFullScreen() {
-            const iframe = document.getElementById('contentFrame');
-            if (iframe.requestFullscreen) {
-                iframe.requestFullscreen();
-            } else if (iframe.mozRequestFullScreen) { /* Firefox */
-                iframe.mozRequestFullScreen();
-            } else if (iframe.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
-                iframe.webkitRequestFullscreen();
-            } else if (iframe.msRequestFullscreen) { /* IE/Edge */
-                iframe.msRequestFullscreen();
-            }
-        }
-
-        function hideButtons() {
-            document.querySelector('.new-tab-btn').style.display = 'none'; // Hide the New tab button
-            document.querySelector('.iframe-btn').style.display = 'none'; // Hide the Iframe button
-            document.querySelector('.fullscreen-btn').style.display = 'none'; // Hide the Fullscreen button
+        function openInNewTab(url) {
+            window.open(url, '_blank');
         }
     </script>
 </body>
-
 </html>
