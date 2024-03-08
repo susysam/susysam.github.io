@@ -82,6 +82,18 @@
                 return;
             }
 
+            // Check if it's a Google search
+            if (searchQuery.toLowerCase().includes("google.com/search?q=")) {
+                window.location.href = "https://www.google.com/search?q=" + encodeURIComponent(searchQuery);
+                return;
+            }
+
+            // Check if it's a valid URL
+            if (!/^((https?:\/\/)?(www\.)?[a-zA-Z0-9]+\.[a-zA-Z]{2,}(\/.*)?)$/.test(searchQuery)) {
+                alert("Invalid URL. Please enter a valid website URL or Google search query.");
+                return;
+            }
+
             // Redirect to the entered website URL
             window.location.href = searchQuery;
         }
