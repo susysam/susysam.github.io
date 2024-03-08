@@ -118,19 +118,13 @@
                 return; // Do nothing if the input is empty
             }
 
-            // Check if the search query is a valid URL or a Google search query
-            if (!isValidUrl(searchQuery)) {
+            // Check if the search query contains only letters (Google search)
+            if (/^[a-zA-Z]+$/.test(searchQuery)) {
                 // Redirect to Google search with the query
-                window.location.href = `https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`;
-            }
-        }
-
-        function isValidUrl(url) {
-            try {
-                new URL(url);
-                return true; // Return true if the URL is valid
-            } catch (error) {
-                return false; // Return false if the URL is invalid
+                window.open(`https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`, '_blank');
+            } else {
+                // Redirect to the entered website URL
+                window.open(searchQuery, '_blank');
             }
         }
     </script>
