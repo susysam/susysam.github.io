@@ -78,24 +78,27 @@
             
             // Check if the input field is empty
             if (!searchQuery) {
-                alert("Please enter a website URL.");
+                alert("Please enter a website URL or Google search query.");
                 return;
             }
 
-            // Check if it's a Google search
-            if (searchQuery.toLowerCase().includes("google.com/search?q=")) {
-                window.location.href = "https://www.google.com/search?q=" + encodeURIComponent(searchQuery);
-                return;
+            // Check if the search query is a valid URL or a Google search query
+            if (isValidUrl(searchQuery)) {
+                // Redirect to the entered website URL
+                window.location.href = searchQuery;
+            } else {
+                // Redirect to Google search with the query
+                window.location.href = `https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`;
             }
+        }
 
-            // Check if it's a valid URL
-            if (!/^((https?:\/\/)?(www\.)?[a-zA-Z0-9]+\.[a-zA-Z]{2,}(\/.*)?)$/.test(searchQuery)) {
-                alert("Invalid URL. Please enter a valid website URL or Google search query.");
-                return;
+        function isValidUrl(url) {
+            try {
+                new URL(url);
+                return true;
+            } catch (error) {
+                return false;
             }
-
-            // Redirect to the entered website URL
-            window.location.href = searchQuery;
         }
 
         function openPreviousPage() {
