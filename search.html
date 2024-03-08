@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search</title>
+    <title>Game Search</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,11 +12,9 @@
             text-align: center;
             margin-top: 50px;
         }
-
         .input-container {
             margin-bottom: 20px;
         }
-
         input[type="text"] {
             padding: 10px;
             font-size: 16px;
@@ -24,7 +22,6 @@
             border: 1px solid #ccc;
             width: 300px;
         }
-
         button {
             padding: 10px 20px;
             font-size: 16px;
@@ -35,39 +32,63 @@
             cursor: pointer;
             margin-right: 10px;
         }
-
         button:hover {
             background-color: #0056b3;
         }
+        .steps {
+            margin-top: 50px;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #6C0BA9;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+        .button:hover {
+            background-color: #4F0672;
+        }
     </style>
 </head>
-
 <body>
     <h1>Game Search</h1>
 
     <div class="input-container">
-        <input type="text" id="searchInput" placeholder="Enter a game name or URL" onkeydown="handleKeyDown(event)">
-        <button onclick="searchGame()">Search</button>
+        <label for="search-query">Search for a website:</label><br>
+        <input type="text" id="search-query" placeholder="Enter website URL"><br><br>
+    </div>
+    <button onclick="searchWebsite()">Search</button>
+
+    <div class="steps">
+        <h2>How to Use:</h2>
+        <p>Step 1: Enter the URL of the website you want to visit.</p>
+        <p>Step 2: Click the "Search" button.</p>
     </div>
 
+    <!-- Back Button -->
+    <div class="button" onclick="openPreviousPage()"><span>Back</span></div>
+
     <script>
-        function searchGame() {
-            var searchInput = document.getElementById("searchInput").value.trim();
-            if (searchInput.startsWith("http://") || searchInput.startsWith("https://")) {
-                window.location.href = searchInput; // Directly go to the entered URL
-            } else {
-                // Perform a search operation (if applicable) based on the entered game name
-                alert("Searching for game: " + searchInput);
-                // Replace this alert with your search logic
+        function searchWebsite() {
+            // Get the input value
+            var searchQuery = document.getElementById("search-query").value.trim();
+            
+            // Check if the input field is empty
+            if (!searchQuery) {
+                alert("Please enter a website URL.");
+                return;
             }
+
+            // Redirect to the entered website URL
+            window.location.href = searchQuery;
         }
 
-        function handleKeyDown(event) {
-            if (event.key === "Enter") {
-                searchGame();
-            }
+        function openPreviousPage() {
+            window.location.href = "start27.html";
         }
     </script>
 </body>
-
 </html>
