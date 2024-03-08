@@ -56,7 +56,6 @@
 
         /* Added styles for the new buttons */
         .new-tab-btn,
-        .iframe-btn,
         .fullscreen-btn {
             margin-top: 20px;
             padding: 10px 20px;
@@ -72,7 +71,6 @@
         }
 
         .new-tab-btn:hover,
-        .iframe-btn:hover,
         .fullscreen-btn:hover {
             background-color: #1f1f1f;
         }
@@ -97,16 +95,12 @@
 
     <!-- Initially hidden buttons -->
     <button class="new-tab-btn" onclick="openInNewTab()">Open link in New tab</button>
-    <button class="iframe-btn" onclick="openInIframe()">Open link in Iframe</button>
-
-    <!-- Fullscreen button -->
     <button class="fullscreen-btn" onclick="toggleFullscreen()">Fullscreen</button>
 
     <iframe id="contentFrame"></iframe>
 
     <script>
         let currentLink = '';
-        let currentIframe = null;
 
         function goBack() {
             window.location.href = "start27.html";
@@ -155,7 +149,7 @@
                 currentLink = links[randomIndex];
                 document.getElementById('contentFrame').src = currentLink;
                 document.querySelector('.new-tab-btn').style.display = 'inline-block';
-                document.querySelector('.iframe-btn').style.display = 'inline-block';
+                document.querySelector('.fullscreen-btn').style.display = 'inline-block';
             }
         }
 
@@ -163,19 +157,14 @@
             window.open(currentLink, '_blank');
         }
 
-        function openInIframe() {
-            document.getElementById('contentFrame').src = currentLink;
-        }
-
         function toggleFullscreen() {
-            if (currentIframe) {
-                if (currentIframe.requestFullscreen) {
-                    currentIframe.requestFullscreen();
-                } else if (currentIframe.webkitRequestFullscreen) { /* Safari */
-                    currentIframe.webkitRequestFullscreen();
-                } else if (currentIframe.msRequestFullscreen) { /* IE11 */
-                    currentIframe.msRequestFullscreen();
-                }
+            const iframe = document.getElementById('contentFrame');
+            if (iframe.requestFullscreen) {
+                iframe.requestFullscreen();
+            } else if (iframe.webkitRequestFullscreen) { /* Safari */
+                iframe.webkitRequestFullscreen();
+            } else if (iframe.msRequestFullscreen) { /* IE11 */
+                iframe.msRequestFullscreen();
             }
         }
     </script>
