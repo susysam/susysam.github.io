@@ -97,19 +97,16 @@
 
     <div class="input-container">
         <div class="search-box">
-            <input type="text" id="search-query" placeholder="Enter website URL">
+            <input type="text" id="search-query" placeholder="Enter website URL or search query">
             <button onclick="searchWebsite()">Search</button>
         </div>
     </div>
 
     <div class="steps">
         <h2>How to Use:</h2>
-        <p>Step 1: Enter the URL of the website you want to visit.</p>
+        <p>Step 1: Enter the URL of the website you want to visit or a search query.</p>
         <p>Step 2: Click the "Search" button.</p>
     </div>
-
-    <!-- Back Button -->
-    <div class="button" onclick="openPreviousPage()"><span>Back</span></div>
 
     <script>
         function searchWebsite() {
@@ -118,15 +115,11 @@
 
             // Check if the input field is empty
             if (!searchQuery) {
-                alert("Please enter a website URL or Google search query.");
-                return;
+                return; // Do nothing if the input is empty
             }
 
             // Check if the search query is a valid URL or a Google search query
-            if (isValidUrl(searchQuery)) {
-                // Redirect to the entered website URL
-                window.location.href = searchQuery;
-            } else {
+            if (!isValidUrl(searchQuery)) {
                 // Redirect to Google search with the query
                 window.location.href = `https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`;
             }
@@ -135,14 +128,10 @@
         function isValidUrl(url) {
             try {
                 new URL(url);
-                return true;
+                return true; // Return true if the URL is valid
             } catch (error) {
-                return false;
+                return false; // Return false if the URL is invalid
             }
-        }
-
-        function openPreviousPage() {
-            window.location.href = "start27.html";
         }
     </script>
 </body>
