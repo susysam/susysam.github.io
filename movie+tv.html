@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -87,30 +86,11 @@
                 return;
             }
 
-            // Generate the API endpoint based on media type and IMDb ID
-            var apiUrl = "https://vidsrc.xyz/embed/" + mediaType;
-            if (mediaType === 'movie') {
-                apiUrl += "?imdb=" + imdbId;
-            } else if (mediaType === 'tv') {
-                apiUrl += "?imdb=" + imdbId;
-            }
+            // Generate the link based on media type
+            var generatedLink = "https://vidsrc.to/embed/" + mediaType + "/" + imdbId;
 
-            // Fetch the embed URL from the API
-            fetch(apiUrl)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.text();
-                })
-                .then(embedUrl => {
-                    // Redirect to the generated embed URL
-                    window.location.href = embedUrl;
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('An error occurred. Please try again later.');
-                });
+            // Redirect to the generated link
+            window.location.href = generatedLink;
         }
 
         function openAnime() {
