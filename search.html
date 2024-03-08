@@ -1,144 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search</title>
     <style>
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: Arial, sans-serif;
             background-color: #f3f3f3;
             text-align: center;
             margin-top: 50px;
         }
-
         .input-container {
             margin-bottom: 20px;
         }
-
-        .search-box {
-            display: inline-block;
-            position: relative;
-        }
-
-        .search-box input[type="text"] {
+        input[type="text"] {
             padding: 10px;
             font-size: 16px;
             border-radius: 5px;
             border: 1px solid #ccc;
             width: 300px;
         }
-
-        .search-box button {
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            padding: 10px;
+        button {
+            padding: 10px 20px;
             font-size: 16px;
-            border-radius: 0 5px 5px 0;
+            border-radius: 5px;
             background-color: #007bff;
             color: #fff;
             border: none;
             cursor: pointer;
+            margin-right: 10px;
         }
-
-        .search-box button:hover {
+        button:hover {
             background-color: #0056b3;
         }
-
-        .iframe-container {
-            margin-top: 20px;
-            position: relative;
-            width: 100%;
-            height: 500px;
+        .steps {
+            margin-top: 50px;
         }
-
-        .iframe-container iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        .fullscreen-btn {
-            display: none;
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            padding: 5px 10px;
-            background-color: #007bff;
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #6C0BA9;
             color: #fff;
-            border: none;
             border-radius: 5px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
         }
-
-        .fullscreen-btn:hover {
-            background-color: #0056b3;
+        .button:hover {
+            background-color: #4F0672;
         }
     </style>
 </head>
-
 <body>
     <h1>Search</h1>
 
     <div class="input-container">
-        <div class="search-box">
-            <input type="text" id="search-query" placeholder="Enter website URL or search query">
-            <button onclick="searchWebsite()">Search</button>
-        </div>
+        <label for="search">Search:</label><br>
+        <input type="text" id="search" placeholder="Example: google.com"><br><br>
     </div>
-
-    <div class="iframe-container" id="iframe-container">
-        <!-- Iframe will be added dynamically -->
-    </div>
+    <button onclick="openNewTab()">Search</button>
 
     <script>
-        function searchWebsite() {
-            var searchQuery = document.getElementById("search-query").value.trim();
-            var iframeContainer = document.getElementById("iframe-container");
+        function openNewTab() {
+            // Get the input value
+            var search = document.getElementById("search").value.trim();
 
-            if (!searchQuery) {
+            // Check if the input field is empty
+            if (!search) {
                 return;
             }
 
-            if (isValidUrl(searchQuery)) {
-                var iframe = document.createElement("iframe");
-                iframe.src = searchQuery;
-                iframe.setAttribute("allowfullscreen", "");
-                iframeContainer.innerHTML = "";
-                iframeContainer.appendChild(iframe);
+            // Open the requested URL in a new tab with the name "about:blank"
+            var newTab = window.open("about:blank");
+            newTab.location.href = search;
 
-                var fullscreenBtn = document.createElement("button");
-                fullscreenBtn.className = "fullscreen-btn";
-                fullscreenBtn.textContent = "Fullscreen";
-                fullscreenBtn.onclick = function () {
-                    toggleFullScreen(iframe);
-                };
-                iframeContainer.appendChild(fullscreenBtn);
-            } else {
-                window.location.href = `https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`;
-            }
-        }
-
-        function isValidUrl(url) {
-            try {
-                new URL(url);
-                return true;
-            } catch (error) {
-                return false;
-            }
-        }
-
-        function toggleFullScreen(iframe) {
-            if (!document.fullscreenElement) {
-                iframe.requestFullscreen();
-            } else {
-                document.exitFullscreen();
-            }
+            // Close the current tab
+            window.close();
         }
     </script>
 </body>
-
 </html>
