@@ -166,18 +166,22 @@
                 currentIframe.src = currentLink;
                 currentIframe.id = 'contentFrame';
                 document.body.appendChild(currentIframe);
-                document.querySelector('.new-tab-btn').style.display = 'inline-block';
-                document.querySelector('.iframe-btn').style.display = 'none';
+            } else {
+                currentIframe.src = currentLink;
             }
+            document.querySelector('.new-tab-btn').style.display = 'inline-block';
+            document.querySelector('.iframe-btn').style.display = 'none';
         }
 
         function toggleFullscreen() {
-            if (currentIframe.requestFullscreen) {
-                currentIframe.requestFullscreen();
-            } else if (currentIframe.webkitRequestFullscreen) { /* Safari */
-                currentIframe.webkitRequestFullscreen();
-            } else if (currentIframe.msRequestFullscreen) { /* IE11 */
-                currentIframe.msRequestFullscreen();
+            if (currentIframe) {
+                if (currentIframe.requestFullscreen) {
+                    currentIframe.requestFullscreen();
+                } else if (currentIframe.webkitRequestFullscreen) { /* Safari */
+                    currentIframe.webkitRequestFullscreen();
+                } else if (currentIframe.msRequestFullscreen) { /* IE11 */
+                    currentIframe.msRequestFullscreen();
+                }
             }
         }
     </script>
