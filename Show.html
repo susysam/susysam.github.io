@@ -49,33 +49,14 @@
 
         iframe {
             width: 90%;
-            height: 90vh; /* Increased height for better visibility */
+            height: 90vh;
             margin: 20px auto;
             border: none;
         }
 
         /* Added styles for the new buttons */
         .new-tab-btn,
-        .iframe-btn {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #6C0BA9;
-            border: 3px solid #fff;
-            border-radius: 10px;
-            text-decoration: none;
-            color: #fff;
-            transition: all 0.3s ease;
-            font-size: 18px;
-            outline: none;
-            display: none; /* Initially hidden */
-        }
-
-        .new-tab-btn:hover,
-        .iframe-btn:hover {
-            background-color: #1f1f1f;
-        }
-
-        /* Fullscreen button */
+        .iframe-btn,
         .fullscreen-btn {
             margin-top: 20px;
             padding: 10px 20px;
@@ -90,6 +71,8 @@
             display: none; /* Initially hidden */
         }
 
+        .new-tab-btn:hover,
+        .iframe-btn:hover,
         .fullscreen-btn:hover {
             background-color: #1f1f1f;
         }
@@ -170,19 +153,6 @@
             if (links) {
                 const randomIndex = Math.floor(Math.random() * links.length);
                 currentLink = links[randomIndex];
-                // Remove previous iframe if exists
-                if (currentIframe) {
-                    document.getElementById('contentFrame').removeChild(currentIframe);
-                }
-                const iframe = document.createElement('iframe');
-                iframe.src = currentLink;
-                iframe.id = 'currentIframe';
-                document.getElementById('contentFrame').appendChild(iframe);
-                currentIframe = iframe;
-                // Display buttons
-                document.querySelector('.new-tab-btn').style.display = 'inline-block';
-                document.querySelector('.iframe-btn').style.display = 'inline-block';
-                document.querySelector('.fullscreen-btn').style.display = 'inline-block';
             }
         }
 
@@ -191,8 +161,14 @@
         }
 
         function openInIframe() {
-            currentIframe.src = currentLink;
-            document.querySelector('.fullscreen-btn').style.display = 'inline-block';
+            if (!currentIframe) {
+                currentIframe = document.createElement('iframe');
+                currentIframe.src = currentLink;
+                currentIframe.id = 'contentFrame';
+                document.body.appendChild(currentIframe);
+                document.querySelector('.new-tab-btn').style.display = 'inline-block';
+                document.querySelector('.iframe-btn').style.display = 'none';
+            }
         }
 
         function toggleFullscreen() {
