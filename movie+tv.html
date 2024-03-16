@@ -19,6 +19,9 @@
             font-size: 36px;
             margin-bottom: 30px;
         }
+        .welcome {
+            display: none;
+        }
         .buttons-container {
             display: flex;
             justify-content: center;
@@ -39,7 +42,7 @@
             background-color: #0056b3;
         }
         .input-container {
-            display: flex;
+            display: none;
             justify-content: center;
             margin-bottom: 20px;
         }
@@ -51,6 +54,7 @@
             width: 300px;
         }
         .steps {
+            display: none;
             margin-top: 50px;
             text-align: left;
         }
@@ -61,6 +65,14 @@
         .steps p {
             font-size: 18px;
             margin-bottom: 15px;
+        }
+        iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
+            margin-top: 30px;
         }
     </style>
 </head>
@@ -83,13 +95,28 @@
             <input type="text" id="imdb-id" placeholder="Enter IMDb ID (e.g., tt1942683)">
         </div>
 
-        <div class="steps">
+        <div class="steps" id="movie-steps">
             <h2>How to Use:</h2>
-            <p>Step 1: Search for the movie or TV show on IMDb.</p>
-            <p>Step 2: Copy the IMDb ID (e.g., tt1942683).</p>
+            <p>Step 1: Search for the movie on IMDb.</p>
+            <p>Step 2: Copy the IMDb ID.</p>
             <p>Step 3: Paste the IMDb ID into the input field.</p>
-            <p>Step 4: Select 'Movie' or 'TV Show' and enjoy!</p>
+            <p>Step 4: Select 'TV Show' and enjoy!</p>
         </div>
+
+        <div class="steps" id="tv-steps">
+            <h2>How to Use:</h2>
+            <p>Step 1: Search for the TV show on IMDb.</p>
+            <p>Step 2: Copy the IMDb ID.</p>
+            <p>Step 3: Paste the IMDb ID into the input field.</p>
+            <p>Step 4: Select 'Movie' and enjoy!</p>
+        </div>
+
+        <div class="steps" id="anime-steps">
+            <h2>How to Use:</h2>
+            <p>Step 1: Select an Anime streaming link below and enjoy!</p>
+        </div>
+
+        <iframe id="media-iframe" style="display: none;"></iframe>
     </div>
 
     <script>
@@ -97,6 +124,9 @@
             var inputContainer = document.querySelector('.input-container');
             var welcomeSection = document.querySelector('.welcome');
             var buttonsContainer = document.querySelector('.buttons-container');
+            var movieSteps = document.getElementById('movie-steps');
+            var tvSteps = document.getElementById('tv-steps');
+            var animeSteps = document.getElementById('anime-steps');
 
             inputContainer.style.display = 'block';
             welcomeSection.style.display = 'none';
@@ -104,6 +134,20 @@
 
             var imdbIdInput = document.getElementById('imdb-id');
             imdbIdInput.setAttribute('data-media-type', mediaType);
+
+            if (mediaType === 'movie') {
+                movieSteps.style.display = 'block';
+                tvSteps.style.display = 'none';
+                animeSteps.style.display = 'none';
+            } else if (mediaType === 'tv') {
+                movieSteps.style.display = 'none';
+                tvSteps.style.display = 'block';
+                animeSteps.style.display = 'none';
+            } else {
+                movieSteps.style.display = 'none';
+                tvSteps.style.display = 'none';
+                animeSteps.style.display = 'block';
+            }
         }
 
         function openAnime() {
@@ -130,13 +174,16 @@
                     return;
                 }
 
+                var mediaIframe = document.getElementById('media-iframe');
                 if (mediaType === 'tv') {
-                    var embedCode = '<iframe src="https://vidsrc.me/embed/tv?imdb=' + imdbId + '" style="width: 100%; height: 100%;" frameborder="0" referrerpolicy="origin" allowfullscreen></iframe>';
+                    mediaIframe.src = "https://vidsrc.me/embed/tv?imdb=" + imdbId;
                 } else if (mediaType === 'movie') {
-                    var embedCode = '<iframe src="https://vidsrc.me/embed/movie?imdb=' + imdbId + '" style="width: 100%; height: 100%;" frameborder="0" referrerpolicy="origin" allowfullscreen></iframe>';
+                    mediaIframe.src = "https://vidsrc.me/embed/movie?imdb=" + imdbId;
                 }
-                
-                document.body.innerHTML = embedCode;
+                mediaIframe.style.display = 'block';
+
+                // Hide input container after submitting
+                document.querySelector('.input-container').style.display = 'none';
             }
         });
     </script>
