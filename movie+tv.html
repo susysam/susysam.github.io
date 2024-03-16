@@ -11,90 +11,102 @@
             text-align: center;
             margin-top: 50px;
         }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 36px;
+            margin-bottom: 30px;
+        }
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        .button {
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 8px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: background-color 0.3s ease;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
         .input-container {
+            display: flex;
+            justify-content: center;
             margin-bottom: 20px;
         }
         input[type="text"] {
-            padding: 10px;
+            padding: 15px;
             font-size: 16px;
             border-radius: 5px;
             border: 1px solid #ccc;
             width: 300px;
         }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
         .steps {
             margin-top: 50px;
+            text-align: left;
         }
-        .button {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #6C0BA9;
-            color: #fff;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-top: 10px;
+        .steps h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
         }
-        .button:hover {
-            background-color: #4F0672;
+        .steps p {
+            font-size: 18px;
+            margin-bottom: 15px;
         }
     </style>
 </head>
 <body>
-    <h1>Entertainment Player</h1>
+    <div class="container">
+        <h1>Entertainment Player</h1>
 
-    <p>Reminder: If anime is blocked, go to links and type in this link: <a href="https://kaido.to/">https://kaido.to/</a></p>
+        <div class="welcome">
+            <h2>Welcome!</h2>
+            <p>Please select what you want to watch:</p>
+        </div>
 
-    <div class="input-container">
-        <label for="imdb-id">IMDb ID (with "tt"):</label><br>
-        <input type="text" id="imdb-id" placeholder="Example: tt1942683"><br><br>
+        <div class="buttons-container">
+            <button onclick="selectMedia('movie')">Movie</button>
+            <button onclick="selectMedia('tv')">TV Show</button>
+            <button onclick="openAnime()">Anime</button>
+        </div>
+
+        <div class="input-container">
+            <input type="text" id="imdb-id" placeholder="Enter IMDb ID (e.g., tt1942683)">
+        </div>
+
+        <div class="steps">
+            <h2>How to Use:</h2>
+            <p>Step 1: Search for the movie or TV show on IMDb.</p>
+            <p>Step 2: Copy the IMDb ID (e.g., tt1942683).</p>
+            <p>Step 3: Paste the IMDb ID into the input field.</p>
+            <p>Step 4: Select 'Movie' or 'TV Show' and enjoy!</p>
+        </div>
     </div>
-    <button onclick="findMedia('movie')">Find Movie</button>
-    <button onclick="findMedia('tv')">Find TV Show</button>
-    <button onclick="openAnime()">Anime</button>
-
-    <div class="steps">
-        <h2>How to Use:</h2>
-        <p>Step 1: Search up IMDb and find the TV-show or movie you want.</p>
-        <p>Step 2: Copy the IMDb ID (with "tt").</p>
-        <p>Step 3: Paste the IMDb ID into the input field and click "Find Movie" or "Find TV Show".</p>
-    </div>
-
-    <!-- Back Button -->
-    <div class="button" onclick="openPreviousPage()"><span>Back</span></div>
 
     <script>
-        function findMedia(mediaType) {
-            // Get the input value
-            var imdbId = document.getElementById("imdb-id").value.trim();
-            
-            // Check if the input field is empty
-            if (!imdbId) {
-                alert("Please fill in the IMDb ID field.");
-                return;
-            }
+        function selectMedia(mediaType) {
+            var inputContainer = document.querySelector('.input-container');
+            var welcomeSection = document.querySelector('.welcome');
+            var buttonsContainer = document.querySelector('.buttons-container');
 
-            // Generate the link based on media type
-            var generatedLink = "https://vidsrc.to/embed/" + mediaType + "/" + imdbId;
+            inputContainer.style.display = 'block';
+            welcomeSection.style.display = 'none';
+            buttonsContainer.style.display = 'none';
 
-            // Redirect to the generated link
-            window.location.href = generatedLink;
+            var imdbIdInput = document.getElementById('imdb-id');
+            imdbIdInput.setAttribute('data-media-type', mediaType);
         }
 
         function openAnime() {
-            // Array of Anime streaming links
             var animeLinks = [
                 "https://unime.vercel.app/eng",
                 "https://kitsunee.me/",
@@ -102,17 +114,31 @@
                 "https://kaido.to/"
             ];
 
-            // Randomly select an Anime streaming link
             var randomIndex = Math.floor(Math.random() * animeLinks.length);
             var selectedAnimeLink = animeLinks[randomIndex];
 
-            // Redirect to the selected Anime streaming link
             window.location.href = selectedAnimeLink;
         }
 
-        function openPreviousPage() {
-            window.location.href = "start27.html";
-        }
+        document.getElementById('imdb-id').addEventListener('keyup', function(event) {
+            if (event.keyCode === 13) {
+                var mediaType = this.getAttribute('data-media-type');
+                var imdbId = this.value.trim();
+                
+                if (!imdbId) {
+                    alert("Please fill in the IMDb ID field.");
+                    return;
+                }
+
+                if (mediaType === 'tv') {
+                    var embedCode = '<iframe src="https://vidsrc.me/embed/tv?imdb=' + imdbId + '" style="width: 100%; height: 100%;" frameborder="0" referrerpolicy="origin" allowfullscreen></iframe>';
+                } else if (mediaType === 'movie') {
+                    var embedCode = '<iframe src="https://vidsrc.me/embed/movie?imdb=' + imdbId + '" style="width: 100%; height: 100%;" frameborder="0" referrerpolicy="origin" allowfullscreen></iframe>';
+                }
+                
+                document.body.innerHTML = embedCode;
+            }
+        });
     </script>
 </body>
 </html>
