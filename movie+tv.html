@@ -19,9 +19,6 @@
             font-size: 36px;
             margin-bottom: 30px;
         }
-        .welcome {
-            display: none;
-        }
         .buttons-container {
             display: flex;
             justify-content: center;
@@ -54,9 +51,9 @@
             width: 300px;
         }
         .steps {
-            display: none;
             margin-top: 50px;
             text-align: left;
+            display: none;
         }
         .steps h2 {
             font-size: 24px;
@@ -66,13 +63,16 @@
             font-size: 18px;
             margin-bottom: 15px;
         }
+        .iframe-container {
+            display: none;
+            margin-top: 50px;
+        }
         iframe {
             width: 100%;
             height: 500px;
             border: none;
             border-radius: 10px;
-            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
-            margin-top: 30px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
         }
     </style>
 </head>
@@ -95,28 +95,17 @@
             <input type="text" id="imdb-id" placeholder="Enter IMDb ID (e.g., tt1942683)">
         </div>
 
-        <div class="steps" id="movie-steps">
-            <h2>How to Use:</h2>
-            <p>Step 1: Search for the movie on IMDb.</p>
-            <p>Step 2: Copy the IMDb ID.</p>
-            <p>Step 3: Paste the IMDb ID into the input field.</p>
-            <p>Step 4: Select 'TV Show' and enjoy!</p>
-        </div>
-
-        <div class="steps" id="tv-steps">
+        <div class="steps">
             <h2>How to Use:</h2>
             <p>Step 1: Search for the TV show on IMDb.</p>
             <p>Step 2: Copy the IMDb ID.</p>
             <p>Step 3: Paste the IMDb ID into the input field.</p>
-            <p>Step 4: Select 'Movie' and enjoy!</p>
+            <p>Step 4: Select 'Movie' and enjoy!.</p>
         </div>
 
-        <div class="steps" id="anime-steps">
-            <h2>How to Use:</h2>
-            <p>Step 1: Select an Anime streaming link below and enjoy!</p>
+        <div class="iframe-container">
+            <iframe id="media-iframe" src="" frameborder="0" allowfullscreen></iframe>
         </div>
-
-        <iframe id="media-iframe" style="display: none;"></iframe>
     </div>
 
     <script>
@@ -124,30 +113,16 @@
             var inputContainer = document.querySelector('.input-container');
             var welcomeSection = document.querySelector('.welcome');
             var buttonsContainer = document.querySelector('.buttons-container');
-            var movieSteps = document.getElementById('movie-steps');
-            var tvSteps = document.getElementById('tv-steps');
-            var animeSteps = document.getElementById('anime-steps');
+            var stepsSection = document.querySelector('.steps');
+            var iframeContainer = document.querySelector('.iframe-container');
 
             inputContainer.style.display = 'block';
             welcomeSection.style.display = 'none';
             buttonsContainer.style.display = 'none';
+            stepsSection.style.display = 'block';
 
             var imdbIdInput = document.getElementById('imdb-id');
             imdbIdInput.setAttribute('data-media-type', mediaType);
-
-            if (mediaType === 'movie') {
-                movieSteps.style.display = 'block';
-                tvSteps.style.display = 'none';
-                animeSteps.style.display = 'none';
-            } else if (mediaType === 'tv') {
-                movieSteps.style.display = 'none';
-                tvSteps.style.display = 'block';
-                animeSteps.style.display = 'none';
-            } else {
-                movieSteps.style.display = 'none';
-                tvSteps.style.display = 'none';
-                animeSteps.style.display = 'block';
-            }
         }
 
         function openAnime() {
@@ -174,16 +149,17 @@
                     return;
                 }
 
-                var mediaIframe = document.getElementById('media-iframe');
+                var embedCode = '';
+                
                 if (mediaType === 'tv') {
-                    mediaIframe.src = "https://vidsrc.me/embed/tv?imdb=" + imdbId;
+                    embedCode = '<iframe src="https://vidsrc.me/embed/tv?imdb=' + imdbId + '" style="width: 100%; height: 100%;" frameborder="0" referrerpolicy="origin" allowfullscreen></iframe>';
                 } else if (mediaType === 'movie') {
-                    mediaIframe.src = "https://vidsrc.me/embed/movie?imdb=" + imdbId;
+                    embedCode = '<iframe src="https://vidsrc.me/embed/movie?imdb=' + imdbId + '" style="width: 100%; height: 100%;" frameborder="0" referrerpolicy="origin" allowfullscreen></iframe>';
                 }
-                mediaIframe.style.display = 'block';
-
-                // Hide input container after submitting
-                document.querySelector('.input-container').style.display = 'none';
+                
+                document.querySelector('.iframe-container').style.display = 'block';
+                document.getElementById('media-iframe').src = '';
+                document.getElementById('media-iframe').src = 'data:text/html;charset=utf-8,' + encodeURI(embedCode);
             }
         });
     </script>
