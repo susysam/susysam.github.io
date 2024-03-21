@@ -84,7 +84,6 @@
         <input type="text" id="search" placeholder="Enter URL" /><br><br>
     </div>
     <button onclick="openUrl()">Search</button>
-    <button onclick="generateRandomHeight()">Generate Random Height</button><br><br>
     <div id="scrollbar">
         <input type="range" id="heightRange" min="100" max="1000" value="500" onchange="adjustHeight(this.value)">
     </div>
@@ -99,12 +98,6 @@
             if (url) {
                 document.getElementById("resultFrame").src = url;
             }
-        }
-
-        function generateRandomHeight() {
-            var randomHeight = Math.floor(Math.random() * 101) + 100;
-            document.getElementById("heightRange").value = randomHeight;
-            adjustHeight(randomHeight);
         }
 
         function adjustHeight(height) {
