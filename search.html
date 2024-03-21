@@ -65,6 +65,15 @@
             border: 1px solid #ccc;
             margin-top: 20px;
         }
+
+        #scrollbar {
+            width: 300px;
+            margin: 0 auto;
+        }
+
+        #scrollbar input[type="range"] {
+            width: 100%;
+        }
     </style>
 </head>
 
@@ -75,6 +84,10 @@
         <input type="text" id="search" placeholder="Enter URL" /><br><br>
     </div>
     <button onclick="openUrl()">Search</button>
+    <button onclick="generateRandomHeight()">Generate Random Height</button><br><br>
+    <div id="scrollbar">
+        <input type="range" id="heightRange" min="100" max="1000" value="500" onchange="adjustHeight(this.value)">
+    </div>
     <iframe id="resultFrame"></iframe>
     <script>
         function openUrl() {
@@ -86,6 +99,16 @@
             if (url) {
                 document.getElementById("resultFrame").src = url;
             }
+        }
+
+        function generateRandomHeight() {
+            var randomHeight = Math.floor(Math.random() * 101) + 100;
+            document.getElementById("heightRange").value = randomHeight;
+            adjustHeight(randomHeight);
+        }
+
+        function adjustHeight(height) {
+            document.getElementById("resultFrame").style.height = height + "px";
         }
     </script>
 </body>
