@@ -84,7 +84,7 @@
 
     <!-- Back, Blocked, and Email Sent Buttons -->
     <div class="button" onclick="goBack()"><span>Back</span></div>
-    <div class="button blocked-btn" onclick="sendBlockedEmail()">Blocked</div>
+    <div class="button blocked-btn" onclick="sendBlockedEmail()">Blocked?</div>
 
     <!-- Button Section -->
     <div class="section">
@@ -164,6 +164,7 @@
                 const randomIndex = Math.floor(Math.random() * links.length);
                 currentLink = links[randomIndex];
                 document.getElementById('contentFrame').src = currentLink;
+               
                 document.querySelector('.new-tab-btn').style.display = 'inline-block';
                 document.querySelector('.fullscreen-btn').style.display = 'inline-block';
             }
@@ -185,20 +186,21 @@
         }
 
         function sendBlockedEmail() {
-            var message = prompt("Please enter your message:");
+            var message = prompt("Type blocked link:");
             if (message) {
-                // You can send the email using PHP or any other server-side language
-                window.location.href = "mailto:obioraokafor370@gmail.com?subject=Blocked Message&body=" + message;
-                // Optionally, you can display a confirmation message
-                var confirmationMessage = document.createElement("p");
-                confirmationMessage.textContent = "Email sent! Hope the website gets unblocked!";
-                confirmationMessage.style.color = "#6C0BA9";
-                confirmationMessage.style.fontWeight = "bold";
-                document.body.appendChild(confirmationMessage);
-                // You can also remove the confirmation message after a few seconds
-                setTimeout(function() {
-                    confirmationMessage.parentNode.removeChild(confirmationMessage);
-                }, 3000); // Remove after 3 seconds
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "send_email.php", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            alert("Email sent! Hope the website gets unblocked! :)");
+                        } else {
+                            alert("Error: Unable to send email. Please try again later.");
+                        }
+                    }
+                };
+                xhr.send("message=" + encodeURIComponent(message));
             }
         }
     </script>
