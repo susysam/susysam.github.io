@@ -104,19 +104,19 @@
         <button class="button" onclick="openCategory('Utopia')">Utopia</button>
         <button class="button" onclick="openCategory('PlexileArcade')">Plexile Arcade</button>
         <button class="button" onclick="openCategory('More')">More</button>
-        <button class="button" id="tryAgain" style="display:none;" onclick="tryAgain()">Try Again</button>
     </div>
 
     <!-- Scrollbar Adjustment -->
-    <div class="scrollbar-container" style="display: none;">
+    <div class="scrollbar-container">
         <input type="range" min="0" max="100" value="70" id="scrollbar" oninput="adjustScrollbar()">
     </div>
 
     <iframe id="contentFrame"></iframe>
 
+    <button class="button" onclick="tryAgain()">Try Again</button>
+
     <script>
         let currentLink = '';
-        let currentCategory = '';
 
         function goBack() {
             window.location.href = "start27.html";
@@ -140,7 +140,7 @@
                 'Utopia': [
                     "https://add.tutor.hydraulik-handpumpen.com/",
                     "https://area.brain.cravat-club.com/",
-                ],                
+                ],
                 'PlexileArcade': [
                     "https://nweatestingsite.glitch.me/location.html",
                     "https://funschoolprojects.glitch.me/location.html",
@@ -165,8 +165,7 @@
                     "https://learningtech.hbmc.net/mobile.html",
                     "https://bread.dlvan.ar/mobile.html",
                     "https://bro.dlvan.ar/mobile.html",
-                    "https://lel.dlvan.ar/mobile.html",
-                    "https://eco.geoecon.info/mobile.html"
+                    "https://lel.dlvan.ar/mobile.html"
                 ],
             };
 
@@ -174,24 +173,21 @@
             if (links) {
                 const randomIndex = Math.floor(Math.random() * links.length);
                 currentLink = links[randomIndex];
-                currentCategory = category;
                 document.getElementById('contentFrame').src = currentLink;
-                showTryAgainButton();
-                hideCategories();
             }
         }
 
+        function adjustScrollbar() {
+            const scrollbarValue = document.getElementById('scrollbar').value;
+            document.getElementById('contentFrame').style.height = `${scrollbarValue}vh`;
+        }
+
         function tryAgain() {
-            openCategory(currentCategory);
-        }
-
-        function showTryAgainButton() {
-            document.getElementById('tryAgain').style.display = 'inline-block';
-        }
-
-        function hideCategories() {
-            document.querySelector('.section').style.display = 'none';
-            document.querySelector('.scrollbar-container').style.display = 'none';
+            const categoryButtons = document.querySelectorAll('.button');
+            categoryButtons.forEach(button => {
+                button.style.display = 'inline-block';
+            });
+            document.getElementById('contentFrame').src = '';
         }
     </script>
 </body>
