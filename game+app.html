@@ -108,24 +108,7 @@
         <!-- Buttons for Games -->
         <div class="game-buttons">
             <button class="button" onclick="openGame('A1R')"><span>A1R</span></button>
-            <button class="button" onclick="openGame('Roblox')"><span>Roblox</span></button>
-            <button class="button" onclick="openGame('Monkey Mart')"><span>Monkey Mart</span></button>
-            <button class="button" onclick="openGame('FNF')"><span>FNF</span></button>
-            <button class="button" onclick="openGame('Rocket League')"><span>Rocket League</span></button>
-            <button class="button" onclick="openGame('Fortnite')"><span>Fortnite</span></button>
-            <button class="button" onclick="openGame('Andriod OS')"><span>Andriod OS</span></button>
-            <!-- Button for YouTube -->
-            <button class="button" onclick="openYouTube()"><span>YouTube</span></button>
-        </div>
-
-        <!-- Buttons for Apps -->
-        <div class="app-buttons">
-            <button class="button" onclick="openApp('Ai')"><span>Ai</span></button>
-            <button class="button" onclick="openApp('Discord')"><span>Discord</span></button>
-            <button class="button" onclick="openApp('Netflix')"><span>Netflix</span></button>
-            <button class="button" onclick="openApp('Disney+')"><span>Disney+</span></button>
-            <button class="button" onclick="openApp('Flixhq')"><span>Flixhq</span></button>
-            <button class="button" onclick="openApp('Xivi')"><span>Xivi</span></button>
+            <button class="button" onclick="openBlockedLink()"><span>Blocked?</span></button>
         </div>
     </div>
 
@@ -153,11 +136,11 @@
             showIframe();
         }
 
-        function openApp(name) {
+        function openBlockedLink() {
             var iframe = document.getElementById('gameAppFrame');
             var loadingOverlay = document.querySelector('.loading-overlay');
             loadingOverlay.style.display = 'flex'; // Show loading overlay
-            iframe.src = getAppLink(name);
+            iframe.src = 'https://docs.google.com/forms/d/e/1FAIpQLSdS1tZ-sCsBZqEYHwDQj8181D5IH3U8UvEdopmaqX_CQ85NSw/viewform?pli=1';
             iframe.onload = function() {
                 loadingOverlay.style.display = 'none'; // Hide loading overlay after iframe content loads
             };
@@ -175,53 +158,10 @@
         function getGameLink(name) {
             switch (name) {
                 case 'A1R':
-                    return 'https://a1rdrop.netlify.app/games';
-                case 'Roblox':
-                    return 'https://nowgg.me/play/roblox-corporation/5349/roblox';
-                case 'Monkey Mart':
-                    return 'https://skooldeliver.github.io/skool-games/monkey-mart/';
-                case 'FNF':
-                    return 'https://www.snokido.com/game/friday-night-funkin';
-                case 'Rocket League':
-                    return 'https://play.geforcenow.com/mall/';
-                case 'Fortnite':
-                    return 'https://play.geforcenow.com/mall/';
-                case 'Andriod OS':
-                    return 'https://nowgg.me/play/uncube/7074/now';
+                    return 'https://freeleo27.github.io/';
                 default:
                     return '';
             }
-        }
-
-        function getAppLink(name) {
-            switch (name) {
-                case 'Ai':
-                    return 'https://www.blackbox.ai';
-                case 'Discord':
-                    return 'https://discord.com/app';
-                case 'Netflix':
-                    return 'https://netflix.com/login';
-                case 'Disney+':
-                    return 'https://www.disneyplus.com';
-                case 'Flixhq':
-                    return 'https://flixhq.to';
-                case 'Xivi':
-                    return 'https://xivi.me/login.php';
-                default:
-                    return '';
-            }
-        }
-
-        // Function to open YouTube link
-        function openYouTube() {
-            var iframe = document.getElementById('gameAppFrame');
-            var loadingOverlay = document.querySelector('.loading-overlay');
-            loadingOverlay.style.display = 'flex'; // Show loading overlay
-            iframe.src = 'https://services.about.dansted.org/a/hvtrs8%2F-wuw%2Cgmoelg.aoo%2F';
-            iframe.onload = function() {
-                loadingOverlay.style.display = 'none'; // Hide loading overlay after iframe content loads
-            };
-            showIframe();
         }
     </script>
 
