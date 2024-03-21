@@ -15,6 +15,14 @@
 
         .section {
             margin-bottom: 50px;
+            text-align: left;
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        .section h2 {
+            margin-bottom: 10px;
+            font-size: 24px;
         }
 
         .input-container {
@@ -65,25 +73,22 @@
 <body>
     <h1>Show</h1>
 
-    <!-- Section 1: Links -->
-    <div class="section" id="linksSection">
-        <h2>Links and Categories 🚀</h2>
+    <!-- Section 1: Proxy links -->
+    <div class="section" id="section1">
+        <h2>Section 1: Proxy links</h2>
         <div id="links">
             <!-- Links will be added dynamically here -->
         </div>
     </div>
 
     <!-- Section 2: Custom mode -->
-    <div class="section" id="customModeSection">
-        <h2>Custom Mode 🔍</h2>
+    <div class="section" id="section2">
+        <h2>Section 2: A custom Fronted proxy iframe</h2>
         <div class="input-container">
             <label for="search">Search:</label><br>
             <input type="text" id="search" placeholder="Enter URL" /><br><br>
         </div>
         <button onclick="searchUrl()">Search</button>
-        <div id="scrollbar">
-            <input type="range" id="heightRange" min="100" max="1000" value="500" onchange="adjustHeight(this.value)">
-        </div>
         <iframe id="resultFrame"></iframe>
     </div>
 
