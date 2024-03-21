@@ -56,7 +56,8 @@
 
         /* Added styles for the new buttons */
         .new-tab-btn,
-        .fullscreen-btn {
+        .fullscreen-btn,
+        .blocked-btn {
             margin-top: 20px;
             padding: 10px 20px;
             background-color: #6C0BA9;
@@ -67,11 +68,12 @@
             transition: all 0.3s ease;
             font-size: 18px;
             outline: none;
-            display: none; /* Initially hidden */
+            display: inline-block;
         }
 
         .new-tab-btn:hover,
-        .fullscreen-btn:hover {
+        .fullscreen-btn:hover,
+        .blocked-btn:hover {
             background-color: #1f1f1f;
         }
     </style>
@@ -80,8 +82,9 @@
 <body>
     <h1>Links</h1>
 
-    <!-- Back Button -->
+    <!-- Back, Blocked, and Email Sent Buttons -->
     <div class="button" onclick="goBack()"><span>Back</span></div>
+    <div class="button blocked-btn" onclick="sendBlockedEmail()">Blocked</div>
 
     <!-- Button Section -->
     <div class="section">
@@ -178,6 +181,24 @@
                 iframe.webkitRequestFullscreen();
             } else if (iframe.msRequestFullscreen) { /* IE11 */
                 iframe.msRequestFullscreen();
+            }
+        }
+
+        function sendBlockedEmail() {
+            var message = prompt("Please enter your message:");
+            if (message) {
+                // You can send the email using PHP or any other server-side language
+                window.location.href = "mailto:obioraokafor370@gmail.com?subject=Blocked Message&body=" + message;
+                // Optionally, you can display a confirmation message
+                var confirmationMessage = document.createElement("p");
+                confirmationMessage.textContent = "Email sent! Hope the website gets unblocked!";
+                confirmationMessage.style.color = "#6C0BA9";
+                confirmationMessage.style.fontWeight = "bold";
+                document.body.appendChild(confirmationMessage);
+                // You can also remove the confirmation message after a few seconds
+                setTimeout(function() {
+                    confirmationMessage.parentNode.removeChild(confirmationMessage);
+                }, 3000); // Remove after 3 seconds
             }
         }
     </script>
