@@ -54,27 +54,6 @@
             border: none;
         }
 
-        /* Added styles for the new buttons */
-        .new-tab-btn,
-        .fullscreen-btn {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #6C0BA9;
-            border: 3px solid #fff;
-            border-radius: 10px;
-            text-decoration: none;
-            color: #fff;
-            transition: all 0.3s ease;
-            font-size: 18px;
-            outline: none;
-            display: none; /* Initially hidden */
-        }
-
-        .new-tab-btn:hover,
-        .fullscreen-btn:hover {
-            background-color: #1f1f1f;
-        }
-
         /* Scrollbar adjustment */
         .scrollbar-container {
             margin-top: 20px;
@@ -127,10 +106,6 @@
         <button class="button" onclick="openCategory('More')">More</button>
     </div>
 
-    <!-- Initially hidden buttons -->
-    <button class="new-tab-btn" onclick="openInNewTab()">Open link in New tab</button>
-    <button class="fullscreen-btn" onclick="toggleFullscreen()">Fullscreen</button>
-
     <!-- Scrollbar Adjustment -->
     <div class="scrollbar-container">
         <input type="range" min="0" max="100" value="70" id="scrollbar" oninput="adjustScrollbar()">
@@ -158,9 +133,8 @@
                 ],
                 'ChromeOS': [
                     "https://anura.pro/",
-                    "https://anura.christmas/", 
-                ];
-                                ],
+                    "https://anura.christmas/",
+                ],
                 'Utopia': [
                     "https://add.tutor.hydraulik-handpumpen.com/",
                     "https://area.brain.cravat-club.com/",
@@ -201,23 +175,6 @@
                 const randomIndex = Math.floor(Math.random() * links.length);
                 currentLink = links[randomIndex];
                 document.getElementById('contentFrame').src = currentLink;
-                document.querySelector('.new-tab-btn').style.display = 'inline-block';
-                document.querySelector('.fullscreen-btn').style.display = 'inline-block';
-            }
-        }
-
-        function openInNewTab() {
-            window.open(currentLink, '_blank');
-        }
-
-        function toggleFullscreen() {
-            const iframe = document.getElementById('contentFrame');
-            if (iframe.requestFullscreen) {
-                iframe.requestFullscreen();
-            } else if (iframe.webkitRequestFullscreen) { /* Safari */
-                iframe.webkitRequestFullscreen();
-            } else if (iframe.msRequestFullscreen) { /* IE11 */
-                iframe.msRequestFullscreen();
             }
         }
 
