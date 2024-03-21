@@ -76,9 +76,12 @@
         <button class="button" onclick="openCategory('Interstellar')">Interstellar</button>
         <button class="button" onclick="openCategory('ChromeOS')">ChromeOS</button>
         <button class="button" onclick="openCategory('Utopia')">Utopia</button>
-        <button class="button" onclick="openCategory('PlexileArcade')">Plexile Arcade</button>
         <button class="button" onclick="openCategory('More')">More</button>
     </div>
+
+    <!-- Back Button -->
+    <div class="button" onclick="goBack()"><span>Back</span></div>
+    <div class="button" onclick="tryAgain()"><span>Try Again</span></div>
 
     <iframe id="contentFrame"></iframe>
 
@@ -103,16 +106,6 @@
                 'Utopia': [
                     "https://add.tutor.hydraulik-handpumpen.com/",
                     "https://area.brain.cravat-club.com/",
-                ],
-                'PlexileArcade': [
-                    "https://nweatestingsite.glitch.me/location.html",
-                    "https://funschoolprojects.glitch.me/location.html",
-                    "https://schoolapplications.onrender.com/location.html",
-                    "https://algebratutors.onrender.com/location.html",
-                    "https://education.disciplinary.design/location.html",
-                    "https://yourlocalsciencegrades.dcmusic.ca/location.html",
-                    "https://schooltutoring.dcmusic.ca/location.html",
-                    "https://schoollessons.pages.dev/location"
                 ],
                 'More': [
                     "https://ripper.jackng.net/",
@@ -144,9 +137,12 @@
             }
         }
 
-        function adjustScrollbar() {
-            const scrollbarValue = document.getElementById('scrollbar').value;
-            document.getElementById('contentFrame').style.height = `${scrollbarValue}vh`;
+        function goBack() {
+            window.location.href = "start27.html";
+        }
+
+        function tryAgain() {
+            document.getElementById('contentFrame').src = "";
         }
 
         // Function to toggle fullscreen
