@@ -81,16 +81,26 @@
     <h1>Show</h1>
 
     <div class="section-container">
+        <!-- Section 1 Button -->
+        <button onclick="showSection('section1')">Section 1</button>
+        
+        <!-- Section 2 Button -->
+        <button onclick="showSection('section2')">Section 2</button>
+    </div>
+
+    <div class="section-container" id="section1" style="display: none;">
         <!-- Section 1: Proxy links -->
-        <div class="section" id="section1">
+        <div class="section">
             <h2>Section 1: Proxy links</h2>
             <div id="links">
                 <!-- Links will be added dynamically here -->
             </div>
         </div>
+    </div>
 
+    <div class="section-container" id="section2" style="display: none;">
         <!-- Section 2: Custom mode -->
-        <div class="section" id="section2">
+        <div class="section">
             <h2>Section 2: A custom Fronted proxy iframe</h2>
             <div class="input-container">
                 <label for="search">Search:</label><br>
@@ -181,6 +191,16 @@
             }
             if (url) {
                 document.getElementById("resultFrame").src = url;
+            }
+        }
+
+        // Function to show/hide sections
+        function showSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section.style.display === "none") {
+                section.style.display = "block";
+            } else {
+                section.style.display = "none";
             }
         }
     </script>
