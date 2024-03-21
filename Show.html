@@ -74,6 +74,40 @@
         .fullscreen-btn:hover {
             background-color: #1f1f1f;
         }
+
+        /* Scrollbar adjustment */
+        .scrollbar-container {
+            margin-top: 20px;
+            width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 20px;
+            background: #1f1f1f;
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+            border-radius: 10px;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #6C0BA9;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        input[type="range"]:hover {
+            opacity: 1;
+        }
     </style>
 </head>
 
@@ -97,6 +131,11 @@
     <button class="new-tab-btn" onclick="openInNewTab()">Open link in New tab</button>
     <button class="fullscreen-btn" onclick="toggleFullscreen()">Fullscreen</button>
 
+    <!-- Scrollbar Adjustment -->
+    <div class="scrollbar-container">
+        <input type="range" min="0" max="100" value="70" id="scrollbar" oninput="adjustScrollbar()">
+    </div>
+
     <iframe id="contentFrame"></iframe>
 
     <script>
@@ -119,8 +158,9 @@
                 ],
                 'ChromeOS': [
                     "https://anura.pro/",
-                    "https://anura.christmas/",
-                ],
+                    "https://anura.christmas/", 
+                ];
+                                ],
                 'Utopia': [
                     "https://add.tutor.hydraulik-handpumpen.com/",
                     "https://area.brain.cravat-club.com/",
@@ -179,6 +219,11 @@
             } else if (iframe.msRequestFullscreen) { /* IE11 */
                 iframe.msRequestFullscreen();
             }
+        }
+
+        function adjustScrollbar() {
+            const scrollbarValue = document.getElementById('scrollbar').value;
+            document.getElementById('contentFrame').style.height = `${scrollbarValue}vh`;
         }
     </script>
 </body>
