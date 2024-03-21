@@ -80,8 +80,8 @@
     </div>
 
     <!-- Back Button -->
-    <div class="button" onclick="goBack()"><span>Back</span></div>
-    <div class="button" onclick="tryAgain()"><span>Try Again</span></div>
+    <div class="button" onclick="goBack()" id="backBtn" style="display: none;"><span>Back</span></div>
+    <div class="button" onclick="tryAgain()" id="tryAgainBtn" style="display: none;"><span>Try Again</span></div>
 
     <iframe id="contentFrame"></iframe>
 
@@ -133,6 +133,8 @@
                 const randomIndex = Math.floor(Math.random() * links.length);
                 currentLink = links[randomIndex];
                 document.getElementById('contentFrame').src = currentLink;
+                document.getElementById('tryAgainBtn').style.display = 'inline-block';
+                document.getElementById('backBtn').style.display = 'inline-block';
                 toggleFullscreen();
             }
         }
@@ -143,6 +145,8 @@
 
         function tryAgain() {
             document.getElementById('contentFrame').src = "";
+            document.getElementById('tryAgainBtn').style.display = 'none';
+            document.getElementById('backBtn').style.display = 'none';
         }
 
         // Function to toggle fullscreen
