@@ -74,7 +74,7 @@
 </head>
 <body>
     <header>
-        <div class="logo">
+        <div class="logo" onclick="location.href='start27.html';">
             <img src="/images/leo.jpg" alt="Website Logo">
         </div>
         <div class="center-text">
@@ -89,20 +89,12 @@
     </main>
 
     <script>
-        const games = [
-            { name: 'Custom Game', images: '/images/plus.png', custom: true },
+        // Define an array to store games
+        let games = [
             { name: 'Bob the Robber 2', images: '/images/bob-the-robber-2.png', link: 'https://www.example.com/' },
             { name: 'Drive Mad', images: '/images/drive-mad.jpg', link: 'https://www.example.com/' },
             { name: 'Minecraft', images: '/images/mc.png', link: 'https://www.example.com/' },
-            { name: 'Moto X3M', images: '/images/moto-x3m.jpg', link: 'https://www.example.com/' },
-            { name: 'Moto X3M 2', images: '/images/motox3m2.jpg', link: 'https://www.example.com/' },
-            { name: 'Retro Bowl', images: '/images/retro-bowl.jpg', link: 'https://www.example.com/' },
-            { name: 'Slope', images: '/images/slope.jpg', link: 'https://www.example.com/' },
-            { name: 'Vex 3', images: '/images/vex3.jpg', link: 'https://www.example.com/' },
-            { name: 'Vex 4', images: '/images/vex4.jpg', link: 'https://www.example.com/' },
-            { name: 'Vex 5', images: '/images/vex5.jpg', link: 'https://www.example.com/' },
-            { name: 'Vex 6', images: '/images/vex6.jpeg', link: 'https://www.example.com/' },
-            { name: 'Vex 7', images: '/images/vex7.jpeg', link: 'https://www.example.com/' }
+            // Add more default games here
         ];
 
         function displayGames() {
@@ -131,63 +123,66 @@
             });
         }
 
-function searchGames() {
-    const searchInput = document.getElementById('searchInput').value.toLowerCase();
-    const filteredGames = games.filter(game => game.name.toLowerCase().includes(searchInput));
-    displayFilteredGames(filteredGames);
-}
+        function searchGames() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const filteredGames = games.filter(game => game.name.toLowerCase().includes(searchInput));
+            displayFilteredGames(filteredGames);
+        }
 
-function displayFilteredGames(filteredGames) {
-    const gameGallery = document.getElementById('gameGallery');
-    gameGallery.innerHTML = '';
-    filteredGames.forEach(game => {
-        const gameElement = document.createElement('div');
-        gameElement.classList.add('game');
-        gameElement.innerHTML = `
-            <img src="${game.images}" alt="${game.name}">
-            <h3>${game.name}</h3>
-        `;
-        gameGallery.appendChild(gameElement);
+        function displayFilteredGames(filteredGames) {
+            const gameGallery = document.getElementById('gameGallery');
+            gameGallery.innerHTML = '';
+            filteredGames.forEach(game => {
+                const gameElement = document.createElement('div');
+                gameElement.classList.add('game');
+                gameElement.innerHTML = `
+                    <img src="${game.images}" alt="${game.name}">
+                    <h3>${game.name}</h3>
+                `;
+                gameGallery.appendChild(gameElement);
 
-        gameElement.addEventListener('click', function() {
-            if (!game.custom) {
-                const iframe = document.createElement('iframe');
-                iframe.src = game.link;
-                iframe.style.width = '100%';
-                iframe.style.height = '100vh';
-                iframe.style.border = 'none';
-                gameElement.innerHTML = '';
-                gameElement.appendChild(iframe);
+                gameElement.addEventListener('click', function() {
+                    if (!game.custom) {
+                        const iframe = document.createElement('iframe');
+                        iframe.src = game.link;
+                        iframe.style.width = '100%';
+                        iframe.style.height = '100vh';
+                        iframe.style.border = 'none';
+                        gameElement.innerHTML = '';
+                        gameElement.appendChild(iframe);
+                    }
+                });
+            });
+        }
+
+        // Function to handle the Custom Game button click event
+        function addCustomGame() {
+            const name = prompt('Enter the name of the game:');
+            const imageUrl = prompt('Enter the URL of the game image:');
+            const gameUrl = prompt('Enter the URL of the game:');
+
+            if (name && imageUrl && gameUrl) {
+                // Create a new custom game object
+                const customGame = {
+                    name: name,
+                    images: imageUrl,
+                    link: gameUrl,
+                    custom: true
+                };
+
+                // Add the custom game to the games array
+                games.push(customGame);
+
+                // Refresh the display to include the new custom game
+                displayGames();
+            } else {
+                alert('Please fill in all the fields.');
             }
-        });
-    });
-}
+        }
 
-// Function to handle the Custom Game button click event
-function addCustomGame() {
-    const name = prompt('Enter the name of the game:');
-    const imageUrl = prompt('Enter the URL of the game image:');
-    const gameUrl = prompt('Enter the URL of the game:');
-
-    if (name && imageUrl && gameUrl) {
-        // Create a new custom game object
-        const customGame = {
-            name: name,
-            images: imageUrl,
-            link: gameUrl,
-            custom: true
-        };
-
-        // Add the custom game to the games array
-        games.push(customGame);
-
-        // Refresh the display to include the new custom game
-        displayGames();
-    } else {
-        alert('Please fill in all the fields.');
-    }
-}
-
-// Adding event listener to the Custom Game button
-const customGameButton = document.getElementById('customGameButton');
-customGameButton.addEventListener('click', addCustomGame);
+        // Adding event listener to the Custom Game button
+        const customGameButton = document.getElementById('customGameButton');
+        customGameButton.addEventListener('click', addCustomGame);
+    </script>
+</body>
+</html>
