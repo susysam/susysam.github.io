@@ -57,48 +57,15 @@
             border-radius: 5px;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
             text-align: center;
-            cursor: pointer;
         }
         .game img {
             max-width: 100%;
             height: auto;
             border-radius: 5px;
         }
-        .game:hover {
-            background-color: #f0f0f0;
-        }
-        .custom-game {
-            border: 2px dashed #999;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-        }
-        .custom-game img {
-            width: 50px;
-            height: auto;
-            margin-bottom: 10px;
-        }
-        .custom-game:hover {
-            background-color: #f0f0f0;
-        }
-        .iframe-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: none;
-            justify-content: center;
-            align-items: center;
-        }
-        .iframe-content {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            width: 80%;
-            height: 80%;
-            overflow: auto;
+        a {
+            text-decoration: none;
+            color: black;
         }
     </style>
 </head>
@@ -108,25 +75,17 @@
             <img src="/images/leo.jpg" alt="Game Website Logo">
         </div>
         <div class="search-bar">
+            <marquee behavior="scroll" direction="right">Play some Games!-Leo</marquee>
             <input type="text" id="searchInput" placeholder="Search games..." oninput="searchGames()">
         </div>
     </header>
     <main id="gameGallery">
-        <div class="custom-game" onclick="showCustomGameInput()">
-            <img src="/images/plus.png" alt="Add Custom Game">
-            <p>Click to add your Own Game</p>
-        </div>
+        <!-- Game images will be dynamically added here -->
     </main>
-    <marquee behavior="scroll" direction="right">Play some Games!-Leo </marquee>
-
-    <div class="iframe-container" id="iframeContainer">
-        <div class="iframe-content" id="iframeContent">
-            <iframe id="gameIframe" frameborder="0"></iframe>
-        </div>
-    </div>
 
     <script>
         const games = [
+            { name: 'Custom Games', images: '/images/plus.png', custom: true },
             { name: 'Bob the Robber 2', images: '/images/bob-the-robber-2.png', link: 'https://www.example.com/' },
             { name: 'Drive Mad', images: '/images/drive-mad.jpg', link: 'https://www.example.com/' },
             { name: 'Minecraft', images: '/images/mc.png', link: 'https://www.example.com/' },
@@ -138,8 +97,7 @@
             { name: 'Vex 4', images: '/images/vex4.jpg', link: 'https://www.example.com/' },
             { name: 'Vex 5', images: '/images/vex5.jpg', link: 'https://www.example.com/' },
             { name: 'Vex 6', images: '/images/vex6.jpeg', link: 'https://www.example.com/' },
-            { name: 'Vex 7', images: '/images/vex7.jpeg', link: 'https://www.example.com/' },
-            { name: 'Custom Games', images: '/images/plus.png', custom: true },
+            { name: 'Vex 7', images: '/images/vex7.jpeg', link: 'https://www.example.com/' }
         ];
 
         function displayGames() {
@@ -156,13 +114,21 @@
                     `;
                 } else {
                     gameElement.innerHTML = `
-                        <a href="${game.link}" target="_blank">
+                                                <a href="${game.link}" target="_blank" style="text-decoration: none; color: inherit;">
                             <img src="${game.images}" alt="${game.name}">
                             <h3>${game.name}</h3>
                         </a>
                     `;
+                } else {
+                    gameElement.innerHTML = `
+                        <div class="game" style="cursor: pointer;" onclick="addCustomGame()">
+                            <img src="${game.images}" alt="${game.name}">
+                            <h3>${game.name}</h3>
+                            <p>Add Custom Game</p>
+                        </div>
+                    `;
                 }
-                gameGallery.appendChild(gameElement);
+                gameGallery.insertBefore(gameElement, gameGallery.firstChild);
             });
         }
 
@@ -195,7 +161,7 @@
                     `;
                 } else {
                     gameElement.innerHTML = `
-                        <a href="${game.link}" target="_blank">
+                        <a href="${game.link}" target="_blank" style="text-decoration: none; color: inherit;">
                             <img src="${game.images}" alt="${game.name}">
                             <h3>${game.name}</h3>
                         </a>
