@@ -57,15 +57,48 @@
             border-radius: 5px;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
             text-align: center;
-            cursor: pointer; /* Add cursor pointer to indicate clickable */
-        }
-        .game:hover { /* Hover effect */
-            background-color: #f0f0f0;
+            cursor: pointer;
         }
         .game img {
             max-width: 100%;
             height: auto;
             border-radius: 5px;
+        }
+        .game:hover {
+            background-color: #f0f0f0;
+        }
+        .custom-game {
+            border: 2px dashed #999;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .custom-game img {
+            width: 50px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+        .custom-game:hover {
+            background-color: #f0f0f0;
+        }
+        .iframe-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .iframe-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            height: 80%;
+            overflow: auto;
         }
     </style>
 </head>
@@ -79,12 +112,21 @@
         </div>
     </header>
     <main id="gameGallery">
-        <!-- Game images will be dynamically added here -->
+        <div class="custom-game" onclick="showCustomGameInput()">
+            <img src="/images/plus.png" alt="Add Custom Game">
+            <p>Click to add your Own Game</p>
+        </div>
     </main>
+    <marquee behavior="scroll" direction="right">Play some Games!-Leo </marquee>
+
+    <div class="iframe-container" id="iframeContainer">
+        <div class="iframe-content" id="iframeContent">
+            <iframe id="gameIframe" frameborder="0"></iframe>
+        </div>
+    </div>
 
     <script>
         const games = [
-            { name: 'Custom Games', images: '/images/plus.png', link: 'javascript:addCustomGame()' },
             { name: 'Bob the Robber 2', images: '/images/bob-the-robber-2.png', link: 'https://www.example.com/' },
             { name: 'Drive Mad', images: '/images/drive-mad.jpg', link: 'https://www.example.com/' },
             { name: 'Minecraft', images: '/images/mc.png', link: 'https://www.example.com/' },
@@ -96,7 +138,8 @@
             { name: 'Vex 4', images: '/images/vex4.jpg', link: 'https://www.example.com/' },
             { name: 'Vex 5', images: '/images/vex5.jpg', link: 'https://www.example.com/' },
             { name: 'Vex 6', images: '/images/vex6.jpeg', link: 'https://www.example.com/' },
-            { name: 'Vex 7', images: '/images/vex7.jpeg', link: 'https://www.example.com/' }
+            { name: 'Vex 7', images: '/images/vex7.jpeg', link: 'https://www.example.com/' },
+            { name: 'Custom Games', images: '/images/plus.png', custom: true },
         ];
 
         function displayGames() {
@@ -105,14 +148,31 @@
             games.forEach(game => {
                 const gameElement = document.createElement('div');
                 gameElement.classList.add('game');
-                gameElement.innerHTML = `
-                    <a href="${game.link}" target="_blank"> <!-- Link added to entire game -->
+                if (game.custom) {
+                    gameElement.innerHTML = `
                         <img src="${game.images}" alt="${game.name}">
                         <h3>${game.name}</h3>
-                    </a>
-                `;
+                        <button onclick="addCustomGame()">Add Custom Game</button>
+                    `;
+                } else {
+                    gameElement.innerHTML = `
+                        <a href="${game.link}" target="_blank">
+                            <img src="${game.images}" alt="${game.name}">
+                            <h3>${game.name}</h3>
+                        </a>
+                    `;
+                }
                 gameGallery.appendChild(gameElement);
             });
+        }
+
+        function addCustomGame() {
+            const gameLink = prompt("Please enter the link to your game:");
+            const imageUrl = prompt("Please enter the URL of the image for your game:");
+            if (gameLink && imageUrl) {
+                games.push({ name: 'Custom Game', images: imageUrl, link: gameLink });
+                displayGames();
+            }
         }
 
         function searchGames() {
@@ -127,26 +187,22 @@
             filteredGames.forEach(game => {
                 const gameElement = document.createElement('div');
                 gameElement.classList.add('game');
-                gameElement.innerHTML = `
-                    <a href="${game.link}" target="_blank"> <!-- Link added to entire game -->
+                if (game.custom) {
+                    gameElement.innerHTML = `
                         <img src="${game.images}" alt="${game.name}">
                         <h3>${game.name}</h3>
-                    </a>
-                `;
+                        <button onclick="addCustomGame()">Add Custom Game</button>
+                    `;
+                } else {
+                    gameElement.innerHTML = `
+                        <a href="${game.link}" target="_blank">
+                            <img src="${game.images}" alt="${game.name}">
+                            <h3>${game.name}</h3>
+                        </a>
+                    `;
+                }
                 gameGallery.appendChild(gameElement);
             });
-        }
-
-        // Function to add custom game
-        function addCustomGame() {
-            const gameLink = prompt("Enter the link to your game:");
-            const gameImage = prompt("Enter the link to the game image:");
-            if (gameLink && gameImage) {
-                // Add the custom game to the games array
-                games.push({ name: 'Custom Game', images: gameImage, link: gameLink });
-                // Update the display
-                displayGames();
-            }
         }
 
         // Initial display of all games
