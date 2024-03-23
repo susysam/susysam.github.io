@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Website</title>
+    <title>Games</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -58,12 +58,12 @@
             border-radius: 5px;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
             text-align: center;
+            cursor: pointer;
         }
         .game img {
             max-width: 100%;
             height: auto;
             border-radius: 5px;
-            cursor: pointer;
         }
         .center-text {
             display: flex;
@@ -74,8 +74,8 @@
 </head>
 <body>
     <header>
-        <div class="logo" onclick="location.href='start27.html';">
-            <img src="/images/leo.jpg" alt="Game Website Logo">
+        <div class="logo">
+            <img src="/images/leo.jpg" alt="Website Logo">
         </div>
         <div class="center-text">
             <h2 style="margin: 0;">Made by -Leo</h2>
@@ -88,7 +88,7 @@
         <!-- Game images will be dynamically added here -->
     </main>
 
-        <script>
+    <script>
         const games = [
             { name: 'Custom Game', images: '/images/plus.png', custom: true },
             { name: 'Bob the Robber 2', images: '/images/bob-the-robber-2.png', link: 'https://www.example.com/' },
@@ -111,21 +111,23 @@
             games.forEach(game => {
                 const gameElement = document.createElement('div');
                 gameElement.classList.add('game');
-                if (game.custom) {
-                    gameElement.innerHTML = `
-                        <img src="${game.images}" alt="${game.name}">
-                        <h3>${game.name}</h3>
-                    `;
-                    gameGallery.appendChild(gameElement);
-                } else {
-                    gameElement.innerHTML = `
-                        <a href="${game.link}" target="_blank">
-                            <img src="${game.images}" alt="${game.name}">
-                            <h3>${game.name}</h3>
-                        </a>
-                    `;
-                    gameGallery.appendChild(gameElement);
-                }
+                gameElement.innerHTML = `
+                    <img src="${game.images}" alt="${game.name}">
+                    <h3>${game.name}</h3>
+                `;
+                gameGallery.appendChild(gameElement);
+
+                gameElement.addEventListener('click', function() {
+                    if (!game.custom) {
+                        const iframe = document.createElement('iframe');
+                        iframe.src = game.link;
+                        iframe.style.width = '100%';
+                        iframe.style.height = '100vh';
+                        iframe.style.border = 'none';
+                        gameElement.innerHTML = '';
+                        gameElement.appendChild(iframe);
+                    }
+                });
             });
         }
 
@@ -141,21 +143,12 @@
             filteredGames.forEach(game => {
                 const gameElement = document.createElement('div');
                 gameElement.classList.add('game');
-                if (game.custom) {
-                    gameElement.innerHTML = `
-                        <img src="${game.images}" alt="${game.name}">
-                        <h3>${game.name}</h3>
-                    `;
-                    gameGallery.appendChild(gameElement);
-                } else {
-                    gameElement.innerHTML = `
-                        <a href="${game.link}" target="_blank">
-                            <img src="${game.images}" alt="${game.name}">
-                            <h3>${game.name}</h3>
-                        </a>
-                    `;
-                    gameGallery.appendChild(gameElement);
-                }
+                gameElement.innerHTML = `
+                    <img src="${game.images}" alt="${game.name}">
+                    <h3>${game.name}</h3>
+                `;
+                gameGallery.appendChild(gameElement);
+
                 gameElement.addEventListener('click', function() {
                     if (!game.custom) {
                         const iframe = document.createElement('iframe');
@@ -163,8 +156,8 @@
                         iframe.style.width = '100%';
                         iframe.style.height = '100vh';
                         iframe.style.border = 'none';
-                        document.body.innerHTML = '';
-                        document.body.appendChild(iframe);
+                        gameElement.innerHTML = '';
+                        gameElement.appendChild(iframe);
                     }
                 });
             });
@@ -173,3 +166,5 @@
         // Initial display of all games
         displayGames();
     </script>
+</body>
+</html>
