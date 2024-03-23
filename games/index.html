@@ -3,31 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Games</title>
+    <title>Game Website</title>
     <style>
-        /* Your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo img {
+            width: 100px;
+            height: auto;
+        }
+        .search-bar {
+            display: flex;
+            align-items: center;
+        }
+        .search-bar input[type="text"] {
+            padding: 8px;
+            width: 200px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .search-bar button {
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-left: 5px;
+        }
+        .search-bar button:hover {
+            background-color: #45a049;
+        }
+        main {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        .game {
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .game img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
     <header>
-        <div class="logo" onclick="location.href='start27.html';">
-            <img src="/images/leo.jpg" alt="Website Logo">
+        <div class="logo">
+            <img src="/images/leo.jpg" alt="Game Website Logo">
         </div>
-        <div class="center-text">
-            <h2 style="margin: 0;">Made by -Leo</h2>
-        </div>
+        <marquee behavior="scroll" direction="right" style="margin: 10px 0;">Play some Games! </marquee>
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Search games..." oninput="searchGames()">
         </div>
-        <!-- Add the "Custom Game" button here -->
-        <button id="customGameButton">Add Custom Game</button>
     </header>
     <main id="gameGallery">
         <!-- Game images will be dynamically added here -->
     </main>
 
     <script>
-        // Your JavaScript code here
+        const games = [
+            { name: 'Bob the Robber 2', images: '/images/bob-the-robber-2.png' },
+            { name: 'Drive Mad', images: '/images/drive-mad.jpg' },
+            { name: 'Minecraft', images: '/images/mc.png' },
+            { name: 'Moto X3M', images: '/images/moto-x3m.jpg' },
+            { name: 'Moto X3M 2', images: '/images/motox3m2.jpg' },
+            { name: 'Retro Bowl', images: '/images/retro-bowl.jpg' },
+            { name: 'Slope', images: '/images/slope.jpg' },
+            { name: 'Vex 3', images: '/images/vex3.jpg' },
+            { name: 'Vex 4', images: '/images/vex4.jpg' },
+            { name: 'Vex 5', images: '/images/vex5.jpg' },
+            { name: 'Vex 6', images: '/images/vex6.jpeg' },
+            { name: 'Vex 7', images: '/images/vex7.jpeg' }
+        ];
+
+        function displayGames() {
+            const gameGallery = document.getElementById('gameGallery');
+            gameGallery.innerHTML = '';
+            games.forEach(game => {
+                const gameElement = document.createElement('div');
+                gameElement.classList.add('game');
+                gameElement.innerHTML = `
+                    <img src="${game.images}" alt="${game.name}">
+                    <h3>${game.name}</h3>
+                `;
+                gameGallery.appendChild(gameElement);
+            });
+        }
+
+        function searchGames() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const filteredGames = games.filter(game => game.name.toLowerCase().includes(searchInput));
+            displayFilteredGames(filteredGames);
+        }
+
+        function displayFilteredGames(filteredGames) {
+            const gameGallery = document.getElementById('gameGallery');
+            gameGallery.innerHTML = '';
+            filteredGames.forEach(game => {
+                const gameElement = document.createElement('div');
+                gameElement.classList.add('game');
+                gameElement.innerHTML = `
+                    <img src="${game.images}" alt="${game.name}">
+                    <h3>${game.name}</h3>
+                `;
+                gameGallery.appendChild(gameElement);
+            });
+        }
+
+        // Initial display of all games
+        displayGames();
     </script>
 </body>
 </html>
