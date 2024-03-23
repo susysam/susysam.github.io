@@ -68,7 +68,7 @@
 <body>
     <header>
         <div class="logo">
-            <img src="logo.png" alt="Game Website Logo">
+            <img src="leo.jpg" alt="Game Website Logo">
         </div>
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Search games...">
@@ -102,7 +102,7 @@
                 const gameElement = document.createElement('div');
                 gameElement.classList.add('game');
                 gameElement.innerHTML = `
-                    <img src="images/${game.image}" alt="${game.name}">
+                    <img src="https://susysam.github.io/images/${game.name}/${game.image}" alt="${game.name}">
                     <h3>${game.name}</h3>
                 `;
                 gameGallery.appendChild(gameElement);
@@ -122,7 +122,7 @@
                 const gameElement = document.createElement('div');
                 gameElement.classList.add('game');
                 gameElement.innerHTML = `
-                    <img src="images/${game.image}" alt="${game.name}">
+                    <img src="https://susysam.github.io/images/${game.name}/${game.image}" alt="${game.name}">
                     <h3>${game.name}</h3>
                 `;
                 gameGallery.appendChild(gameElement);
