@@ -3,183 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game+Apps</title>
+    <title>Games</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            text-align: center;
-            margin: 20px;
-            background-color: #171717; /* Dark background */
-            color: #fff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
         }
-
-        .button {
-            padding: 15px 30px;
-            font-size: 24px;
-            background-color: #6C0BA9; /* Purple */
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo img {
+            width: 100px;
+            height: auto;
+        }
+        .search-bar {
+            display: flex;
+            align-items: center;
+        }
+        .search-bar input[type="text"] {
+            padding: 8px;
+            width: 200px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .search-bar button {
+            padding: 8px 15px;
+            background-color: #4CAF50;
             color: white;
             border: none;
-            border-radius: 8px;
             cursor: pointer;
-            text-decoration: none;
-            transition: background-color 0.3s ease; /* Smooth transition for background color */
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Added box shadow for 3D effect */
+            border-radius: 5px;
+            margin-left: 5px;
         }
-
-        .button::after {
-            content: "";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 300%;
-            height: 300%;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            transition: all 0.3s ease;
-            transform: translate(-50%, -50%) scale(0);
-            z-index: 0;
+        .search-bar button:hover {
+            background-color: #45a049;
         }
-
-        .button:hover::after {
-            transform: translate(-50%, -50%) scale(3);
+        main {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
         }
-
-        .button span {
-            position: relative;
-            z-index: 1;
+        .game {
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
-
-        .button:hover {
-            background-color: #4F0672; /* Darker purple on hover */
-        }
-
-        .iframe-container {
-            margin-top: 20px;
-            width: 100%;
-            height: 90vh; /* Adjust height as needed */
-        }
-
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        .fade-out {
-            opacity: 0;
-            transition: opacity 0.5s ease;
+        .game img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
-
-    <!-- Back Button -->
-    <div class="button" onclick="goBack()"><span>Back</span></div>
-
-    <div class="container">
-        <!-- Buttons for Games -->
-        <div class="game-buttons">
-            <button class="button" onclick="openGame('A1R')"><span>A1R</span></button>
-            <button class="button" onclick="openGame('Roblox')"><span>Roblox</span></button>
-            <button class="button" onclick="openGame('Monkey Mart')"><span>Monkey Mart</span></button>
-            <button class="button" onclick="openGame('FNF')"><span>FNF</span></button>
-            <button class="button" onclick="openGame('Rocket League')"><span>Rocket League</span></button>
-            <button class="button" onclick="openGame('Fortnite')"><span>Fortnite</span></button>
-            <button class="button" onclick="openGame('Andriod OS')"><span>Andriod OS</span></button>
-            <!-- Button for YouTube -->
-            <button class="button" onclick="openYouTube()"><span>YouTube</span></button>
+    <header>
+        <div class="logo">
+            <img src="/images/leo.jpg" alt="Game Website Logo">
         </div>
-
-        <!-- Buttons for Apps -->
-        <div class="app-buttons">
-            <button class="button" onclick="openApp('Ai')"><span>Ai</span></button>
-            <button class="button" onclick="openApp('Discord')"><span>Discord</span></button>
-            <button class="button" onclick="openApp('Netflix')"><span>Netflix</span></button>
-            <button class="button" onclick="openApp('Disney+')"><span>Disney+</span></button>
-            <button class="button" onclick="openApp('Flixhq')"><span>Flixhq</span></button>
-            <button class="button" onclick="openApp('Xivi')"><span>Xivi</span></button>
+        <marquee behavior="scroll" direction="right" style="margin: 10px 0;">Play some Games! </marquee>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search games..." oninput="searchGames()">
         </div>
-    </div>
-
-    <!-- Iframe container -->
-    <div class="iframe-container">
-        <iframe id="gameAppFrame" src="" frameborder="0"></iframe>
-    </div>
+    </header>
+    <main id="gameGallery">
+        <!-- Game /images will be dynamically added here -->
+    </main>
 
     <script>
-        function goBack() {
-            window.location.href = "start27.html";
+        const games = [
+            { name: 'Bob the Robber 2', images: '/images/bob-the-robber-2.png', link: 'https://www.example.com/' },
+            { name: 'Drive Mad', images: '/images/drive-mad.jpg', link: 'https://www.example.com/' },
+            { name: 'Minecraft', images: '/images/mc.png', link: 'https://www.example.com/' },
+            { name: 'Moto X3M', images: '/images/moto-x3m.jpg', link: 'https://www.example.com/' },
+            { name: 'Moto X3M 2', images: '/images/motox3m2.jpg', link: 'https://www.example.com/' },
+            { name: 'Retro Bowl', images: '/images/retro-bowl.jpg', link: 'https://www.example.com/' },
+            { name: 'Slope', images: '/images/slope.jpg', link: 'https://www.example.com/' },
+            { name: 'Vex 3', images: '/images/vex3.jpg', link: 'https://www.example.com/' },
+            { name: 'Vex 4', images: '/images/vex4.jpg', link: 'https://www.example.com/' },
+            { name: 'Vex 5', images: '/images/vex5.jpg', link: 'https://www.example.com/' },
+            { name: 'Vex 6', images: '/images/vex6.jpeg', link: 'https://www.example.com/' },
+            { name: 'Vex 7', images: '/images/vex7.jpeg', link: 'https://www.example.com/' }
+        ];
+
+        function displayGames() {
+            const gameGallery = document.getElementById('gameGallery');
+            gameGallery.innerHTML = '';
+            games.forEach(game => {
+                const gameElement = document.createElement('div');
+                gameElement.classList.add('game');
+                gameElement.innerHTML = `
+                    <a href="${game.link}" target="_blank">
+                        <img src="${game.images}" alt="${game.name}">
+                        <h3>${game.name}</h3>
+                    </a>
+                `;
+                gameGallery.appendChild(gameElement);
+            });
         }
 
-        function openGame(name) {
-            var iframe = document.getElementById('gameAppFrame');
-            iframe.src = getGameLink(name);
-            showIframe();
+        function searchGames() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const filteredGames = games.filter(game => game.name.toLowerCase().includes(searchInput));
+            displayFilteredGames(filteredGames);
         }
 
-        function openApp(name) {
-            var iframe = document.getElementById('gameAppFrame');
-            iframe.src = getAppLink(name);
-            showIframe();
+        function displayFilteredGames(filteredGames) {
+            const gameGallery = document.getElementById('gameGallery');
+            gameGallery.innerHTML = '';
+            filteredGames.forEach(game => {
+                const gameElement = document.createElement('div');
+                gameElement.classList.add('game');
+                gameElement.innerHTML = `
+                    <a href="${game.link}" target="_blank">
+                        <img src="${game.images}" alt="${game.name}">
+                        <h3>${game.name}</h3>
+                    </a>
+                `;
+                gameGallery.appendChild(gameElement);
+            });
         }
 
-        function showIframe() {
-            var container = document.querySelector('.container');
-            container.classList.add('fade-out');
-            setTimeout(() => {
-                container.style.display = 'none';
-            }, 500);
-        }
-
-        function getGameLink(name) {
-            switch (name) {
-                case 'A1R':
-                    return 'https://freeleo27.github.io/';
-                case 'Roblox':
-                    return 'https://nowgg.me/play/roblox-corporation/5349/roblox';
-                case 'Monkey Mart':
-                    return 'https://skooldeliver.github.io/skool-games/monkey-mart/';
-                case 'FNF':
-                    return 'https://www.snokido.com/game/friday-night-funkin';
-                case 'Rocket League':
-                    return 'https://play.geforcenow.com/mall/';
-                case 'Fortnite':
-                    return 'https://play.geforcenow.com/mall/';
-                case 'Andriod OS':
-                    return 'https://nowgg.me/play/uncube/7074/now';
-                default:
-                    return '';
-            }
-        }
-
-        function getAppLink(name) {
-            switch (name) {
-                case 'Ai':
-                    return 'https://www.blackbox.ai';
-                case 'Discord':
-                    return 'https://discord.com/app';
-                case 'Netflix':
-                    return 'https://netflix.com/login';
-                case 'Disney+':
-                    return 'https://www.disneyplus.com';
-                case 'Flixhq':
-                    return 'https://flixhq.to';
-                case 'Xivi':
-                    return 'https://xivi.me/login.php';
-                default:
-                    return '';
-            }
-        }
-
-        // Function to open YouTube link
-        function openYouTube() {
-            var iframe = document.getElementById('gameAppFrame');
-            iframe.src = 'https://services.about.dansted.org/a/hvtrs8%2F-wuw%2Cgmoelg.aoo%2F';
-            showIframe();
-        }
+        // Initial display of all games
+        displayGames();
     </script>
-
 </body>
 </html>
