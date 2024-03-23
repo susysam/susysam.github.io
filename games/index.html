@@ -22,6 +22,7 @@
         .logo img {
             width: 100px;
             height: auto;
+            cursor: pointer;
         }
         .search-bar {
             display: flex;
@@ -62,6 +63,7 @@
             max-width: 100%;
             height: auto;
             border-radius: 5px;
+            cursor: pointer;
         }
         .center-text {
             display: flex;
@@ -72,7 +74,7 @@
 </head>
 <body>
     <header>
-        <div class="logo">
+        <div class="logo" onclick="location.href='start27.html';">
             <img src="/images/leo.jpg" alt="Game Website Logo">
         </div>
         <div class="center-text">
@@ -86,7 +88,7 @@
         <!-- Game images will be dynamically added here -->
     </main>
 
-    <script>
+        <script>
         const games = [
             { name: 'Custom Game', images: '/images/plus.png', custom: true },
             { name: 'Bob the Robber 2', images: '/images/bob-the-robber-2.png', link: 'https://www.example.com/' },
@@ -147,16 +149,27 @@
                     gameGallery.appendChild(gameElement);
                 } else {
                     gameElement.innerHTML = `
-                        <iframe src="${game.link}" style="width: 300px; height: 200px;"></iframe>
-                        <h3>${game.name}</h3>
+                        <a href="${game.link}" target="_blank">
+                            <img src="${game.images}" alt="${game.name}">
+                            <h3>${game.name}</h3>
+                        </a>
                     `;
                     gameGallery.appendChild(gameElement);
                 }
+                gameElement.addEventListener('click', function() {
+                    if (!game.custom) {
+                        const iframe = document.createElement('iframe');
+                        iframe.src = game.link;
+                        iframe.style.width = '100%';
+                        iframe.style.height = '100vh';
+                        iframe.style.border = 'none';
+                        document.body.innerHTML = '';
+                        document.body.appendChild(iframe);
+                    }
+                });
             });
         }
 
         // Initial display of all games
         displayGames();
     </script>
-</body>
-</html>
