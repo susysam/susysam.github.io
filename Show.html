@@ -14,12 +14,6 @@
             color: #fff;
         }
 
-        h1 {
-            color: #ffcc00;
-            display: inline-block;
-            margin-right: 20px;
-        }
-
         .button-container {
             display: inline-block;
             margin-top: 20px;
@@ -69,7 +63,6 @@
 </head>
 
 <body>
-    <h1>Links</h1>
     <div class="button-container">
         <button class="button" onclick="goBack()">Back</button>
         <button class="button" onclick="refreshPage()">Links</button>
@@ -78,13 +71,9 @@
 
     <!-- Button Section -->
     <div class="section">
-        <h2>Choose a Category 🚀</h2>
         <button class="button" onclick="openCategory('Interstellar')">Interstellar</button>
         <button class="button" onclick="openCategory('More')">More</button>
     </div>
-
-    <!-- Back Button -->
-    <div class="button" onclick="goBack()" id="backBtn" style="display: none;"><span>Back</span></div>
 
     <iframe id="contentFrame"></iframe>
 
@@ -103,9 +92,7 @@
                     "https://s.cambrianscientific.com",
                 ],
                 'More': [
-                    "https://ahyohyo.dlvan.ar/mobile.html",
                     "https://bro.dlvan.ar/mobile.html",
-                    "https://lel.dlvan.ar/mobile.html",
                     "https://wheat.dlvan.ar/mobile.html",
                     "https://eco.geoecon.info/mobile.html"
                 ],
@@ -116,7 +103,6 @@
                 const randomIndex = Math.floor(Math.random() * links.length);
                 currentLink = links[randomIndex];
                 document.getElementById('contentFrame').src = currentLink;
-                document.getElementById('backBtn').style.display = 'inline-block';
                 toggleFullscreen();
             }
         }
