@@ -71,8 +71,7 @@
             <img src="leo.jpg" alt="Game Website Logo">
         </div>
         <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Search games...">
-            <button onclick="searchGames()">Search</button>
+            <input type="text" id="searchInput" placeholder="Search games..." oninput="searchGames()">
         </div>
     </header>
     <main id="gameGallery">
@@ -81,18 +80,18 @@
 
     <script>
         const games = [
-            { name: 'Bob the Robber 2', image: 'bob-the-robber-2.png' },
-            { name: 'Drive Mad', image: 'drive-mad.jpg' },
-            { name: 'Minecraft', image: 'mc.png' },
-            { name: 'Moto X3M', image: 'moto-x3m.jpg' },
-            { name: 'Moto X3M 2', image: 'motox3m2.jpg' },
-            { name: 'Retro Bowl', image: 'retro-bowl.jpg' },
-            { name: 'Slope', image: 'slope.jpg' },
-            { name: 'Vex 3', image: 'vex3.jpg' },
-            { name: 'Vex 4', image: 'vex4.jpg' },
-            { name: 'Vex 5', image: 'vex5.jpg' },
-            { name: 'Vex 6', image: 'vex6.jpeg' },
-            { name: 'Vex 7', image: 'vex7.jpeg' }
+            { name: 'Bob the Robber 2', image: '/image/bob-the-robber-2.png' },
+            { name: 'Drive Mad', image: '/image/drive-mad.jpg' },
+            { name: 'Minecraft', image: '/image/mc.png' },
+            { name: 'Moto X3M', image: '/image/moto-x3m.jpg' },
+            { name: 'Moto X3M 2', image: '/image/motox3m2.jpg' },
+            { name: 'Retro Bowl', image: '/image/retro-bowl.jpg' },
+            { name: 'Slope', image: '/image/slope.jpg' },
+            { name: 'Vex 3', image: '/image/vex3.jpg' },
+            { name: 'Vex 4', image: '/image/vex4.jpg' },
+            { name: 'Vex 5', image: '/image/vex5.jpg' },
+            { name: 'Vex 6', image: '/image/vex6.jpeg' },
+            { name: 'Vex 7', image: '/image/vex7.jpeg' }
         ];
 
         function displayGames() {
@@ -102,7 +101,7 @@
                 const gameElement = document.createElement('div');
                 gameElement.classList.add('game');
                 gameElement.innerHTML = `
-                    <img src="https://susysam.github.io/images/${game.name}/${game.image}" alt="${game.name}">
+                    <img src="${game.image}" alt="${game.name}">
                     <h3>${game.name}</h3>
                 `;
                 gameGallery.appendChild(gameElement);
@@ -122,7 +121,7 @@
                 const gameElement = document.createElement('div');
                 gameElement.classList.add('game');
                 gameElement.innerHTML = `
-                    <img src="https://susysam.github.io/images/${game.name}/${game.image}" alt="${game.name}">
+                    <img src="${game.image}" alt="${game.name}">
                     <h3>${game.name}</h3>
                 `;
                 gameGallery.appendChild(gameElement);
