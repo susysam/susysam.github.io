@@ -23,9 +23,15 @@
             width: 100px;
             height: auto;
         }
+        .search-bar {
+            display: flex;
+            align-items: center;
+        }
         .search-bar input[type="text"] {
             padding: 8px;
             width: 200px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
         }
         .search-bar button {
             padding: 8px 15px;
@@ -33,6 +39,8 @@
             color: white;
             border: none;
             cursor: pointer;
+            border-radius: 5px;
+            margin-left: 5px;
         }
         .search-bar button:hover {
             background-color: #45a049;
@@ -94,7 +102,7 @@
                 const gameElement = document.createElement('div');
                 gameElement.classList.add('game');
                 gameElement.innerHTML = `
-                    <img src="image/${game.image}" alt="${game.name}">
+                    <img src="images/${game.image}" alt="${game.name}">
                     <h3>${game.name}</h3>
                 `;
                 gameGallery.appendChild(gameElement);
@@ -114,7 +122,7 @@
                 const gameElement = document.createElement('div');
                 gameElement.classList.add('game');
                 gameElement.innerHTML = `
-                    <img src="image/${game.image}" alt="${game.name}">
+                    <img src="images/${game.image}" alt="${game.name}">
                     <h3>${game.name}</h3>
                 `;
                 gameGallery.appendChild(gameElement);
