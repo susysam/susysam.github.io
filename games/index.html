@@ -1,13 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <link rel="stylesheet" href="TemplateData/style.css">
-    <script src="TemplateData/UnityProgress.js"></script>
-    <script src="TemplateData/unityloader41.js"></script>
-    <script>
-        var gameInstance = UnityLoader.instantiate("gameContainer", "Build/slope.json", { onProgress: UnityProgress, Module: { onRuntimeInitialized: function() { UnityProgress(gameInstance, "complete") } } });
-    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Website</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo img {
+            width: 100px;
+            height: auto;
+        }
+        .search-bar input[type="text"] {
+            padding: 8px;
+            width: 200px;
+        }
+        .search-bar button {
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .search-bar button:hover {
+            background-color: #45a049;
+        }
+        main {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        .game {
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .game img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+    </style>
 </head>
-<body style="margin: 0; overflow: hidden;">
-    <div class="webgl-content">
-        <div id="gameContainer" style="width: 100%; height: 100%; margin: 0;"></div>
-    </div>
+<body>
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="Game Website Logo">
+        </div>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search games...">
+            <button onclick="searchGames()">Search</button>
+        </div>
+    </header>
+    <main id="gameGallery">
+        <!-- Game images will be dynamically added here -->
+    </main>
+
+    <script>
+        const games = [
+            { name: 'Bob the Robber 2', image: 'bob-the-robber-2.png' },
+            { name: 'Drive Mad', image: 'drive-mad.jpg' },
+            { name: 'Minecraft', image: 'mc.png' },
+            { name: 'Moto X3M', image: 'moto-x3m.jpg' },
+            { name: 'Moto X3M 2', image: 'motox3m2.jpg' },
+            { name: 'Retro Bowl', image: 'retro-bowl.jpg' },
+            { name: 'Slope', image: 'slope.jpg' },
+            { name: 'Vex 3', image: 'vex3.jpg' },
+            { name: 'Vex 4', image: 'vex4.jpg' },
+            { name: 'Vex 5', image: 'vex5.jpg' },
+            { name: 'Vex 6', image: 'vex6.jpeg' },
+            { name: 'Vex 7', image: 'vex7.jpeg' }
+        ];
+
+        function displayGames() {
+            const gameGallery = document.getElementById('gameGallery');
+            gameGallery.innerHTML = '';
+            games.forEach(game => {
+                const gameElement = document.createElement('div');
+                gameElement.classList.add('game');
+                gameElement.innerHTML = `
+                    <img src="image/${game.image}" alt="${game.name}">
+                    <h3>${game.name}</h3>
+                `;
+                gameGallery.appendChild(gameElement);
+            });
+        }
+
+        function searchGames() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const filteredGames = games.filter(game => game.name.toLowerCase().includes(searchInput));
+            displayFilteredGames(filteredGames);
+        }
+
+        function displayFilteredGames(filteredGames) {
+            const gameGallery = document.getElementById('gameGallery');
+            gameGallery.innerHTML = '';
+            filteredGames.forEach(game => {
+                const gameElement = document.createElement('div');
+                gameElement.classList.add('game');
+                gameElement.innerHTML = `
+                    <img src="image/${game.image}" alt="${game.name}">
+                    <h3>${game.name}</h3>
+                `;
+                gameGallery.appendChild(gameElement);
+            });
+        }
+
+        // Initial display of all games
+        displayGames();
+    </script>
 </body>
+</html>
