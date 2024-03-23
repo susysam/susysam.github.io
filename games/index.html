@@ -63,6 +63,21 @@
             height: auto;
             border-radius: 5px;
         }
+        .game h3 {
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .game h3:hover {
+            color: #4CAF50;
+        }
+        .play-games {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .play-games marquee {
+            font-size: 18px;
+            color: #4CAF50;
+        }
     </style>
 </head>
 <body>
@@ -77,6 +92,9 @@
     <main id="gameGallery">
         <!-- Game /images will be dynamically added here -->
     </main>
+    <div class="play-games">
+        <marquee behavior="scroll" direction="right">Play some Games!</marquee>
+    </div>
 
     <script>
         const games = [
@@ -102,7 +120,7 @@
                 gameElement.classList.add('game');
                 gameElement.innerHTML = `
                     <img src="${game.images}" alt="${game.name}">
-                    <h3>${game.name}</h3>
+                    <h3 onclick="navigateToExample()">${game.name}</h3>
                 `;
                 gameGallery.appendChild(gameElement);
             });
@@ -114,22 +132,29 @@
             displayFilteredGames(filteredGames);
         }
 
-        function displayFilteredGames(filteredGames) {
-            const gameGallery = document.getElementById('gameGallery');
-            gameGallery.innerHTML = '';
-            filteredGames.forEach(game => {
-                const gameElement = document.createElement('div');
-                gameElement.classList.add('game');
-                gameElement.innerHTML = `
-                    <img src="${game.images}" alt="${game.name}">
-                    <h3>${game.name}</h3>
-                `;
-                gameGallery.appendChild(gameElement);
-            });
-        }
+        function displayfilteredGames.forEach(game => {
+            const gameElement = document.createElement('div');
+            gameElement.classList.add('game');
+            gameElement.innerHTML = `
+                <a href="https://example.com" target="_blank" class="game-link">${game.name}</a>
+                <img src="${game.images}" alt="${game.name}">
+                <h3>${game.name}</h3>
+            `;
+            gameGallery.appendChild(gameElement);
+        });
 
-        // Initial display of all games
-        displayGames();
+        // Add hover effect to game names
+        const gameLinks = document.querySelectorAll('.game-link');
+        gameLinks.forEach(link => {
+            link.addEventListener('mouseover', () => {
+                link.style.textDecoration = 'underline';
+            });
+            link.addEventListener('mouseout', () => {
+                link.style.textDecoration = 'none';
+            });
+        });
     </script>
+    <!-- Play some Games! moving text -->
+    <marquee behavior="scroll" direction="right" style="margin: 10px 0;">Play some Games! </marquee>
 </body>
 </html>
