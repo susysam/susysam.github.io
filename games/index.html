@@ -156,33 +156,34 @@
         }
 
         // Function to handle the Custom Game button click event
-        function addCustomGame() {
-            const name = prompt('Enter the name of the game:');
-            const imageUrl = prompt('Enter the URL of the game image:');
-            const gameUrl = prompt('Enter the URL of the game:');
+// Function to handle the Custom Game button click event
+function addCustomGame() {
+    const name = prompt('Enter the name of the game:');
+    const imageUrl = prompt('Enter the URL of the game image:');
+    const gameUrl = prompt('Enter the URL of the game:');
 
-            if (name && imageUrl && gameUrl) {
-                // Create a new custom game object
-                const customGame = {
-                    name: name,
-                    images: imageUrl,
-                    link: gameUrl,
-                    custom: true
-                };
+    if (name && imageUrl && gameUrl) {
+        // Create a new custom game object
+        const customGame = {
+            name: name,
+            images: imageUrl,
+            link: gameUrl,
+            custom: true
+        };
 
-                // Add the custom game to the games array
-                games.push(customGame);
+        // Add the custom game to the games array
+        games.push(customGame);
 
-                // Refresh the display to include the new custom game
-                displayGames();
-            } else {
-                alert('Please fill in all the fields.');
-            }
-        }
+        // Refresh the display to include the new custom game
+        displayGames();
+    } else {
+        alert('Please fill in all the fields.');
+    }
+}
 
-        // Adding event listener to the Custom Game button
-        const customGameButton = document.getElementById('customGameButton');
-        customGameButton.addEventListener('click', addCustomGame);
-    </script>
-</body>
-</html>
+// Adding event listener to the Custom Game button
+const customGameButton = document.getElementById('customGameButton');
+customGameButton.addEventListener('click', addCustomGame);
+
+// Initial display of all games
+displayGames();
