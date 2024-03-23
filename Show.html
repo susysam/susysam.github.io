@@ -3,127 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    <link rel="icon" href="https://user-images.githubusercontent.com/41707197/56105496-bc44bd80-5ef9-11e9-8f65-859cda5d8941.png" type="image/png">
+    <title>Links</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
             text-align: center;
             margin: 20px;
-            background-color: #f0f0f0; /* Light background */
-            color: #333; /* Dark text */
+            background-color: #161616;
+            color: #fff;
         }
 
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            background-color: #6C0BA9; /* Purple */
-            color: white;
+        h1 {
+            color: #ffcc00;
+            display: inline-block;
+            margin-right: 20px;
         }
 
-        .navbar a {
-            text-decoration: none;
-            color: white;
-            font-size: 16px;
-            padding: 10px 20px;
-            border-radius: 5px;
-            transition: background-color 0.3s ease; /* Smooth transition for background color */
-        }
-
-        .navbar a:hover {
-            background-color: #4F0672; /* Darker purple on hover */
-        }
-
-        #contentFrameContainer {
+        .button-container {
             margin-top: 20px;
-            width: 90%;
-            margin: 20px auto;
-            max-height: 70vh;
-            overflow-y: auto;
-        }
-
-        #contentFrame {
-            width: 100%;
-            border: none;
+            display: flex;
+            justify-content: center;
         }
 
         .button {
+            margin: 0 10px;
             padding: 10px 20px;
-            font-size: 16px;
-            background-color: rgb(255, 0, 0); /* Red */
-            color: white;
+            background-color: #6C0BA9;
             border: none;
             border-radius: 5px;
+            text-decoration: none;
+            color: #fff;
             cursor: pointer;
-            transition: background-color 0.3s ease; /* Smooth transition for background color */
-            margin: 0 10px;
+            transition: background-color 0.3s ease;
         }
 
         .button:hover {
-            background-color: rgb(220, 0, 0); /* Darker red on hover */
+            background-color: #4F0672;
+        }
+
+        .category-container {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .category {
+            margin: 10px;
+            padding: 5px 10px;
+            background-color: #1f1f1f;
+            border: 2px solid #fff;
+            border-radius: 5px;
+            display: block;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .category:hover {
+            background-color: #6C0BA9;
+        }
+
+        iframe {
+            width: 90%;
+            height: 70vh;
+            margin: 20px auto;
+            border: none;
         }
     </style>
 </head>
 <body>
-    <div class="navbar">
-        <div>
-            <button class="button" onclick="goBack()"><span>Back</span></button>
-        </div>
-        <div>
-            <button class="button" onclick="refreshPage()"><span>Links</span></button>
-        </div>
-        <div>
-            <button class="button" onclick="goToSearch()"><span>Blocked?</span></button>
-        </div>
+    <h1>Links</h1>
+
+    <div class="button-container">
+        <button class="button" onclick="goBack()">Back</button>
+        <button class="button" onclick="refreshPage()">Links</button>
+        <button class="button" onclick="goToBlocked()">Blocked?</button>
     </div>
 
-    <div id="contentFrameContainer">
-        <iframe id="contentFrame"></iframe>
+    <div class="category-container">
+        <div class="category" onclick="openCategory('Interstellar')">Interstellar</div>
+        <div class="category" onclick="openCategory('More')">More</div>
     </div>
+
+    <iframe id="contentFrame"></iframe>
 
     <script>
-        const categories = {
-            'Interstellar': [
-                "https://testing.development.sanluix.org",
-                "https://cultures.linexedu.eu",
-                "https://n.c.gracemp.org",
-                "https://x.o.h4xxel.org",
-                "https://tools.development.sanluix.org",
-                "https://forum.cloud.rigaprecast.com/",
-                "https://s.cambrianscientific.com",
-            ],
-            'More': [
-                "https://learningtech.hbmc.net/mobile.html",
-                "https://bread.dlvan.ar/mobile.html",
-                "https://ahyohyo.dlvan.ar/mobile.html",
-                "https://bro.dlvan.ar/mobile.html",
-                "https://lel.dlvan.ar/mobile.html",
-                "https://wheat.dlvan.ar/mobile.html",
-                "https://eco.geoecon.info/mobile.html"
-            ],
-        };
-
-        function populateCategories() {
-            const scrollBox = document.getElementById("contentFrameContainer");
-            for (const category in categories) {
-                const categoryButton = document.createElement("button");
-                categoryButton.textContent = category;
-                categoryButton.classList.add("button");
-                categoryButton.addEventListener("click", () => openCategory(category));
-                scrollBox.appendChild(categoryButton);
-            }
-        }
-
-        populateCategories();
+        let currentLink = '';
 
         function openCategory(category) {
+            const categories = {
+                'Interstellar': [
+                    "https://testing.development.sanluix.org",
+                    "https://cultures.linexedu.eu",
+                    "https://n.c.gracemp.org",
+                    "https://x.o.h4xxel.org",
+                    "https://tools.development.sanluix.org",
+                    "https://forum.cloud.rigaprecast.com/",
+                    "https://s.cambrianscientific.com",
+                ],
+                'More': [
+                    "https://ahyohyo.dlvan.ar/mobile.html",
+                    "https://bro.dlvan.ar/mobile.html",
+                    "https://lel.dlvan.ar/mobile.html",
+                    "https://wheat.dlvan.ar/mobile.html",
+                    "https://eco.geoecon.info/mobile.html"
+                ],
+            };
+
             const links = categories[category];
             if (links) {
                 const randomIndex = Math.floor(Math.random() * links.length);
-                const currentLink = links[randomIndex];
+                currentLink = links[randomIndex];
                 document.getElementById('contentFrame').src = currentLink;
+                toggleFullscreen();
             }
         }
 
@@ -131,12 +124,23 @@
             window.location.href = "start27.html";
         }
 
-        function goToSearch() {
-            window.location.href = "search.html";
+        function goToBlocked() {
+            window.location.href = "blocked.html";
         }
 
         function refreshPage() {
-            location.reload();
+            window.location.reload();
+        }
+
+        function toggleFullscreen() {
+            const iframe = document.getElementById('contentFrame');
+            if (iframe.requestFullscreen) {
+                iframe.requestFullscreen();
+            } else if (iframe.webkitRequestFullscreen) { /* Safari */
+                iframe.webkitRequestFullscreen();
+            } else if (iframe.msRequestFullscreen) { /* IE11 */
+                iframe.msRequestFullscreen();
+            }
         }
     </script>
 </body>
