@@ -57,6 +57,10 @@
             border-radius: 5px;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
             text-align: center;
+            cursor: pointer; /* Add cursor pointer to indicate clickable */
+        }
+        .game:hover { /* Hover effect */
+            background-color: #f0f0f0;
         }
         .game img {
             max-width: 100%;
@@ -70,29 +74,29 @@
         <div class="logo">
             <img src="/images/leo.jpg" alt="Game Website Logo">
         </div>
-        <marquee behavior="scroll" direction="right" style="margin: 10px 0;">Play some Games! </marquee>
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Search games..." oninput="searchGames()">
         </div>
     </header>
     <main id="gameGallery">
-        <!-- Game /images will be dynamically added here -->
+        <!-- Game images will be dynamically added here -->
     </main>
 
     <script>
         const games = [
-            { name: 'Bob the Robber 2', images: '/images/bob-the-robber-2.png' },
-            { name: 'Drive Mad', images: '/images/drive-mad.jpg' },
-            { name: 'Minecraft', images: '/images/mc.png' },
-            { name: 'Moto X3M', images: '/images/moto-x3m.jpg' },
-            { name: 'Moto X3M 2', images: '/images/motox3m2.jpg' },
-            { name: 'Retro Bowl', images: '/images/retro-bowl.jpg' },
-            { name: 'Slope', images: '/images/slope.jpg' },
-            { name: 'Vex 3', images: '/images/vex3.jpg' },
-            { name: 'Vex 4', images: '/images/vex4.jpg' },
-            { name: 'Vex 5', images: '/images/vex5.jpg' },
-            { name: 'Vex 6', images: '/images/vex6.jpeg' },
-            { name: 'Vex 7', images: '/images/vex7.jpeg' }
+            { name: 'Custom Games', images: '/images/plus.png', link: 'javascript:addCustomGame()' },
+            { name: 'Bob the Robber 2', images: '/images/bob-the-robber-2.png', link: 'https://www.example.com/' },
+            { name: 'Drive Mad', images: '/images/drive-mad.jpg', link: 'https://www.example.com/' },
+            { name: 'Minecraft', images: '/images/mc.png', link: 'https://www.example.com/' },
+            { name: 'Moto X3M', images: '/images/moto-x3m.jpg', link: 'https://www.example.com/' },
+            { name: 'Moto X3M 2', images: '/images/motox3m2.jpg', link: 'https://www.example.com/' },
+            { name: 'Retro Bowl', images: '/images/retro-bowl.jpg', link: 'https://www.example.com/' },
+            { name: 'Slope', images: '/images/slope.jpg', link: 'https://www.example.com/' },
+            { name: 'Vex 3', images: '/images/vex3.jpg', link: 'https://www.example.com/' },
+            { name: 'Vex 4', images: '/images/vex4.jpg', link: 'https://www.example.com/' },
+            { name: 'Vex 5', images: '/images/vex5.jpg', link: 'https://www.example.com/' },
+            { name: 'Vex 6', images: '/images/vex6.jpeg', link: 'https://www.example.com/' },
+            { name: 'Vex 7', images: '/images/vex7.jpeg', link: 'https://www.example.com/' }
         ];
 
         function displayGames() {
@@ -102,8 +106,10 @@
                 const gameElement = document.createElement('div');
                 gameElement.classList.add('game');
                 gameElement.innerHTML = `
-                    <img src="${game.images}" alt="${game.name}">
-                    <h3>${game.name}</h3>
+                    <a href="${game.link}" target="_blank"> <!-- Link added to entire game -->
+                        <img src="${game.images}" alt="${game.name}">
+                        <h3>${game.name}</h3>
+                    </a>
                 `;
                 gameGallery.appendChild(gameElement);
             });
@@ -122,11 +128,25 @@
                 const gameElement = document.createElement('div');
                 gameElement.classList.add('game');
                 gameElement.innerHTML = `
-                    <img src="${game.images}" alt="${game.name}">
-                    <h3>${game.name}</h3>
+                    <a href="${game.link}" target="_blank"> <!-- Link added to entire game -->
+                        <img src="${game.images}" alt="${game.name}">
+                        <h3>${game.name}</h3>
+                    </a>
                 `;
                 gameGallery.appendChild(gameElement);
             });
+        }
+
+        // Function to add custom game
+        function addCustomGame() {
+            const gameLink = prompt("Enter the link to your game:");
+            const gameImage = prompt("Enter the link to the game image:");
+            if (gameLink && gameImage) {
+                // Add the custom game to the games array
+                games.push({ name: 'Custom Game', images: gameImage, link: gameLink });
+                // Update the display
+                displayGames();
+            }
         }
 
         // Initial display of all games
