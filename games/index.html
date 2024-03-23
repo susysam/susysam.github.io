@@ -76,7 +76,7 @@
             <img src="/images/leo.jpg" alt="Game Website Logo">
         </div>
         <div class="center-text">
-            <h2 style="margin: 0;">Play some Games!-Leo</h2>
+            <h2 style="margin: 0;">Made by -Leo</h2>
         </div>
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Search games..." oninput="searchGames()">
@@ -147,10 +147,8 @@
                     gameGallery.appendChild(gameElement);
                 } else {
                     gameElement.innerHTML = `
-                        <a href="${game.link}" target="_blank">
-                            <img src="${game.images}" alt="${game.name}">
-                            <h3>${game.name}</h3>
-                        </a>
+                        <iframe src="${game.link}" style="width: 300px; height: 200px;"></iframe>
+                        <h3>${game.name}</h3>
                     `;
                     gameGallery.appendChild(gameElement);
                 }
@@ -162,4 +160,3 @@
     </script>
 </body>
 </html>
-
