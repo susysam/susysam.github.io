@@ -1,139 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Links</title>
+    <title>Home</title>
+    <link rel="icon" href="https://user-images.githubusercontent.com/41707197/56105496-bc44bd80-5ef9-11e9-8f65-859cda5d8941.png" type="image/png">
     <style>
         body {
             font-family: 'Arial', sans-serif;
             text-align: center;
             margin: 20px;
-            background-color: #161616;
-            color: #fff;
+            background-color: #f0f0f0; /* Light background */
+            color: #333; /* Dark text */
         }
 
-        h1 {
-            color: #ffcc00;
-            display: inline-block;
-            margin-right: 20px;
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #6C0BA9; /* Purple */
+            color: white;
         }
 
-        .button {
-            margin: 10px;
-            padding: 10px 20px;
-            background-color: #1f1f1f;
-            border: 3px solid #fff;
-            border-radius: 10px;
+        .navbar a {
             text-decoration: none;
-            color: #fff;
-            display: inline-block;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            font-size: 18px;
-            outline: none;
+            color: white;
+            font-size: 16px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease; /* Smooth transition for background color */
         }
 
-        .button:hover {
-            background-color: #6C0BA9;
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        .navbar a:hover {
+            background-color: #4F0672; /* Darker purple on hover */
         }
 
-        .button:focus {
-            box-shadow: 0 0 0 3px #6C0BA9;
-        }
-
-        iframe {
+        #contentFrameContainer {
+            margin-top: 20px;
             width: 90%;
-            height: 70vh;
             margin: 20px auto;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        #contentFrame {
+            width: 100%;
             border: none;
         }
 
-        /* Remove Scrollbar */
-        ::-webkit-scrollbar {
-            display: none;
+        .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: rgb(255, 0, 0); /* Red */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease; /* Smooth transition for background color */
+            margin: 0 10px;
         }
 
-        /* Hide scrollbar for IE, Edge and Firefox */
-        iframe {
-            -ms-overflow-style: none; /* IE and Edge */
-            scrollbar-width: none; /* Firefox */
+        .button:hover {
+            background-color: rgb(220, 0, 0); /* Darker red on hover */
         }
     </style>
 </head>
-
 <body>
-    <h1>Links</h1>
-    <div class="button" onclick="goBack()"><span>Back</span></div>
-    <button class="button" onclick="goToSearch()">Blocked?</button>
-
-    <!-- Button Section -->
-    <div class="section">
-        <h2>Choose a Category 🚀</h2>
-        <button class="button" onclick="openCategory('Interstellar')">Interstellar</button>
-        <button class="button" onclick="openCategory('ChromeOS')">ChromeOS</button>
-        <button class="button" onclick="openCategory('Utopia')">Utopia</button>
-        <button class="button" onclick="openCategory('More')">More</button>
+    <div class="navbar">
+        <div>
+            <button class="button" onclick="goBack()"><span>Back</span></button>
+        </div>
+        <div>
+            <button class="button" onclick="refreshPage()"><span>Links</span></button>
+        </div>
+        <div>
+            <button class="button" onclick="goToSearch()"><span>Blocked?</span></button>
+        </div>
     </div>
 
-    <!-- Back Button -->
-    <div class="button" onclick="goBack()" id="backBtn" style="display: none;"><span>Back</span></div>
-
-    <iframe id="contentFrame"></iframe>
+    <div id="contentFrameContainer">
+        <iframe id="contentFrame"></iframe>
+    </div>
 
     <script>
-        let currentLink = '';
+        const categories = {
+            'Interstellar': [
+                "https://testing.development.sanluix.org",
+                "https://cultures.linexedu.eu",
+                "https://n.c.gracemp.org",
+                "https://x.o.h4xxel.org",
+                "https://tools.development.sanluix.org",
+                "https://forum.cloud.rigaprecast.com/",
+                "https://s.cambrianscientific.com",
+            ],
+            'More': [
+                "https://learningtech.hbmc.net/mobile.html",
+                "https://bread.dlvan.ar/mobile.html",
+                "https://ahyohyo.dlvan.ar/mobile.html",
+                "https://bro.dlvan.ar/mobile.html",
+                "https://lel.dlvan.ar/mobile.html",
+                "https://wheat.dlvan.ar/mobile.html",
+                "https://eco.geoecon.info/mobile.html"
+            ],
+        };
+
+        function populateCategories() {
+            const scrollBox = document.getElementById("contentFrameContainer");
+            for (const category in categories) {
+                const categoryButton = document.createElement("button");
+                categoryButton.textContent = category;
+                categoryButton.classList.add("button");
+                categoryButton.addEventListener("click", () => openCategory(category));
+                scrollBox.appendChild(categoryButton);
+            }
+        }
+
+        populateCategories();
 
         function openCategory(category) {
-            const categories = {
-                'Interstellar': [
-                    "https://testing.development.sanluix.org",
-                    "https://cultures.linexedu.eu",
-                    "https://n.c.gracemp.org",
-                    "https://x.o.h4xxel.org",
-                    "https://tools.development.sanluix.org",
-                    "https://forum.cloud.rigaprecast.com/",
-                    "https://s.cambrianscientific.com",
-                ],
-                'ChromeOS': [
-                    "https://anura.pro/",
-                    "https://anura.christmas/",
-                ],
-                'Utopia': [
-                    "https://add.tutor.hydraulik-handpumpen.com/",
-                    "https://area.brain.cravat-club.com/",
-                ],
-                'More': [
-                    "https://ripper.jackng.net/",
-                    "https://2093.joecampanaro.com/",
-                    "https://dna.pristytools.com/",
-                    "https://yeat.proheroeyewear.com/",
-                    "https://rsr.ssident.com/",
-                    "https://future.bizzapp.com/",
-                    "https://userid.kstar.us/",
-                    "https://music.logntw.com/",
-                    "https://ken.opior.com/",
-                    "https://mc.qthome.org/",
-                    "https://learningtech.hbmc.net/mobile.html",
-                    "https://bread.dlvan.ar/mobile.html",
-                    "https://ahyohyo.dlvan.ar/mobile.html",
-                    "https://bro.dlvan.ar/mobile.html",
-                    "https://lel.dlvan.ar/mobile.html",
-                    "https://wheat.dlvan.ar/mobile.html",
-                    "https://eco.geoecon.info/mobile.html"
-                ],
-            };
-
             const links = categories[category];
             if (links) {
                 const randomIndex = Math.floor(Math.random() * links.length);
-                currentLink = links[randomIndex];
+                const currentLink = links[randomIndex];
                 document.getElementById('contentFrame').src = currentLink;
-                document.getElementById('backBtn').style.display = 'inline-block';
-                toggleFullscreen();
             }
         }
 
@@ -145,18 +135,9 @@
             window.location.href = "search.html";
         }
 
-        // Function to toggle fullscreen
-        function toggleFullscreen() {
-            const iframe = document.getElementById('contentFrame');
-            if (iframe.requestFullscreen) {
-                iframe.requestFullscreen();
-            } else if (iframe.webkitRequestFullscreen) { /* Safari */
-                iframe.webkitRequestFullscreen();
-            } else if (iframe.msRequestFullscreen) { /* IE11 */
-                iframe.msRequestFullscreen();
-            }
+        function refreshPage() {
+            location.reload();
         }
     </script>
 </body>
-
 </html>
