@@ -21,7 +21,9 @@
         }
         .logo img {
             width: 100px;
-            height: auto;
+            height: 100px;
+            border-radius: 50%; /* Circular shape */
+            overflow: hidden; /* Ensure circular shape */
         }
         .search-bar {
             display: flex;
@@ -64,7 +66,6 @@
             border-radius: 5px;
         }
         #customGameInput {
-            display: none;
             margin-top: 20px;
         }
         #customGameInput input[type="text"] {
@@ -103,16 +104,16 @@
 
     <div id="customGameInput">
         <input type="text" id="customGameLink" placeholder="Enter link...">
-        <button onclick="addCustomGame()">Add</button>
+        <button onclick="addCustomGame()">Add Custom Game</button>
     </div>
     
     <center>
         <button onclick="removeCustomGames()">Remove Custom Games!</button>
     </center>
     
-    <center>
-        <button onclick="toggleFullscreen()">Play in Fullscreen</button>
-    </center>
+    <div class="button-container">
+        <button id="FullscreenButton" onclick="toggleFullscreen()">Fullscreen</button>
+    </div>
 
     <script>
         let games = [
@@ -191,14 +192,19 @@
         }
         
         function toggleFullscreen() {
-            var win = window.open();
             var url = getFullscreenURL();
-            var iframe = win.document.createElement('iframe');
-            iframe.style.width = "100%";
-            iframe.style.height = "100%";
-            iframe.style.border = "none";
+            var newTab = window.open();
+            newTab.document.body.style.margin = '0';
+            newTab.document.body.style.height = '100vh';
+            var iframe = newTab.document.createElement('iframe');
+            iframe.style.border = 'none';
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+            iframe.style.margin = '0';
             iframe.src = url;
-            win.document.body.appendChild(iframe);
+            newTab.document.body.appendChild(iframe);
+            document.getElementById('FullscreenButton').style.background='#ff5148';
+            document.getElementById('FullscreenButton').innerHTML="Fullscreen...";
         }
         
         function getFullscreenURL() {
