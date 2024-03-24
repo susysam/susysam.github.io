@@ -22,8 +22,8 @@
         .logo img {
             width: 100px;
             height: 100px;
-            border-radius: 50%; /* Circular shape */
-            overflow: hidden; /* Ensure circular shape */
+            border-radius: 50%;
+            overflow: hidden;
         }
         .search-bar {
             display: flex;
@@ -86,6 +86,18 @@
         #customGameInput button:hover {
             background-color: #45a049;
         }
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
@@ -99,61 +111,57 @@
         </div>
     </header>
     <main id="gameGallery">
-        <!-- Game images will be dynamically added here -->
+        <!-- Game buttons will be dynamically added here -->
     </main>
 
     <div id="customGameInput" style="display: none;">
-        <input type="text" id="customGameLink" placeholder="Enter link...">
+        <input type="text" id="customGameName" placeholder="Enter game name...">
+        <input type="text" id="customGameLink" placeholder="Enter game link...">
+        <input type="text" id="customGameIcon" placeholder="Enter game icon URL (optional)...">
         <button onclick="addCustomGame()">Add Custom Game</button>
     </div>
-    
-    <center>
-        <button onclick="removeCustomGames()">Remove Custom Games!</button>
-    </center>
-    
-    <center>
-        <!-- Fullscreen button with updated URL -->
-        <button id="FullscreenButton" onclick="toggleFullscreen()">Fullscreen</button>
-    </center>
+
+    <div class="taskbar">
+        <button onclick="goBack()">Back</button>
+        <p>Made by-Leo :)</p>
+    </div>
 
     <script>
         let games = [
-            { name: 'Custom Game', images: '/images/plus.png', link: '' }, // Changed the first game to a custom game
-            { name: 'Bob the Robber 2', images: '/images/bob-the-robber-2.png', link: 'https://www.example.com/' },
-            { name: 'Drive Mad', images: '/images/drive-mad.jpg', link: 'https://www.example.com/' },
-            { name: 'Minecraft', images: '/images/mc.png', link: 'https://www.example.com/' },
-            { name: 'Moto X3M', images: '/images/moto-x3m.jpg', link: 'https://www.example.com/' },
-            { name: 'Moto X3M 2', images: '/images/motox3m2.jpg', link: 'https://www.example.com/' },
-            { name: 'Retro Bowl', images: '/images/retro-bowl.jpg', link: 'https://www.example.com/' },
-            { name: 'Slope', images: '/images/slope.jpg', link: 'https://www.example.com/' },
-            { name: 'A1R', images: '/images/A1R.png', link: 'https://freeleo27.github.io/' },
-            { name: 'Cluster Rush', images: 'https://geometrydash.io/data/image/game/cluster-rush.jpg', link: 'https://www.snake-games.io/localgames/cluster-rush/' },
-            { name: 'Vex 3', images: '/images/vex3.jpg', link: 'https://html5.gamedistribution.com/rvvASMiM/762c932b4db74c6da0c1d101b2da8be6/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-3' },
-            { name: 'Vex 4', images: '/images/vex4.jpg', link: 'https://html5.gamedistribution.com/rvvASMiM/80e6a5ae477f4d4fbcd1ea293d10087d/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-4' },
-            { name: 'Vex 5', images: '/images/vex5.jpg', link: 'https://html5.gamedistribution.com/rvvASMiM/f120262ab72743039fbce88c1f370df8/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-5' },
-            { name: 'Vex 6', images: '/images/vex6.jpeg', link: 'https://html5.gamedistribution.com/rvvASMiM/4925e12574364121a48c61c35f649c36/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-6' },
-            { name: 'Basketball Stars', images: 'https://images.crazygames.com/games/basketball-stars-2019/cover-1583231506155.png?auto=format%2Ccompress&q=45&cs=strip&ch=DPR&w=1200&h=630&fit=crop', link: 'https://html5.gamedistribution.com/rvvASMiM/69d78d071f704fa183d75b4114ae40ec/?gd_sdk_referrer_url=https://gamedistribution.com/games/basketball-stars' }
+            { name: 'Bob the Robber 2', link: 'https://www.example.com/' },
+            { name: 'Drive Mad', link: 'https://www.example.com/' },
+            { name: 'Minecraft', link: 'https://www.example.com/' },
+            { name: 'Moto X3M', link: 'https://www.example.com/' },
+            { name: 'Moto X3M 2', link: 'https://www.example.com/' },
+            { name: 'Retro Bowl', link: 'https://www.example.com/' },
+            { name: 'Slope', link: 'https://www.example.com/' },
+            { name: 'A1R', link: 'https://freeleo27.github.io/' },
+            { name: 'Cluster Rush', link: 'https://www.snake-games.io/localgames/cluster-rush/' },
+            { name: 'Vex 3', link: 'https://html5.gamedistribution.com/rvvASMiM/762c932b4db74c6da0c1d101b2da8be6/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-3' },
+{ name: 'Vex 4', link: 'https://html5.gamedistribution.com/rvvASMiM/80e6a5ae477f4d4fbcd1ea293d10087d/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-4' },
+{ name: 'Vex 5', link: 'https://html5.gamedistribution.com/rvvASMiM/f120262ab72743039fbce88c1f370df8/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-5' },
+{ name: 'Vex 6', link: 'https://html5.gamedistribution.com/rvvASMiM/4925e12574364121a48c61c35f649c36/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-6' },
+{ name: 'Basketball Stars', link: 'https://html5.gamedistribution.com/rvvASMiM/69d78d071f704fa183d75b4114ae40ec/?gd_sdk_referrer_url=https://gamedistribution.com/games/basketball-stars' }
 ];
 
-// Function to toggle fullscreen
-function toggleFullscreen() {
-    window.location.href = 'https://susysam.github.io/games/';
+function goToStart() {
+    window.location.href = '/start27.html';
 }
 
-// Function to add a custom game
 function addCustomGame() {
-    let customGameLink = document.getElementById('customGameLink').value;
-    games.unshift({ name: 'Custom Game', images: '/images/plus.png', link: customGameLink });
+    let customGameName = document.getElementById('customGameName').value.trim();
+    let customGameLink = document.getElementById('customGameLink').value.trim();
+    let customGameIcon = document.getElementById('customGameIcon').value.trim();
+
+    if (customGameName === '' || customGameLink === '') {
+        alert('Please fill in the required fields.');
+        return;
+    }
+
+    games.unshift({ name: customGameName + ' (Custom game)', link: customGameLink, icon: customGameIcon });
     displayGames();
 }
 
-// Function to remove custom games
-function removeCustomGames() {
-    games = games.filter(game => game.name !== 'Custom Game');
-    displayGames();
-}
-
-// Function to display games
 function displayGames() {
     let gameGallery = document.getElementById('gameGallery');
     gameGallery.innerHTML = '';
@@ -162,19 +170,27 @@ function displayGames() {
         let gameDiv = document.createElement('div');
         gameDiv.classList.add('game');
 
-        let img = document.createElement('img');
-        img.src = game.images;
-        gameDiv.appendChild(img);
+        if (game.icon) {
+            let img = document.createElement('img');
+            img.src = game.icon;
+            gameDiv.appendChild(img);
+        }
 
         let name = document.createElement('p');
         name.textContent = game.name;
+        name.onclick = function() {
+            if (game.link) {
+                window.location.href = game.link;
+            } else {
+                document.getElementById('customGameInput').style.display = 'block';
+            }
+        };
         gameDiv.appendChild(name);
 
         gameGallery.appendChild(gameDiv);
     });
 }
 
-// Initial display of games
 displayGames();
 </script>
 </body>
