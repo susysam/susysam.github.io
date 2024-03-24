@@ -102,7 +102,7 @@
         <!-- Game images will be dynamically added here -->
     </main>
 
-    <div id="customGameInput">
+    <div id="customGameInput" style="display: none;">
         <input type="text" id="customGameLink" placeholder="Enter link...">
         <button onclick="addCustomGame()">Add Custom Game</button>
     </div>
@@ -111,9 +111,10 @@
         <button onclick="removeCustomGames()">Remove Custom Games!</button>
     </center>
     
-    <div class="button-container">
+    <center>
+        <!-- Fullscreen button remains unchanged -->
         <button id="FullscreenButton" onclick="toggleFullscreen()">Fullscreen</button>
-    </div>
+    </center>
 
     <script>
         let games = [
