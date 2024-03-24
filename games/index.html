@@ -22,8 +22,8 @@
         .logo img {
             width: 100px;
             height: 100px;
-            border-radius: 50%;
-            overflow: hidden;
+            border-radius: 50%; /* Circular shape */
+            overflow: hidden; /* Ensure circular shape */
         }
         .search-bar {
             display: flex;
@@ -59,6 +59,7 @@
             border-radius: 5px;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
             text-align: center;
+            cursor: pointer;
         }
         .game img {
             max-width: 100%;
@@ -86,17 +87,16 @@
         #customGameInput button:hover {
             background-color: #45a049;
         }
-        .taskbar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: #333;
-            color: #fff;
-            padding: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        #backButton {
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #backButton:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
@@ -111,23 +111,23 @@
         </div>
     </header>
     <main id="gameGallery">
-        <!-- Game buttons will be dynamically added here -->
+        <!-- Game images will be dynamically added here -->
     </main>
 
     <div id="customGameInput" style="display: none;">
         <input type="text" id="customGameName" placeholder="Enter game name...">
-        <input type="text" id="customGameLink" placeholder="Enter game link...">
+        <input type="text" id="customGameLink" placeholder="Enter game URL...">
         <input type="text" id="customGameIcon" placeholder="Enter game icon URL (optional)...">
         <button onclick="addCustomGame()">Add Custom Game</button>
     </div>
-
-    <div class="taskbar">
-        <button onclick="goBack()">Back</button>
-        <p>Made by-Leo :)</p>
-    </div>
+    
+    <center>
+        <button id="backButton" onclick="goToStart()">Back</button>
+    </center>
 
     <script>
         let games = [
+            { name: 'Custom Game', link: '' }, // Changed the first game to a custom game
             { name: 'Bob the Robber 2', link: 'https://www.example.com/' },
             { name: 'Drive Mad', link: 'https://www.example.com/' },
             { name: 'Minecraft', link: 'https://www.example.com/' },
@@ -137,61 +137,65 @@
             { name: 'Slope', link: 'https://www.example.com/' },
             { name: 'A1R', link: 'https://freeleo27.github.io/' },
             { name: 'Cluster Rush', link: 'https://www.snake-games.io/localgames/cluster-rush/' },
-            { name: 'Vex 3', link: 'https://html5.gamedistribution.com/rvvASMiM/762c932b4db74c6da0c1d101b2da8be6/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-3' },
-{ name: 'Vex 4', link: 'https://html5.gamedistribution.com/rvvASMiM/80e6a5ae477f4d4fbcd1ea293d10087d/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-4' },
-{ name: 'Vex 5', link: 'https://html5.gamedistribution.com/rvvASMiM/f120262ab72743039fbce88c1f370df8/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-5' },
-{ name: 'Vex 6', link: 'https://html5.gamedistribution.com/rvvASMiM/4925e12574364121a48c61c35f649c36/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-6' },
-{ name: 'Basketball Stars', link: 'https://html5.gamedistribution.com/rvvASMiM/69d78d071f704fa183d75b4114ae40ec/?gd_sdk_referrer_url=https://gamedistribution.com/games/basketball-stars' }
-];
+            { name: 'Vex 3', link: 'https://gamedistribution.com/games/vex-3' },
+            { name: 'Vex 4', link: 'https://gamedistribution.com/games/vex-4' },
+            { name: 'Vex 5', link: 'https://gamedistribution.com/games/vex-5' },
+            { name: 'Vex 6', link: 'https://gamedistribution.com/games/vex-6' },
+            { name: 'Basketball Stars', link: 'https://gamedistribution.com/games/basketball-stars' }
+        ];
 
-function goToStart() {
-    window.location.href = '/start27.html';
-}
-
-function addCustomGame() {
-    let customGameName = document.getElementById('customGameName').value.trim();
-    let customGameLink = document.getElementById('customGameLink').value.trim();
-    let customGameIcon = document.getElementById('customGameIcon').value.trim();
-
-    if (customGameName === '' || customGameLink === '') {
-        alert('Please fill in the required fields.');
-        return;
-    }
-
-    games.unshift({ name: customGameName + ' (Custom game)', link: customGameLink, icon: customGameIcon });
-    displayGames();
-}
-
-function displayGames() {
-    let gameGallery = document.getElementById('gameGallery');
-    gameGallery.innerHTML = '';
-
-    games.forEach(game => {
-        let gameDiv = document.createElement('div');
-        gameDiv.classList.add('game');
-
-        if (game.icon) {
-            let img = document.createElement('img');
-            img.src = game.icon;
-            gameDiv.appendChild(img);
+        function goToStart() {
+            window.location.href = '/start27.html';
         }
 
-        let name = document.createElement('p');
-        name.textContent = game.name;
-        name.onclick = function() {
-            if (game.link) {
-                window.location.href = game.link;
-            } else {
-                document.getElementById('customGameInput').style.display = 'block';
+        function addCustomGame() {
+            let customGameName = document.getElementById('customGameName').value.trim();
+            let customGameLink = document.getElementById('customGameLink').value.trim();
+            let customGameIcon = document.getElementById('customGameIcon').value.trim();
+
+            if (customGameName === '' || customGameLink === '') {
+                alert('Please fill in the required fields.');
+                return;
             }
-        };
-        gameDiv.appendChild(name);
 
-        gameGallery.appendChild(gameDiv);
-    });
-}
+            games.unshift({ name: customGameName + ' (Custom game)', link: customGameLink, icon: customGameIcon });
+            displayGames();
+        }
 
-displayGames();
-</script>
+        function displayGames() {
+            let gameGallery = document.getElementById('gameGallery');
+            gameGallery.innerHTML = '';
+
+            games.forEach(game => {
+                let gameDiv = document.createElement('div');
+                gameDiv.classList.add('game');
+
+                if (game.icon) {
+                    let img = document.createElement('img');
+                    img.src = game.icon;
+                    gameDiv.appendChild(img);
+                }
+
+                let name = document.createElement('p');
+                name.textContent = game.name;
+                name.onclick = function() {
+                    if (game.link) {
+                        let iframe = document.createElement('iframe');
+                        iframe.src = game.link;
+                        iframe.style.width = "100%";
+                        iframe.style.height = "100vh";
+                        iframe.style.border = "none";
+                        gameDiv.innerHTML = '';
+                        gameDiv.appendChild(iframe);
+                    }
+                };
+                gameDiv.appendChild(name);
+
+                gameGallery.appendChild(gameDiv);
+            });
+        }
+
+        displayGames();
+    </script>
 </body>
 </html>
