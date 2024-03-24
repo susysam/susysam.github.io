@@ -112,7 +112,7 @@
     </center>
     
     <center>
-        <!-- Fullscreen button remains unchanged -->
+        <!-- Fullscreen button with updated URL -->
         <button id="FullscreenButton" onclick="toggleFullscreen()">Fullscreen</button>
     </center>
 
@@ -133,94 +133,49 @@
             { name: 'Vex 5', images: '/images/vex5.jpg', link: 'https://html5.gamedistribution.com/rvvASMiM/f120262ab72743039fbce88c1f370df8/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-5' },
             { name: 'Vex 6', images: '/images/vex6.jpeg', link: 'https://html5.gamedistribution.com/rvvASMiM/4925e12574364121a48c61c35f649c36/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-6' },
             { name: 'Basketball Stars', images: 'https://images.crazygames.com/games/basketball-stars-2019/cover-1583231506155.png?auto=format%2Ccompress&q=45&cs=strip&ch=DPR&w=1200&h=630&fit=crop', link: 'https://html5.gamedistribution.com/rvvASMiM/69d78d071f704fa183d75b4114ae40ec/?gd_sdk_referrer_url=https://gamedistribution.com/games/basketball-stars' }
-        ];
+];
 
-        function displayGames() {
-            const gameGallery = document.getElementById('gameGallery');
-            gameGallery.innerHTML = '';
-            games.forEach(game => {
-                const gameElement = document.createElement('div');
-                gameElement.classList.add('game');
-                gameElement.innerHTML = `
-                    <a href="${game.link}" target="_blank">
-                        <img src="${game.images}" alt="${game.name}">
-                        <h3>${game.name}</h3>
-                    </a>
-                `;
-                gameGallery.appendChild(gameElement);
-            });
-        }
+// Function to toggle fullscreen
+function toggleFullscreen() {
+    window.location.href = 'https://susysam.github.io/games/';
+}
 
-        function searchGames() {
-            const searchInput = document.getElementById('searchInput').value.toLowerCase();
-            const filteredGames = games.filter(game => game.name.toLowerCase().includes(searchInput));
-            displayFilteredGames(filteredGames);
-        }
+// Function to add a custom game
+function addCustomGame() {
+    let customGameLink = document.getElementById('customGameLink').value;
+    games.unshift({ name: 'Custom Game', images: '/images/plus.png', link: customGameLink });
+    displayGames();
+}
 
-        function displayFilteredGames(filteredGames) {
-            const gameGallery = document.getElementById('gameGallery');
-            gameGallery.innerHTML = '';
-            filteredGames.forEach(game => {
-                const gameElement = document.createElement('div');
-                gameElement.classList.add('game');
-                gameElement.innerHTML = `
-                    <a href="${game.link}" target="_blank">
-                        <img src="${game.images}" alt="${game.name}">
-                        <h3>${game.name}</h3>
-                    </a>
-                `;
-                gameGallery.appendChild(gameElement);
-            });
-        }
+// Function to remove custom games
+function removeCustomGames() {
+    games = games.filter(game => game.name !== 'Custom Game');
+    displayGames();
+}
 
-        function toggleCustomGameInput() {
-            const customGameInput = document.getElementById('customGameInput');
-            customGameInput.style.display = customGameInput.style.display === 'none' ? 'block' : 'none';
-        }
+// Function to display games
+function displayGames() {
+    let gameGallery = document.getElementById('gameGallery');
+    gameGallery.innerHTML = '';
 
-        function addCustomGame() {
-            const customGameLink = document.getElementById('customGameLink').value;
-            const gameName = 'Custom Game';
-            const gameImage = '/images/plus.png';
-            games.push({ name: gameName, images: gameImage, link: customGameLink });
-            displayGames();
-            toggleCustomGameInput();
-        }
-        
-        function removeCustomGames() {
-            games = games.filter(game => !game.link.startsWith('https://susysam.github.io/games/'));
-            displayGames();
-        }
-        
-        function toggleFullscreen() {
-            var url = getFullscreenURL();
-            var newTab = window.open();
-            newTab.document.body.style.margin = '0';
-            newTab.document.body.style.height = '100vh';
-            var iframe = newTab.document.createElement('iframe');
-            iframe.style.border = 'none';
-            iframe.style.width = '100%';
-            iframe.style.height = '100%';
-            iframe.style.margin = '0';
-            iframe.src = url;
-            newTab.document.body.appendChild(iframe);
-            document.getElementById('FullscreenButton').style.background='#ff5148';
-            document.getElementById('FullscreenButton').innerHTML="Fullscreen...";
-        }
-        
-        function getFullscreenURL() {
-            const customGameLink = document.getElementById('customGameLink').value;
-            if (customGameLink) {
-                return customGameLink;
-            } else {
-                // Choose a default URL from the premade games
-                return games.find(game => !game.link.startsWith('https://susysam.github.io/games/')).link;
-            }
-        }
+    games.forEach(game => {
+        let gameDiv = document.createElement('div');
+        gameDiv.classList.add('game');
 
-        // Initial display of all games
-        displayGames();
-    </script>
+        let img = document.createElement('img');
+        img.src = game.images;
+        gameDiv.appendChild(img);
+
+        let name = document.createElement('p');
+        name.textContent = game.name;
+        gameDiv.appendChild(name);
+
+        gameGallery.appendChild(gameDiv);
+    });
+}
+
+// Initial display of games
+displayGames();
+</script>
 </body>
 </html>
-
