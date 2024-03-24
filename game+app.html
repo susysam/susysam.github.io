@@ -21,7 +21,9 @@
         }
         .logo img {
             width: 100px;
-            height: auto;
+            height: 100px;
+            border-radius: 50%; /* Circular shape */
+            overflow: hidden; /* Ensure circular shape */
         }
         .search-bar {
             display: flex;
@@ -57,11 +59,55 @@
             border-radius: 5px;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
             text-align: center;
+            cursor: pointer;
         }
         .game img {
             max-width: 100%;
             height: auto;
             border-radius: 5px;
+        }
+        .game h3 {
+            margin-top: 10px;
+        }
+        #customGameInput {
+            margin-top: 20px;
+        }
+        #customGameInput input[type="text"] {
+            padding: 8px;
+            width: 200px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-right: 10px;
+        }
+        #customGameInput button {
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #customGameInput button:hover {
+            background-color: #45a049;
+        }
+        #backButton {
+            padding: 8px 15px;
+            background-color: #ff5148;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-left: 5px;
+        }
+        #backButton:hover {
+            background-color: #d04237;
+        }
+        #gameFrame {
+            display: none;
+            width: 80vw;
+            height: 80vh;
+            margin: 0 auto;
+            border: none;
         }
     </style>
 </head>
@@ -74,67 +120,123 @@
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Search games..." oninput="searchGames()">
         </div>
+        <button id="backButton" onclick="goBack()">Back</button>
     </header>
     <main id="gameGallery">
-        <!-- Game /images will be dynamically added here -->
+        <!-- Game images will be dynamically added here -->
     </main>
 
-    <script>
-        const games = [
-            { name: 'Bob the Robber 2', images: '/images/bob-the-robber-2.png', link: 'https://www.example.com/' },
-            { name: 'Drive Mad', images: '/images/drive-mad.jpg', link: 'https://www.example.com/' },
-            { name: 'Minecraft', images: '/images/mc.png', link: 'https://www.example.com/' },
-            { name: 'Moto X3M', images: '/images/moto-x3m.jpg', link: 'https://www.example.com/' },
-            { name: 'Moto X3M 2', images: '/images/motox3m2.jpg', link: 'https://www.example.com/' },
-            { name: 'Retro Bowl', images: '/images/retro-bowl.jpg', link: 'https://www.example.com/' },
-            { name: 'Slope', images: '/images/slope.jpg', link: 'https://www.example.com/' },
-            { name: 'A1R', images: '/images/A1R.png', link: 'https://freeleo27.github.io/' },
-            { name: 'Vex 3', images: '/images/vex3.jpg', link: 'https://www.example.com/' },
-            { name: 'Vex 4', images: '/images/vex4.jpg', link: 'https://www.example.com/' },
-            { name: 'Vex 5', images: '/images/vex5.jpg', link: 'https://www.example.com/' },
-            { name: 'Vex 6', images: '/images/vex6.jpeg', link: 'https://www.example.com/' },
-            { name: 'Vex 7', images: '/images/vex7.jpeg', link: 'https://www.example.com/' }
-        ];
+    <div id="customGameInput" style="display: none;">
+        <input type="text" id="customGameName" placeholder="Enter game name...">
+        <input type="text" id="customGameLink" placeholder="Enter game link...">
+        <input type="text" id="customGameIcon" placeholder="Enter game icon...">
+        <button onclick="addCustomGame()">Add Custom Game</button>
+    </div>
 
+    <iframe id="gameFrame" frameborder="0"></iframe>
+
+    <script>
+        let games = [
+    { name: 'Custom Game', images: '/images/plus.png', link: 'https://docs.google.com/forms/d/e/1FAIpQLSdS1tZ-sCsBZqEYHwDQj8181D5IH3U8UvEdopmaqX_CQ85NSw/viewform' }, // Changed the first game to a custom game
+    { name: 'Bob the Robber 2', images: '/images/bob-the-robber-2.png', link: 'https://www.example.com/' },
+    { name: 'Drive Mad', images: '/images/drive-mad.jpg', link: 'https://www.example.com/' },
+    { name: 'Minecraft', images: '/images/mc.png', link: 'https://www.example.com/' },
+    { name: 'Moto X3M', images: '/images/moto-x3m.jpg', link: 'https://www.example.com/' },
+    { name: 'Moto X3M 2', images: '/images/motox3m2.jpg', link: 'https://www.example.com/' },
+    { name: 'Retro Bowl', images: '/images/retro-bowl.jpg', link: 'https://www.example.com/' },
+    { name: 'Slope', images: '/images/slope.jpg', link: 'https://www.example.com/' },
+    { name: 'A1R', images: '/images/A1R.png', link: 'https://freeleo27.github.io/' },
+    { name: 'Roblox', images: 'https://media.licdn.com/dms/image/C4E0BAQHcBSrlw3MI3g/company-logo_200_200/0/1661789836195/roblox_logo?e=2147483647&v=beta&t=0oF3IJAN2a2NnTWiqfdkMHHHULM3iuO_MJN2JBHeWmc', link: 'https://freeleo27.github.io/' }, // Corrected image URL
+    { name: 'Cluster Rush', images: 'https://geometrydash.io/data/image/game/cluster-rush.jpg', link: 'https://www.snake-games.io/localgames/cluster-rush/' },
+    { name: 'Vex 3', images: '/images/vex3.jpg', link: 'https://html5.gamedistribution.com/rvvASMiM/762c932b4db74c6da0c1d101b2da8be6/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-3' },
+    { name: 'Vex 4', images: '/images/vex4.jpg', link: 'https://html5.gamedistribution.com/rvvASMiM/80e6a5ae477f4d4fbcd1ea293d10087d/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-4' },
+    { name: 'Vex 5', images: '/images/vex5.jpg', link: 'https://html5.gamedistribution.com/rvvASMiM/f120262ab72743039fbce88c1f370df8/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-5' },
+    { name: 'Vex 6', images: '/images/vex6.jpeg', link: 'https://html5.gamedistribution.com/rvvASMiM/4925e12574364121a48c61c35f649c36/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-6' },
+    { name: 'Basketball Stars', images: 'https://images.crazygames.com/games/basketball-stars-2019/cover-1583231506155.png?auto=format%2Ccompress&q=45&cs=strip&ch=DPR&w=1200&h=630&fit=crop', link: 'https://html5.gamedistribution.com/rvvASMiM/69d78d071f704fa183d75b4114ae40ec/?gd_sdk_referrer_url=https://gamedistribution.com/games/basketball-stars' }
+];
         function displayGames() {
-            const gameGallery = document.getElementById('gameGallery');
+            let gameGallery = document.getElementById('gameGallery');
             gameGallery.innerHTML = '';
+
             games.forEach(game => {
-                const gameElement = document.createElement('div');
-                gameElement.classList.add('game');
-                gameElement.innerHTML = `
-                    <a href="${game.link}" target="_blank">
-                        <img src="${game.images}" alt="${game.name}">
-                        <h3>${game.name}</h3>
-                    </a>
-                `;
-                gameGallery.appendChild(gameElement);
+                let gameDiv = document.createElement('div');
+                gameDiv.classList.add('game');
+                gameDiv.setAttribute('onclick', `openGame('${game.link}')`);
+
+                if (game.images) {
+                    let img = document.createElement('img');
+                    img.src = game.images;
+                    gameDiv.appendChild(img);
+                }
+
+                let name = document.createElement('h3');
+                name.textContent = game.name;
+                gameDiv.appendChild(name);
+
+                gameGallery.appendChild(gameDiv);
             });
         }
 
+        function openGame(link) {
+            let gameFrame = document.getElementById('gameFrame');
+            gameFrame.src = link;
+            gameFrame.style.display = 'block';
+
+            let gameGallery = document.getElementById('gameGallery');
+            gameGallery.style.display = 'none';
+        }
+
+        function goBack() {
+            let gameFrame = document.getElementById('gameFrame');
+            gameFrame.style.display = 'none';
+
+            let gameGallery = document.getElementById('gameGallery');
+            gameGallery.style.display = 'grid';
+        }
+
+        function addCustomGame() {
+            let customGameName = document.getElementById('customGameName').value.trim();
+            let customGameLink = document.getElementById('customGameLink').value.trim();
+            let customGameIcon = document.getElementById('customGameIcon').value.trim();
+
+            if (customGameName && customGameLink) {
+                games.unshift({ name: customGameName, images: customGameIcon, link: customGameLink });
+                displayGames();
+                document.getElementById('customGameInput').style.display = 'none';
+            } else {
+                alert('Please enter both game name and game link.');
+            }
+        }
+
         function searchGames() {
-            const searchInput = document.getElementById('searchInput').value.toLowerCase();
-            const filteredGames = games.filter(game => game.name.toLowerCase().includes(searchInput));
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            let filteredGames = games.filter(game => game.name.toLowerCase().includes(input));
             displayFilteredGames(filteredGames);
         }
 
         function displayFilteredGames(filteredGames) {
-            const gameGallery = document.getElementById('gameGallery');
+            let gameGallery = document.getElementById('gameGallery');
             gameGallery.innerHTML = '';
+
             filteredGames.forEach(game => {
-                const gameElement = document.createElement('div');
-                gameElement.classList.add('game');
-                gameElement.innerHTML = `
-                    <a href="${game.link}" target="_blank">
-                        <img src="${game.images}" alt="${game.name}">
-                        <h3>${game.name}</h3>
-                    </a>
-                `;
-                gameGallery.appendChild(gameElement);
+                let gameDiv = document.createElement('div');
+                gameDiv.classList.add('game');
+                gameDiv.setAttribute('onclick', `openGame('${game.link}')`);
+
+                if (game.images) {
+                    let img = document.createElement('img');
+                    img.src = game.images;
+                    gameDiv.appendChild(img);
+                }
+
+                let name = document.createElement('h3');
+                name.textContent = game.name;
+                gameDiv.appendChild(name);
+
+                gameGallery.appendChild(gameDiv);
             });
         }
 
-        // Initial display of all games
         displayGames();
     </script>
 </body>
