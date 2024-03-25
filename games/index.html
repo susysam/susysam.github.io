@@ -137,7 +137,7 @@
 
     <script>
         let games = [
-    { name: 'Custom Game', images: '/images/plus.png', link: 'https://docs.google.com/forms/d/e/1FAIpQLSdS1tZ-sCsBZqEYHwDQj8181D5IH3U8UvEdopmaqX_CQ85NSw/viewform' }, // Changed the first game to a custom game
+    { name: 'Custom Game', images: '/images/plus.png', link: '#' }, // Changed the first game to a custom game with a placeholder link
     { name: 'Bob the Robber 2', images: '/images/bob-the-robber-2.png', link: 'https://www.example.com/' },
     { name: 'Drive Mad', images: '/images/drive-mad.jpg', link: 'https://www.example.com/' },
     { name: 'G Switch 3', images: 'https://img.poki.com/cdn-cgi/image/quality=78,width=600,height=600,fit=cover,f=auto/7f53593c-4090-4cc5-a934-6a5e599d8eaa.png', link: 'https://www.example.com/' },
@@ -238,6 +238,21 @@
                 gameGallery.appendChild(gameDiv);
             });
         }
+        function addCustomGame() {
+    let customGameName = document.getElementById('customGameName').value.trim();
+    let customGameIcon = document.getElementById('customGameIcon').value.trim();
+    
+    // Get the link inputted by the user
+    let customGameLink = prompt('Please enter the link for the custom game:');
+    
+    if (customGameName && customGameLink) {
+        games.unshift({ name: customGameName, images: customGameIcon, link: customGameLink });
+        displayGames();
+        document.getElementById('customGameInput').style.display = 'none';
+    } else {
+        alert('Please enter both game name and game link.');
+    }
+}
 
         displayGames();
     </script>
