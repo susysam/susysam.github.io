@@ -60,7 +60,6 @@
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
             text-align: center;
             cursor: pointer;
-            position: relative;
         }
         .game img {
             max-width: 100%;
@@ -69,20 +68,6 @@
         }
         .game h3 {
             margin-top: 10px;
-        }
-        .fullscreen-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: transparent;
-            border: none;
-            font-size: 20px;
-            color: white;
-            cursor: pointer;
-            outline: none;
-        }
-        .fullscreen-button:hover {
-            color: #ccc;
         }
         #customGameInput {
             margin-top: 20px;
@@ -148,11 +133,12 @@
         <button onclick="addCustomGame()">Add Custom Game</button>
     </div>
 
+    <button id="removeCustomGames" style="display: none;">Remove Custom Games!</button>
+
     <iframe id="gameFrame" frameborder="0"></iframe>
 
     <script>
         let games = [
-            { name: 'Custom Game', images: '/images/plus.png', link: 'https://docs.google.com/forms/d/e/1FAIpQLSdS1tZ-sCsBZqEYHwDQj8181D5IH3U8UvEdopmaqX_CQ85NSw/viewform' },
             { name: 'Bob the Robber 2', images: '/images/bob-the-robber-2.png', link: 'https://ubg365.github.io/bob-the-robber-2/' },
             { name: 'Drive Mad', images: '/images/drive-mad.jpg', link: 'https://ubg77.github.io/game131022/drive-mad/' },
             { name: 'G Switch 3', images: 'https://img.poki.com/cdn-cgi/image/quality=78,width=600,height=600,fit=cover,f=auto/7f53593c-4090-4cc5-a934-6a5e599d8eaa.png', link: 'https://webglmath.github.io/gswitch/' },
@@ -170,6 +156,7 @@
             { name: 'Vex 6', images: '/images/vex6.jpeg', link: 'https://html5.gamedistribution.com/rvvASMiM/4925e12574364121a48c61c35f649c36/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-6' },
             { name: 'Basketball Stars', images: 'https://images.crazygames.com/games/basketball-stars-2019/cover-1583231506155.png?auto=format%2Ccompress&q=45&cs=strip&ch=DPR&w=1200&h=630&fit=crop', link: 'https://html5.gamedistribution.com/rvvASMiM/69d78d071f704fa183d75b4114ae40ec/?gd_sdk_referrer_url=https://gamedistribution.com/games/basketball-stars' }
         ];
+
         function displayGames() {
             let gameGallery = document.getElementById('gameGallery');
             gameGallery.innerHTML = '';
@@ -189,29 +176,8 @@
                 name.textContent = game.name;
                 gameDiv.appendChild(name);
 
-                let fullscreenButton = document.createElement('span');
-                fullscreenButton.classList.add('fullscreen-button');
-                fullscreenButton.textContent = '\u25A1';
-                fullscreenButton.setAttribute('onclick', `toggleFullscreen('${game.link}')`);
-                gameDiv.appendChild(fullscreenButton);
-
                 gameGallery.appendChild(gameDiv);
             });
-        }
-
-        function toggleFullscreen(link) {
-            let gameFrame = document.getElementById('gameFrame');
-            gameFrame.src = link;
-            gameFrame.style.display = 'block';
-
-            if (document.fullscreenElement) {
-                document.exitFullscreen();
-            } else {
-                document.documentElement.requestFullscreen();
-            }
-
-            let gameGallery = document.getElementById('gameGallery');
-            gameGallery.style.display = 'none';
         }
 
         function openGame(link) {
@@ -238,10 +204,19 @@
 
             if (customGameName && customGameLink) {
                 games.unshift({ name: customGameName, images: customGameIcon, link: customGameLink });
-                displayGames();
                 document.getElementById('customGameInput').style.display = 'none';
+                document.getElementById('removeCustomGames').style.display = 'block';
+                displayGames();
             } else {
                 alert('Please enter both game name and game link.');
+            }
+        }
+
+        function removeCustomGames() {
+            if (confirm('Are you sure you want to remove all custom games?')) {
+                games = games.filter(game => !game.hasOwnProperty('custom'));
+                document.getElementById('removeCustomGames').style.display = 'none';
+                displayGames();
             }
         }
 
@@ -269,12 +244,6 @@
                 let name = document.createElement('h3');
                 name.textContent = game.name;
                 gameDiv.appendChild(name);
-
-                let fullscreenButton = document.createElement('span');
-                fullscreenButton.classList.add('fullscreen-button');
-                fullscreenButton.textContent = '\u25A1';
-                fullscreenButton.setAttribute('onclick', `toggleFullscreen('${game.link}')`);
-                gameDiv.appendChild(fullscreenButton);
 
                 gameGallery.appendChild(gameDiv);
             });
