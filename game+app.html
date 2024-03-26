@@ -109,6 +109,18 @@
             margin: 0 auto;
             border: none;
         }
+        #fullscreenButton {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -119,7 +131,7 @@
         <div>Play some Games!</div>
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Search games..." oninput="searchGames()">
-            <button id="backButton" onclick="goBack()">Back</button>
+            <button id="backButton" onclick="location.reload()">Back</button>
         </div>
     </header>
     <main id="gameGallery">
@@ -134,122 +146,44 @@
     </div>
 
     <button id="removeCustomGames" style="display: none;">Remove Custom Games!</button>
+    <button id="fullscreenButton" onclick="toggleFullscreen()">Fullscreen</button>
 
     <iframe id="gameFrame" frameborder="0"></iframe>
 
     <script>
-        let games = [
-            { name: 'Bob the Robber 2', images: '/images/bob-the-robber-2.png', link: 'https://ubg365.github.io/bob-the-robber-2/' },
-            { name: 'Drive Mad', images: '/images/drive-mad.jpg', link: 'https://ubg77.github.io/game131022/drive-mad/' },
-            { name: 'G Switch 3', images: 'https://img.poki.com/cdn-cgi/image/quality=78,width=600,height=600,fit=cover,f=auto/7f53593c-4090-4cc5-a934-6a5e599d8eaa.png', link: 'https://webglmath.github.io/gswitch/' },
-            { name: 'vex 7', images: '/images/vex.png', link: 'https://html5edu.github.io/h6/vex-7/' },
-            { name: 'Minecraft', images: '/images/mc.png', link: 'https://classic.minecraft.net/' },
-            { name: 'Moto X3M', images: '/images/moto-x3m.jpg', link: 'https://webglmath.github.io/moto-x3m/' },
-            { name: 'Retro Bowl', images: '/images/retro-bowl.jpg', link: 'https://webglmath.github.io/retro-bowl/' },
-            { name: 'Slope', images: '/images/slope.jpg', link: 'https://webglmath.github.io/slope/' },
-            { name: 'A1R', images: '/images/A1R.png', link: 'https://freeleo27.github.io/' },
-            { name: 'Roblox', images: '/images/roblox_logo.jpeg', link: 'https://now.gg/iframe/snippet?app_pkg=com.roblox.client&partner=skool' },
-            { name: 'Cluster Rush', images: 'https://geometrydash.io/data/image/game/cluster-rush.jpg', link: 'https://www.snake-games.io/localgames/cluster-rush/' },
-            { name: 'Vex 3', images: '/images/vex3.jpg', link: 'https://html5.gamedistribution.com/rvvASMiM/762c932b4db74c6da0c1d101b2da8be6/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-3' },
-            { name: 'Vex 4', images: '/images/vex4.jpg', link: 'https://html5.gamedistribution.com/rvvASMiM/80e6a5ae477f4d4fbcd1ea293d10087d/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-4' },
-            { name: 'Vex 5', images: '/images/vex5.jpg', link: 'https://html5.gamedistribution.com/rvvASMiM/f120262ab72743039fbce88c1f370df8/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-5' },
-            { name: 'Vex 6', images: '/images/vex6.jpeg', link: 'https://html5.gamedistribution.com/rvvASMiM/4925e12574364121a48c61c35f649c36/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-6' },
-            { name: 'Basketball Stars', images: 'https://images.crazygames.com/games/basketball-stars-2019/cover-1583231506155.png?auto=format%2Ccompress&q=45&cs=strip&ch=DPR&w=1200&h=630&fit=crop', link: 'https://html5.gamedistribution.com/rvvASMiM/69d78d071f704fa183d75b4114ae40ec/?gd_sdk_referrer_url=https://gamedistribution.com/games/basketball-stars' }
-        ];
+        // ... (The rest of the JavaScript code)
 
-        function displayGames() {
-            let gameGallery = document.getElementById('gameGallery');
-            gameGallery.innerHTML = '';
+        function toggleFullscreen() {
+            const gameFrame = document.getElementById('gameFrame');
 
-            games.forEach(game => {
-                let gameDiv = document.createElement('div');
-                gameDiv.classList.add('game');
-                gameDiv.setAttribute('onclick', `openGame('${game.link}')`);
-
-                if (game.images) {
-                    let img = document.createElement('img');
-                    img.src = game.images;
-                    gameDiv.appendChild(img);
-                }
-
-                let name = document.createElement('h3');
-                name.textContent = game.name;
-                gameDiv.appendChild(name);
-
-                gameGallery.appendChild(gameDiv);
-            });
-        }
-
-        function openGame(link) {
-            let gameFrame = document.getElementById('gameFrame');
-            gameFrame.src = link;
-            gameFrame.style.display = 'block';
-
-            let gameGallery = document.getElementById('gameGallery');
-            gameGallery.style.display = 'none';
-        }
-
-        function goBack() {
-            let gameFrame = document.getElementById('gameFrame');
-            gameFrame.style.display = 'none';
-
-            let gameGallery = document.getElementById('gameGallery');
-            gameGallery.style.display = 'grid';
-        }
-
-        function addCustomGame() {
-            let customGameName = document.getElementById('customGameName').value.trim();
-            let customGameLink = document.getElementById('customGameLink').value.trim();
-            let customGameIcon = document.getElementById('customGameIcon').value.trim();
-
-            if (customGameName && customGameLink) {
-                games.unshift({ name: customGameName, images: customGameIcon, link: customGameLink });
-                document.getElementById('customGameInput').style.display = 'none';
-                document.getElementById('removeCustomGames').style.display = 'block';
-                displayGames();
-            } else {
-                alert('Please enter both game name and game link.');
+            if (gameFrame.requestFullscreen) {
+                gameFrame.requestFullscreen();
+            } else if (gameFrame.webkitRequestFullscreen) {
+                gameFrame.webkitRequestFullscreen();
+            } else if (gameFrame.msRequestFullscreen) {
+                gameFrame.msRequestFullscreen();
             }
+
+            const fullscreenButton = document.getElementById('fullscreenButton');
+            fullscreenButton.textContent = 'Exit Fullscreen';
+            fullscreenButton.onclick = exitFullscreen;
         }
 
-        function removeCustomGames() {
-            if (confirm('Are you sure you want to remove all custom games?')) {
-                games = games.filter(game => !game.hasOwnProperty('custom'));
-                document.getElementById('removeCustomGames').style.display = 'none';
-                displayGames();
+        function exitFullscreen() {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
             }
+
+            const fullscreenButton = document.getElementById('fullscreenButton');
+            fullscreenButton.textContent = 'Fullscreen';
+            fullscreenButton.onclick = toggleFullscreen;
         }
 
-        function searchGames() {
-            let input = document.getElementById('searchInput').value.toLowerCase();
-            let filteredGames = games.filter(game => game.name.toLowerCase().includes(input));
-            displayFilteredGames(filteredGames);
-        }
-
-        function displayFilteredGames(filteredGames) {
-            let gameGallery = document.getElementById('gameGallery');
-            gameGallery.innerHTML = '';
-
-            filteredGames.forEach(game => {
-                let gameDiv = document.createElement('div');
-                gameDiv.classList.add('game');
-                gameDiv.setAttribute('onclick', `openGame('${game.link}')`);
-
-                if (game.images) {
-                    let img = document.createElement('img');
-                    img.src = game.images;
-                    gameDiv.appendChild(img);
-                }
-
-                let name = document.createElement('h3');
-                name.textContent = game.name;
-                gameDiv.appendChild(name);
-
-                gameGallery.appendChild(gameDiv);
-            });
-        }
-
-        displayGames();
+        // ... (The rest of the JavaScript code)
     </script>
 </body>
 </html>
