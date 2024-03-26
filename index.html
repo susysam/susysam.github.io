@@ -126,42 +126,6 @@
   </style>
 </head>
 <body>
-  <?php
-    session_start(); // Start a new session or resume the existing session
-
-    // Check if the user is already logged in, redirect to start27.html if so
-    if(isset($_SESSION['username'])) {
-      header("Location: start27.html");
-      exit();
-    }
-
-    // Define the hardcoded usernames and passwords
-    $credentials = array(
-      "Leo" => "2024",
-      "Admin" => "Admin"
-    );
-
-    // Check if the form is submitted
-    if(isset($_POST['submit'])) {
-      // Validate login credentials
-      $username = $_POST['username'];
-      $password = $_POST['password'];
-
-      // Check if the provided username exists and the password matches
-      if(array_key_exists($username, $credentials) && $credentials[$username] === $password) {
-        // Login successful, set session variables
-        $_SESSION['username'] = $username;
-
-        // Redirect to start27.html
-        header("Location: start27.html");
-        exit();
-      } else {
-        // Login failed, display error message
-        echo '<script>alert("Invalid username or password!");</script>';
-      }
-    }
-  ?>
-
   <div class="wrapper">
     <div class="form-wrapper sign-in">
       <form action="" method="POST">
@@ -178,19 +142,8 @@
           <label><input type="checkbox"> Remember me</label>
         </div>
         <button type="submit" name="submit">Login</button>
-        <div class="signUp-link">
-          <p>Don't have an account? <a href="#" class="signUpBtn-link">Sign Up</a></p>
-        </div>
       </form>
     </div>
   </div>
-  <script>
-    const signUpBtnLink = document.querySelector('.signUpBtn-link');
-    const wrapper = document.querySelector('.wrapper');
-    
-    signUpBtnLink.addEventListener('click', () => {
-        wrapper.classList.toggle('active');
-    });
-  </script>
 </body>
 </html>
