@@ -128,6 +128,7 @@
 
     <div id="customGameInput" style="display: none;">
         <input type="text" id="customGameName" placeholder="Enter game name...">
+        <input type="text" id="customGameLink" placeholder="Enter game link...">
         <input type="text" id="customGameIcon" placeholder="Enter game icon...">
         <button onclick="addCustomGame()">Add Custom Game</button>
     </div>
@@ -136,21 +137,24 @@
 
     <script>
         let games = [
-{ name: 'Custom Game', images: '/images/plus.png' }, // Changed the first game to a custom game
-{ name: 'Bob the Robber 2', images: '/images/bob-the-robber-2.png', link: 'https://ubg365.github.io/bob-the-robber-2' },
-{ name: 'Drive Mad', images: '/images/drive-mad.jpg', link: 'https://ubg77.github.io/game131022/drive-mad/' },
-{ name: 'G Switch 3', images: 'https://img.poki.com/cdn-cgi/image/quality=78,width=600,height=600,fit=cover,f=auto/7f53593c-4090-4cc5-a934-6a5e599d8eaa.png', link: 'https://webglmath.github.io/gswitch/' },
-{ name: 'vex 7', images: '/images/vex.png', link: 'https://html5edu.github.io/h6/vex-7/' },
-{ name: 'Minecraft', images: '/images/mc.png', link: 'https://classic.minecraft.net/' },
-{ name: 'Moto X3M', images: '/images/moto-x3m.jpg', link: 'https://webglmath.github.io/moto-x3m/' },
-{ name: 'Retro Bowl', images: '/images/retro-bowl.jpg', link: 'https://webglmath.github.io/retro-bowl/' },
-{ name: 'Slope', images: '/images/slope.jpg', link: 'https://webglmath.github.io/slope/' },
-{ name: 'A1R', images: '/images/A1R.png', link: 'https://freeleo27.github.io/' },
-{ name: 'Roblox', images: '/images/roblox_logo.jpeg', link: 'https://now.gg/iframe/snippet?app_pkg=com.roblox.client&partner=skool' },
-{ name: 'Cluster Rush', images: 'https://geometrydash.io', link: 'https://www.snake-games.io/localgames/cluster-rush/' },
-{ name: 'Vex 3', images: '/images/vex3.jpg', link: 'https://html5.gamedistribution.com/rvvASMiM/762c932b4db' }
+            { name: 'Custom Game', images: '/images/plus.png', link: 'https://docs.google.com/forms/d/e/1FAIpQLSdS1tZ-sCsBZqEYHwDQj8181D5IH3U8UvEdopmaqX_CQ85NSw/viewform' }, // Changed the first game to a custom game
+            { name: 'Bob the Robber 2', images: '/images/bob-the-robber-2.png', link: 'https://ubg365.github.io/bob-the-robber-2/' },
+            { name: 'Drive Mad', images: '/images/drive-mad.jpg', link: 'https://ubg77.github.io/game131022/drive-mad/' },
+            { name: 'G Switch 3', images: 'https://img.poki.com/cdn-cgi/image/quality=78,width=600,height=600,fit=cover,f=auto/7f53593c-4090-4cc5-a934-6a5e599d8eaa.png', link: 'https://webglmath.github.io/gswitch/' },
+            { name: 'vex 7', images: '/images/vex.png', link: 'https://html5edu.github.io/h6/vex-7/' },
+            { name: 'Minecraft', images: '/images/mc.png', link: 'https://classic.minecraft.net/' },
+            { name: 'Moto X3M', images: '/images/moto-x3m.jpg', link: 'https://webglmath.github.io/moto-x3m/' },
+            { name: 'Retro Bowl', images: '/images/retro-bowl.jpg', link: 'https://webglmath.github.io/retro-bowl/' },
+            { name: 'Slope', images: '/images/slope.jpg', link: 'https://webglmath.github.io/slope/' },
+            { name: 'A1R', images: '/images/A1R.png', link: 'https://freeleo27.github.io/' },
+            { name: 'Roblox', images: '/images/roblox_logo.jpeg', link: 'https://now.gg/iframe/snippet?app_pkg=com.roblox.client&partner=skool' }, // Corrected image URL
+            { name: 'Cluster Rush', images: 'https://geometrydash.io/data/image/game/cluster-rush.jpg', link: 'https://www.snake-games.io/localgames/cluster-rush/' },
+            { name: 'Vex 3', images: '/images/vex3.jpg', link: 'https://html5.gamedistribution.com/rvvASMiM/762c932b4db74c6da0c1d101b2da8be6/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-3' },
+            { name: 'Vex 4', images: '/images/vex4.jpg', link: 'https://html5.gamedistribution.com/rvvASMiM/80e6a5ae477f4d4fbcd1ea293d10087d/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-4' },
+            { name: 'Vex 5', images: '/images/vex5.jpg', link: 'https://html5.gamedistribution.com/rvvASMiM/f120262ab72743039fbce88c1f370df8/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-5' },
+            { name: 'Vex 6', images: '/images/vex6.jpeg', link: 'https://html5.gamedistribution.com/rvvASMiM/4925e12574364121a48c61c35f649c36/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-6' },
+            { name: 'Basketball Stars', images: 'https://images.crazygames.com/games/basketball-stars-2019/cover-1583231506155.png?auto=format%2Ccompress&q=45&cs=strip&ch=DPR&w=1200&h=630&fit=crop', link: 'https://html5.gamedistribution.com/rvvASMiM/69d78d071f704fa183d75b4114ae40ec/?gd_sdk_referrer_url=https://gamedistribution.com/games/basketball-stars' }
         ];
-
         function displayGames() {
             let gameGallery = document.getElementById('gameGallery');
             gameGallery.innerHTML = '';
@@ -193,14 +197,15 @@
 
         function addCustomGame() {
             let customGameName = document.getElementById('customGameName').value.trim();
+            let customGameLink = document.getElementById('customGameLink').value.trim();
             let customGameIcon = document.getElementById('customGameIcon').value.trim();
 
-            if (customGameName && customGameIcon) {
-                games.unshift({ name: customGameName, images: customGameIcon });
+            if (customGameName && customGameLink) {
+                games.unshift({ name: customGameName, images: customGameIcon, link: customGameLink });
                 displayGames();
                 document.getElementById('customGameInput').style.display = 'none';
             } else {
-                alert('Please enter both game name and game icon.');
+                alert('Please enter both game name and game link.');
             }
         }
 
@@ -217,9 +222,7 @@
             filteredGames.forEach(game => {
                 let gameDiv = document.createElement('div');
                 gameDiv.classList.add('game');
-                if (game.link) {
-                    gameDiv.setAttribute('onclick', `openGame('${game.link}')`);
-                }
+                gameDiv.setAttribute('onclick', `openGame('${game.link}')`);
 
                 if (game.images) {
                     let img = document.createElement('img');
