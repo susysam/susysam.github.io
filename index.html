@@ -129,15 +129,15 @@
 <body>
   <div class="wrapper">
     <div class="form-wrapper sign-in">
-      <form action="">
+      <form id="loginForm" action="about.html" method="post">
         <h2>Login</h2>
         <div class="input-group">
-          <input type="text" required>
-          <label for="">Username</label>
+          <input type="text" id="username" name="username" required>
+          <label for="username">Username</label>
         </div>
         <div class="input-group">
-          <input type="password" required>
-          <label for="">Password</label>
+          <input type="password" id="password" name="password" required>
+          <label for="password">Password</label>
         </div>
         <div class="remember">
           <label><input type="checkbox"> Remember me</label>
@@ -155,6 +155,24 @@
     
     signUpBtnLink.addEventListener('click', () => {
         wrapper.classList.toggle('active');
+    });
+
+    // Form submission and validation
+    const loginForm = document.getElementById('loginForm');
+    loginForm.addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent the default form submission
+      
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      
+      // Simulate login validation
+      if ((username === "yourUsername" && password === "yourPassword") || (username === "Admin" && password === "Admin")) {
+        // Redirect to about.html upon successful login
+        window.location.href = "about.html";
+      } else {
+        // Display error message or handle invalid login
+        console.log("Invalid username or password");
+      }
     });
   </script>
 </body>
