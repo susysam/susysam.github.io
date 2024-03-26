@@ -35,22 +35,7 @@
             border-radius: 5px;
             border: 1px solid #ccc;
         }
-        .custom-game-button {
-            display: none;
-        }
-        .custom-game-input {
-            margin-top: 20px;
-            display: flex;
-            align-items: center;
-        }
-        .custom-game-input input[type="text"] {
-            padding: 8px;
-            width: 200px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            margin-right: 10px;
-        }
-        .custom-game-input button {
+        .search-bar button {
             padding: 8px 15px;
             background-color: #4CAF50;
             color: white;
@@ -59,7 +44,7 @@
             border-radius: 5px;
             margin-left: 5px;
         }
-        .custom-game-input button:hover {
+        .search-bar button:hover {
             background-color: #45a049;
         }
         main {
@@ -84,6 +69,39 @@
         .game h3 {
             margin-top: 10px;
         }
+        #customGameInput {
+            margin-top: 20px;
+        }
+        #customGameInput input[type="text"] {
+            padding: 8px;
+            width: 200px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-right: 10px;
+        }
+        #customGameInput button {
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #customGameInput button:hover {
+            background-color: #45a049;
+        }
+        #backButton {
+            padding: 8px 15px;
+            background-color: #ff5148;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-left: 5px;
+        }
+        #backButton:hover {
+            background-color: #d04237;
+        }
         #gameFrame {
             display: none;
             width: 80vw;
@@ -103,17 +121,16 @@
             <input type="text" id="searchInput" placeholder="Search games..." oninput="searchGames()">
             <button id="backButton" onclick="goBack()">Back</button>
         </div>
-        <button class="custom-game-button" onclick="showCustomGameInput()">Add Game</button>
     </header>
     <main id="gameGallery">
         <!-- Game images will be dynamically added here -->
     </main>
 
-    <div class="custom-game-input">
-        <input type="text" id="customGameName" placeholder="Game name...">
-        <input type="text" id="customGameLink" placeholder="Game link...">
-        <input type="text" id="customGameIcon" placeholder="Game icon URL...">
-        <button onclick="addCustomGame()">Add Game</button>
+    <div id="customGameInput">
+        <input type="text" id="customGameName" placeholder="Enter game name...">
+        <input type="text" id="customGameLink" placeholder="Enter game link...">
+        <input type="text" id="customGameIcon" placeholder="Enter game icon URL...">
+        <button onclick="addCustomGame()">Add Custom Game</button>
     </div>
 
     <iframe id="gameFrame" frameborder="0"></iframe>
@@ -157,14 +174,6 @@
                 name.textContent = game.name;
                 gameDiv.appendChild(name);
 
-                if (game.images === '/images/plus.png') {
-                    let plusIcon = document.createElement('img');
-                    plusIcon.src = game.images;
-                    plusIcon.style.width = '20px';
-                    plusIcon.style.marginRight = '5px';
-                    name.insertBefore(plusIcon, name.firstChild);
-                }
-
                 gameGallery.appendChild(gameDiv);
             });
         }
@@ -194,7 +203,7 @@
             if (customGameName && customGameLink) {
                 games.unshift({ name: customGameName, images: customGameIcon, link: customGameLink });
                 displayGames();
-                hideCustomGameInput();
+                document.getElementById('customGameInput').style.display = 'none';
             } else {
                 alert('Please enter both game name and game link.');
             }
@@ -225,32 +234,8 @@
                 name.textContent = game.name;
                 gameDiv.appendChild(name);
 
-                if (game.images === '/images/plus.png') {
-                    let plusIcon = document.createElement('img');
-                    plusIcon.src = game.images;
-                    plusIcon.style.width = '20px';
-                    plusIcon.style.marginRight = '5px';
-                    name.insertBefore(plusIcon, name.firstChild);
-                }
-
                 gameGallery.appendChild(gameDiv);
             });
-        }
-
-        function showCustomGameInput() {
-            let customGameInput = document.querySelector('.custom-game-input');
-            customGameInput.style.display = 'flex';
-
-            let customGameButton = document.querySelector('.custom-game-button');
-            customGameButton.style.display = 'none';
-        }
-
-        function hideCustomGameInput() {
-            let customGameInput = document.querySelector('.custom-game-input');
-            customGameInput.style.display = 'none';
-
-            let customGameButton = document.querySelector('.custom-game-button');
-            customGameButton.style.display = 'flex';
         }
 
         displayGames();
