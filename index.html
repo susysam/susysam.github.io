@@ -1,259 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            background-color: #292929;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            font-family: 'Montserrat', sans-serif;
-        }
-
-        .login-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            width: 100%;
-        }
-
-        .login-box {
-            width: 400px;
-            padding: 40px;
-            background: linear-gradient(#006992, #2E1760);
-            box-sizing: border-box;
-            box-shadow: 0 15px 25px rgba(0, 0, 0, .6);
-            border-radius: 10px;
-            animation: slideInFromLeft 1s ease forwards;
-        }
-
-        .login-box h2 {
-            margin: 0 0 30px;
-            padding: 0;
-            color: #fff;
-            text-align: center;
-        }
-
-        .login-box .user-box {
-            position: relative;
-        }
-
-        .login-box .user-box input {
-            width: 100%;
-            padding: 10px 0;
-            font-size: 16px;
-            color: #fff;
-            margin-bottom: 30px;
-            border: none;
-            border-bottom: 1px solid #fff;
-            outline: none;
-            background: transparent;
-        }
-
-        .login-box .user-box label {
-            position: absolute;
-            top: 0;
-            left: 0;
-            padding: 10px 0;
-            font-size: 16px;
-            color: #fff;
-            pointer-events: none;
-            transition: .5s;
-        }
-
-        .login-box .user-box input:focus~label,
-        .login-box .user-box input:valid~label {
-            top: -20px;
-            left: 0;
-            color: #03e9f4;
-            font-size: 12px;
-        }
-
-        .login-box form a {
-            position: relative;
-            display: inline-block;
-            padding: 10px 20px;
-            color: #03e9f4;
-            font-size: 16px;
-            text-decoration: none;
-            text-transform: uppercase;
-            overflow: hidden;
-            transition: .5s;
-            margin-top: 40px;
-            letter-spacing: 4px
-        }
-
-        .login-box a:hover {
-            background: #03e9f4;
-            color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 0 5px #03e9f4, 0 0 25px #03e9f4, 0 0 50px #03e9f4, 0 0 100px #03e9f4;
-        }
-
-        .login-box a span {
-            position: absolute;
-            display: block;
-        }
-
-        .login-box a span:nth-child(1) {
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #03e9f4);
-            animation: btn-anim1 1s linear infinite;
-        }
-
-        @keyframes btn-anim1 {
-            0% {
-                left: -100%;
-            }
-
-            50%,
-            100% {
-                left: 100%;
-            }
-        }
-
-        .login-box a span:nth-child(2) {
-            top: -100%;
-            right: 0;
-            width: 2px;
-            height: 100%;
-            background: linear-gradient(180deg, transparent, #03e9f4);
-            animation: btn-anim2 1s linear infinite;
-            animation-delay: .25s
-        }
-
-        @keyframes btn-anim2 {
-            0% {
-                top: -100%;
-            }
-
-            50%,
-            100% {
-                top: 100%;
-            }
-        }
-
-        .login-box a span:nth-child(3) {
-            bottom: 0;
-            right: -100%;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(270deg, transparent, #03e9f4);
-            animation: btn-anim3 1s linear infinite;
-            animation-delay: .5s
-        }
-
-        @keyframes btn-anim3 {
-            0% {
-                right: -100%;
-            }
-
-            50%,
-            100% {
-                right: 100%;
-            }
-        }
-
-        .login-box a span:nth-child(4) {
-            bottom: -100%;
-            left: 0;
-            width: 2px;
-            height: 100%;
-            background: linear-gradient(360deg, transparent, #03e9f4);
-            animation: btn-anim4 1s linear infinite;
-            animation-delay: .75s
-        }
-
-        @keyframes btn-anim4 {
-            0% {
-                bottom: -100%;
-            }
-
-            50%,
-            100% {
-                bottom: 100%;
-            }
-        }
-
-        @keyframes slideInFromLeft {
-            from {
-                transform: translateX(-100%);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes fadeInFromBottom {
-            from {
-                transform: translateY(50%);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Animated Login & Registration Form | Codehal</title>
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: #000;
+    }
+    .wrapper {
+      position: relative;
+      width: 400px;
+      height: 500px;
+      background: #000;
+      box-shadow: 0 0 50px #0ef;
+      border-radius: 20px;
+      padding: 40px;
+      overflow: hidden;
+    }
+    .wrapper:hover {
+      animation: animate 1s linear infinite;
+    }
+    @keyframes animate {
+      100% {
+        filter: hue-rotate(360deg);
+      }
+    }
+    .form-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      transition: 1s ease-in-out;
+    }
+    .wrapper.active .form-wrapper.sign-in {
+      transform: translateY(-450px);
+    }
+    .wrapper .form-wrapper.sign-up {
+      position: absolute;
+      top: 450px;
+      left: 0;
+    }
+    .wrapper.active .form-wrapper.sign-up {
+      transform: translateY(-450px);
+    }
+    h2 {
+      font-size: 30px;
+      color: #fff;
+      text-align: center;
+    }
+    .input-group {
+      position: relative;
+      margin: 30px 0;
+      border-bottom: 2px solid #fff;
+    }
+    .input-group label {
+      position: absolute;
+      top: 50%;
+      left: 5px;
+      transform: translateY(-50%);
+      font-size: 16px;
+      color: #fff;
+      pointer-events: none;
+      transition: .5s;
+    }
+    .input-group input {
+      width: 320px;
+      height: 40px;
+      font-size: 16px;
+      color: #fff;
+      padding: 0 5px;
+      background: transparent;
+      border: none;
+      outline: none;
+    }
+    .input-group input:focus~label,
+    .input-group input:valid~label {
+      top: -5px;
+    }
+    .remember {
+      margin: -5px 0 15px 5px;
+    }
+    .remember label {
+      color: #fff;
+      font-size: 14px;
+    }
+    .remember label input {
+      accent-color: #0ef;
+    }
+    button {
+      position: relative;
+      width: 100%;
+      height: 40px;
+      background: #0ef;
+      box-shadow: 0 0 10px #0ef;
+      font-size: 16px;
+      color: #000;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 30px;
+      border: none;
+      outline: none;
+    }
+    .signUp-link {
+      font-size: 14px;
+      text-align: center;
+      margin: 15px 0;
+    }
+    .signUp-link p {
+      color: #fff;
+    }
+    .signUp-link p a {
+      color: #0ef;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .signUp-link p a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
-
 <body>
-
-    <div class="login-container">
-        <div class="login-box">
-            <h2>Login</h2>
-            <div class="user-box">
-                <input type="text" id="username" required="">
-                <label for="username">Username</label>
-            </div>
-            <div class="user-box">
-                <input type="password" id="password" required="">
-                <label for="password">Password</label>
-            </div>
-            <!-- Modified button -->
-            <div class="button" onclick="attemptLogin()"><span>Login</span></div>
-            <!-- End of modification -->
+  <div class="wrapper">
+    <div class="form-wrapper sign-in">
+      <form action="">
+        <h2>Login</h2>
+        <div class="input-group">
+          <input type="text" required>
+          <label for="">Username</label>
         </div>
+        <div class="input-group">
+          <input type="password" required>
+          <label for="">Password</label>
+        </div>
+        <div class="remember">
+          <label><input type="checkbox"> Remember me</label>
+        </div>
+        <button type="submit">Login</button>
+        <div class="signUp-link">
+          <p>Don't have an account? <a href="#" class="signUpBtn-link">Sign Up</a></p>
+        </div>
+      </form>
     </div>
-
-    <div id="successContainer" class="success-message" style="display: none;">Correct ✅</div>
-    <div id="wrongContainer" class="error-message" style="display: none;">Wrong ❌</div>
-    <div id="circleAnimation" class="circle-animation" style="display: none;"></div>
-    <div id="wrongAnimation" class="wrong-animation" style="display: none;"></div>
-
-    <script>
-        function attemptLogin() {
-            var username = document.getElementById("username").value;
-            var password = document.getElementById("password").value;
-
-            // Your validation logic here
-            if ((username === "Leo" && password === "2024") || (username === "Robloxislife" && password === "FriedChicken")) {
-                document.getElementById("circleAnimation").style.display = "block";
-                document.getElementById("successContainer").style.display = "block";
-                window.location.href = "about.html";
-            } else {
-                document.getElementById("wrongAnimation").style.display = "block";
-                document.getElementById("wrongContainer").style.display = "block";
-            }
-        }
-    </script>
-
+    <div class="form-wrapper sign-up">
+      <form action="">
+        <h2>Sign Up</h2>
+        <div class="input-group">
+          <input type="text" required>
+          <label for="">Username</label>
+        </div>
+        <div class="input-group">
+          <input type="email" required>
+          <label for="">Email</label>
+        </div>
+        <div class="input-group">
+          <input type="password" required>
+          <label for="">Password</label>
+        </div>
+        <div class="remember">
+          <label><input type="checkbox"> I agree to the terms & conditions</label>
+        </div>
+        <button type="submit">Sign Up</button>
+        <div class="signUp-link">
+          <p>Already have an account? <a href="#" class="signInBtn-link">Sign In</a></p>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script>
+    const signInBtnLink = document.querySelector('.signInBtn-link');
+    const signUpBtnLink = document.querySelector('.signUpBtn-link');
+    const wrapper = document.querySelector('.wrapper');
+    
+    signUpBtnLink.addEventListener('click', () => {
+        wrapper.classList.toggle('active');
+    });
+    
+    signInBtnLink.addEventListener('click', () => {
+        wrapper.classList.toggle('active');
+    });
+  </script>
 </body>
-
 </html>
