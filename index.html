@@ -40,14 +40,11 @@
     }
     .form-wrapper {
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      width: 100%;
       height: 100%;
       transition: 1s ease-in-out;
-    }
-    .wrapper.active .form-wrapper.sign-in {
-      transform: translateY(-450px);
     }
     h2 {
       font-size: 30px;
@@ -83,18 +80,7 @@
     .input-group input:valid~label {
       top: -5px;
     }
-    .remember {
-      margin: -5px 0 15px 5px;
-    }
-    .remember label {
-      color: #fff;
-      font-size: 14px;
-    }
-    .remember label input {
-      accent-color: #0ef;
-    }
     button {
-      position: relative;
       width: 100%;
       height: 40px;
       background: #0ef;
@@ -131,7 +117,7 @@
 
     // Check if the user is already logged in, redirect to start27.html if so
     if(isset($_SESSION['username'])) {
-      header("Location: https://susysam.github.io/start27.html");
+      header("Location: start27.html");
       exit();
     }
 
@@ -153,11 +139,11 @@
         $_SESSION['username'] = $username;
 
         // Redirect to start27.html
-        header("Location: https://susysam.github.io/start27.html");
+        header("Location: start27.html");
         exit();
       } else {
-        // Login failed, display error message
-        echo '<script>alert("Invalid username or password!");</script>';
+        // Invalid username or password
+        echo '<script>console.log("Invalid username or password!");</script>';
       }
     }
   ?>
@@ -174,10 +160,10 @@
           <input type="password" name="password" required>
           <label for="">Password</label>
         </div>
-        <div class="remember">
-          <label><input type="checkbox"> Remember me</label>
-        </div>
         <button type="submit" name="submit">Login</button>
+        <div class="signUp-link">
+          <p>Don't have an account? <a href="#" class="signUpBtn-link">Sign Up</a></p>
+        </div>
       </form>
     </div>
   </div>
