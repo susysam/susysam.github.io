@@ -4,10 +4,9 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Just Login</title>
+  <title>Login</title>
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap">
   <style>
-    /* Your existing CSS styles */
     * {
       margin: 0;
       padding: 0;
@@ -50,14 +49,6 @@
     .wrapper.active .form-wrapper.sign-in {
       transform: translateY(-450px);
     }
-    .wrapper .form-wrapper.sign-up {
-      position: absolute;
-      top: 450px;
-      left: 0;
-    }
-    .wrapper.active .form-wrapper.sign-up {
-      transform: translateY(-450px);
-    }
     h2 {
       font-size: 30px;
       color: #fff;
@@ -91,6 +82,16 @@
     .input-group input:focus~label,
     .input-group input:valid~label {
       top: -5px;
+    }
+    .remember {
+      margin: -5px 0 15px 5px;
+    }
+    .remember label {
+      color: #fff;
+      font-size: 14px;
+    }
+    .remember label input {
+      accent-color: #0ef;
     }
     button {
       position: relative;
@@ -163,7 +164,7 @@
 
   <div class="wrapper">
     <div class="form-wrapper sign-in">
-      <form action="#" method="POST">
+      <form action="" method="POST">
         <h2>Login</h2>
         <div class="input-group">
           <input type="text" name="username" required>
@@ -173,25 +174,23 @@
           <input type="password" name="password" required>
           <label for="">Password</label>
         </div>
-<button type="submit" name="submit">Sign Up</button>
+        <div class="remember">
+          <label><input type="checkbox"> Remember me</label>
+        </div>
+        <button type="submit" name="submit">Login</button>
         <div class="signUp-link">
-          <p>Already have an account? <a href="#" class="signInBtn-link">Sign In</a></p>
+          <p>Don't have an account? <a href="#" class="signUpBtn-link">Sign Up</a></p>
         </div>
       </form>
     </div>
   </div>
-<script>
-  const signInBtnLink = document.querySelector('.signInBtn-link');
-  const signUpBtnLink = document.querySelector('.signUpBtn-link'); // Corrected class name
-  const wrapper = document.querySelector('.wrapper');
-
-  signUpBtnLink.addEventListener('click', () => {
-      wrapper.classList.add('active');
-  });
-
-  signInBtnLink.addEventListener('click', () => {
-      wrapper.classList.remove('active');
-  });
-</script>
+  <script>
+    const signUpBtnLink = document.querySelector('.signUpBtn-link');
+    const wrapper = document.querySelector('.wrapper');
+    
+    signUpBtnLink.addEventListener('click', () => {
+        wrapper.classList.toggle('active');
+    });
+  </script>
 </body>
 </html>
