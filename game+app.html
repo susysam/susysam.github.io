@@ -71,6 +71,9 @@
         }
         #customGameInput {
             margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         #customGameInput input[type="text"] {
             padding: 8px;
@@ -109,6 +112,17 @@
             margin: 0 auto;
             border: none;
         }
+        .moving-text {
+            animation: moveText 5s infinite linear;
+        }
+        @keyframes moveText {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
     </style>
 </head>
 <body>
@@ -116,7 +130,7 @@
         <div class="logo">
             <img src="/images/leo.jpg" alt="Game Website Logo">
         </div>
-        <div>Play some Games!</div>
+        <div class="moving-text">Play some Games!</div>
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Search games..." oninput="searchGames()">
             <button id="backButton" onclick="goBack()">Back</button>
@@ -167,6 +181,7 @@
                 if (game.images) {
                     let img = document.createElement('img');
                     img.src = game.images;
+                    img.style.maxHeight = '100px'; // Added to limit image size
                     gameDiv.appendChild(img);
                 }
 
@@ -227,6 +242,7 @@
                 if (game.images) {
                     let img = document.createElement('img');
                     img.src = game.images;
+                    img.style.maxHeight = '50px'; // Reduced image size when searching
                     gameDiv.appendChild(img);
                 }
 
