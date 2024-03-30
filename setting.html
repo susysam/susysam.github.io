@@ -4,11 +4,11 @@
   <base target="_blank">
   <style>
     body {
-      color: white; 
-      font-family: 'Titan One', cursive;
+      color: #333; 
+      font-family: 'Arial', sans-serif;
       text-align: center;
       margin-top: 50px;
-      background-color: #171717; /* Match background color of start27.html */
+      background-color: #f0f0f0; /* Light background */
     }
 
     .button-container {
@@ -26,22 +26,23 @@
       border-radius: 12px;
       border: none;
       padding: 10px;
-      background: lime;
-      font-family: 'Trebuchet MS';
+      background: #6C0BA9; /* Purple */
+      color: white;
+      font-family: 'Arial', sans-serif;
       cursor: pointer;
       transition: all .2s ease-in-out; 
     }
 
     button:hover {
-      transform: scale(1.1); 
+      background: #4F0672; /* Darker purple on hover */
     }
   </style>
 </head>
 <body>
   <div class="button-container">
-    <button id="tabButton">Tab</button>
-    <button id="windowButton">Window</button>
-    <button id="backButton">Back</button> <!-- Renamed to "Back" -->
+    <button id="tabButton">Open in Tab</button>
+    <button id="windowButton">Open in Window</button>
+    <button id="backButton">Go Back</button> <!-- Renamed to "Go Back" -->
   </div>
 
   <script>
