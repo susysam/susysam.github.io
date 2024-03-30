@@ -94,6 +94,8 @@
 
         .input-button {
             margin-top: 10px;
+            display: flex;
+            justify-content: center;
         }
 
         .input-button .button {
@@ -124,13 +126,13 @@
     <p id="time"></p>
 
     <div class="button-container" id="button-container">
-        <button class="button" onclick="showBackgroundButton()">Click to change Background!</button>
+        <button class="button" onclick="showBackgroundInput()">Change Background</button>
     </div>
 
     <div id="background-input">
         <input type="text" id="background-url" placeholder="Enter background URL">
         <div class="input-button">
-            <button class="button" onclick="changeBackground()">Change Background</button>
+            <button class="button" onclick="changeBackground()">Save</button>
             <button class="button" onclick="removeBackgroundButton()">Cancel</button>
         </div>
     </div>
@@ -166,15 +168,11 @@
             let hours = now.getHours();
             const minutes = now.getMinutes().toString().padStart(2, '0');
             const seconds = now.getSeconds().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12;
 
-            if (hours > 12) {
-                hours -= 12;
-            }
-            if (hours === 0) {
-                hours = 12;
-            }
-
-            const timeString = `${hours}:${minutes}:${seconds}`;
+            const timeString = `${hours}:${minutes}:${seconds} ${ampm}`;
             document.getElementById('time').textContent = timeString;
         }
 
@@ -197,12 +195,6 @@
             window.location.href = "Show.html";
         }
 
-        function showBackgroundButton() {
-            document.getElementById("button-container").innerHTML = `
-                <button class="button" onclick="showBackgroundInput()">Change Background</button>
-            `;
-        }
-
         function showBackgroundInput() {
             document.getElementById("background-input").style.display = "block";
         }
@@ -212,19 +204,10 @@
             document.body.style.backgroundImage = `url('${backgroundUrl}')`;
             localStorage.setItem("backgroundUrl", backgroundUrl);
             document.getElementById("background-input").style.display = "none"; // Hide background input
-            document.getElementById("button-container").innerHTML = ''; // Hide background buttons
         }
 
         function removeBackgroundButton() {
             document.getElementById("background-input").style.display = "none";
-            document.getElementById("button-container").innerHTML = `
-                <button class="button" onclick="showBackgroundButton()">Click to change Background!</button>
-            `;
-        }
-
-        function resetBackground() {
-            document.body.style.backgroundImage = '';
-            localStorage.removeItem("backgroundUrl");
         }
 
         // Check if background URL is stored in local storage
