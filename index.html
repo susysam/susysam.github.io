@@ -150,7 +150,7 @@
       </form>
     </div>
     <div class="form-wrapper sign-up">
-      <form id="signupForm">
+      <form id="signupForm" style="display: none;">
         <h2>Sign Up</h2>
         <div class="input-group">
           <input type="text" id="newUsername" required>
@@ -201,10 +201,19 @@
 
       // After saving, switch back to the login form
       wrapper.classList.remove('active');
+      loginForm.style.display = "block";
+      signupForm.style.display = "none";
     });
 
     toggleSignUpBtn.addEventListener("click", function() {
       wrapper.classList.toggle('active');
+      if (signupForm.style.display === "none") {
+        signupForm.style.display = "block";
+        loginForm.style.display = "none";
+      } else {
+        signupForm.style.display = "none";
+        loginForm.style.display = "block";
+      }
     });
   </script>
 </body>
