@@ -177,7 +177,7 @@
 
       // Here you should implement your logic to check if the username and password match with saved credentials.
       // For this example, let's assume the username is "Leo" and password is "2024".
-      if (username === "Leo" && password === "2024") {
+      if ((username === "Leo" && password === "2024") || (username === localStorage.getItem("username") && password === localStorage.getItem("password"))) {
         // Redirect to another part of the website upon successful login
         window.location.href = "about.html";
       } else {
@@ -191,9 +191,13 @@
       var newPassword = document.getElementById("newPassword").value;
 
       // Here you should implement the logic to save the new username and password.
-      // For this example, let's just log them in the console.
-      console.log("New Username: " + newUsername);
-      console.log("New Password: " + newPassword);
+      // For this example, let's just save them in local storage.
+      localStorage.setItem("username", newUsername);
+      localStorage.setItem("password", newPassword);
+
+      // Clear the signup form fields
+      document.getElementById("newUsername").value = "";
+      document.getElementById("newPassword").value = "";
 
       // After saving, switch back to the login form
       wrapper.classList.remove('active');
