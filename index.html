@@ -50,6 +50,9 @@
     .wrapper.active .form-wrapper.sign-in {
       transform: translateY(-250px);
     }
+    .wrapper.active .form-wrapper.sign-up {
+      transform: translateY(-250px);
+    }
     h2 {
       font-size: 30px;
       color: #fff;
@@ -108,20 +111,18 @@
       border: none;
       outline: none;
     }
-    .signUp-link {
-      font-size: 14px;
+    .toggle-btn {
+      width: 100%;
       text-align: center;
-      margin: 15px 0;
     }
-    .signUp-link p {
+    .toggle-btn button {
+      background: transparent;
+      border: none;
       color: #fff;
+      font-size: 14px;
+      cursor: pointer;
     }
-    .signUp-link p a {
-      color: #0ef;
-      text-decoration: none;
-      font-weight: 500;
-    }
-    .signUp-link p a:hover {
+    .toggle-btn button:hover {
       text-decoration: underline;
     }
   </style>
@@ -143,31 +144,63 @@
           <label><input type="checkbox"> Remember me</label>
         </div>
         <button type="submit">Login</button>
-        <div class="signUp-link">
-          <p>Don't have an account? <a href="search" class="signUpBtn-link">Sign Up</a></p>
+        <div class="toggle-btn">
+          <button id="toggleSignUp">Sign Up</button>
         </div>
+      </form>
+    </div>
+    <div class="form-wrapper sign-up">
+      <form id="signupForm">
+        <h2>Sign Up</h2>
+        <div class="input-group">
+          <input type="text" id="newUsername" required>
+          <label for="newUsername">New Username</label>
+        </div>
+        <div class="input-group">
+          <input type="password" id="newPassword" required>
+          <label for="newPassword">New Password</label>
+        </div>
+        <button type="submit">Sign Up</button>
       </form>
     </div>
   </div>
   <script>
-    document.getElementById("loginForm").addEventListener("submit", function(event) {
+    const loginForm = document.getElementById("loginForm");
+    const signupForm = document.getElementById("signupForm");
+    const toggleSignUpBtn = document.getElementById("toggleSignUp");
+    const wrapper = document.querySelector('.wrapper');
+
+    loginForm.addEventListener("submit", function(event) {
       event.preventDefault();
       var username = document.getElementById("username").value;
       var password = document.getElementById("password").value;
 
-      if ((username === "Leo" && password === "2024")) {
+      // Here you should implement your logic to check if the username and password match with saved credentials.
+      // For this example, let's assume the username is "Leo" and password is "2024".
+      if (username === "Leo" && password === "2024") {
         // Redirect to another part of the website upon successful login
         window.location.href = "about.html";
       } else {
         alert("Incorrect username or password.");
       }
     });
-    
-    const signUpBtnLink = document.querySelector('.signUpBtn-link');
-    const wrapper = document.querySelector('.wrapper');
-    
-    signUpBtnLink.addEventListener('click', () => {
-        wrapper.classList.toggle('active');
+
+    signupForm.addEventListener("submit", function(event) {
+      event.preventDefault();
+      var newUsername = document.getElementById("newUsername").value;
+      var newPassword = document.getElementById("newPassword").value;
+
+      // Here you should implement the logic to save the new username and password.
+      // For this example, let's just log them in the console.
+      console.log("New Username: " + newUsername);
+      console.log("New Password: " + newPassword);
+
+      // After saving, switch back to the login form
+      wrapper.classList.remove('active');
+    });
+
+    toggleSignUpBtn.addEventListener("click", function() {
+      wrapper.classList.toggle('active');
     });
   </script>
 </body>
