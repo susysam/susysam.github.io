@@ -11,6 +11,27 @@
       background-color: #f0f0f0; /* Light background */
     }
 
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    label {
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"] {
+      width: 300px;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
     .button-container {
       display: flex;
       flex-direction: column;
@@ -39,11 +60,11 @@
   </style>
 </head>
 <body>
-  <div>
+  <div class="container">
     <label for="websiteName">Website Name:</label>
     <input type="text" id="websiteName" placeholder="Enter website name">
   </div>
-  <div>
+  <div class="container">
     <label for="websiteIcon">Website Icon URL:</label>
     <input type="text" id="websiteIcon" placeholder="Enter icon URL">
   </div>
@@ -98,7 +119,7 @@
 
       // Update website name and icon
       document.getElementById('websiteName').addEventListener('input', function() {
-        document.title = this.value || 'Default Website Name';
+        document.title = this.value || 'Default Name';
       });
 
       document.getElementById('websiteIcon').addEventListener('input', function() {
