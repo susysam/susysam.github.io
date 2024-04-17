@@ -75,31 +75,40 @@
             background-color: #4F0672; /* Darker purple on hover */
         }
 
-        #background-options {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
+        #background-input {
+            display: none;
             margin-top: 20px;
         }
 
-        .background-option {
-            width: 150px;
-            height: 100px;
-            margin: 10px;
+        #background-input input[type="text"] {
+            padding: 10px;
+            font-size: 14px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
             border-radius: 5px;
-            overflow: hidden;
+            width: 300px;
+        }
+
+        .input-button {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .input-button .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #6C0BA9; /* Purple */
+            color: white;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
-            transition: transform 0.3s ease;
+            transition: background-color 0.3s ease; /* Smooth transition for background color */
+            margin-left: 10px;
         }
 
-        .background-option:hover {
-            transform: scale(1.05); /* Scale up on hover */
-        }
-
-        .background-option img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .input-button .button:hover {
+            background-color: #4F0672; /* Darker purple on hover */
         }
     </style>
 </head>
@@ -118,16 +127,18 @@
     <!-- Current Time -->
     <p id="time"></p>
 
-    <!-- Background Options -->
-    <div id="background-options">
-        <!-- Sample Background Options (Replace with actual images) -->
-        <div class="background-option" onclick="changeBackground('url_to_image_1.jpg')">
-            <img src="url_to_image_1.jpg" alt="Background 1">
+    <!-- Button to Change Background -->
+    <div class="button-container" id="button-container">
+        <button class="button" onclick="showBackgroundInput()">Change Background</button>
+    </div>
+
+    <!-- Input for Background URL -->
+    <div id="background-input">
+        <input type="text" id="background-url" placeholder="Enter background URL">
+        <div class="input-button">
+            <button class="button" onclick="changeBackground()">Save</button>
+            <button class="button" onclick="removeBackgroundButton()">Cancel</button>
         </div>
-        <div class="background-option" onclick="changeBackground('url_to_image_2.jpg')">
-            <img src="url_to_image_2.jpg" alt="Background 2">
-        </div>
-        <!-- Add more background options as needed -->
     </div>
 
     <!-- JavaScript Code -->
@@ -187,10 +198,22 @@
             window.location.href = "Show.html";
         }
 
+        // Show Background Input
+        function showBackgroundInput() {
+            document.getElementById("background-input").style.display = "block";
+        }
+
         // Change Background
-        function changeBackground(backgroundUrl) {
+        function changeBackground() {
+            const backgroundUrl = document.getElementById("background-url").value;
             document.body.style.backgroundImage = `url('${backgroundUrl}')`;
             localStorage.setItem("backgroundUrl", backgroundUrl);
+            document.getElementById("background-input").style.display = "none"; // Hide background input
+        }
+
+        // Remove Background Input
+        function removeBackgroundButton() {
+            document.getElementById("background-input").style.display = "none";
         }
 
         // Load Background from Local Storage
