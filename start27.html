@@ -6,6 +6,7 @@
     <title>Home</title>
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Google_Classroom_Logo.svg/2372px-Google_Classroom_Logo.svg.png" type="image/png">
     <style>
+        /* CSS styles for improved aesthetics */
         body {
             font-family: 'Arial', sans-serif;
             text-align: center;
@@ -17,12 +18,12 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh; /* Ensure full viewport height */
+            background-size: cover; /* Cover background image */
+            background-position: center; /* Center the background image */
         }
 
         .navbar {
-            display: flex;
-            justify-content: flex-end;
             position: absolute;
             top: 20px;
             right: 20px;
@@ -38,10 +39,6 @@
             margin-left: 10px;
             cursor: pointer; /* Add cursor pointer */
             transition: background-color 0.3s ease; /* Smooth transition for background color */
-        }
-
-        .navbar a:last-child {
-            margin-right: 0;
         }
 
         .navbar a:hover {
@@ -78,66 +75,64 @@
             background-color: #4F0672; /* Darker purple on hover */
         }
 
-        #background-input {
-            display: none;
+        #background-options {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
             margin-top: 20px;
         }
 
-        #background-input input[type="text"] {
-            padding: 10px;
-            font-size: 14px;
-            margin-top: 10px;
-            border: 1px solid #ccc;
+        .background-option {
+            width: 150px;
+            height: 100px;
+            margin: 10px;
             border-radius: 5px;
-            width: 300px;
-        }
-
-        .input-button {
-            margin-top: 10px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .input-button .button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #6C0BA9; /* Purple */
-            color: white;
-            border: none;
-            border-radius: 5px;
+            overflow: hidden;
             cursor: pointer;
-            transition: background-color 0.3s ease; /* Smooth transition for background color */
-            margin-left: 10px;
+            transition: transform 0.3s ease;
         }
 
-        .input-button .button:hover {
-            background-color: #4F0672; /* Darker purple on hover */
+        .background-option:hover {
+            transform: scale(1.05); /* Scale up on hover */
+        }
+
+        .background-option img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
     </style>
 </head>
 <body>
+    <!-- Navigation Bar -->
     <div class="navbar">
-        <a onclick="openGameApps()"><span>Games + Apps</span></a>
-        <a onclick="openlinks()"><span>Links</span></a>
-        <a onclick="openSettings()"><span>Settings</span></a>
-        <a onclick="openTvShowPlayer()"><span>Movie+TV</span></a>
+        <a onclick="openGameApps()">Games + Apps</a>
+        <a onclick="openlinks()">Links</a>
+        <a onclick="openSettings()">Settings</a>
+        <a onclick="openTvShowPlayer()">Movie+TV</a>
     </div>
+
+    <!-- Random Placeholder Text -->
     <p id="placeholder"></p>
+    
+    <!-- Current Time -->
     <p id="time"></p>
 
-    <div class="button-container" id="button-container">
-        <button class="button" onclick="showBackgroundInput()">Change Background</button>
-    </div>
-
-    <div id="background-input">
-        <input type="text" id="background-url" placeholder="Enter background URL">
-        <div class="input-button">
-            <button class="button" onclick="changeBackground()">Save</button>
-            <button class="button" onclick="removeBackgroundButton()">Cancel</button>
+    <!-- Background Options -->
+    <div id="background-options">
+        <!-- Sample Background Options (Replace with actual images) -->
+        <div class="background-option" onclick="changeBackground('url_to_image_1.jpg')">
+            <img src="url_to_image_1.jpg" alt="Background 1">
         </div>
+        <div class="background-option" onclick="changeBackground('url_to_image_2.jpg')">
+            <img src="url_to_image_2.jpg" alt="Background 2">
+        </div>
+        <!-- Add more background options as needed -->
     </div>
 
+    <!-- JavaScript Code -->
     <script>
+        // Random Placeholder Text
         const options = [
             "Over 5 Users in 2024!",
             "Fastest growing proxy server!",
@@ -156,13 +151,9 @@
             return options[randomNumber];
         }
 
-        function setRandomPlaceholder() {
-            const placeholder = document.getElementById("placeholder");
-            placeholder.textContent = getRandomOption();
-        }
+        document.getElementById("placeholder").textContent = getRandomOption();
 
-        setRandomPlaceholder();
-
+        // Update Clock
         function updateClock() {
             const now = new Date();
             let hours = now.getHours();
@@ -179,6 +170,7 @@
         updateClock();
         setInterval(updateClock, 1000);
 
+        // Open Other Pages
         function openGameApps() {
             window.location.href = "game+app.html";
         }
@@ -195,22 +187,13 @@
             window.location.href = "Show.html";
         }
 
-        function showBackgroundInput() {
-            document.getElementById("background-input").style.display = "block";
-        }
-
-        function changeBackground() {
-            const backgroundUrl = document.getElementById("background-url").value;
+        // Change Background
+        function changeBackground(backgroundUrl) {
             document.body.style.backgroundImage = `url('${backgroundUrl}')`;
             localStorage.setItem("backgroundUrl", backgroundUrl);
-            document.getElementById("background-input").style.display = "none"; // Hide background input
         }
 
-        function removeBackgroundButton() {
-            document.getElementById("background-input").style.display = "none";
-        }
-
-        // Check if background URL is stored in local storage
+        // Load Background from Local Storage
         const storedBackgroundUrl = localStorage.getItem("backgroundUrl");
         if (storedBackgroundUrl) {
             document.body.style.backgroundImage = `url('${storedBackgroundUrl}')`;
