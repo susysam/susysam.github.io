@@ -39,6 +39,15 @@
   </style>
 </head>
 <body>
+  <div>
+    <label for="websiteName">Website Name:</label>
+    <input type="text" id="websiteName" placeholder="Enter website name">
+  </div>
+  <div>
+    <label for="websiteIcon">Website Icon URL:</label>
+    <input type="text" id="websiteIcon" placeholder="Enter icon URL">
+  </div>
+
   <div class="button-container">
     <button id="tabButton">Open in Tab</button>
     <button id="windowButton">Open in Window</button>
@@ -86,6 +95,20 @@
       document.getElementById('backButton').onclick = function() {
         window.location.href = "https://susysam.github.io/start27.html"; // Redirect to start27.html
       };
+
+      // Update website name and icon
+      document.getElementById('websiteName').addEventListener('input', function() {
+        document.title = this.value || 'Default Website Name';
+      });
+
+      document.getElementById('websiteIcon').addEventListener('input', function() {
+        var iconUrl = this.value;
+        var link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+        link.type = 'image/x-icon';
+        link.rel = 'shortcut icon';
+        link.href = iconUrl;
+        document.getElementsByTagName('head')[0].appendChild(link);
+      });
     }
   </script>
 </body>
