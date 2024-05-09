@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Games🎮</title>
+    <title>Game</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -38,6 +38,7 @@
         .title {
             margin: 0;
             font-size: 24px;
+            display: none;
         }
 
         .search-bar {
@@ -105,6 +106,7 @@
             background-color: #fff;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: none;
         }
 
         .custom-game-input h2 {
@@ -136,6 +138,12 @@
             margin: 0 auto;
             border: none;
         }
+
+        .play-games {
+            font-size: 20px;
+            margin: 20px;
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -145,7 +153,7 @@
             <img src="/images/leo.jpg" alt="Game Website Logo">
         </div>
         <div class="header-content">
-            <h1 class="title">Games Galore</h1>
+            <p class="play-games">Play some Games!</p>
             <div class="search-bar">
                 <input type="text" id="searchInput" placeholder="Search games..." oninput="searchGames()">
                 <button id="backButton" onclick="goBack()">Back</button>
