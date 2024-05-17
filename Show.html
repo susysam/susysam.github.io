@@ -37,8 +37,47 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
         }
 
-        .button:focus {
-            box-shadow: 0 0 0 3px #6C0BA9;
+        .dropdown {
+            margin: 20px;
+            display: inline-block;
+        }
+
+        .dropbtn {
+            padding: 10px 20px;
+            background-color: #1f1f1f;
+            border: 3px solid #fff;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 18px;
+            outline: none;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #ddd;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
         }
 
         iframe {
@@ -47,79 +86,75 @@
             margin-top: 20px;
             border: none;
         }
-
-        /* Remove Scrollbar */
-        ::-webkit-scrollbar {
-            display: none;
-        }
-
-        /* Hide scrollbar for IE, Edge and Firefox */
-        iframe {
-            -ms-overflow-style: none; /* IE and Edge */
-            scrollbar-width: none; /* Firefox */
-        }
     </style>
 </head>
 <body>
     <div class="button-container">
         <button class="button" onclick="goBack()">Back</button>
-        <button class="button" onclick="refreshPage()">Links</button>
         <button class="button" onclick="goToSearch()">Blocked?</button>
         <button class="button" onclick="toggleFullscreen()">Fullscreen</button>
     </div>
 
-    <!-- Button Section -->
-    <div class="section">
-        <h2>Choose a Category! 🚀</h2>
-        <button class="button" onclick="openCategory('Interstellar')">Interstellar</button>
-        <button class="button" onclick="openCategory('Doge')">Doge</button>
-        <button class="button" onclick="openCategory('xenon')">xenon</button>
-        <button class="button" onclick="openCategory('Spoofs')">Spoofs</button>
+    <!-- Dropdown Menus for Categories -->
+    <div class="dropdown">
+        <button class="dropbtn">Interstellar</button>
+        <div class="dropdown-content" id="Interstellar"></div>
+    </div>
+    <div class="dropdown">
+        <button class="dropbtn">Doge</button>
+        <div class="dropdown-content" id="Doge"></div>
+    </div>
+    <div class="dropdown">
+        <button class="dropbtn">Xenon</button>
+        <div class="dropdown-content" id="Xenon"></div>
+    </div>
+    <div class="dropdown">
+        <button class="dropbtn">Spoofs</button>
+        <div class="dropdown-content" id="Spoofs"></div>
     </div>
 
     <iframe id="contentFrame"></iframe>
 
     <script>
-        let currentLink = '';
+        const categories = {
+            'Interstellar': [
+                "https://n.c.gracemp.org/",
+                "https://journeys.sunday.glenwaverleychurches.org/",
+                // More links...
+            ],
+            'Doge': [
+                "https://smart-tools.abatek.com/",
+                "https://ferretv4-ferretman.vercel.app/",
+                // More links...
+            ],
+            'Xenon': [
+                "https://jumpa.basewisdom.com/",
+                "https://records.calvaryduncan.com/",
+                // More links...
+            ],
+            'Spoofs': [
+                "https://whywhywhy-bqlf.onrender.com/spoofs/onlinetutoring.html",
+                "https://people-are-dumb-lol.onrender.com/spoofs/onlinetutoring.html",
+                // More links...
+            ]
+        };
 
-        function openCategory(category) {
-            const categories = {
-                'Interstellar': [
-                    "https://n.c.gracemp.org/",
-                    "https://journeys.sunday.glenwaverleychurches.org/",
-                    // More links...
-                ],
-                'Doge': [
-                    "https://smart-tools.abatek.com/",
-                    "https://ferretv4-ferretman.vercel.app/",
-                    // More links...
-                ],
-                'xenon': [
-                    "https://jumpa.basewisdom.com/",
-                    "https://records.calvaryduncan.com/",
-                    // More links...
-                ],
-                'Spoofs': [
-                    "https://whywhywhy-bqlf.onrender.com/spoofs/onlinetutoring.html",
-                    "https://people-are-dumb-lol.onrender.com/spoofs/onlinetutoring.html",
-                    // More links...
-                ]
-            };
-
-            const links = categories[category];
-            if (links) {
-                const randomIndex = Math.floor(Math.random() * links.length);
-                currentLink = links[randomIndex];
-                document.getElementById('contentFrame').src = currentLink;
-            }
-        }
+        Object.keys(categories).forEach(category => {
+            const dropdown = document.getElementById(category);
+            categories[category].forEach((link, index) => {
+                const a = document.createElement('a');
+                a.href = '#';
+                a.textContent = `Link ${index + 1}`;
+                a.onclick = () => {
+                    document.getElementById('contentFrame').src = link;
+                    return false;
+                };
+                dropdown.appendChild(a);
+            });
+        });
 
         function goBack() {
             window.location.href = "start27.html";
-        }
-
-        function refreshPage() {
-            location.reload();
         }
 
         function goToSearch() {
