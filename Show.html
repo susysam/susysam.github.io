@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Links</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -14,12 +13,12 @@
             color: #fff;
         }
 
-        .dropdown {
-            margin: 20px;
+        .button-container {
             display: inline-block;
+            margin-top: 20px;
         }
 
-        .dropbtn {
+        .button {
             padding: 10px 20px;
             background-color: #1f1f1f;
             border: 3px solid #fff;
@@ -32,33 +31,14 @@
             outline: none;
         }
 
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-        }
-
-        .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            text-align: left;
-        }
-
-        .dropdown-content a:hover {
-            background-color: #ddd;
-        }
-
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        .dropdown:hover .dropbtn {
+        .button:hover {
             background-color: #6C0BA9;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .button:focus {
+            box-shadow: 0 0 0 3px #6C0BA9;
         }
 
         iframe {
@@ -67,65 +47,95 @@
             margin-top: 20px;
             border: none;
         }
+
+        /* Remove Scrollbar */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Hide scrollbar for IE, Edge and Firefox */
+        iframe {
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none; /* Firefox */
+        }
     </style>
 </head>
 <body>
-    <div class="dropdown">
-        <button class="dropbtn">Interstellar</button>
-        <div class="dropdown-content" id="Interstellar"></div>
+    <div class="button-container">
+        <button class="button" onclick="goBack()">Back</button>
+        <button class="button" onclick="refreshPage()">Links</button>
+        <button class="button" onclick="goToSearch()">Blocked?</button>
+        <button class="button" onclick="toggleFullscreen()">Fullscreen</button>
     </div>
-    <div class="dropdown">
-        <button class="dropbtn">Doge</button>
-        <div class="dropdown-content" id="Doge"></div>
-    </div>
-    <div class="dropdown">
-        <button class="dropbtn">Xenon</button>
-        <div class="dropdown-content" id="Xenon"></div>
-    </div>
-    <div class="dropdown">
-        <button class="dropbtn">Spoofs</button>
-        <div class="dropdown-content" id="Spoofs"></div>
+
+    <!-- Button Section -->
+    <div class="section">
+        <h2>Choose a Category! 🚀</h2>
+        <button class="button" onclick="openCategory('Interstellar')">Interstellar</button>
+        <button class="button" onclick="openCategory('Doge')">Doge</button>
+        <button class="button" onclick="openCategory('xenon')">xenon</button>
+        <button class="button" onclick="openCategory('Spoofs')">Spoofs</button>
     </div>
 
     <iframe id="contentFrame"></iframe>
 
     <script>
-        const categories = {
-            'Interstellar': [
-                "https://n.c.gracemp.org/",
-                "https://journeys.sunday.glenwaverleychurches.org/",
-                // More links...
-            ],
-            'Doge': [
-                "https://smart-tools.abatek.com/",
-                "https://ferretv4-ferretman.vercel.app/",
-                // More links...
-            ],
-            'Xenon': [
-                "https://jumpa.basewisdom.com/",
-                "https://records.calvaryduncan.com/",
-                // More links...
-            ],
-            'Spoofs': [
-                "https://whywhywhy-bqlf.onrender.com/spoofs/onlinetutoring.html",
-                "https://people-are-dumb-lol.onrender.com/spoofs/onlinetutoring.html",
-                // More links...
-            ]
-        };
+        let currentLink = '';
 
-        Object.keys(categories).forEach(category => {
-            const dropdown = document.getElementById(category);
-            categories[category].forEach((link, index) => {
-                const a = document.createElement('a');
-                a.href = '#';
-                a.textContent = `Link ${index + 1}`;
-                a.onclick = () => {
-                    document.getElementById('contentFrame').src = link;
-                    return false;
-                };
-                dropdown.appendChild(a);
-            });
-        });
+        function openCategory(category) {
+            const categories = {
+                'Interstellar': [
+                    "https://n.c.gracemp.org/",
+                    "https://journeys.sunday.glenwaverleychurches.org/",
+                    // More links...
+                ],
+                'Doge': [
+                    "https://smart-tools.abatek.com/",
+                    "https://ferretv4-ferretman.vercel.app/",
+                    // More links...
+                ],
+                'xenon': [
+                    "https://jumpa.basewisdom.com/",
+                    "https://records.calvaryduncan.com/",
+                    // More links...
+                ],
+                'Spoofs': [
+                    "https://whywhywhy-bqlf.onrender.com/spoofs/onlinetutoring.html",
+                    "https://people-are-dumb-lol.onrender.com/spoofs/onlinetutoring.html",
+                    // More links...
+                ]
+            };
+
+            const links = categories[category];
+            if (links) {
+                const randomIndex = Math.floor(Math.random() * links.length);
+                currentLink = links[randomIndex];
+                document.getElementById('contentFrame').src = currentLink;
+            }
+        }
+
+        function goBack() {
+            window.location.href = "start27.html";
+        }
+
+        function refreshPage() {
+            location.reload();
+        }
+
+        function goToSearch() {
+            window.location.href = "search.html";
+        }
+
+        function toggleFullscreen() {
+            const iframe = document.getElementById('contentFrame');
+            if (iframe.requestFullscreen) {
+                iframe.requestFullscreen();
+            } else if (iframe.webkitRequestFullscreen) { /* Safari */
+                iframe.webkitRequestFullscreen();
+            } else if (iframe.msRequestFullscreen) { /* IE11 */
+                iframe.msRequestFullscreen();
+            }
+        }
     </script>
 </body>
 </html>
