@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game</title>
-    <link rel="stylesheet" href="/path/to/font-awesome/css/font-awesome.min.css"> <!-- Ensure you have FontAwesome for icons -->
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -156,7 +155,7 @@
     <div id="customGameInput">
         <input type="text" id="customGameName" placeholder="Enter game name...">
         <input type="text" id="customGameLink" placeholder="Enter game link...">
-        <input type="text" id="customGameIcon" placeholder="Enter game icon URL...">
+        <input type="text" id="customGameIcon" placeholder="Icon URL...">
         <button onclick="addCustomGame()">Add Custom Game</button>
         <button onclick="clearCustomGames()">Clear Custom Games</button>
     </div>
@@ -178,12 +177,10 @@
                 gameDiv.classList.add('game');
                 gameDiv.setAttribute('onclick', `openGame('${game.link}')`);
 
-                if (game.images) {
-                    let img = document.createElement('img');
-                    img.src = game.images;
-                    img.style.maxHeight = '100px'; // Added to limit image size
-                    gameDiv.appendChild(img);
-                }
+                let img = document.createElement('img');
+                img.src = game.images || '/images/plus.png'; // Default icon if not specified
+                img.style.maxHeight = '100px'; // Consistent image size
+                gameDiv.appendChild(img);
 
                 let name = document.createElement('h3');
                 name.textContent = game.name;
@@ -212,14 +209,12 @@
         function addCustomGame() {
             let customGameName = document.getElementById('customGameName').value.trim();
             let customGameLink = document.getElementById('customGameLink').value.trim();
-            let customGameIcon = document.getElementById('customGameIcon').value.trim();
+            let customGameIcon = document.getElementById('customGameIcon').value.trim() || '/images/plus.png'; // Use default icon if empty
 
             if (customGameName && customGameLink) {
                 games.unshift({ name: customGameName, images: customGameIcon, link: customGameLink });
                 displayGames();
                 document.getElementById('customGameInput').style.display = 'none';
-            } else {
-                alert('Please enter both game name and game link.');
             }
         }
 
@@ -243,12 +238,10 @@
                 gameDiv.classList.add('game');
                 gameDiv.setAttribute('onclick', `openGame('${game.link}')`);
 
-                if (game.images) {
-                    let img = document.createElement('img');
-                    img.src = game.images;
-                    img.style.maxHeight = '50px'; // Reduced image size when searching
-                    gameDiv.appendChild(img);
-                }
+                let img = document.createElement('img');
+                img.src = game.images || '/images/plus.png'; // Default icon if not specified
+                img.style.maxHeight = '100px'; // Consistent image size
+                gameDiv.appendChild(img);
 
                 let name = document.createElement('h3');
                 name.textContent = game.name;
