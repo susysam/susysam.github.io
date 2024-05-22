@@ -170,23 +170,12 @@
         if (gameBoosterEnabled !== null) {
           document.getElementById('gameBoosterToggle').checked = JSON.parse(gameBoosterEnabled);
         }
+        updateGameBoosterStatus();
       });
 
       // Update Game Booster status
       document.getElementById('gameBoosterToggle').addEventListener('change', function() {
-        var status = document.getElementById('gameBoosterStatus');
-        if (this.checked) {
-          status.textContent = 'On';
-          // Add code here to optimize games when Game Booster is turned on
-          // For example:
-          // optimizeGames();
-        } else {
-          status.textContent = 'Off';
-          // Add code here to revert optimizations when Game Booster is turned off
-          // For example:
-          // revertOptimizations();
-        }
-
+        updateGameBoosterStatus();
         // Save the state of the toggle switch to localStorage
         localStorage.setItem('gameBoosterEnabled', this.checked);
       });
@@ -243,6 +232,24 @@
         link.href = iconUrl;
         document.getElementsByTagName('head')[0].appendChild(link);
       });
+    }
+
+    function updateGameBoosterStatus() {
+      var status = document.getElementById('gameBoosterStatus');
+      var toggleSwitch = document.getElementById('gameBoosterToggle');
+      if (toggleSwitch.checked) {
+        status.textContent = 'On';
+        // Add code here to optimize games when Game Booster is turned on
+        // For example:
+        // optimizeGames();
+        document.body.style.backgroundColor = '#e6ffe6'; // Set background color to light green
+      } else {
+        status.textContent = 'Off';
+        // Add code here to revert optimizations when Game Booster is turned off
+        // For example:
+        // revertOptimizations();
+        document.body.style.backgroundColor = '#f0f0f0'; // Set background color back to default
+      }
     }
   </script>
 </body>
