@@ -178,45 +178,21 @@
         updateGameBoosterStatus();
         // Save the state of the toggle switch to localStorage
         localStorage.setItem('gameBoosterEnabled', this.checked);
+        // Apply the Game Booster status to all other pages
+        applyGameBoosterStatusToAllPages(this.checked);
       });
 
       // Button click event listeners
       document.getElementById('tabButton').onclick = function() {
-        var newTab = window.open();
-        newTab.document.body.style.margin = '0';
-        newTab.document.body.style.height = '100vh';
-        var iframe = newTab.document.createElement('iframe');
-        iframe.style.border = 'none';
-        iframe.style.width = '100%';
-        iframe.style.height = '100%';
-        iframe.style.margin = '0';
-        iframe.src = url;
-        newTab.document.body.appendChild(iframe);
-        document.getElementById('tabButton').style.background='#ff5148';
-        document.getElementById('tabButton').innerHTML="Click again to reopen!";
+        openInTab();
       };
 
       document.getElementById('windowButton').onclick = function() {
-        var newWindow = window.open("", "about:blank", "width=800,height=600");
-        if (newWindow) {
-          newWindow.document.body.style.margin = '0';
-          newWindow.document.body.style.height = '100vh';
-          var iframe = newWindow.document.createElement('iframe');
-          iframe.style.border = 'none';
-          iframe.style.width = '100%';
-          iframe.style.height = '100%';
-          iframe.style.margin = '0';
-          iframe.src = url;
-          newWindow.document.body.appendChild(iframe);
-          document.getElementById('windowButton').style.background='#ff5148';
-          document.getElementById('windowButton').innerHTML="Click again to reopen!";
-        } else {
-          alert("Pop-ups are blocked. Please allow pop-ups for this site to use this feature.");
-        }
+        openInWindow();
       };
 
       document.getElementById('backButton').onclick = function() {
-        window.location.href = "https://susysam.github.io/start27.html"; // Redirect to start27.html
+        goBack();
       };
 
       // Update website name and icon
@@ -250,6 +226,65 @@
         // revertOptimizations();
         document.body.style.backgroundColor = '#f0f0f0'; // Set background color back to default
       }
+    }
+
+    function applyGameBoosterStatusToAllPages(enabled) {
+      var frames = window.frames;
+      for (var i = 0; i < frames.length; i++) {
+        var frameDocument = frames[i].document;
+        var frameGameBoosterToggle = frameDocument.getElementById('gameBoosterToggle');
+        if (frameGameBoosterToggle) {
+          frameGameBoosterToggle.checked = enabled;
+          // Update Game Booster status on each frame
+          var frameGameBoosterStatus = frameDocument.getElementById('gameBoosterStatus');
+          if (frameGameBoosterStatus) {
+            frameGameBoosterStatus.textContent = enabled ? 'On' : 'Off';
+          }
+          // Apply background color change to each frame
+          var frameBody = frameDocument.body;
+          if (frameBody) {
+            frameBody.style.backgroundColor = enabled ? '#e6ffe6' : '#f0f0f0';
+          }
+        }
+      }
+    }
+
+    function openInTab() {
+      var newTab = window.open();
+      newTab.document.body.style.margin = '0';
+      newTab.document.body.style.height = '100vh';
+      var iframe = newTab.document.createElement('iframe');
+      iframe.style.border = 'none';
+      iframe.style.width = '100%';
+      iframe.style.height = '100%';
+      iframe.style.margin = '0';
+      iframe.src = url;
+      newTab.document.body.appendChild(iframe);
+      document.getElementById('tabButton').style.background='#ff5148';
+      document.getElementById('tabButton').innerHTML="Click again to reopen!";
+    }
+
+    function openInWindow() {
+      var newWindow = window.open("", "about:blank", "width=800,height=600");
+      if (newWindow) {
+        newWindow.document.body.style.margin = '0';
+        newWindow.document.body.style.height = '100vh';
+        var iframe = newWindow.document.createElement('iframe');
+        iframe.style.border = 'none';
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.style.margin = '0';
+        iframe.src = url;
+        newWindow.document.body.appendChild(iframe);
+        document.getElementById('windowButton').style.background='#ff5148';
+        document.getElementById('windowButton').innerHTML="Click again to reopen!";
+      } else {
+        alert("Pop-ups are blocked. Please allow pop-ups for this site to use this feature.");
+      }
+    }
+
+    function goBack() {
+      window.location.href = "https://susysam.github.io/start27.html"; // Redirect to start27.html
     }
   </script>
 </body>
