@@ -57,6 +57,63 @@
     button:hover {
       background: #4F0672; /* Darker purple on hover */
     }
+
+    /* Added styles for toggle switch */
+    .toggle-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
+
+    .toggle-switch input { 
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 34px;
+    }
+
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .toggle-slider {
+      background-color: #2196F3;
+    }
+
+    input:checked + .toggle-slider:before {
+      transform: translateX(26px);
+    }
+
+    /* Added style for active state */
+    input:checked + .toggle-slider:active {
+      background-color: #0b7dda;
+    }
   </style>
 </head>
 <body>
@@ -67,6 +124,17 @@
   <div class="container">
     <label for="websiteIcon">Website Icon URL:</label>
     <input type="text" id="websiteIcon" placeholder="Enter icon URL">
+  </div>
+
+  <!-- Toggle switch for Game Booster -->
+  <div class="container">
+    <label for="gameBoosterToggle">Game Booster:</label>
+    <div class="toggle-container">
+      <input type="checkbox" id="gameBoosterToggle">
+      <label class="toggle-switch" for="gameBoosterToggle">
+        <div class="toggle-slider"></div>
+      </label>
+    </div>
   </div>
 
   <div class="button-container">
