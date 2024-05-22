@@ -119,6 +119,16 @@
     input:not(:checked) + .toggle-slider {
       background-color: #ff5148; /* Red when Off */
     }
+
+    /* Added style for animation when moving left to right */
+    input:checked + .toggle-slider:before {
+      transform: translateX(26px);
+    }
+
+    /* Added style for animation when moving right to left */
+    input:not(:checked) + .toggle-slider:before {
+      transform: translateX(0);
+    }
   </style>
 </head>
 <body>
