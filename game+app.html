@@ -198,7 +198,26 @@
             });
         }
 
-        // Additional functions...
+        function goBack() {
+            window.history.back();
+        }
+
+        function addCustomGame() {
+            let customGameName = document.getElementById('customGameName').value.trim();
+            let customGameLink = document.getElementById('customGameLink').value.trim();
+            let customGameIcon = document.getElementById('customGameIcon').value.trim();
+
+            if (customGameName && customGameLink) {
+                games.unshift({ name: customGameName, images: customGameIcon || '/images/plus.png', link: customGameLink });
+                displayGames();
+            }
+        }
+
+        function searchGames() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            let filteredGames = games.filter(game => game.name.toLowerCase().includes(input));
+            displayGames(filteredGames);
+        }
 
         displayGames();
     </script>
