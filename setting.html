@@ -9,7 +9,6 @@
       text-align: center;
       margin-top: 50px;
       background-color: #f0f0f0; /* Light background */
-      transition: background-color 0.3s ease; /* Smooth background color transition */
     }
 
     .container {
@@ -18,14 +17,6 @@
       align-items: center;
       gap: 20px;
       margin-top: 20px;
-      transition: transform 0.3s ease, opacity 0.3s ease; /* Smooth animation for container elements */
-      transform: translateY(-20px); /* Initial position above */
-      opacity: 0; /* Initially hidden */
-    }
-
-    .container.active {
-      transform: translateY(0); /* Move to original position */
-      opacity: 1; /* Show the container */
     }
 
     label {
@@ -111,31 +102,31 @@
       border-radius: 50%;
     }
 
-    .toggle-switch input:checked + .toggle-slider {
+    input:checked + .toggle-slider {
       background-color: #4CAF50; /* Green when On */
     }
 
-    .toggle-switch input:checked + .toggle-slider:before {
+    input:checked + .toggle-slider:before {
       transform: translateX(26px);
     }
 
     /* Added style for active state */
-    .toggle-switch input:checked + .toggle-slider:active {
+    input:checked + .toggle-slider:active {
       background-color: #45a049; /* Darker green when On */
     }
 
     /* Added style for Off state */
-    .toggle-switch .toggle-slider {
+    .toggle-slider {
       background-color: #ff5148; /* Red when Off */
     }
 
     /* Added style for animation when moving left to right */
-    .toggle-switch input:checked + .toggle-slider:before {
+    input:checked + .toggle-slider:before {
       transform: translateX(26px);
     }
 
     /* Added style for animation when moving right to left */
-    .toggle-switch input:not(:checked) + .toggle-slider:before {
+    input:not(:checked) + .toggle-slider:before {
       transform: translateX(0);
     }
   </style>
@@ -154,9 +145,9 @@
   <div class="container">
     <label for="gameBoosterToggle">Game Booster:</label>
     <div class="toggle-container">
-      <!-- Toggle switch -->
-      <label class="toggle-switch">
-        <input type="checkbox" id="gameBoosterToggle">
+      <!-- Removed check mark and checked attribute -->
+      <input type="checkbox" id="gameBoosterToggle">
+      <label class="toggle-switch" for="gameBoosterToggle">
         <div class="toggle-slider"></div>
       </label>
       <span id="gameBoosterStatus">Off</span>
@@ -173,12 +164,34 @@
     var url = "https://susysam.github.io/start27.html";
 
     if (url) {
-      // Animation for container elements
-      var containers = document.querySelectorAll('.container');
-      containers.forEach(function(container) {
-        container.classList.add('active');
+      // Retrieve the state of the toggle switch from localStorage when the page loads
+      document.addEventListener('DOMContentLoaded', function() {
+        var gameBoosterEnabled = localStorage.getItem('gameBoosterEnabled');
+        if (gameBoosterEnabled !== null) {
+          document.getElementById('gameBoosterToggle').checked = JSON.parse(gameBoosterEnabled);
+        }
       });
 
+      // Update Game Booster status
+      document.getElementById('gameBoosterToggle').addEventListener('change', function() {
+        var status = document.getElementById('gameBoosterStatus');
+        if (this.checked) {
+          status.textContent = 'On';
+          // Add code here to optimize games when Game Booster is turned on
+          // For example:
+          // optimizeGames();
+        } else {
+          status.textContent = 'Off';
+          // Add code here to revert optimizations when Game Booster is turned off
+          // For example:
+          // revertOptimizations();
+        }
+
+        // Save the state of the toggle switch to localStorage
+        localStorage.setItem('gameBoosterEnabled', this.checked);
+      });
+
+      // Button click event listeners
       document.getElementById('tabButton').onclick = function() {
         var newTab = window.open();
         newTab.document.body.style.margin = '0';
@@ -229,22 +242,6 @@
         link.rel = 'shortcut icon';
         link.href = iconUrl;
         document.getElementsByTagName('head')[0].appendChild(link);
-      });
-
-      // Update Game Booster status
-      document.getElementById('gameBoosterToggle').addEventListener('change', function() {
-        var status = document.getElementById('gameBoosterStatus');
-        if (this.checked) {
-          status.textContent = 'On';
-          // Add code here to optimize games when Game Booster is turned on
-          // For example:
-          // optimizeGames();
-        } else {
-          status.textContent = 'Off';
-          // Add code here to revert optimizations when Game Booster is turned off
-          // For example:
-          // revertOptimizations();
-        }
       });
     }
   </script>
