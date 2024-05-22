@@ -94,7 +94,6 @@
     <div class="button-container">
         <button class="button" onclick="goBack()" aria-label="Go back to previous page">Back</button>
         <button class="button" onclick="goToSearch()" aria-label="Go to search page">Blocked?</button>
-        <button class="button" onclick="toggleFullscreen()" aria-label="Toggle fullscreen mode">Fullscreen</button>
     </div>
 
     <!-- Dropdown Menus for Categories -->
@@ -124,12 +123,9 @@
                 "https://journeys.sunday.glenwaverleychurches.org/",
                 "https://artforfriends.matenaers.com/",
                 "https://int-bblum3-ryt-s-projects.vercel.app/",
-                "https://ineedmoneypleaseclickonads.vercel.app/",
                 // More links...
             ],
             'Light': [
-                "hi",
-                "https://ferretv4-ferretman.vercel.app/",
                 "https://boredmansworld.datamining.cl/",
                 "https://night-lights.datamining.cl/",
                 "https://weekly-light-show.kanacad.org/",
@@ -172,17 +168,6 @@
 
         function goToSearch() {
             window.location.href = "search.html";
-        }
-
-        function toggleFullscreen() {
-            const iframe = document.getElementById('contentFrame');
-            if (iframe.requestFullscreen) {
-                iframe.requestFullscreen();
-            } else if (iframe.webkitRequestFullscreen) { /* Safari */
-                iframe.webkitRequestFullscreen();
-            } else if (iframe.msRequestFullscreen) { /* IE11 */
-                iframe.msRequestFullscreen();
-            }
         }
     </script>
 </body>
