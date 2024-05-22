@@ -102,31 +102,31 @@
       border-radius: 50%;
     }
 
-    input:checked + .toggle-slider {
+    .toggle-switch input:checked + .toggle-slider {
       background-color: #4CAF50; /* Green when On */
     }
 
-    input:checked + .toggle-slider:before {
+    .toggle-switch input:checked + .toggle-slider:before {
       transform: translateX(26px);
     }
 
     /* Added style for active state */
-    input:checked + .toggle-slider:active {
+    .toggle-switch input:checked + .toggle-slider:active {
       background-color: #45a049; /* Darker green when On */
     }
 
     /* Added style for Off state */
-    .toggle-slider {
+    .toggle-switch .toggle-slider {
       background-color: #ff5148; /* Red when Off */
     }
 
     /* Added style for animation when moving left to right */
-    input:checked + .toggle-slider:before {
+    .toggle-switch input:checked + .toggle-slider:before {
       transform: translateX(26px);
     }
 
     /* Added style for animation when moving right to left */
-    input:not(:checked) + .toggle-slider:before {
+    .toggle-switch input:not(:checked) + .toggle-slider:before {
       transform: translateX(0);
     }
   </style>
@@ -145,9 +145,9 @@
   <div class="container">
     <label for="gameBoosterToggle">Game Booster:</label>
     <div class="toggle-container">
-      <!-- Removed check mark and checked attribute -->
-      <input type="checkbox" id="gameBoosterToggle">
-      <label class="toggle-switch" for="gameBoosterToggle">
+      <!-- Toggle switch -->
+      <label class="toggle-switch">
+        <input type="checkbox" id="gameBoosterToggle">
         <div class="toggle-slider"></div>
       </label>
       <span id="gameBoosterStatus">Off</span>
@@ -194,7 +194,7 @@
           document.getElementById('windowButton').style.background='#ff5148';
           document.getElementById('windowButton').innerHTML="Click again to reopen!";
         } else {
-          console.log("Pop-ups are blocked. Please allow pop-ups for this site to use this feature.");
+          alert("Pop-ups are blocked. Please allow pop-ups for this site to use this feature.");
         }
       };
 
