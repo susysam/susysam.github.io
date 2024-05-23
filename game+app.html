@@ -66,9 +66,6 @@
             height: auto;
             border-radius: 5px;
         }
-        .game h3 {
-            margin-top: 10px;
-        }
         #customGameInput {
             margin-top: 20px;
             display: flex;
@@ -204,6 +201,24 @@
 
             // Hide custom game input fields and button
             document.getElementById('customGameInput').style.display = 'none';
+
+            // Create fullscreen button
+            let fullscreenButton = document.createElement('button');
+            fullscreenButton.textContent = 'Play in Fullscreen';
+            fullscreenButton.onclick = function() {
+                if (gameFrame.requestFullscreen) {
+                    gameFrame.requestFullscreen();
+                } else if (gameFrame.mozRequestFullScreen) { /* Firefox */
+                    gameFrame.mozRequestFullScreen();
+                } else if (gameFrame.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+                    gameFrame.webkitRequestFullscreen();
+                } else if (gameFrame.msRequestFullscreen) { /* IE/Edge */
+                    gameFrame.msRequestFullscreen();
+                }
+            };
+
+            // Append fullscreen button to the body
+            document.body.appendChild(fullscreenButton);
         }
 
         function goBack() {
