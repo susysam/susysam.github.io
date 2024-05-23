@@ -72,12 +72,6 @@
       height: 34px;
     }
 
-    .toggle-switch input { 
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-
     .toggle-slider {
       position: absolute;
       cursor: pointer;
@@ -125,10 +119,10 @@
   <div class="container">
     <label for="gameBoosterToggle">Game Booster:</label>
     <div class="toggle-container">
-      <input type="checkbox" id="gameBoosterToggle">
-      <label class="toggle-switch" for="gameBoosterToggle">
+      <div class="toggle-switch">
+        <input type="checkbox" id="gameBoosterToggle">
         <div class="toggle-slider"></div>
-      </label>
+      </div>
       <span id="gameBoosterStatus">Off</span>
     </div>
   </div>
@@ -196,22 +190,23 @@
     }
 
     function applyGameBoosterStatusToAllPages(enabled) {
-      var frames = window.frames;
-      for (var i = 0; i < frames.length; i++) {
-        var frameDocument = frames[i].document;
-        var frameGameBoosterToggle = frameDocument.getElementById('gameBoosterToggle');
-        if (frameGameBoosterToggle) {
-          frameGameBoosterToggle.checked = enabled;
-          var frameGameBoosterStatus = frameDocument.getElementById('gameBoosterStatus');
-          if (frameGameBoosterStatus) {
-            frameGameBoosterStatus.textContent = enabled ? 'On' : 'Off';
-          }
-          var frameBody = frameDocument.body;
-          if (frameBody) {
-            frameBody.style.backgroundColor = enabled ? '#e6ffe6' : '#f0f0f0';
+      // Send a message to all other pages in the same domain to update their game booster status
+      if (enabled) {
+        window.localStorage.setItem('gameBoosterMessage', 'enable');
+      } else {
+        window.localStorage.setItem('gameBoosterMessage', 'disable');
+      }
+
+      // Listen for changes to the localStorage and apply the game booster status accordingly
+      window.addEventListener('storage', function(event) {
+        if (event.key === 'gameBoosterMessage') {
+          if (event.newValue === 'enable') {
+            optimizeWebsite();
+          } else if (event.newValue === 'disable') {
+            revertOptimizations();
           }
         }
-      }
+      });
     }
 
     function openInTab() {
@@ -243,8 +238,6 @@
         newWindow.document.body.appendChild(iframe);
         document.getElementById('windowButton').style.background='#ff5148';
         document.getElementById('windowButton').innerHTML="Click again to reopen!";
-      } else {
-        alert("Pop-ups are blocked. Please allow pop-ups for this site to use this feature.");
       }
     }
 
