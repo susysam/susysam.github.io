@@ -72,6 +72,12 @@
       height: 34px;
     }
 
+    .toggle-switch input { 
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
     .toggle-slider {
       position: absolute;
       cursor: pointer;
@@ -190,23 +196,13 @@
     }
 
     function applyGameBoosterStatusToAllPages(enabled) {
-      // Send a message to all other pages in the same domain to update their game booster status
       if (enabled) {
         window.localStorage.setItem('gameBoosterMessage', 'enable');
       } else {
         window.localStorage.setItem('gameBoosterMessage', 'disable');
       }
 
-      // Listen for changes to the localStorage and apply the game booster status accordingly
-      window.addEventListener('storage', function(event) {
-        if (event.key === 'gameBoosterMessage') {
-          if (event.newValue === 'enable') {
-            optimizeWebsite();
-          } else if (event.newValue === 'disable') {
-            revertOptimizations();
-          }
-        }
-      });
+      window.dispatchEvent(new Event('storage'));
     }
 
     function openInTab() {
@@ -246,12 +242,10 @@
     }
 
     function optimizeWebsite() {
-      // Add code to optimize the entire website
       console.log("Website optimized for performance.");
     }
 
     function revertOptimizations() {
-      // Add code to revert optimizations
       console.log("Optimizations reverted.");
     }
   </script>
