@@ -147,6 +147,17 @@
     <iframe id="gameFrame" frameborder="0"></iframe>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var gameBoosterEnabled = localStorage.getItem('gameBoosterEnabled');
+            if (gameBoosterEnabled === 'true') {
+                document.body.style.backgroundColor = '#e6ffe6'; // Light green
+                console.log("Game Booster is enabled on this page.");
+            } else {
+                document.body.style.backgroundColor = '#f5f5f5'; // Default color
+                console.log("Game Booster is disabled on this page.");
+            }
+        });
+
         let games = [
             { name: 'Bob the Robber 2', images: '/images/bob-the-robber-2.png', link: 'https://ubg365.github.io/bob-the-robber-2/' },
             { name: 'Drive Mad', images: '/images/drive-mad.jpg', link: 'https://ubg77.github.io/game131022/drive-mad/' },
@@ -270,5 +281,4 @@
         displayGames();
     </script>
 </body>
-
 </html>
