@@ -144,8 +144,9 @@
 
     document.addEventListener('DOMContentLoaded', function() {
       var gameBoosterEnabled = localStorage.getItem('gameBoosterEnabled');
+      var gameBoosterToggle = document.getElementById('gameBoosterToggle');
       if (gameBoosterEnabled !== null) {
-        document.getElementById('gameBoosterToggle').checked = JSON.parse(gameBoosterEnabled);
+        gameBoosterToggle.checked = JSON.parse(gameBoosterEnabled);
       }
       updateGameBoosterStatus();
     });
