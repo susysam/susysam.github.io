@@ -203,25 +203,8 @@
         }
 
         function openGame(link) {
-            let gameFrame = document.getElementById('gameFrame');
-            gameFrame.src = link;
-            gameFrame.style.display = 'block';
-
-            let gameGallery = document.getElementById('gameGallery');
-            gameGallery.style.display = 'none';
-
-            // Hide custom game input fields and button
-            document.getElementById('customGameInput').style.display = 'none';
-
-            // Create fullscreen button
-            let fullscreenButton = document.createElement('button');
-            fullscreenButton.textContent = 'Play in Fullscreen';
-            fullscreenButton.onclick = function() {
-                toggleFullscreen(gameFrame);
-            };
-
-            // Append fullscreen button to the body
-            document.body.appendChild(fullscreenButton);
+            // Open the game link in a new tab with about:blank as the URL
+            window.open('about:blank', '_blank').location.href = link;
         }
 
         function goBack() {
@@ -271,30 +254,6 @@
         }
 
         displayGames();
-
-        function toggleFullscreen(element) {
-            if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreenElement && !document.msFullscreenElement) {
-                if (element.requestFullscreen) {
-                    element.requestFullscreen();
-                } else if (element.webkitRequestFullscreen) {
-                    element.webkitRequestFullscreen();
-                } else if (element.mozRequestFullScreen) {
-                    element.mozRequestFullScreen();
-                } else if (element.msRequestFullscreen) {
-                    element.msRequestFullscreen();
-                }
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.webkitExitFullscreen) {
-                    document.webkitExitFullscreen();
-                } else if (document.mozCancelFullScreen) {
-                    document.mozCancelFullScreen();
-                } else if (document.msExitFullscreen) {
-                    document.msExitFullscreen();
-                }
-            }
-        }
     </script>
 </body>
 </html>
