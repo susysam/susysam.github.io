@@ -217,15 +217,7 @@
             let fullscreenButton = document.createElement('button');
             fullscreenButton.textContent = 'Play in Fullscreen';
             fullscreenButton.onclick = function() {
-                if (gameFrame.requestFullscreen) {
-                    gameFrame.requestFullscreen();
-                } else if (gameFrame.mozRequestFullScreen) { /* Firefox */
-                    gameFrame.mozRequestFullScreen();
-                } else if (gameFrame.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
-                    gameFrame.webkitRequestFullscreen();
-                } else if (gameFrame.msRequestFullscreen) { /* IE/Edge */
-                    gameFrame.msRequestFullscreen();
-                }
+                toggleFullscreen(gameFrame);
             };
 
             // Append fullscreen button to the body
@@ -279,6 +271,30 @@
         }
 
         displayGames();
+
+        function toggleFullscreen(element) {
+            if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreenElement && !document.msFullscreenElement) {
+                if (element.requestFullscreen) {
+                    element.requestFullscreen();
+                } else if (element.webkitRequestFullscreen) {
+                    element.webkitRequestFullscreen();
+                } else if (element.mozRequestFullScreen) {
+                    element.mozRequestFullScreen();
+                } else if (element.msRequestFullscreen) {
+                    element.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            }
+        }
     </script>
 </body>
 </html>
