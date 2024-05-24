@@ -82,6 +82,40 @@
         .button:hover {
             background-color: #0e1259;
         }
+        .moving-text {
+            animation: moveText 5s infinite linear;
+            color: #fff;
+            font-size: 20px;
+        }
+        @keyframes moveText {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+        #customGameInput {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #customGameInput input[type="text"], #customGameInput button {
+            padding: 8px;
+            margin: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        #customGameInput button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #customGameInput button:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
@@ -89,6 +123,7 @@
         <div class="logo">
             <img src="/images/leo.jpg" alt="Game Website Logo">
         </div>
+        <div class="moving-text">Play some Games!</div>
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Search games..." oninput="searchGames()">
             <button onclick="goBack()">Back</button>
@@ -97,6 +132,12 @@
     <main id="gameGallery">
         <!-- Game images will be dynamically added here -->
     </main>
+    <div id="customGameInput">
+        <input type="text" id="customGameName" placeholder="Enter game name...">
+        <input type="text" id="customGameLink" placeholder="Enter game link...">
+        <input type="text" id="customGameIcon" placeholder="Icon URL...">
+        <button id="addCustomGameButton" onclick="addCustomGame()">Add Custom Game</button>
+    </div>
     <script>
         let games = [
             { name: 'Bob the Robber 2', image: '/images/bob-the-robber-2.png', link: 'https://ubg365.github.io/bob-the-robber-2/' },
@@ -131,6 +172,14 @@
                 `;
                 gameGallery.appendChild(gameDiv);
             });
+        }
+
+        function addCustomGame() {
+            const name = document.getElementById('customGameName').value;
+            const link = document.getElementById('customGameLink').value;
+            const image = document.getElementById('customGameIcon').value || '/images/plus.png';
+            games.push({ name, image, link });
+            displayGames();
         }
 
         function clickHandler(link) {
