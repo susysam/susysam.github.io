@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Games</title>
+    <title>Games Portal</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f5f5f5;
@@ -23,7 +24,6 @@
             width: 100px;
             height: 100px;
             border-radius: 50%;
-            overflow: hidden;
         }
         .search-bar {
             display: flex;
@@ -66,192 +66,69 @@
             height: auto;
             border-radius: 5px;
         }
-        #customGameInput {
-            margin-top: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        #customGameInput input[type="text"] {
-            padding: 8px;
-            width: 200px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            margin-right: 10px;
-        }
-        #customGameInput button {
-            padding: 8px 15px;
+        .game button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
             background-color: #4CAF50;
             color: white;
             border: none;
             cursor: pointer;
             border-radius: 5px;
         }
-        #customGameInput button:hover {
+        .game button:hover {
             background-color: #45a049;
-        }
-        #backButton {
-            padding: 8px 15px;
-            background-color: #ff5148;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            margin-left: 5px;
-        }
-        #backButton:hover {
-            background-color: #d04237;
-        }
-        #gameFrame {
-            display: none;
-            width: 80vw;
-            height: 80vh;
-            margin: 0 auto;
-            border: none;
-        }
-        .moving-text {
-            animation: moveText 5s infinite linear;
-        }
-        @keyframes moveText {
-            0% {
-                transform: translateX(0);
-            }
-            100% {
-                transform: translateX(100%);
-            }
         }
     </style>
 </head>
 <body>
     <header>
         <div class="logo">
-            <img src="/images/leo.jpg" alt="Game Website Logo">
+            <img src="/images/logo.png" alt="Game Website Logo">
         </div>
-        <div class="moving-text">Play some Games!</div>
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Search games..." oninput="searchGames()">
-            <button id="backButton" onclick="goBack()">Back</button>
+            <button onclick="goBack()">Back</button>
         </div>
     </header>
     <main id="gameGallery">
         <!-- Game images will be dynamically added here -->
     </main>
-
-    <div id="customGameInput">
-        <input type="text" id="customGameName" placeholder="Enter game name...">
-        <input type="text" id="customGameLink" placeholder="Enter game link...">
-        <input type="text" id="customGameIcon" placeholder="Icon URL...">
-        <button id="addCustomGameButton" onclick="addCustomGame()">Add Custom Game</button>
-    </div>
-
-    <iframe id="gameFrame" frameborder="0"></iframe>
-
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var gameBoosterEnabled = localStorage.getItem('gameBoosterEnabled');
-            if (gameBoosterEnabled === 'true') {
-                document.body.style.backgroundColor = '#e6ffe6'; // Light green
-                console.log("Game Booster is enabled on this page.");
-            } else {
-                document.body.style.backgroundColor = '#f5f5f5'; // Default color
-                console.log("Game Booster is disabled on this page.");
-            }
-        });
-
         let games = [
-            { name: 'Bob the Robber 2', images: '/images/bob-the-robber-2.png', link: 'https://ubg365.github.io/bob-the-robber-2/' },
-            { name: 'Drive Mad', images: '/images/drive-mad.jpg', link: 'https://ubg77.github.io/game131022/drive-mad/' },
-            { name: 'G Switch 3', images: 'https://img.poki.com/cdn-cgi/image/quality=78,width=600,height=600,fit=cover,f=auto/7f53593c-4090-4cc5-a934-6a5e599d8eaa.png', link: 'https://webglmath.github.io/gswitch/' },
-            { name: 'vex 7', images: '/images/vex.png', link: 'https://html5edu.github.io/h6/vex-7/' },
-            { name: 'Minecraft', images: '/images/mc.png', link: 'https://xlegends.github.io/server-gxmehub/' },
-            { name: 'Moto X3M', images: '/images/moto-x3m.jpg', link: 'https://webglmath.github.io/moto-x3m/' },
-            { name: 'Retro Bowl', images: '/images/retro-bowl.jpg', link: 'https://webglmath.github.io/retro-bowl/' },
-            { name: 'Slope', images: '/images/slope.jpg', link: 'https://webglmath.github.io/slope/' },
-            { name: 'A1R', images: '/images/A1R.png', link: 'https://freeleo27.github.io/' },
-            { name: 'Smash Karts', images: '/images/smash.png', link: 'https://smartcart1.github.io/s/smash-karts/' },
-            { name: 'Roblox', images: '/images/roblox_logo.jpeg', link: 'https://now.gg/iframe/snippet?app_pkg=com.roblox.client&partner=skool' },
-            { name: 'Cluster Rush', images: 'https://geometrydash.io/data/image/game/cluster-rush.jpg', link: 'https://www.snake-games.io/localgames/cluster-rush/' },
-            { name: 'Vex 3', images: '/images/vex3.jpg', link: 'https://html5.gamedistribution.com/rvvASMiM/762c932b4db74c6da0c1d101b2da8be6/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-3' },
-            { name: 'Vex 4', images: '/images/vex4.jpg', link: 'https://html5.gamedistribution.com/rvvASMiM/80e6a5ae477f4d4fbcd1ea293d10087d/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-4' },
-            { name: 'Vex 5', images: '/images/vex5.jpg', link: 'https://html5.gamedistribution.com/rvvASMiM/f120262ab72743039fbce88c1f370df8/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-5' },
-            { name: 'Vex 6', images: '/images/vex6.jpeg', link: 'https://html5.gamedistribution.com/rvvASMiM/4925e12574364121a48c61c35f649c36/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-6' },
-            { name: 'Basketball Stars', images: 'https://images.crazygames.com/games/basketball-stars-2019/cover-1583231506155.png?auto=format%2Ccompress&q=45&cs=strip&ch=DPR&w=1200&h=630&fit=crop', link: 'https://html5.gamedistribution.com/rvvASMiM/69d78d071f704fa183d75b4114ae40ec/?gd_sdk_referrer_url=https://gamedistribution.com/games/basketball-stars' }
+            { name: 'Smash Karts', image: '/images/smash-karts.png', link: 'https://smartcart1.github.io/s/smash-karts/' },
+            { name: 'Minecraft', image: '/images/minecraft.png', link: 'https://minecraft.net' },
+            { name: 'Fortnite', image: '/images/fortnite.png', link: 'https://fortnite.com' },
+            // Add more games as needed
         ];
 
         function displayGames() {
-            let gameGallery = document.getElementById('gameGallery');
+            const gameGallery = document.getElementById('gameGallery');
             gameGallery.innerHTML = '';
-
             games.forEach(game => {
-                let gameDiv = document.createElement('div');
-                gameDiv.classList.add('game');
-                gameDiv.setAttribute('onclick', `openGame('${game.link}')`);
-
-                if (game.images) {
-                    let img = document.createElement('img');
-                    img.src = game.images;
-                    img.style.maxHeight = '100px'; // Added to limit image size
-                    gameDiv.appendChild(img);
-                }
-
-                let name = document.createElement('h3');
-                name.textContent = game.name;
-                gameDiv.appendChild(name);
-
+                const gameDiv = document.createElement('div');
+                gameDiv.className = 'game';
+                gameDiv.innerHTML = `
+                    <img src="${game.image}" alt="${game.name}">
+                    <h3>${game.name}</h3>
+                    <button onclick="openGame('${game.link}')">Launch</button>
+                `;
                 gameGallery.appendChild(gameDiv);
             });
         }
 
         function openGame(link) {
-            // Open the game link in a new tab with about:blank as the URL and in the background
-            var win = window.open('about:blank', '_blank');
-            win.document.location.href = link;
+            window.open(link, '_blank', 'noopener,noreferrer');
         }
 
         function goBack() {
-            window.location.href = "start27.html";
-        }
-
-        function addCustomGame() {
-            let customGameName = document.getElementById('customGameName').value.trim();
-            let customGameLink = document.getElementById('customGameLink').value.trim();
-            let customGameIcon = document.getElementById('customGameIcon').value.trim();
-
-            if (customGameName && customGameLink) {
-                games.unshift({ name: customGameName, images: customGameIcon || '/images/plus.png', link: customGameLink });
-                displayGames();
-                document.getElementById('customGameInput').style.display = 'none';
-            }
+            window.history.back();
         }
 
         function searchGames() {
-            let input = document.getElementById('searchInput').value.toLowerCase();
-            let filteredGames = games.filter(game => game.name.toLowerCase().includes(input));
-            displayFilteredGames(filteredGames);
-        }
-
-        function displayFilteredGames(filteredGames) {
-            let gameGallery = document.getElementById('gameGallery');
-            gameGallery.innerHTML = '';
-
-            filteredGames.forEach(game => {
-                let gameDiv = document.createElement('div');
-                gameDiv.classList.add('game');
-                gameDiv.setAttribute('onclick', `openGame('${game.link}')`);
-
-                if (game.images) {
-                    let img = document.createElement('img');
-                    img.src = game.images;
-                    img.style.maxHeight = '50px'; // Reduced image size when searching
-                    gameDiv.appendChild(img);
-                }
-
-                let name = document.createElement('h3');
-                name.textContent = game.name;
-                gameDiv.appendChild(name);
-
-                gameGallery.appendChild(gameDiv);
-            });
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const filteredGames = games.filter(game => game.name.toLowerCase().includes(input));
+            displayGames(filteredGames);
         }
 
         displayGames();
