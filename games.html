@@ -203,8 +203,9 @@
         }
 
         function openGame(link) {
-            // Open the game link in a new tab with about:blank as the URL
-            window.open('about:blank', '_blank').location.href = link;
+            // Open the game link in a new tab with about:blank as the URL and in the background
+            var win = window.open('about:blank', '_blank');
+            win.document.location.href = link;
         }
 
         function goBack() {
