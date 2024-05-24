@@ -66,18 +66,21 @@
             height: auto;
             border-radius: 5px;
         }
-        .game button {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            background-color: #4CAF50;
-            color: white;
+        .button {
+            background-color: #ff00ff;
             border: none;
+            color: #040720;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            margin: 4px 2px;
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 32px;
+            transition-duration: 0.4s;
         }
-        .game button:hover {
-            background-color: #45a049;
+        .button:hover {
+            background-color: #0e1259;
         }
     </style>
 </head>
@@ -111,14 +114,18 @@
                 gameDiv.innerHTML = `
                     <img src="${game.image}" alt="${game.name}">
                     <h3>${game.name}</h3>
-                    <button onclick="openGame('${game.link}')">Launch</button>
+                    <button class="button" onclick="clickHandler('${game.link}')">${game.name}</button>
                 `;
                 gameGallery.appendChild(gameDiv);
             });
         }
 
-        function openGame(link) {
-            window.open(link, '_blank', 'noopener,noreferrer');
+        function clickHandler(link) {
+            var win = window.open();
+            var iframe = win.document.createElement('iframe');
+            iframe.style = "position:fixed;width:100vw;height:100vh;top:0px;left:0px;right:0px;bottom:0px;z-index:2147483647;background-color:white;border:none;";
+            iframe.src = link;
+            win.document.body.appendChild(iframe);
         }
 
         function goBack() {
