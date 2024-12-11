@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tabs</title>
+    <title>Titanium Network - Tabs</title>
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Google_Classroom_Logo.svg/2372px-Google_Classroom_Logo.svg.png" type="image/png">
     <style>
         * {
@@ -42,16 +42,19 @@
             background-color: #4F0672;
         }
 
-        .back-button {
+        .back-button,
+        .restart-button {
             background-color: #6C0BA9;
             color: white;
             padding: 10px 20px;
             border-radius: 5px;
             text-decoration: none;
             margin-bottom: 20px;
+            margin-right: 10px;
         }
 
-        .back-button:hover {
+        .back-button:hover,
+        .restart-button:hover {
             background-color: #4F0672;
         }
 
@@ -71,6 +74,7 @@
             border-bottom: none;
             margin-right: 5px;
             transition: background-color 0.3s;
+            position: relative;
         }
 
         .tab:hover {
@@ -122,30 +126,45 @@
         .search-button:hover {
             background-color: #4F0672;
         }
+
+        .tab-buttons .tab-close,
+        .tab-buttons .tab-add {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .tab-buttons .tab-add {
+            top: 5px;
+            right: 35px;
+        }
+
     </style>
 </head>
 <body>
 
     <!-- Back to Tabs Button -->
-    <a href="index.html" class="back-button">Back to Tabs</a>
+    <a href="https://susysam.github.io/start27.html" class="back-button">Back to Tabs</a>
+    <a href="#" class="restart-button" onclick="restartTabs()">Restart</a>
 
     <!-- Tab Window -->
     <div class="tabs-container">
-        <!-- Tab Buttons -->
-        <div id="tab1" class="tab active" onclick="switchTab(1)">Google</div>
-        <div id="tab2" class="tab" onclick="switchTab(2)">YouTube</div>
-        <div id="tab3" class="tab" onclick="switchTab(3)">Wikipedia</div>
+        <!-- Tab Button for Default Tab -->
+        <div id="tab1" class="tab active" onclick="switchTab(1)">
+            Default Tab
+            <button class="tab-close" onclick="closeTab(event, 1)">×</button>
+            <button class="tab-add" onclick="addTab()">+</button>
+        </div>
     </div>
 
-    <!-- Tab Contents -->
+    <!-- Default Tab Content (Google Search) -->
     <div id="tabContent1" class="tab-content active">
-        <iframe src="https://www.google.com" class="iframe-container"></iframe>
-    </div>
-    <div id="tabContent2" class="tab-content">
-        <iframe src="https://www.youtube.com" class="iframe-container"></iframe>
-    </div>
-    <div id="tabContent3" class="tab-content">
-        <iframe src="https://www.wikipedia.org" class="iframe-container"></iframe>
+        <iframe src="https://www.google.com/search?q=reading+this+means+it+works" class="iframe-container"></iframe>
     </div>
 
     <!-- Search Bar -->
@@ -153,6 +172,8 @@
     <button class="search-button" onclick="searchWebsite()">Open Website</button>
 
     <script>
+        let tabCount = 1;
+
         // Function to switch between tabs
         function switchTab(tabNumber) {
             // Deactivate all tabs
@@ -179,38 +200,67 @@
             }
 
             // Create a new tab for the website
-            const tabNumber = document.querySelectorAll('.tab').length + 1;
-            const newTab = document.createElement('div');
-            newTab.classList.add('tab');
-            newTab.innerText = formattedUrl;
-            newTab.setAttribute('onclick', `openNewTab(${tabNumber}, '${formattedUrl}')`);
-            document.querySelector('.tabs-container').appendChild(newTab);
-
-            // Create a corresponding tab content
-            const newTabContent = document.createElement('div');
-            newTabContent.classList.add('tab-content');
-            const iframe = document.createElement('iframe');
-            iframe.src = formattedUrl;
-            iframe.classList.add('iframe-container');
-            newTabContent.appendChild(iframe);
-            document.body.appendChild(newTabContent);
-
-            // Switch to the new tab
-            switchTab(tabNumber);
+            addTab(formattedUrl);
         }
 
-        // Function to open new tab
-        function openNewTab(tabNumber, url) {
-            // Deactivate all tabs and content
-            const tabs = document.querySelectorAll('.tab');
-            tabs.forEach(tab => tab.classList.remove('active'));
+        // Function to add a new tab
+        function addTab(url = 'https://www.google.com') {
+            tabCount++;
 
-            const tabContents = document.querySelectorAll('.tab-content');
-            tabContents.forEach(content => content.classList.remove('active'));
+            // Create a new tab
+            const newTab = document.createElement('div');
+            newTab.classList.add('tab');
+            newTab.id = `tab${tabCount}`;
+            newTab.innerHTML = `Tab ${tabCount}
+                <button class="tab-close" onclick="closeTab(event, ${tabCount})">×</button>
+                <button class="tab-add" onclick="addTab()">+</button>`;
+            newTab.setAttribute('onclick', `switchTab(${tabCount})`);
 
-            // Activate clicked tab and its content
-            document.getElementById(`tab${tabNumber}`).classList.add('active');
-            document.getElementById(`tabContent${tabNumber}`).classList.add('active');
+            // Append the new tab
+            document.querySelector('.tabs-container').appendChild(newTab);
+
+            // Create corresponding content for the new tab
+            const newTabContent = document.createElement('div');
+            newTabContent.classList.add('tab-content');
+            newTabContent.id = `tabContent${tabCount}`;
+
+            const iframe = document.createElement('iframe');
+            iframe.src = url;
+            iframe.classList.add('iframe-container');
+            newTabContent.appendChild(iframe);
+
+            document.body.appendChild(newTabContent);
+
+            // Switch to the newly created tab
+            switchTab(tabCount);
+        }
+
+        // Function to close a tab
+        function closeTab(event, tabNumber) {
+            event.stopPropagation(); // Prevent tab switch
+
+            // Remove the tab
+            const tab = document.getElementById(`tab${tabNumber}`);
+            tab.remove();
+
+            // Remove the tab content
+            const tabContent = document.getElementById(`tabContent${tabNumber}`);
+            tabContent.remove();
+
+            // If no tabs are left, reset to the default state
+            if (document.querySelectorAll('.tab').length === 0) {
+                restartTabs();
+            }
+        }
+
+        // Function to restart tabs to the default state
+        function restartTabs() {
+            // Remove all current tabs
+            document.querySelectorAll('.tab').forEach(tab => tab.remove());
+            document.querySelectorAll('.tab-content').forEach(content => content.remove());
+
+            // Add default tab
+            addTab('https://www.google.com/search?q=reading+this+means+it+works');
         }
     </script>
 
