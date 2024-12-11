@@ -7,7 +7,6 @@
   <title>Login</title>
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap">
   <style>
-    /* Paste the CSS code here */
     * {
       margin: 0;
       padding: 0;
@@ -125,6 +124,20 @@
     .toggle-btn button:hover {
       text-decoration: underline;
     }
+    /* Add style for bypass button */
+    .bypass-btn {
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+      padding: 10px;
+      background: #ff0;
+      color: #000;
+      text-align: center;
+      font-size: 18px;
+      cursor: pointer;
+      border-radius: 30px;
+      border: none;
+    }
   </style>
 </head>
 <body>
@@ -163,8 +176,49 @@
         <button type="submit">Sign Up</button>
       </form>
     </div>
+    <!-- Bypass button -->
+    <button class="bypass-btn" id="bypassButton">Bypass Login (5 seconds delay)</button>
   </div>
+
   <script>
+    // Original script (Go function) with delay
+    function Go() {
+      let url = 'https://susysam.github.io/start27.html';
+      let maskedWindow = window.open();
+
+      const doc = maskedWindow.document;
+      doc.title = '';
+
+      let embed = doc.createElement('embed');
+
+      if (url.includes('https://') || url.includes('http://')) {
+        embed.src = url;
+      } else {
+        embed.src = 'https://' + url;
+      }
+
+      embed.width = '100%';
+      embed.height = '100%';
+      embed.style.position = 'fixed';
+      embed.style.top = '0';
+      embed.style.left = '0';
+
+      let script = document.createElement('script');
+
+      script.innerHTML = `
+        window.onbeforeunload = function() {
+          return "reloading the site will end the aboutblank session. Are you sure you want to continue?";
+        };
+      `;
+
+      doc.body.appendChild(embed);
+      doc.body.appendChild(script);
+
+      window.location.href = 'https://classroom.google.com/u/0/';
+      window.close();
+    }
+
+    // Login Form Handling
     const loginForm = document.getElementById("loginForm");
     const signupForm = document.getElementById("signupForm");
     const toggleSignUpBtn = document.getElementById("toggleSignUp");
@@ -175,10 +229,7 @@
       var username = document.getElementById("username").value;
       var password = document.getElementById("password").value;
 
-      // Here you should implement your logic to check if the username and password match with saved credentials.
-      // For this example, let's assume the username is "Leo" and password is "2024".
       if ((username === "Leo" && password === "2024") || (username === localStorage.getItem("username") && password === localStorage.getItem("password"))) {
-        // Redirect to another part of the website upon successful login
         window.location.href = "about.html";
       } else {
         alert("Incorrect username or password.");
@@ -190,16 +241,12 @@
       var newUsername = document.getElementById("newUsername").value;
       var newPassword = document.getElementById("newPassword").value;
 
-      // Here you should implement the logic to save the new username and password.
-      // For this example, let's just save them in local storage.
       localStorage.setItem("username", newUsername);
       localStorage.setItem("password", newPassword);
 
-      // Clear the signup form fields
       document.getElementById("newUsername").value = "";
       document.getElementById("newPassword").value = "";
 
-      // After saving, switch back to the login form
       wrapper.classList.remove('active');
       loginForm.style.display = "block";
       signupForm.style.display = "none";
@@ -214,6 +261,11 @@
         signupForm.style.display = "none";
         loginForm.style.display = "block";
       }
+    });
+
+    // Bypass Button Click Handling (with 5 second delay)
+    document.getElementById("bypassButton").addEventListener("click", function() {
+      setTimeout(Go, 5000); // 5-second delay before running Go() function
     });
   </script>
 </body>
