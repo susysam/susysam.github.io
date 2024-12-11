@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Titanium Network - Search</title>
+    <title>Tabs</title>
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Google_Classroom_Logo.svg/2372px-Google_Classroom_Logo.svg.png" type="image/png">
     <style>
         * {
@@ -12,50 +12,93 @@
             box-sizing: border-box;
         }
 
-        .skip-link {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background-color: #6C0BA9;
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            z-index: 100;
-        }
-
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
-            color: #333;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            min-height: 100vh;
+            justify-content: flex-start;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        .navbar {
+            margin-bottom: 20px;
             text-align: center;
         }
 
         .navbar a {
-            margin: 10px;
             padding: 10px 20px;
             background-color: #6C0BA9;
             color: white;
             text-decoration: none;
             border-radius: 5px;
-            transition: background-color 0.3s;
+            margin: 5px;
+            display: inline-block;
         }
 
         .navbar a:hover {
             background-color: #4F0672;
         }
 
-        .content {
-            margin-top: 50px;
-            width: 80%;
-            padding: 20px;
-            border-radius: 10px;
+        .back-button {
+            background-color: #6C0BA9;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+
+        .back-button:hover {
+            background-color: #4F0672;
+        }
+
+        .tabs-container {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 2px solid #ddd;
+            background-color: #fff;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #ddd;
+            border: 1px solid #ccc;
+            border-bottom: none;
+            margin-right: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .tab:hover {
+            background-color: #bbb;
+        }
+
+        .tab.active {
+            background-color: #6C0BA9;
+            color: white;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .tab-content {
+            width: 100%;
+            height: 70vh;
             background-color: white;
+            padding: 20px;
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .iframe-container {
+            width: 100%;
+            height: 100%;
+            border: none;
         }
 
         .search-bar {
@@ -67,87 +110,109 @@
             border: 1px solid #ccc;
         }
 
-        .results {
-            margin-top: 20px;
-            text-align: left;
-        }
-
-        .back-button {
+        .search-button {
+            padding: 10px 20px;
             background-color: #6C0BA9;
             color: white;
-            padding: 10px 20px;
             border-radius: 5px;
-            text-decoration: none;
-            display: inline-block;
-            margin-top: 20px;
+            cursor: pointer;
+            margin-top: 10px;
         }
 
-        .back-button:hover {
+        .search-button:hover {
             background-color: #4F0672;
-        }
-
-        #iframe-container {
-            margin-top: 30px;
-            width: 100%;
-            height: 600px;
-            border: none;
         }
     </style>
 </head>
 <body>
-    <a href="#content" class="skip-link">Skip to content</a>
 
-    <div class="navbar">
-        <a href="games.html">Games</a>
-        <a href="links.html">Links</a>
-        <a href="settings.html">Settings</a>
-        <a href="movie-tv.html">Movie+TV</a>
-        <a href="tabs.html">Tabs</a>
+    <!-- Back to Tabs Button -->
+    <a href="index.html" class="back-button">Back to Tabs</a>
+
+    <!-- Tab Window -->
+    <div class="tabs-container">
+        <!-- Tab Buttons -->
+        <div id="tab1" class="tab active" onclick="switchTab(1)">Google</div>
+        <div id="tab2" class="tab" onclick="switchTab(2)">YouTube</div>
+        <div id="tab3" class="tab" onclick="switchTab(3)">Wikipedia</div>
     </div>
 
-    <div class="content" id="content">
-        <h1>Welcome to Titanium Network</h1>
-        <p>Discover advanced tools and setups for privacy and security.</p>
-
-        <!-- Search Bar -->
-        <input type="text" id="searchInput" class="search-bar" placeholder="Enter a URL like youtube.com">
-
-        <!-- Search Button -->
-        <button onclick="search()">Search</button>
-
-        <!-- Back Button (to go back to tabs.html) -->
-        <a href="tabs.html" class="back-button">Back to Tabs</a>
-
-        <!-- Dynamic Iframe for loading websites -->
-        <div id="iframe-container"></div>
+    <!-- Tab Contents -->
+    <div id="tabContent1" class="tab-content active">
+        <iframe src="https://www.google.com" class="iframe-container"></iframe>
     </div>
+    <div id="tabContent2" class="tab-content">
+        <iframe src="https://www.youtube.com" class="iframe-container"></iframe>
+    </div>
+    <div id="tabContent3" class="tab-content">
+        <iframe src="https://www.wikipedia.org" class="iframe-container"></iframe>
+    </div>
+
+    <!-- Search Bar -->
+    <input type="text" id="searchInput" class="search-bar" placeholder="Enter a website URL (e.g., youtube.com)">
+    <button class="search-button" onclick="searchWebsite()">Open Website</button>
 
     <script>
-        function search() {
-            const query = document.getElementById('searchInput').value;
-            const iframeContainer = document.getElementById('iframe-container');
-            
-            if (!query) {
-                alert("Please enter a URL.");
-                return;
+        // Function to switch between tabs
+        function switchTab(tabNumber) {
+            // Deactivate all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Hide all tab content
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+
+            // Activate clicked tab and corresponding content
+            document.getElementById(`tab${tabNumber}`).classList.add('active');
+            document.getElementById(`tabContent${tabNumber}`).classList.add('active');
+        }
+
+        // Function to handle website search and open
+        function searchWebsite() {
+            const url = document.getElementById('searchInput').value;
+            if (!url) return;
+
+            let formattedUrl = url;
+            if (!formattedUrl.startsWith('http://') && !formattedUrl.startsWith('https://')) {
+                formattedUrl = 'http://' + formattedUrl; // Add 'http://' if missing
             }
 
-            // Check if the URL includes "http://", "https://" or "www"
-            let url = query;
-            if (!url.startsWith('http://') && !url.startsWith('https://')) {
-                url = 'http://' + url;  // Default to HTTP if no scheme is provided
-            }
+            // Create a new tab for the website
+            const tabNumber = document.querySelectorAll('.tab').length + 1;
+            const newTab = document.createElement('div');
+            newTab.classList.add('tab');
+            newTab.innerText = formattedUrl;
+            newTab.setAttribute('onclick', `openNewTab(${tabNumber}, '${formattedUrl}')`);
+            document.querySelector('.tabs-container').appendChild(newTab);
 
-            // Clear previous iframe content
-            iframeContainer.innerHTML = '';
-
-            // Create an iframe element to display the website
+            // Create a corresponding tab content
+            const newTabContent = document.createElement('div');
+            newTabContent.classList.add('tab-content');
             const iframe = document.createElement('iframe');
-            iframe.src = url;
-            iframe.width = '100%';
-            iframe.height = '600px';
-            iframeContainer.appendChild(iframe);
+            iframe.src = formattedUrl;
+            iframe.classList.add('iframe-container');
+            newTabContent.appendChild(iframe);
+            document.body.appendChild(newTabContent);
+
+            // Switch to the new tab
+            switchTab(tabNumber);
+        }
+
+        // Function to open new tab
+        function openNewTab(tabNumber, url) {
+            // Deactivate all tabs and content
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+
+            // Activate clicked tab and its content
+            document.getElementById(`tab${tabNumber}`).classList.add('active');
+            document.getElementById(`tabContent${tabNumber}`).classList.add('active');
         }
     </script>
+
 </body>
 </html>
