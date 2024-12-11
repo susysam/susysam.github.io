@@ -117,6 +117,7 @@
     <div class="navbar">
         <a onclick="openGameApps()">Games</a>
         <a onclick="openlinks()">Links</a>
+        <a onclick="openTabs()">Tabs</a>
         <a onclick="openSettings()">Settings</a>
         <a onclick="openTvShowPlayer()">Movie+TV</a>
     </div>
@@ -172,7 +173,7 @@
             const seconds = now.getSeconds().toString().padStart(2, '0');
             const ampm = hours >= 12 ? 'PM' : 'AM';
             hours = hours % 12;
-            hours = hours ? hours : 12;
+            hours = hours ? 12 : 12;
 
             const timeString = `${hours}:${minutes}:${seconds} ${ampm}`;
             document.getElementById('time').textContent = timeString;
@@ -186,16 +187,20 @@
             window.location.href = "games.html";
         }
 
+        function openlinks() {
+            window.location.href = "links.html";
+        }
+
+        function openTabs() {
+            window.location.href = "tabs.html"; 
+        }
+
         function openSettings() {
             window.location.href = "setting.html";
         }
 
         function openTvShowPlayer() {
             window.location.href = "movie+tv.html";
-        }
-
-        function openlinks() {
-            window.location.href = "links.html";
         }
 
         // Show Background Input
@@ -208,7 +213,7 @@
             const backgroundUrl = document.getElementById("background-url").value;
             document.body.style.backgroundImage = `url('${backgroundUrl}')`;
             localStorage.setItem("backgroundUrl", backgroundUrl);
-            document.getElementById("background-input").style.display = "none"; // Hide background input
+            document.getElementById("background-input").style.display = "none"; 
         }
 
         // Remove Background Input
