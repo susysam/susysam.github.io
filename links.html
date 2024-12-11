@@ -3,164 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Links</title>
+    <title>Improved Links</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
             text-align: center;
-            margin: 20px;
-            background-color: #161616;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
             color: #fff;
+        }
+
+        header {
+            padding: 20px;
+            background: linear-gradient(90deg, #6C0BA9, #3E0F87);
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .last-update {
+            font-size: 14px;
+            margin-top: 10px;
+            color: #ccc;
         }
 
         .button-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
+            margin: 20px 0;
         }
 
         .button {
-            padding: 10px 20px;
+            padding: 12px 25px;
             background-color: #1f1f1f;
-            border: 3px solid #fff;
+            border: 2px solid #fff;
             border-radius: 10px;
             text-decoration: none;
             color: #fff;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 18px;
-            outline: none;
+            font-size: 16px;
             margin: 0 10px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
         }
 
         .button:hover, .button:focus {
             background-color: #6C0BA9;
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            color: white;
+            transform: scale(1.1);
         }
 
         .dropdown {
-            margin: 20px;
             display: inline-block;
+            margin: 20px;
         }
 
         .dropbtn {
-            padding: 10px 20px;
+            padding: 12px 25px;
             background-color: #1f1f1f;
-            border: 3px solid #fff;
+            border: 2px solid #fff;
             border-radius: 10px;
-            text-decoration: none;
             color: #fff;
+            font-size: 16px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 18px;
-            outline: none;
+            transition: all 0.3s ease-in-out;
         }
 
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-        }
-
-        .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            text-align: left;
-        }
-
-        .dropdown-content a:hover, .dropdown-content a:focus {
-            background-color: #ddd;
-        }
-
-        .dropdown:hover .dropdown-content, .dropdown:focus .dropdown-content {
-            display: block;
-        }
-
-        iframe {
-            width: 100%;
-            height: 80vh;
-            margin-top: 20px;
-            border: none;
+        .dropbtn:hover, .dropbtn:focus {
+            background-color: #6C0BA9;
         }
     </style>
 </head>
 <body>
+    <header>Links</header>
+    <div class="last-update">Last Update: 12-11-24</div>
+
     <div class="button-container">
-        <button class="button" onclick="goBack()" aria-label="Go back to previous page">Back</button>
-        <button class="button" onclick="goToSearch()" aria-label="Go to search page">Blocked?</button>
+        <button class="button" onclick="goBack()" aria-label="Go back to the previous page">Back</button>
+        <button class="button" onclick="goToSearch()" aria-label="Go to the search page">Blocked?</button>
     </div>
 
-    <!-- Dropdown Menus for Categories -->
-    <div class="dropdown" tabindex="0" aria-haspopup="true" aria-expanded="false">
-        <button class="dropbtn" aria-controls="Interstellar">Interstellar</button>
-        <div class="dropdown-content" id="Interstellar"></div>
+    <!-- Categories -->
+    <div class="dropdown">
+        <button class="dropbtn" onclick="openLink('https://social.valah.net/')" aria-label="Open Interstellar Links">Interstellar</button>
     </div>
-    <div class="dropdown" tabindex="0" aria-haspopup="true" aria-expanded="false">
-        <button class="dropbtn" aria-controls="Light">Light</button>
-        <div class="dropdown-content" id="Light"></div>
+    <div class="dropdown">
+        <button class="dropbtn" aria-label="Light Links Coming Soon">Light (New Links Coming Soon)</button>
     </div>
-    <div class="dropdown" tabindex="0" aria-haspopup="true" aria-expanded="false">
-        <button class="dropbtn" aria-controls="Xenon">Xenon</button>
-        <div class="dropdown-content" id="Xenon"></div>
+    <div class="dropdown">
+        <button class="dropbtn" aria-label="Xenon Links Coming Soon">Xenon (New Links Coming Soon)</button>
     </div>
-    <div class="dropdown" tabindex="0" aria-haspopup="true" aria-expanded="false">
-        <button class="dropbtn" aria-controls="Spoofs">Spoofs</button>
-        <div class="dropdown-content" id="Spoofs"></div>
+    <div class="dropdown">
+        <button class="dropbtn" aria-label="Spoofs Links Coming Soon">Spoofs (New Links Coming Soon)</button>
     </div>
-
-    <iframe id="contentFrame" title="Content Display"></iframe>
 
     <script>
-        const categories = {
-            'Interstellar': [
-                "https://n.c.gracemp.org/",
-                "https://journeys.sunday.glenwaverleychurches.org/",
-                "https://artforfriends.matenaers.com/",
-                "https://int-bblum3-ryt-s-projects.vercel.app/",
-                // More links...
-            ],
-            'Light': [
-                "https://boredmansworld.datamining.cl/",
-                "https://night-lights.datamining.cl/",
-                "https://weekly-light-show.kanacad.org/",
-                "https://brilliant-night.us.to/",
-                // More links...
-            ],
-            'Xenon': [
-                "https://reality.nicolasi.com//",
-                "https://records.calvaryduncan.com/",
-                "https://oblock.chicago360factor.com/",
-                "https://zones.trumpetx.net/",
-                "https://nle.modernpotterystudio.com/",
-                "https://2024.lojadebikini.com/",
-                // More links...
-            ],
-            'Spoofs': [
-                "https://whywhywhy-bqlf.onrender.com/spoofs/onlinetutoring.html",
-                "https://people-are-dumb-lol.onrender.com/spoofs/onlinetutoring.html",
-                // More links...
-            ]
-        };
-
-        Object.keys(categories).forEach(category => {
-            const dropdown = document.getElementById(category);
-            categories[category].forEach((link, index) => {
-                const a = document.createElement('a');
-                a.href = '#';
-                a.textContent = `Link ${index + 1}`;
-                a.onclick = () => {
-                    document.getElementById('contentFrame').src = link;
-                    return false;
-                };
-                dropdown.appendChild(a);
-            });
-        });
+        function openLink(url) {
+            window.open(url, '_blank', 'noopener');
+        }
 
         function goBack() {
             window.location.href = "start27.html";
