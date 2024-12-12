@@ -1,57 +1,118 @@
-<script>
-  const loginForm = document.getElementById("loginForm");
-  const signupForm = document.getElementById("signupForm");
-  const loginSection = document.getElementById("loginSection");
-  const signupSection = document.getElementById("signupSection");
-  const showSignupBtn = document.getElementById("showSignup");
-  const showLoginBtn = document.getElementById("showLogin");
-  const bypassButton = document.getElementById("bypassButton");
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <style>
+    /* Your previous CSS here */
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <!-- Login Section -->
+    <div id="loginSection">
+      <h2>Login</h2>
+      <form id="loginForm">
+        <div class="input-group">
+          <input type="text" id="username" required>
+          <label for="username">Username</label>
+        </div>
+        <div class="input-group">
+          <input type="password" id="password" required>
+          <label for="password">Password</label>
+        </div>
+        <div class="remember">
+          <label><input type="checkbox"> Remember me</label>
+        </div>
+        <button type="submit">Login</button>
+        <div class="toggle-btn">
+          <button type="button" id="showSignup">Sign Up</button>
+        </div>
+      </form>
+    </div>
 
-  // Login Handling
-  loginForm.addEventListener("submit", function(event) {
-    event.preventDefault();
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
+    <!-- Sign Up Section -->
+    <div id="signupSection" style="display: none;">
+      <h2>Sign Up</h2>
+      <form id="signupForm">
+        <div class="input-group">
+          <input type="text" id="newUsername" required>
+          <label for="newUsername">New Username</label>
+        </div>
+        <div class="input-group">
+          <input type="password" id="newPassword" required>
+          <label for="newPassword">New Password</label>
+        </div>
+        <button type="submit">Sign Up</button>
+        <div class="toggle-btn">
+          <button type="button" id="showLogin">Back to Login</button>
+        </div>
+      </form>
+    </div>
 
-    if ((username === "Leo" && password === "2024") || 
-        (username === localStorage.getItem("username") && password === localStorage.getItem("password"))) {
-      alert("Login successful!");
-      window.location.href = "about.html";
-    } else {
-      alert("Invalid credentials.");
-    }
-  });
+    <!-- Bypass Button -->
+    <button class="bypass-btn" id="bypassButton">Bypass Login Instantly</button>
+  </div>
 
-  // Signup Handling
-  signupForm.addEventListener("submit", function(event) {
-    event.preventDefault();
-    const newUsername = document.getElementById("newUsername").value;
-    const newPassword = document.getElementById("newPassword").value;
+  <script>
+    // JavaScript handling for login, signup, and bypass
 
-    localStorage.setItem("username", newUsername);
-    localStorage.setItem("password", newPassword);
-    alert("Sign up successful! Please log in.");
-    signupSection.style.display = "none";
-    loginSection.style.display = "block";
-  });
+    const loginForm = document.getElementById("loginForm");
+    const signupForm = document.getElementById("signupForm");
+    const loginSection = document.getElementById("loginSection");
+    const signupSection = document.getElementById("signupSection");
+    const showSignupBtn = document.getElementById("showSignup");
+    const showLoginBtn = document.getElementById("showLogin");
+    const bypassButton = document.getElementById("bypassButton");
 
-  // Toggle Signup/Login
-  showSignupBtn.addEventListener("click", function() {
-    loginSection.style.display = "none";
-    signupSection.style.display = "block";
-  });
+    // Login Handling
+    loginForm.addEventListener("submit", function(event) {
+      event.preventDefault();
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
 
-  showLoginBtn.addEventListener("click", function() {
-    signupSection.style.display = "none";
-    loginSection.style.display = "block";
-  });
+      if ((username === "Leo" && password === "2024") || 
+          (username === localStorage.getItem("username") && password === localStorage.getItem("password"))) {
+        alert("Login successful!");
+        window.location.href = "about.html"; // Redirect to the page after successful login
+      } else {
+        alert("Invalid credentials.");
+      }
+    });
 
-  // Bypass Button Handling (Simulate successful login)
-  bypassButton.addEventListener("click", function() {
-    // Simulate login by setting username and password in localStorage
-    localStorage.setItem("username", "Leo");
-    localStorage.setItem("password", "2024");
-    alert("Bypassing login. Welcome back, Leo!");
-    window.location.href = "about.html"; // Redirect to the page after login
-  });
-</script>
+    // Signup Handling
+    signupForm.addEventListener("submit", function(event) {
+      event.preventDefault();
+      const newUsername = document.getElementById("newUsername").value;
+      const newPassword = document.getElementById("newPassword").value;
+
+      localStorage.setItem("username", newUsername);
+      localStorage.setItem("password", newPassword);
+      alert("Sign up successful! Please log in.");
+      signupSection.style.display = "none";
+      loginSection.style.display = "block";
+    });
+
+    // Toggle between Login and Signup
+    showSignupBtn.addEventListener("click", function() {
+      loginSection.style.display = "none";
+      signupSection.style.display = "block";
+    });
+
+    showLoginBtn.addEventListener("click", function() {
+      signupSection.style.display = "none";
+      loginSection.style.display = "block";
+    });
+
+    // Bypass Button Handling (Simulate successful login)
+    bypassButton.addEventListener("click", function() {
+      // Simulate login by setting username and password in localStorage
+      localStorage.setItem("username", "Leo");
+      localStorage.setItem("password", "2024");
+      alert("Bypassing login. Welcome back, Leo!");
+      window.location.href = "about.html"; // Redirect to the page after login
+    });
+  </script>
+</body>
+</html>
