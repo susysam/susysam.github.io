@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Games Hub</title>
+  <title>Games</title>
   <style>
     body {
       margin: 0;
@@ -102,10 +102,28 @@
     .add-game-inputs button:hover {
       background: darkorange;
     }
+
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: orange;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .back-button:hover {
+      background: darkorange;
+    }
   </style>
 </head>
 <body>
-  <h1>Welcome to Games Hub</h1>
+  <button class="back-button" onclick="window.history.back()">Back</button>
+  <h1>Games</h1>
   <div class="games-container" id="gamesContainer">
     <!-- Game 1 -->
     <div class="game-card">
