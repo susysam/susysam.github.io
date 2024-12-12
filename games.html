@@ -3,53 +3,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Games</title>
+    <title>Game Hub</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-bar input {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 200px;
+        }
+
+        .search-bar button {
+            padding: 8px 15px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .search-bar button:hover {
+            background-color: #45a049;
+        }
+
+        main {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .game {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            padding: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .game:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .game img {
+            max-width: 100%;
+            height: 150px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .game button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #ff5722;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .game button:hover {
+            background-color: #e64a19;
+        }
+
+        #customGameInput {
+            display: flex;
+            gap: 10px;
+            padding: 20px;
+            background: #fff;
+            border-top: 1px solid #ccc;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #customGameInput input {
+            padding: 10px;
+            flex: 1;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #customGameInput button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #customGameInput button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <main id="gameGallery">
-        <!-- Game links will be dynamically added here -->
-    </main>
+    <header>
+        <h1>Game Hub</h1>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search games..." oninput="searchGames()">
+            <button onclick="goBack()">Back</button>
+        </div>
+    </header>
+
+    <main id="gameGallery"></main>
+
+    <div id="customGameInput">
+        <input type="text" id="customGameName" placeholder="Enter game name...">
+        <input type="text" id="customGameLink" placeholder="Enter game link...">
+        <input type="text" id="customGameIcon" placeholder="Icon URL (optional)...">
+        <button onclick="addCustomGame()">Add Game</button>
+    </div>
+
     <script>
         let games = [
-            { name: 'Bob the Robber 2', link: 'https://ubg365.github.io/bob-the-robber-2/' },
-            { name: 'Drive Mad', link: 'https://ubg77.github.io/game131022/drive-mad/' },
-            { name: 'G Switch 3', link: 'https://webglmath.github.io/gswitch/' },
-            { name: 'Vex 7', link: 'https://html5edu.github.io/h6/vex-7/' },
-            { name: 'Minecraft', link: 'https://xlegends.github.io/server-gxmehub/' },
-            { name: 'Moto X3M', link: 'https://webglmath.github.io/moto-x3m/' },
-            { name: 'Retro Bowl', link: 'https://webglmath.github.io/retro-bowl/' },
-            { name: 'Slope', link: 'https://webglmath.github.io/slope/' },
-            { name: 'A1R', link: 'https://freeleo27.github.io/' },
-            { name: 'Smash Karts', link: 'https://smartcart1.github.io/s/smash-karts/' },
-            { name: 'Roblox', link: 'https://now.gg/iframe/snippet?app_pkg=com.roblox.client&partner=skool' },
-            { name: 'Cluster Rush', link: 'https://www.snake-games.io/localgames/cluster-rush/' },
-            { name: 'Vex 3', link: 'https://html5.gamedistribution.com/rvvASMiM/762c932b4db74c6da0c1d101b2da8be6/' },
-            { name: 'Vex 4', link: 'https://html5.gamedistribution.com/rvvASMiM/80e6a5ae477f4d4fbcd1ea293d10087d/' },
-            { name: 'Vex 5', link: 'https://html5.gamedistribution.com/rvvASMiM/f120262ab72743039fbce88c1f370df8/' },
-            { name: 'Vex 6', link: 'https://html5.gamedistribution.com/rvvASMiM/4925e12574364121a48c61c35f649c36/' },
-            { name: 'Basketball Stars', link: 'https://html5.gamedistribution.com/rvvASMiM/69d78d071f704fa183d75b4114ae40ec/' }
+            { name: 'Bob the Robber 2', image: 'https://via.placeholder.com/150', link: 'https://ubg365.github.io/bob-the-robber-2/' },
+            { name: 'Drive Mad', image: 'https://via.placeholder.com/150', link: 'https://ubg77.github.io/game131022/drive-mad/' },
+            { name: 'Slope', image: 'https://via.placeholder.com/150', link: 'https://webglmath.github.io/slope/' },
+            { name: 'Minecraft', image: 'https://via.placeholder.com/150', link: 'https://xlegends.github.io/server-gxmehub/' }
         ];
 
-        function displayGames() {
+        function displayGames(filteredGames = games) {
             const gameGallery = document.getElementById('gameGallery');
             gameGallery.innerHTML = '';
-            games.forEach(game => {
+            filteredGames.forEach(game => {
                 const gameDiv = document.createElement('div');
+                gameDiv.className = 'game';
                 gameDiv.innerHTML = `
+                    <img src="${game.image}" alt="${game.name}">
                     <h3>${game.name}</h3>
-                    <button onclick="openGame('${btoa(game.link)}')">${game.name}</button>
+                    <button onclick="openGame('${btoa(game.link)}')">Play</button>
                 `;
                 gameGallery.appendChild(gameDiv);
             });
         }
 
+        function searchGames() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filteredGames = games.filter(game => game.name.toLowerCase().includes(query));
+            displayGames(filteredGames);
+        }
+
+        function addCustomGame() {
+            const name = document.getElementById('customGameName').value;
+            const link = document.getElementById('customGameLink').value;
+            const image = document.getElementById('customGameIcon').value || 'https://via.placeholder.com/150';
+
+            if (name && link) {
+                games.push({ name, link, image });
+                displayGames();
+            }
+        }
+
         function openGame(encodedLink) {
             const decodedLink = atob(encodedLink);
-            var win = window.open();
-            var iframe = win.document.createElement('iframe');
-            iframe.style = "position:fixed;width:100vw;height:100vh;top:0px;left:0px;right:0px;bottom:0px;z-index:2147483647;background-color:white;border:none;";
-            iframe.src = decodedLink;
-            win.document.body.appendChild(iframe);
+            window.open(decodedLink, '_blank');
+        }
+
+        function goBack() {
+            window.history.back();
         }
 
         displayGames();
