@@ -1,201 +1,195 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Hub</title>
-    <style>
-        /* General Styles */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f9;
-            color: #333;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Games Hub</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #121212;
+      color: white;
+      text-align: center;
+    }
 
-        header {
-            background: linear-gradient(45deg, #6a11cb, #2575fc);
-            color: white;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
+    h1 {
+      margin-top: 20px;
+    }
 
-        header h1 {
-            margin: 0;
-            font-size: 24px;
-        }
+    .games-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      padding: 20px;
+    }
 
-        .search-bar {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+    .game-card {
+      background: #222;
+      border: 2px solid orange;
+      border-radius: 10px;
+      width: 250px;
+      padding: 15px;
+      box-shadow: 0 5px 15px rgba(255, 165, 0, 0.5);
+      transition: transform 0.2s ease;
+    }
 
-        .search-bar input {
-            padding: 8px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            width: 200px;
-        }
+    .game-card:hover {
+      transform: scale(1.05);
+    }
 
-        .search-bar button {
-            padding: 8px 15px;
-            background-color: #4caf50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+    .game-card img {
+      width: 100%;
+      height: 150px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
 
-        .search-bar button:hover {
-            background-color: #45a049;
-        }
+    .game-card h3 {
+      margin: 10px 0;
+    }
 
-        main {
-            padding: 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
+    .game-card button {
+      background: orange;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
 
-        .game {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            padding: 20px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
+    .game-card button:hover {
+      background: darkorange;
+    }
 
-        .game:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-        }
+    .add-game-container {
+      margin: 20px;
+    }
 
-        .game img {
-            max-width: 100%;
-            height: 150px;
-            border-radius: 8px;
-            object-fit: cover;
-        }
+    .hidden {
+      display: none;
+    }
 
-        .game button {
-            margin-top: 10px;
-            padding: 10px 20px;
-            background-color: #ff5722;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+    .add-game-inputs {
+      margin-top: 15px;
+    }
 
-        .game button:hover {
-            background-color: #e64a19;
-        }
+    .add-game-inputs input {
+      display: block;
+      width: 300px;
+      margin: 10px auto;
+      padding: 10px;
+      border: 2px solid orange;
+      border-radius: 5px;
+      background: #222;
+      color: white;
+      font-size: 16px;
+    }
 
-        #customGameInput {
-            display: flex;
-            gap: 10px;
-            padding: 20px;
-            background: #fff;
-            border-top: 1px solid #ccc;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-        }
+    .add-game-inputs button {
+      background: orange;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
 
-        #customGameInput input {
-            padding: 10px;
-            flex: 1;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        #customGameInput button {
-            padding: 10px 15px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        #customGameInput button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    .add-game-inputs button:hover {
+      background: darkorange;
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>Game Hub</h1>
-        <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Search games..." oninput="searchGames()">
-            <button onclick="goBack()">Back</button>
-        </div>
-    </header>
-
-    <main id="gameGallery"></main>
-
-    <div id="customGameInput">
-        <input type="text" id="customGameName" placeholder="Enter game name...">
-        <input type="text" id="customGameLink" placeholder="Enter game link...">
-        <input type="text" id="customGameIcon" placeholder="Icon URL (optional)...">
-        <button onclick="addCustomGame()">Add Game</button>
+  <h1>Welcome to Games Hub</h1>
+  <div class="games-container" id="gamesContainer">
+    <!-- Game 1 -->
+    <div class="game-card">
+      <img src="/images/bob-the-robber-2.png" alt="Bob the Robber 2">
+      <h3>Bob the Robber 2</h3>
+      <button onclick="openGame('https://ubg365.github.io/bob-the-robber-2/')">Play</button>
     </div>
 
-    <script>
-        let games = [
-            { name: 'Bob the Robber 2', image: 'https://via.placeholder.com/150', link: 'https://ubg365.github.io/bob-the-robber-2/' },
-            { name: 'Drive Mad', image: 'https://via.placeholder.com/150', link: 'https://ubg77.github.io/game131022/drive-mad/' },
-            { name: 'Slope', image: 'https://via.placeholder.com/150', link: 'https://webglmath.github.io/slope/' },
-            { name: 'Minecraft', image: 'https://via.placeholder.com/150', link: 'https://xlegends.github.io/server-gxmehub/' }
-        ];
+    <!-- Game 2 -->
+    <div class="game-card">
+      <img src="/images/drive-mad.jpg" alt="Drive Mad">
+      <h3>Drive Mad</h3>
+      <button onclick="openGame('https://ubg77.github.io/game131022/drive-mad/')">Play</button>
+    </div>
+  </div>
 
-        function displayGames(filteredGames = games) {
-            const gameGallery = document.getElementById('gameGallery');
-            gameGallery.innerHTML = '';
-            filteredGames.forEach(game => {
-                const gameDiv = document.createElement('div');
-                gameDiv.className = 'game';
-                gameDiv.innerHTML = `
-                    <img src="${game.image}" alt="${game.name}">
-                    <h3>${game.name}</h3>
-                    <button onclick="openGame('${btoa(game.link)}')">Play</button>
-                `;
-                gameGallery.appendChild(gameDiv);
-            });
-        }
+  <!-- Add Game Section -->
+  <div class="add-game-container">
+    <button id="addGameBtn">Add Game</button>
+    <div class="add-game-inputs hidden" id="addGameInputs">
+      <input type="text" id="gameName" placeholder="Enter game name...">
+      <input type="text" id="gameLink" placeholder="Enter game link...">
+      <button onclick="addGame()">Submit</button>
+    </div>
+  </div>
 
-        function searchGames() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const filteredGames = games.filter(game => game.name.toLowerCase().includes(query));
-            displayGames(filteredGames);
-        }
+  <script>
+    // Open game in a new tab with iframe
+    function openGame(url) {
+      const win = window.open();
+      win.document.body.style.margin = '0';
+      win.document.body.style.height = '100vh';
+      const iframe = win.document.createElement('iframe');
+      iframe.style.border = 'none';
+      iframe.style.width = '100%';
+      iframe.style.height = '100%';
+      iframe.src = url;
+      win.document.body.appendChild(iframe);
+    }
 
-        function addCustomGame() {
-            const name = document.getElementById('customGameName').value;
-            const link = document.getElementById('customGameLink').value;
-            const image = document.getElementById('customGameIcon').value || 'https://via.placeholder.com/150';
+    // Show "Add Game" inputs
+    document.getElementById('addGameBtn').addEventListener('click', function () {
+      document.getElementById('addGameInputs').classList.remove('hidden');
+    });
 
-            if (name && link) {
-                games.push({ name, link, image });
-                displayGames();
-            }
-        }
+    // Add a new game dynamically
+    function addGame() {
+      const name = document.getElementById('gameName').value;
+      const link = document.getElementById('gameLink').value;
 
-        function openGame(encodedLink) {
-            const decodedLink = atob(encodedLink);
-            window.open(decodedLink, '_blank');
-        }
+      if (name && link) {
+        const gamesContainer = document.getElementById('gamesContainer');
 
-        function goBack() {
-            window.history.back();
-        }
+        // Create new game card
+        const gameCard = document.createElement('div');
+        gameCard.classList.add('game-card');
 
-        displayGames();
-    </script>
+        const img = document.createElement('img');
+        img.src = '/images/custom-game.png'; // Default custom game icon
+        img.alt = name;
+
+        const title = document.createElement('h3');
+        title.textContent = name;
+
+        const button = document.createElement('button');
+        button.textContent = 'Play';
+        button.onclick = function () {
+          openGame(link);
+        };
+
+        gameCard.appendChild(img);
+        gameCard.appendChild(title);
+        gameCard.appendChild(button);
+
+        gamesContainer.appendChild(gameCard);
+
+        // Reset inputs
+        document.getElementById('gameName').value = '';
+        document.getElementById('gameLink').value = '';
+        document.getElementById('addGameInputs').classList.add('hidden');
+      } else {
+        alert('Please enter both the game name and link!');
+      }
+    }
+  </script>
 </body>
 </html>
