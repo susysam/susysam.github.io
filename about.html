@@ -8,14 +8,7 @@
             font-family: 'Rubik', sans-serif;
             text-align: center;
         }
-        h1 {
-            position: absolute;
-            top: 45%;
-            right: 50%;
-            transform: translate(50%);
-            font-weight: 100;
-            font-size: 1.5rem;
-        }
+
         button {
             padding: 20px 40px 20px 40px;
             height: auto;
@@ -40,8 +33,6 @@
     </style>
 </head>
 <body>
-    <h1>This may not work on Proxys-Leo</h1>
-
     <script>
         // Generate a random URL from the array
         function getRandomUrl() {
@@ -104,17 +95,7 @@
             }, 1000); 
         }
 
-        // Trigger the Go function with specific events
-        document.addEventListener('keyup', (event) => {
-            if (event.keyCode === 13) {
-                Go();
-            }
-        });
-        document.body.addEventListener('click', () => {
-            Go();
-        });
-
-        // Automatically trigger the function on page load
+        // Automatically trigger the Go function on page load
         Go();
     </script>
 </body>
