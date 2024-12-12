@@ -143,38 +143,33 @@
             <button onclick="goBack()">Back</button>
         </div>
     </header>
-    <main id="gameGallery">
-    </main>
+    <main id="gameGallery"></main>
     <div id="customGameInput">
         <input type="text" id="customGameName" placeholder="Enter game name...">
         <input type="text" id="customGameLink" placeholder="Enter game link...">
         <button id="addCustomGameButton" onclick="addCustomGame()">Add Custom Game</button>
     </div>
     <script>
-        const games = [
+        // Predefined public games
+        const publicGames = [
             { name: 'Bob the Robber 2', image: '/images/bob-the-robber-2.png', link: 'https://ubg365.github.io/bob-the-robber-2/' },
             { name: 'Drive Mad', image: '/images/drive-mad.jpg', link: 'https://ubg77.github.io/game131022/drive-mad/' },
-            { name: 'G Switch 3', image: 'https://img.poki.com/cdn-cgi/image/quality=78,width=600,height=600,fit=cover,f=auto/7f53593c-4090-4cc5-a934-6a5e599d8eaa.png', link: 'https://webglmath.github.io/gswitch/' },
-            { name: 'vex 7', image: '/images/vex.png', link: 'https://html5edu.github.io/h6/vex-7/' },
-            { name: 'Minecraft', image: '/images/mc.png', link: 'https://xlegends.github.io/server-gxmehub/' },
-            { name: 'Moto X3M', image: '/images/moto-x3m.jpg', link: 'https://webglmath.github.io/moto-x3m/' },
-            { name: 'Retro Bowl', image: '/images/retro-bowl.jpg', link: 'https://webglmath.github.io/retro-bowl/' },
-            { name: 'Slope', image: '/images/slope.jpg', link: 'https://webglmath.github.io/slope/' },
-            { name: 'A1R', image: '/images/A1R.png', link: 'https://freeleo27.github.io/' },
-            { name: 'Smash Karts', image: '/images/smash.png', link: 'https://smartcart1.github.io/s/smash-karts/' },
-            { name: 'Roblox(Now.gg)', image: '/images/roblox_logo.jpeg', link: 'https://now.gg/iframe/snippet?app_pkg=com.roblox.client&partner=skool' },
-            { name: 'Cluster Rush', image: 'https://geometrydash.io/data/image/game/cluster-rush.jpg', link: 'https://www.snake-games.io/localgames/cluster-rush/' },
-            { name: 'Vex 3', image: '/images/vex3.jpg', link: 'https://html5.gamedistribution.com/rvvASMiM/762c932b4db74c6da0c1d101b2da8be6/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-3' },
-            { name: 'Vex 4', image: '/images/vex4.jpg', link: 'https://html5.gamedistribution.com/rvvASMiM/80e6a5ae477f4d4fbcd1ea293d10087d/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-4' },
-            { name: 'Vex 5', image: '/images/vex5.jpg', link: 'https://html5.gamedistribution.com/rvvASMiM/f120262ab72743039fbce88c1f370df8/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-5' },
-            { name: 'Vex 6', image: '/images/vex6.jpeg', link: 'https://html5.gamedistribution.com/rvvASMiM/4925e12574364121a48c61c35f649c36/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-6' },
-            { name: 'Basketball Stars', image: 'https://images.crazygames.com/games/basketball-stars-2019/cover-1583231506155.png?auto=format%2Ccompress&q=45&cs=strip&ch=DPR&w=1200&h=630&fit=crop', link: 'https://html5.gamedistribution.com/rvvASMiM/69d78d071f704fa183d75b4114ae40ec/?gd_sdk_referrer_url=https://gamedistribution.com/games/basketball-stars' }
+            { name: 'G Switch 3', image: 'https://img.poki.com/cdn-cgi/image/quality=78,width=600,height=600,fit=cover,f=auto/7f53593c-4090-4cc5-a934-6a5e599d8eaa.png', link: 'https://webglmath.github.io/gswitch/' }
         ];
+
+        // Load custom games from localStorage
+        const customGames = JSON.parse(localStorage.getItem('customGames')) || [];
+
+        // Combine public and custom games
+        function getAllGames() {
+            return [...publicGames, ...customGames];
+        }
 
         function displayGames() {
             const gameGallery = document.getElementById('gameGallery');
+            const allGames = getAllGames();
             gameGallery.innerHTML = '';
-            games.forEach(game => {
+            allGames.forEach(game => {
                 const gameDiv = document.createElement('div');
                 gameDiv.className = 'game';
                 gameDiv.innerHTML = `
@@ -189,9 +184,15 @@
         function addCustomGame() {
             const name = document.getElementById('customGameName').value;
             const link = document.getElementById('customGameLink').value;
-            const image = '/images/plus.png'; // Default icon for custom games
-            games.push({ name, image, link });
-            displayGames();
+            const image = '/images/plus.png'; // Default image for custom games
+            if (name && link) {
+                customGames.push({ name, image, link });
+                localStorage.setItem('customGames', JSON.stringify(customGames));
+                displayGames();
+                alert('Custom game added!');
+            } else {
+                alert('Please enter a valid name and link.');
+            }
         }
 
         function openGame(link) {
@@ -204,7 +205,8 @@
 
         function searchGames() {
             const input = document.getElementById('searchInput').value.toLowerCase();
-            const filteredGames = games.filter(game => game.name.toLowerCase().includes(input));
+            const allGames = getAllGames();
+            const filteredGames = allGames.filter(game => game.name.toLowerCase().includes(input));
             const gameGallery = document.getElementById('gameGallery');
             gameGallery.innerHTML = '';
             filteredGames.forEach(game => {
@@ -219,6 +221,7 @@
             });
         }
 
+        // Display games on load
         displayGames();
     </script>
 </body>
