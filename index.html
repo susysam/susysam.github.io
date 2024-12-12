@@ -2,15 +2,127 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap">
   <style>
-    /* Your previous CSS here */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: #000;
+    }
+    .wrapper {
+      position: relative;
+      width: 400px;
+      background: #000;
+      box-shadow: 0 0 50px #0ef;
+      border-radius: 20px;
+      padding: 40px;
+      overflow: hidden;
+    }
+    h2 {
+      font-size: 30px;
+      color: #fff;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .input-group {
+      position: relative;
+      margin: 20px 0;
+      border-bottom: 2px solid #fff;
+    }
+    .input-group label {
+      position: absolute;
+      top: 50%;
+      left: 5px;
+      transform: translateY(-50%);
+      font-size: 16px;
+      color: #fff;
+      pointer-events: none;
+      transition: .5s;
+    }
+    .input-group input {
+      width: 100%;
+      height: 40px;
+      font-size: 16px;
+      color: #fff;
+      background: transparent;
+      border: none;
+      outline: none;
+      padding: 5px;
+    }
+    .input-group input:focus~label,
+    .input-group input:valid~label {
+      top: -10px;
+      font-size: 12px;
+    }
+    .remember {
+      margin: 10px 0 15px;
+    }
+    .remember label {
+      color: #fff;
+      font-size: 14px;
+    }
+    .remember label input {
+      accent-color: #0ef;
+    }
+    button {
+      width: 100%;
+      height: 40px;
+      background: #0ef;
+      box-shadow: 0 0 10px #0ef;
+      font-size: 16px;
+      color: #000;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 30px;
+      border: none;
+      outline: none;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #08c;
+    }
+    .toggle-btn {
+      text-align: center;
+      margin-top: 10px;
+    }
+    .toggle-btn button {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .bypass-btn {
+      margin-top: 20px;
+      width: 100%;
+      background: #ff0;
+      color: #000;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .bypass-btn:hover {
+      background: #ffc107;
+    }
   </style>
 </head>
 <body>
   <div class="wrapper">
-    <!-- Login Section -->
     <div id="loginSection">
       <h2>Login</h2>
       <form id="loginForm">
@@ -31,8 +143,6 @@
         </div>
       </form>
     </div>
-
-    <!-- Sign Up Section -->
     <div id="signupSection" style="display: none;">
       <h2>Sign Up</h2>
       <form id="signupForm">
@@ -50,14 +160,10 @@
         </div>
       </form>
     </div>
-
-    <!-- Bypass Button -->
     <button class="bypass-btn" id="bypassButton">Bypass Login Instantly</button>
   </div>
 
   <script>
-    // JavaScript handling for login, signup, and bypass
-
     const loginForm = document.getElementById("loginForm");
     const signupForm = document.getElementById("signupForm");
     const loginSection = document.getElementById("loginSection");
@@ -75,7 +181,7 @@
       if ((username === "Leo" && password === "2024") || 
           (username === localStorage.getItem("username") && password === localStorage.getItem("password"))) {
         alert("Login successful!");
-        window.location.href = "about.html"; // Redirect to the page after successful login
+        window.location.href = "about.html";
       } else {
         alert("Invalid credentials.");
       }
@@ -94,7 +200,7 @@
       loginSection.style.display = "block";
     });
 
-    // Toggle between Login and Signup
+    // Toggle Signup/Login
     showSignupBtn.addEventListener("click", function() {
       loginSection.style.display = "none";
       signupSection.style.display = "block";
@@ -105,13 +211,9 @@
       loginSection.style.display = "block";
     });
 
-    // Bypass Button Handling (Simulate successful login)
+    // Bypass Button Handling
     bypassButton.addEventListener("click", function() {
-      // Simulate login by setting username and password in localStorage
-      localStorage.setItem("username", "Leo");
-      localStorage.setItem("password", "2024");
-      alert("Bypassing login. Welcome back, Leo!");
-      window.location.href = "about.html"; // Redirect to the page after login
+      window.location.href = "https://susysam.github.io/start27.html";
     });
   </script>
 </body>
