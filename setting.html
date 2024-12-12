@@ -121,6 +121,18 @@
     <input type="text" id="websiteIcon" placeholder="Enter icon URL">
   </div>
 
+  <!-- Dark Mode Toggle -->
+  <div class="container">
+    <label>Dark Mode:</label>
+    <div class="toggle-container">
+      <div class="toggle-switch">
+        <input type="checkbox" id="darkModeToggle">
+        <div class="toggle-slider"></div>
+      </div>
+      <span id="darkModeStatus">Off</span>
+    </div>
+  </div>
+
   <!-- Toggle switch for Game Booster -->
   <div class="container">
     <label>Game Booster:(May not work 💀)</label>
@@ -139,6 +151,8 @@
     <button id="backButton">Go Back</button>
   </div>
 
+  <script src="dark-mode.js"></script>
+  <script src="game-booster.js"></script>
   <script>
     var url = "main.html";
 
