@@ -80,70 +80,77 @@
             <button class="button" onclick="selectMedia('movie')">Movie</button>
             <button class="button" onclick="selectMedia('tv')">TV Show</button>
             <button class="button" onclick="openAnime()">Anime</button>
+            <button class="button" onclick="continueWatching()">Continue</button>
         </div>
 
         <div class="input-container">
-            <input type="text" id="imdb-id" placeholder="Enter IMDb ID (e.g., tt1942683)">
+            <input type="text" id="media-name" placeholder="Enter movie or TV show name">
+            <button class="button" onclick="searchIMDB()">Search IMDb</button>
         </div>
 
         <div class="steps">
             <h2>How to Use:</h2>
-            <p>Step 1: Search what you want on IMDb.</p>
-            <p>Step 2: Copy the IMDb ID.</p>
-            <p>Step 3: Paste the IMDb ID into the input field.</p>
+            <p>Step 1: Type your movie or TV show name and choose either "Movie" or "TV Show."</p>
+            <p>Step 2: Click the "Search IMDb" button to open a new tab for IMDb search.</p>
+            <p>Step 3: Copy the IMDb ID from the link and paste it into the input box.</p>
             <p>Step 4: Enjoy!</p>
         </div>
     </div>
 
     <script>
+        let lastWatched = { type: '', imdbId: '' };
+
         function selectMedia(mediaType) {
-            var inputContainer = document.querySelector('.input-container');
-            var welcomeSection = document.querySelector('.welcome');
-            var buttonsContainer = document.querySelector('.buttons-container');
-            var stepsSection = document.querySelector('.steps');
+            const inputContainer = document.querySelector('.input-container');
+            const welcomeSection = document.querySelector('.welcome');
+            const buttonsContainer = document.querySelector('.buttons-container');
+            const stepsSection = document.querySelector('.steps');
 
             inputContainer.style.display = 'block';
             welcomeSection.style.display = 'none';
             buttonsContainer.style.display = 'none';
             stepsSection.style.display = 'block';
 
-            var imdbIdInput = document.getElementById('imdb-id');
-            imdbIdInput.setAttribute('data-media-type', mediaType);
+            const mediaNameInput = document.getElementById('media-name');
+            mediaNameInput.setAttribute('data-media-type', mediaType);
+        }
 
-            imdbIdInput.addEventListener('keyup', function(event) {
-                if (event.keyCode === 13) {
-                    var imdbId = this.value.trim();
+        function searchIMDB() {
+            const mediaNameInput = document.getElementById('media-name');
+            const mediaName = mediaNameInput.value.trim();
+            if (!mediaName) {
+                alert("Please enter a movie or TV show name.");
+                return;
+            }
 
-                    if (!imdbId) {
-                        alert("Please fill in the IMDb ID field.");
-                        return;
-                    }
+            const searchURL = `https://www.google.com/search?q=${encodeURIComponent(mediaName)}+imdb`;
+            window.open(searchURL, '_blank'); // Opens IMDb search in a new tab
+        }
 
-                    var url = '';
+        function continueWatching() {
+            if (lastWatched.type && lastWatched.imdbId) {
+                const url = lastWatched.type === 'tv' 
+                    ? `https://vidsrc.me/embed/tv?imdb=${lastWatched.imdbId}`
+                    : `https://vidsrc.me/embed/movie?imdb=${lastWatched.imdbId}`;
 
-                    if (mediaType === 'tv') {
-                        url = 'https://vidsrc.me/embed/tv?imdb=' + imdbId;
-                    } else if (mediaType === 'movie') {
-                        url = 'https://vidsrc.me/embed/movie?imdb=' + imdbId;
-                    }
-
-                    window.open(url, '_blank'); // Opens in a new tab
-                }
-            });
+                window.open(url, '_blank');
+            } else {
+                alert("No recent watch history found.");
+            }
         }
 
         function openAnime() {
-            var animeLinks = [
+            const animeLinks = [
                 "https://unime.vercel.app/eng",
                 "https://kitsunee.me/",
                 "https://anify.tv/anime",
                 "https://kaido.to/"
             ];
 
-            var randomIndex = Math.floor(Math.random() * animeLinks.length);
-            var selectedAnimeLink = animeLinks[randomIndex];
+            const randomIndex = Math.floor(Math.random() * animeLinks.length);
+            const selectedAnimeLink = animeLinks[randomIndex];
 
-            window.open(selectedAnimeLink, '_blank'); // Opens in a new tab
+            window.open(selectedAnimeLink, '_blank');
         }
     </script>
 </body>
