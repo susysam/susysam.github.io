@@ -151,8 +151,51 @@
     <button id="backButton">Go Back</button>
   </div>
 
-  <!-- Scripts -->
-  <script src="dark-mode.js"></script>
-  <script src="game-booster.js"></script>
+  <!-- Inline JavaScript -->
+  <script>
+    // Dark Mode Toggle
+    document.getElementById('darkModeToggle').addEventListener('change', function (e) {
+      const isDarkMode = e.target.checked;
+      document.body.style.backgroundColor = isDarkMode ? '#222' : '#f0f0f0';
+      document.body.style.color = isDarkMode ? '#fff' : '#333';
+      document.getElementById('darkModeStatus').textContent = isDarkMode ? 'On' : 'Off';
+    });
+
+    // Game Booster Toggle
+    document.getElementById('gameBoosterToggle').addEventListener('change', function (e) {
+      const isBoosted = e.target.checked;
+      document.getElementById('gameBoosterStatus').textContent = isBoosted ? 'On' : 'Off';
+      // Example logic for Game Booster (add your own functionality if needed)
+      if (isBoosted) {
+        alert('Game Booster Activated! 🚀');
+      }
+    });
+
+    // Open in Tab Button
+    document.getElementById('tabButton').addEventListener('click', function () {
+      const websiteName = document.getElementById('websiteName').value;
+      const websiteIcon = document.getElementById('websiteIcon').value;
+      if (websiteName) {
+        window.open(websiteName, '_blank');
+      } else {
+        alert('Please enter a website name!');
+      }
+    });
+
+    // Open in Window Button
+    document.getElementById('windowButton').addEventListener('click', function () {
+      const websiteName = document.getElementById('websiteName').value;
+      if (websiteName) {
+        window.open(websiteName, '_blank', 'width=600,height=400');
+      } else {
+        alert('Please enter a website name!');
+      }
+    });
+
+    // Go Back Button
+    document.getElementById('backButton').addEventListener('click', function () {
+      window.history.back();
+    });
+  </script>
 </body>
 </html>
