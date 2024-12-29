@@ -65,6 +65,19 @@
             margin-bottom: 15px;
             color: #333;
         }
+        .iframe-container {
+            display: none;
+            margin-top: 50px;
+            width: 100%;
+            height: 800px;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
     </style>
 </head>
 <body>
@@ -77,81 +90,84 @@
         </div>
 
         <div class="buttons-container">
-            <button class="button" onclick="selectMedia('movie')">Movie</button>
-            <button class="button" onclick="selectMedia('tv')">TV Show</button>
-            <button class="button" onclick="openAnime()">Anime</button>
-            <button class="button" onclick="continueWatching()">Continue</button>
+            <button onclick="selectMedia('movie')">Movie</button>
+            <button onclick="selectMedia('tv')">TV Show</button>
+            <button onclick="openAnime()">Anime</button>
+            <button onclick="continueWatching()">Continue Watching</button>
         </div>
 
         <div class="input-container">
-            <input type="text" id="media-name" placeholder="Enter movie or TV show name">
-            <button class="button" onclick="searchAndPlay()">Search</button>
+            <input type="text" id="imdb-id" placeholder="Enter IMDb ID (e.g., tt1942683)">
+            <button class="button" onclick="playMedia()">Play</button>
         </div>
 
         <div class="steps">
             <h2>How to Use:</h2>
-            <p>Step 1: Type your movie or TV show name and choose either "Movie" or "TV Show."</p>
-            <p>Step 2: Click the "Search" button to play your media directly.</p>
-            <p>Step 3: Enjoy!</p>
+            <p>Step 1: Search what you want on IMDb.</p>
+            <p>Step 2: Copy the IMDb ID.</p>
+            <p>Step 3: Paste the IMDb ID into the input field.</p>
+            <p>Step 4: Enjoy!</p>
+        </div>
+
+        <div class="iframe-container">
+            <iframe id="media-iframe" src="" allowfullscreen></iframe>
         </div>
     </div>
 
     <script>
-        let lastWatched = { type: '', name: '' };
-
         function selectMedia(mediaType) {
-            const inputContainer = document.querySelector('.input-container');
-            const welcomeSection = document.querySelector('.welcome');
-            const buttonsContainer = document.querySelector('.buttons-container');
-            const stepsSection = document.querySelector('.steps');
+            document.querySelector('.input-container').style.display = 'block';
+            document.querySelector('.welcome').style.display = 'none';
+            document.querySelector('.buttons-container').style.display = 'none';
 
-            inputContainer.style.display = 'block';
-            welcomeSection.style.display = 'none';
-            buttonsContainer.style.display = 'none';
-            stepsSection.style.display = 'block';
-
-            const mediaNameInput = document.getElementById('media-name');
-            mediaNameInput.setAttribute('data-media-type', mediaType);
+            const imdbInput = document.getElementById('imdb-id');
+            imdbInput.setAttribute('data-media-type', mediaType);
         }
 
-        function searchAndPlay() {
-            const mediaNameInput = document.getElementById('media-name');
-            const mediaName = mediaNameInput.value.trim();
-            const mediaType = mediaNameInput.getAttribute('data-media-type');
+        function playMedia() {
+            const imdbInput = document.getElementById('imdb-id');
+            const imdbId = imdbInput.value.trim();
+            const mediaType = imdbInput.getAttribute('data-media-type');
 
-            if (!mediaName) {
-                alert("Please enter a movie or TV show name.");
+            if (!imdbId) {
+                alert("Please enter a valid IMDb ID.");
                 return;
             }
 
-            lastWatched = { type: mediaType, name: mediaName };
+            const iframe = document.getElementById('media-iframe');
+            const iframeContainer = document.querySelector('.iframe-container');
 
-            // Use Google Search to find IMDb ID
-            fetch(`https://vidsrc.me/api/fetch?title=${encodeURIComponent(mediaName)}&type=${mediaType}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data && data.imdbId) {
-                        const playbackURL = mediaType === 'tv'
-                            ? `https://vidsrc.me/embed/tv?imdb=${data.imdbId}`
-                            : `https://vidsrc.me/embed/movie?imdb=${data.imdbId}`;
-                        window.open(playbackURL, '_blank');
-                    } else {
-                        alert("Media not found. Opening IMDb search.");
-                        window.open(`https://www.google.com/search?q=${encodeURIComponent(mediaName)} imdb`, '_blank');
-                    }
-                })
-                .catch(() => {
-                    alert("Error occurred. Opening IMDb search.");
-                    window.open(`https://www.google.com/search?q=${encodeURIComponent(mediaName)} imdb`, '_blank');
-                });
+            // Set the iframe source based on media type
+            if (mediaType === 'tv') {
+                iframe.src = `https://vidsrc.me/embed/tv?imdb=${imdbId}`;
+            } else if (mediaType === 'movie') {
+                iframe.src = `https://vidsrc.me/embed/movie?imdb=${imdbId}`;
+            }
+
+            iframeContainer.style.display = 'block';
+
+            // Save last watched media to localStorage
+            localStorage.setItem('lastWatched', JSON.stringify({ imdbId, mediaType }));
         }
 
         function continueWatching() {
-            if (lastWatched.type && lastWatched.name) {
-                searchAndPlay();
-            } else {
-                alert("No recent watch history found.");
+            const lastWatched = localStorage.getItem('lastWatched');
+            if (!lastWatched) {
+                alert("No recently watched media found.");
+                return;
             }
+
+            const { imdbId, mediaType } = JSON.parse(lastWatched);
+            const iframe = document.getElementById('media-iframe');
+            const iframeContainer = document.querySelector('.iframe-container');
+
+            if (mediaType === 'tv') {
+                iframe.src = `https://vidsrc.me/embed/tv?imdb=${imdbId}`;
+            } else if (mediaType === 'movie') {
+                iframe.src = `https://vidsrc.me/embed/movie?imdb=${imdbId}`;
+            }
+
+            iframeContainer.style.display = 'block';
         }
 
         function openAnime() {
@@ -162,10 +178,8 @@
                 "https://kaido.to/"
             ];
 
-            const randomIndex = Math.floor(Math.random() * animeLinks.length);
-            const selectedAnimeLink = animeLinks[randomIndex];
-
-            window.open(selectedAnimeLink, '_blank');
+            const randomLink = animeLinks[Math.floor(Math.random() * animeLinks.length)];
+            window.open(randomLink, "_blank");
         }
     </script>
 </body>
