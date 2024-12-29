@@ -19,3 +19,28 @@ gameBoosterToggle.addEventListener('change', function () {
     alert('Game Booster Disabled!');
   }
 });
+
+// Home Button
+document.getElementById('homeButton').addEventListener('click', function () {
+  window.location.href = 'index.html'; // Change to the actual home page file name
+});
+
+// Open in New Tab
+document.getElementById('tabButton').addEventListener('click', function () {
+  const url = prompt('Enter a website URL to open:');
+  if (url) {
+    window.open(url, '_blank');
+  } else {
+    alert('Please enter a valid URL!');
+  }
+});
+
+// Open in New Window
+document.getElementById('windowButton').addEventListener('click', function () {
+  const url = prompt('Enter a website URL to open:');
+  if (url) {
+    window.open(url, '_blank', 'width=800,height=600');
+  } else {
+    alert('Please enter a valid URL!');
+  }
+});
