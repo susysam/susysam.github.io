@@ -7,34 +7,45 @@
   <style>
     body {
       font-family: 'Arial', sans-serif;
-      text-align: center;
       margin: 0;
       padding: 0;
-      background-color: #f8f9fa;
+      background-color: var(--bg-color, #ffffff);
+      color: var(--text-color, #333);
       transition: background-color 0.3s, color 0.3s;
     }
 
+    :root {
+      --bg-color: #ffffff;
+      --text-color: #333;
+    }
+
+    :root.dark-mode {
+      --bg-color: #121212;
+      --text-color: #ffffff;
+    }
+
     header {
-      background-color: #6C0BA9;
+      background-color: #4CAF50;
       color: white;
       padding: 20px;
+      text-align: center;
       font-size: 24px;
     }
 
     .container {
+      max-width: 700px;
       margin: 20px auto;
-      max-width: 600px;
       padding: 20px;
-      background: white;
+      background: var(--card-color, #f9f9f9);
       border-radius: 12px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
     .setting {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      margin: 20px 0;
     }
 
     label {
@@ -42,25 +53,21 @@
     }
 
     input[type="checkbox"] {
-      width: 20px;
-      height: 20px;
+      display: none;
     }
 
-    #darkModeToggle {
-      appearance: none;
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
       width: 50px;
       height: 26px;
       background: #ccc;
       border-radius: 13px;
-      position: relative;
       cursor: pointer;
+      transition: background-color 0.3s;
     }
 
-    #darkModeToggle:checked {
-      background: #6C0BA9;
-    }
-
-    #darkModeToggle::before {
+    .toggle-switch::after {
       content: '';
       position: absolute;
       top: 3px;
@@ -69,34 +76,40 @@
       height: 20px;
       background: white;
       border-radius: 50%;
-      transition: 0.3s;
+      transition: transform 0.3s;
     }
 
-    #darkModeToggle:checked::before {
+    input[type="checkbox"]:checked + .toggle-switch {
+      background: #4CAF50;
+    }
+
+    input[type="checkbox"]:checked + .toggle-switch::after {
       transform: translateX(24px);
     }
 
     button {
-      margin-top: 20px;
-      background-color: #6C0BA9;
+      display: block;
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      background-color: #4CAF50;
       color: white;
+      font-size: 18px;
       border: none;
-      padding: 12px 20px;
-      font-size: 16px;
+      border-radius: 6px;
       cursor: pointer;
-      border-radius: 8px;
       transition: background-color 0.3s ease;
     }
 
     button:hover {
-      background-color: #4F0672;
+      background-color: #388E3C;
     }
 
-    .btn-container {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      align-items: center;
+    footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+      color: var(--text-color, #333);
     }
   </style>
 </head>
@@ -107,57 +120,75 @@
     <div class="setting">
       <label>Dark Mode</label>
       <input type="checkbox" id="darkModeToggle">
-    </div>
-    <div class="setting">
-      <label>Game Booster (May not work 💀)</label>
-      <input type="checkbox" id="gameBoosterToggle">
+      <div class="toggle-switch"></div>
     </div>
 
-    <div class="btn-container">
-      <button id="homeButton">Go to Home</button>
-      <button id="tabButton">Open in New Tab</button>
-      <button id="windowButton">Open in New Window</button>
-    </div>
+    <button id="homeButton">Go to Home</button>
+    <button id="tabButton">Open in New Tab</button>
+    <button id="windowButton">Open in New Window</button>
   </div>
 
+  <footer>&copy; 2024 Your Website</footer>
+
   <script>
-    // Dark Mode Toggle
-    const darkModeToggle = document.getElementById('darkModeToggle');
-    darkModeToggle.addEventListener('change', function () {
-      if (this.checked) {
-        document.body.style.backgroundColor = '#333';
-        document.body.style.color = '#fff';
+    // Load Dark Mode preference
+    document.addEventListener('DOMContentLoaded', () => {
+      if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.classList.add('dark-mode');
+        document.querySelector(':root').style.setProperty('--card-color', '#1f1f1f');
       } else {
-        document.body.style.backgroundColor = '#f8f9fa';
-        document.body.style.color = '#333';
+        document.querySelector(':root').style.setProperty('--card-color', '#f9f9f9');
       }
+
+      // Toggle switch state
+      document.getElementById('darkModeToggle').checked =
+        document.documentElement.classList.contains('dark-mode');
     });
 
-    // Game Booster Toggle (Placeholder)
-    const gameBoosterToggle = document.getElementById('gameBoosterToggle');
-    gameBoosterToggle.addEventListener('change', function () {
+    // Dark Mode Toggle
+    document.getElementById('darkModeToggle').addEventListener('change', function () {
       if (this.checked) {
-        alert('Game Booster Enabled! (Just kidding, this is a placeholder)');
+        document.documentElement.classList.add('dark-mode');
+        document.querySelector(':root').style.setProperty('--card-color', '#1f1f1f');
+        localStorage.setItem('theme', 'dark');
       } else {
-        alert('Game Booster Disabled!');
+        document.documentElement.classList.remove('dark-mode');
+        document.querySelector(':root').style.setProperty('--card-color', '#f9f9f9');
+        localStorage.setItem('theme', 'light');
       }
     });
 
     // Go to Home Button
     document.getElementById('homeButton').addEventListener('click', function () {
-      window.location.href = 'https://susysam.github.io/start27.html'; // Home page link
+      window.location.href = 'https://susysam.github.io/start27.html';
     });
 
     // Open in New Tab (about:blank format)
     document.getElementById('tabButton').addEventListener('click', function () {
-      const newTab = window.open('about:blank', '_blank'); // Opens about:blank in a new tab
-      newTab.location.href = 'https://susysam.github.io/setting.html'; // Loads the settings page
+      const newTab = window.open('about:blank', '_blank');
+      newTab.document.write(`
+        <html>
+          <head><title>Settings</title></head>
+          <body>
+            <iframe src="https://susysam.github.io/setting.html" style="border:none;width:100%;height:100vh;"></iframe>
+          </body>
+        </html>
+      `);
+      newTab.document.close();
     });
 
     // Open in New Window (about:blank format)
     document.getElementById('windowButton').addEventListener('click', function () {
-      const newWindow = window.open('about:blank', '_blank', 'width=800,height=600'); // Opens about:blank in a new window
-      newWindow.location.href = 'https://susysam.github.io/setting.html'; // Loads the settings page
+      const newWindow = window.open('about:blank', '_blank', 'width=800,height=600');
+      newWindow.document.write(`
+        <html>
+          <head><title>Settings</title></head>
+          <body>
+            <iframe src="https://susysam.github.io/setting.html" style="border:none;width:100%;height:100vh;"></iframe>
+          </body>
+        </html>
+      `);
+      newWindow.document.close();
     });
   </script>
 </body>
