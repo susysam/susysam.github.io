@@ -1,46 +1,125 @@
-// Dark Mode Toggle
-const darkModeToggle = document.getElementById('darkModeToggle');
-darkModeToggle.addEventListener('change', function () {
-  if (this.checked) {
-    document.body.style.backgroundColor = '#333';
-    document.body.style.color = '#fff';
-  } else {
-    document.body.style.backgroundColor = '#f8f9fa';
-    document.body.style.color = '#333';
-  }
-});
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      background-color: #f8f9fa;
+      transition: background-color 0.3s, color 0.3s;
+    }
 
-// Game Booster Toggle (Placeholder)
-const gameBoosterToggle = document.getElementById('gameBoosterToggle');
-gameBoosterToggle.addEventListener('change', function () {
-  if (this.checked) {
-    alert('Game Booster Enabled! (Just kidding, this is a placeholder)');
-  } else {
-    alert('Game Booster Disabled!');
-  }
-});
+    header {
+      background-color: #6C0BA9;
+      color: white;
+      padding: 20px;
+      font-size: 24px;
+    }
 
-// Home Button
-document.getElementById('homeButton').addEventListener('click', function () {
-  window.location.href = 'index.html'; // Change to the actual home page file name
-});
+    .container {
+      margin: 20px auto;
+      max-width: 600px;
+      padding: 20px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
 
-// Open in New Tab
-document.getElementById('tabButton').addEventListener('click', function () {
-  const url = prompt('Enter a website URL to open:');
-  if (url) {
-    window.open(url, '_blank');
-  } else {
-    alert('Please enter a valid URL!');
-  }
-});
+    .setting {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
 
-// Open in New Window
-document.getElementById('windowButton').addEventListener('click', function () {
-  const url = prompt('Enter a website URL to open:');
-  if (url) {
-    window.open(url, '_blank', 'width=800,height=600');
-  } else {
-    alert('Please enter a valid URL!');
-  }
-});
+    label {
+      font-size: 18px;
+    }
+
+    input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+    }
+
+    #darkModeToggle {
+      appearance: none;
+      width: 50px;
+      height: 26px;
+      background: #ccc;
+      border-radius: 13px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    #darkModeToggle:checked {
+      background: #6C0BA9;
+    }
+
+    #darkModeToggle::before {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      transition: 0.3s;
+    }
+
+    #darkModeToggle:checked::before {
+      transform: translateX(24px);
+    }
+
+    button {
+      margin-top: 20px;
+      background-color: #6C0BA9;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #4F0672;
+    }
+
+    .btn-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+  <header>Settings</header>
+
+  <div class="container">
+    <div class="setting">
+      <label>Dark Mode</label>
+      <input type="checkbox" id="darkModeToggle">
+    </div>
+    <div class="setting">
+      <label>Game Booster (May not work 💀)</label>
+      <input type="checkbox" id="gameBoosterToggle">
+    </div>
+
+    <div class="btn-container">
+      <button id="homeButton">Go to Home</button>
+      <button id="tabButton">Open in New Tab</button>
+      <button id="windowButton">Open in New Window</button>
+    </div>
+  </div>
+
+  <script src="settings.js"></script>
+</body>
+</html>
