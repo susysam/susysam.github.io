@@ -51,6 +51,22 @@
             border: 1px solid #ccc;
             width: 300px;
         }
+        .return-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #FF5733; /* Orange button color */
+            color: #fff;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .return-button:hover {
+            background-color: #C74426; /* Darker orange on hover */
+        }
     </style>
 </head>
 <body>
@@ -74,6 +90,9 @@
             <button class="button" onclick="playMedia()">Play</button>
         </div>
     </div>
+
+    <!-- Return Button -->
+    <button class="return-button" onclick="goToHome()">Return</button>
 
     <script>
         function selectMedia(mediaType) {
@@ -185,6 +204,10 @@
 
             const randomLink = animeLinks[Math.floor(Math.random() * animeLinks.length)];
             window.open(randomLink, "_blank");
+        }
+
+        function goToHome() {
+            window.location.href = "https://susysam.github.io/start27.html";
         }
     </script>
 </body>
