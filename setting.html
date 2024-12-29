@@ -148,14 +148,16 @@
       window.location.href = 'https://susysam.github.io/start27.html'; // Home page link
     });
 
-    // Open in New Tab
+    // Open in New Tab (about:blank format)
     document.getElementById('tabButton').addEventListener('click', function () {
-      window.open('https://susysam.github.io/setting.html', '_blank'); // Opens in a new tab
+      const newTab = window.open('about:blank', '_blank'); // Opens about:blank in a new tab
+      newTab.location.href = 'https://susysam.github.io/setting.html'; // Loads the settings page
     });
 
-    // Open in New Window
+    // Open in New Window (about:blank format)
     document.getElementById('windowButton').addEventListener('click', function () {
-      window.open('https://susysam.github.io/setting.html', '_blank', 'width=800,height=600'); // Opens in a new window
+      const newWindow = window.open('about:blank', '_blank', 'width=800,height=600'); // Opens about:blank in a new window
+      newWindow.location.href = 'https://susysam.github.io/setting.html'; // Loads the settings page
     });
   </script>
 </body>
