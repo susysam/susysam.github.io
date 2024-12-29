@@ -143,29 +143,19 @@
       }
     });
 
-    // Home Button
+    // Go to Home Button
     document.getElementById('homeButton').addEventListener('click', function () {
-      window.location.href = 'index.html'; // Replace with the actual file name of your home page
+      window.location.href = 'https://susysam.github.io/start27.html'; // Home page link
     });
 
     // Open in New Tab
     document.getElementById('tabButton').addEventListener('click', function () {
-      const url = prompt('Enter a website URL to open in a new tab:');
-      if (url) {
-        window.open(url, '_blank'); // Opens in a new tab
-      } else {
-        alert('Please enter a valid URL!');
-      }
+      window.open('https://susysam.github.io/setting.html', '_blank'); // Opens in a new tab
     });
 
     // Open in New Window
     document.getElementById('windowButton').addEventListener('click', function () {
-      const url = prompt('Enter a website URL to open in a new window:');
-      if (url) {
-        window.open(url, '_blank', 'width=800,height=600'); // Opens in a new window
-      } else {
-        alert('Please enter a valid URL!');
-      }
+      window.open('https://susysam.github.io/setting.html', '_blank', 'width=800,height=600'); // Opens in a new window
     });
   </script>
 </body>
