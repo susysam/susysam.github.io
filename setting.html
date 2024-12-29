@@ -1,201 +1,96 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <base target="_blank">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings</title>
   <style>
     body {
-      color: #333; 
       font-family: 'Arial', sans-serif;
       text-align: center;
-      margin-top: 50px;
-      background-color: #f0f0f0; /* Light background */
+      margin: 0;
+      padding: 0;
+      background-color: #f8f9fa;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    header {
+      background-color: #6C0BA9;
+      color: white;
+      padding: 20px;
+      font-size: 24px;
     }
 
     .container {
+      margin: 20px auto;
+      max-width: 600px;
+      padding: 20px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .setting {
       display: flex;
-      flex-direction: column;
+      justify-content: space-between;
       align-items: center;
-      gap: 20px;
-      margin-top: 20px;
+      margin-bottom: 20px;
     }
 
     label {
       font-size: 18px;
-      margin-bottom: 5px;
     }
 
-    input[type="text"] {
-      width: 300px;
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
+    input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
     }
 
-    .button-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-      margin-top: 20px;
-    }
-
-    button {
-      width: 200px;
-      height: 50px;
-      font-size: 18px;
-      border-radius: 12px;
-      border: none;
-      padding: 10px;
-      background: #6C0BA9; /* Purple */
-      color: white;
-      font-family: 'Arial', sans-serif;
-      cursor: pointer;
-      transition: all .2s ease-in-out; 
-    }
-
-    button:hover {
-      background: #4F0672; /* Darker purple on hover */
-    }
-
-    /* Toggle switch styles */
-    .toggle-container {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .toggle-switch {
-      position: relative;
-      display: inline-block;
-      width: 60px;
-      height: 34px;
-    }
-
-    .toggle-switch input { 
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-
-    .toggle-slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #ff5148; /* Red when Off */
-      transition: .4s;
-      border-radius: 34px;
-    }
-
-    .toggle-slider:before {
-      position: absolute;
-      content: "";
+    #darkModeToggle {
+      appearance: none;
+      width: 50px;
       height: 26px;
-      width: 26px;
-      left: 4px;
-      bottom: 4px;
-      background-color: white;
-      transition: .4s;
+      background: #ccc;
+      border-radius: 13px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    #darkModeToggle:checked {
+      background: #6C0BA9;
+    }
+
+    #darkModeToggle::before {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      background: white;
       border-radius: 50%;
+      transition: 0.3s;
     }
 
-    input:checked + .toggle-slider {
-      background-color: #4CAF50; /* Green when On */
-    }
-
-    input:checked + .toggle-slider:before {
-      transform: translateX(26px);
+    #darkModeToggle:checked::before {
+      transform: translateX(24px);
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <label for="websiteName">Website Name:</label>
-    <input type="text" id="websiteName" placeholder="Enter website name">
-  </div>
-  <div class="container">
-    <label for="websiteIcon">Website Icon URL:</label>
-    <input type="text" id="websiteIcon" placeholder="Enter icon URL">
-  </div>
+  <header>Settings</header>
 
-  <!-- Dark Mode Toggle -->
   <div class="container">
-    <label>Dark Mode:</label>
-    <div class="toggle-container">
-      <div class="toggle-switch">
-        <input type="checkbox" id="darkModeToggle">
-        <div class="toggle-slider"></div>
-      </div>
-      <span id="darkModeStatus">Off</span>
+    <div class="setting">
+      <label>Dark Mode</label>
+      <input type="checkbox" id="darkModeToggle">
+    </div>
+    <div class="setting">
+      <label>Game Booster (May not work 💀)</label>
+      <input type="checkbox" id="gameBoosterToggle">
     </div>
   </div>
 
-  <!-- Game Booster Toggle -->
-  <div class="container">
-    <label>Game Booster (May not work 💀):</label>
-    <div class="toggle-container">
-      <div class="toggle-switch">
-        <input type="checkbox" id="gameBoosterToggle">
-        <div class="toggle-slider"></div>
-      </div>
-      <span id="gameBoosterStatus">Off</span>
-    </div>
-  </div>
-
-  <div class="button-container">
-    <button id="tabButton">Open in Tab</button>
-    <button id="windowButton">Open in Window</button>
-    <button id="backButton">Go Back</button>
-  </div>
-
-  <!-- Inline JavaScript -->
-  <script>
-    // Dark Mode Toggle
-    document.getElementById('darkModeToggle').addEventListener('change', function (e) {
-      const isDarkMode = e.target.checked;
-      document.body.style.backgroundColor = isDarkMode ? '#222' : '#f0f0f0';
-      document.body.style.color = isDarkMode ? '#fff' : '#333';
-      document.getElementById('darkModeStatus').textContent = isDarkMode ? 'On' : 'Off';
-    });
-
-    // Game Booster Toggle
-    document.getElementById('gameBoosterToggle').addEventListener('change', function (e) {
-      const isBoosted = e.target.checked;
-      document.getElementById('gameBoosterStatus').textContent = isBoosted ? 'On' : 'Off';
-      // Example logic for Game Booster (add your own functionality if needed)
-      if (isBoosted) {
-        alert('Game Booster Activated! 🚀');
-      }
-    });
-
-    // Open in Tab Button
-    document.getElementById('tabButton').addEventListener('click', function () {
-      const websiteName = document.getElementById('websiteName').value;
-      const websiteIcon = document.getElementById('websiteIcon').value;
-      if (websiteName) {
-        window.open(websiteName, '_blank');
-      } else {
-        alert('Please enter a website name!');
-      }
-    });
-
-    // Open in Window Button
-    document.getElementById('windowButton').addEventListener('click', function () {
-      const websiteName = document.getElementById('websiteName').value;
-      if (websiteName) {
-        window.open(websiteName, '_blank', 'width=600,height=400');
-      } else {
-        alert('Please enter a website name!');
-      }
-    });
-
-    // Go Back Button
-    document.getElementById('backButton').addEventListener('click', function () {
-      window.history.back();
-    });
-  </script>
+  <script src="settings.js"></script>
 </body>
 </html>
