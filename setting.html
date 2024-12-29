@@ -120,6 +120,53 @@
     </div>
   </div>
 
-  <script src="settings.js"></script>
+  <script>
+    // Dark Mode Toggle
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    darkModeToggle.addEventListener('change', function () {
+      if (this.checked) {
+        document.body.style.backgroundColor = '#333';
+        document.body.style.color = '#fff';
+      } else {
+        document.body.style.backgroundColor = '#f8f9fa';
+        document.body.style.color = '#333';
+      }
+    });
+
+    // Game Booster Toggle (Placeholder)
+    const gameBoosterToggle = document.getElementById('gameBoosterToggle');
+    gameBoosterToggle.addEventListener('change', function () {
+      if (this.checked) {
+        alert('Game Booster Enabled! (Just kidding, this is a placeholder)');
+      } else {
+        alert('Game Booster Disabled!');
+      }
+    });
+
+    // Home Button
+    document.getElementById('homeButton').addEventListener('click', function () {
+      window.location.href = 'index.html'; // Replace with the actual file name of your home page
+    });
+
+    // Open in New Tab
+    document.getElementById('tabButton').addEventListener('click', function () {
+      const url = prompt('Enter a website URL to open in a new tab:');
+      if (url) {
+        window.open(url, '_blank'); // Opens in a new tab
+      } else {
+        alert('Please enter a valid URL!');
+      }
+    });
+
+    // Open in New Window
+    document.getElementById('windowButton').addEventListener('click', function () {
+      const url = prompt('Enter a website URL to open in a new window:');
+      if (url) {
+        window.open(url, '_blank', 'width=800,height=600'); // Opens in a new window
+      } else {
+        alert('Please enter a valid URL!');
+      }
+    });
+  </script>
 </body>
 </html>
