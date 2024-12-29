@@ -51,33 +51,6 @@
             border: 1px solid #ccc;
             width: 300px;
         }
-        .steps {
-            margin-top: 50px;
-            text-align: left;
-        }
-        .steps h2 {
-            font-size: 24px;
-            margin-bottom: 10px;
-            color: #333;
-        }
-        .steps p {
-            font-size: 18px;
-            margin-bottom: 15px;
-            color: #333;
-        }
-        .iframe-container {
-            display: none;
-            margin-top: 50px;
-            width: 100%;
-            height: 800px;
-        }
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-        }
     </style>
 </head>
 <body>
@@ -100,18 +73,6 @@
             <input type="text" id="imdb-id" placeholder="Enter IMDb ID (e.g., tt1942683)">
             <button class="button" onclick="playMedia()">Play</button>
         </div>
-
-        <div class="steps">
-            <h2>How to Use:</h2>
-            <p>Step 1: Search what you want on IMDb.</p>
-            <p>Step 2: Copy the IMDb ID.</p>
-            <p>Step 3: Paste the IMDb ID into the input field.</p>
-            <p>Step 4: Enjoy!</p>
-        </div>
-
-        <div class="iframe-container">
-            <iframe id="media-iframe" src="" allowfullscreen></iframe>
-        </div>
     </div>
 
     <script>
@@ -129,22 +90,44 @@
             const imdbId = imdbInput.value.trim();
             const mediaType = imdbInput.getAttribute('data-media-type');
 
-            if (!imdbId) {
-                alert("Please enter a valid IMDb ID.");
-                return;
-            }
+            if (!imdbId) return; // Don't proceed if IMDb ID is empty
 
-            const iframe = document.getElementById('media-iframe');
-            const iframeContainer = document.querySelector('.iframe-container');
-
-            // Set the iframe source based on media type
+            // Generate the link to open in a new about:blank tab
+            let url = '';
             if (mediaType === 'tv') {
-                iframe.src = `https://vidsrc.me/embed/tv?imdb=${imdbId}`;
+                url = `https://vidsrc.me/embed/tv?imdb=${imdbId}`;
             } else if (mediaType === 'movie') {
-                iframe.src = `https://vidsrc.me/embed/movie?imdb=${imdbId}`;
+                url = `https://vidsrc.me/embed/movie?imdb=${imdbId}`;
             }
 
-            iframeContainer.style.display = 'block';
+            // Open in a new about:blank tab
+            const newTab = window.open("about:blank", "_blank");
+            newTab.document.write(`
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <title>Media Viewer</title>
+                    <style>
+                        body {
+                            margin: 0;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            height: 100vh;
+                            background-color: #000;
+                        }
+                        iframe {
+                            width: 100%;
+                            height: 100%;
+                            border: none;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <iframe src="${url}" allowfullscreen></iframe>
+                </body>
+                </html>
+            `);
 
             // Save last watched media to localStorage
             localStorage.setItem('lastWatched', JSON.stringify({ imdbId, mediaType }));
@@ -152,22 +135,44 @@
 
         function continueWatching() {
             const lastWatched = localStorage.getItem('lastWatched');
-            if (!lastWatched) {
-                alert("No recently watched media found.");
-                return;
-            }
+            if (!lastWatched) return; // No media to continue watching
 
             const { imdbId, mediaType } = JSON.parse(lastWatched);
-            const iframe = document.getElementById('media-iframe');
-            const iframeContainer = document.querySelector('.iframe-container');
 
+            let url = '';
             if (mediaType === 'tv') {
-                iframe.src = `https://vidsrc.me/embed/tv?imdb=${imdbId}`;
+                url = `https://vidsrc.me/embed/tv?imdb=${imdbId}`;
             } else if (mediaType === 'movie') {
-                iframe.src = `https://vidsrc.me/embed/movie?imdb=${imdbId}`;
+                url = `https://vidsrc.me/embed/movie?imdb=${imdbId}`;
             }
 
-            iframeContainer.style.display = 'block';
+            const newTab = window.open("about:blank", "_blank");
+            newTab.document.write(`
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <title>Media Viewer</title>
+                    <style>
+                        body {
+                            margin: 0;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            height: 100vh;
+                            background-color: #000;
+                        }
+                        iframe {
+                            width: 100%;
+                            height: 100%;
+                            border: none;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <iframe src="${url}" allowfullscreen></iframe>
+                </body>
+                </html>
+            `);
         }
 
         function openAnime() {
