@@ -110,26 +110,6 @@
         .input-button .button:hover {
             background-color: #4F0672; /* Darker purple on hover */
         }
-
-        /* Context Menu Styles */
-        .context-menu {
-            position: absolute;
-            display: none;
-            background-color: #ffffff;
-            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            z-index: 1000;
-        }
-
-        .context-menu-item {
-            padding: 10px 15px;
-            cursor: pointer;
-            color: #333;
-        }
-
-        .context-menu-item:hover {
-            background-color: #f0f0f0;
-        }
     </style>
 </head>
 <body>
@@ -162,28 +142,13 @@
         </div>
     </div>
 
-    <!-- Right Click Context Menu -->
-    <div id="context-menu" class="context-menu">
-        <div class="context-menu-item" onclick="openSettings()">Settings</div>
-        <div class="context-menu-item" onclick="changeBackground()">Change Background</div>
-        <div class="context-menu-item" onclick="openGameApps()">Games</div>
-        <div class="context-menu-item" onclick="openlinks()">Links</div>
-    </div>
-
     <!-- JavaScript Code -->
     <script>
         // Random Placeholder Text
         const options = [
-            "Over 5 Users in 2024!",
-            "Fastest growing proxy server!",
-            "Made by Leo!",
-            "Thanks for using the site",
-            "Set a custom background in here.",
-            "Tab Cloaking is highly recommended",
-            "About:Blank Cloak is highly recommended",
-            "Finally, an actual site unblocker that works fast!",
-            "It is not recommended to share this link with anyone.",
-            "© Copyright 2024 Leo's Network. All Rights Reserved."
+            "Tab Cloak (opens the tab in about:blank format)",
+            "Links (opens the links tab)",
+            "View all Settings (opens settings)"
         ];
 
         function getRandomOption() {
@@ -255,22 +220,57 @@
             document.body.style.backgroundImage = `url('${storedBackgroundUrl}')`;
         }
 
-        // Right Click Menu
-        window.addEventListener('contextmenu', function(event) {
-            event.preventDefault();
-            const contextMenu = document.getElementById('context-menu');
-            contextMenu.style.display = 'block';
-            contextMenu.style.left = `${event.pageX}px`;
-            contextMenu.style.top = `${event.pageY}px`;
+        // Add Right-click Context Menu
+        document.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+            const menu = document.createElement('div');
+            menu.style.position = 'absolute';
+            menu.style.top = e.clientY + 'px';
+            menu.style.left = e.clientX + 'px';
+            menu.style.backgroundColor = '#fff';
+            menu.style.border = '1px solid #ccc';
+            menu.style.boxShadow = '0px 4px 8px rgba(0, 0, 0, 0.2)';
+            menu.style.padding = '10px';
+            menu.style.zIndex = '1000';
+
+            options.forEach(function (option) {
+                const item = document.createElement('div');
+                item.style.padding = '8px';
+                item.style.cursor = 'pointer';
+                item.style.color = '#333';
+                item.innerText = option;
+                item.onclick = function () {
+                    handleMenuOption(option);
+                    document.body.removeChild(menu);
+                };
+                item.onmouseover = function () {
+                    item.style.backgroundColor = '#eee';
+                };
+                item.onmouseout = function () {
+                    item.style.backgroundColor = 'transparent';
+                };
+                menu.appendChild(item);
+            });
+
+            document.body.appendChild(menu);
+
+            document.addEventListener('click', function () {
+                if (menu) {
+                    document.body.removeChild(menu);
+                }
+            });
         });
 
-        // Hide the context menu when clicked elsewhere
-        window.addEventListener('click', function(event) {
-            const contextMenu = document.getElementById('context-menu');
-            if (event.target !== contextMenu && !contextMenu.contains(event.target)) {
-                contextMenu.style.display = 'none';
+        // Handle Menu Option Selection
+        function handleMenuOption(option) {
+            if (option === "Tab Cloak (opens the tab in about:blank format)") {
+                window.open('about:blank', '_blank');
+            } else if (option === "Links (opens the links tab)") {
+                openlinks();
+            } else if (option === "View all Settings (opens settings)") {
+                openSettings();
             }
-        });
+        }
     </script>
 </body>
 </html>
