@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
     <title>Home</title>
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Google_Classroom_Logo.svg/2372px-Google_Classroom_Logo.svg.png" type="image/png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js">
     <style>
-        /* CSS styles for improved aesthetics */
+        /* Basic CSS Styles */
         body {
             font-family: 'Arial', sans-serif;
             text-align: center;
@@ -135,14 +137,13 @@
         #customMenu ul li:hover {
             background-color: #f0f0f0;
         }
-
     </style>
 </head>
 <body>
     <!-- Navigation Bar -->
     <div class="navbar">
         <a onclick="openGameApps()">Games</a>
-        <a onclick="openlinks()">Links</a>
+        <a onclick="openLinks()">Links</a>
         <a onclick="openTabs()">Tabs</a>
         <a onclick="openSettings()">Settings</a>
         <a onclick="openTvShowPlayer()">Movie+TV</a>
@@ -150,7 +151,7 @@
 
     <!-- Random Placeholder Text -->
     <p id="placeholder"></p>
-    
+
     <!-- Current Time -->
     <p id="time"></p>
 
@@ -223,7 +224,7 @@
             window.location.href = "games.html";
         }
 
-        function openlinks() {
+        function openLinks() {
             window.location.href = "links.html";
         }
 
@@ -268,11 +269,6 @@
 
         // Prevent default right-click menu and show custom menu
         document.addEventListener('contextmenu', function(event) {
-            // Check if the target of the click is a button, link, or text
-            if (event.target.closest('button') || event.target.closest('a') || event.target.closest('p')) {
-                return; // Do nothing if it's a button, link, or paragraph text
-            }
-
             event.preventDefault();
             customMenu.style.left = `${event.pageX}px`;
             customMenu.style.top = `${event.pageY}px`;
@@ -281,7 +277,6 @@
 
         // Hide the custom menu when clicking anywhere else
         document.addEventListener('click', function(event) {
-            // Check if the click is inside the custom menu to prevent it from hiding immediately
             if (!customMenu.contains(event.target)) {
                 customMenu.classList.add('hidden');
             }
