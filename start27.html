@@ -12,15 +12,15 @@
             text-align: center;
             margin: 0;
             padding: 0;
-            background-color: #f0f0f0; /* Light background */
-            color: #333; /* Dark text */
+            background-color: #f0f0f0;
+            color: #333;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh; /* Ensure full viewport height */
-            background-size: cover; /* Cover background image */
-            background-position: center; /* Center the background image */
+            min-height: 100vh;
+            background-size: cover;
+            background-position: center;
         }
 
         .navbar {
@@ -32,17 +32,17 @@
         .navbar a {
             padding: 10px 20px;
             font-size: 16px;
-            background-color: #6C0BA9; /* Purple */
+            background-color: #6C0BA9;
             color: white;
             text-decoration: none;
             border-radius: 5px;
             margin-left: 10px;
-            cursor: pointer; /* Add cursor pointer */
-            transition: background-color 0.3s ease; /* Smooth transition for background color */
+            cursor: pointer;
+            transition: background-color 0.3s ease;
         }
 
         .navbar a:hover {
-            background-color: #4F0672; /* Darker purple on hover */
+            background-color: #4F0672;
         }
 
         #placeholder {
@@ -62,17 +62,17 @@
         .button {
             padding: 10px 20px;
             font-size: 16px;
-            background-color: #6C0BA9; /* Purple */
+            background-color: #6C0BA9;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s ease; /* Smooth transition for background color */
+            transition: background-color 0.3s ease;
             margin: 0 10px;
         }
 
         .button:hover {
-            background-color: #4F0672; /* Darker purple on hover */
+            background-color: #4F0672;
         }
 
         #background-input {
@@ -98,18 +98,44 @@
         .input-button .button {
             padding: 10px 20px;
             font-size: 16px;
-            background-color: #6C0BA9; /* Purple */
+            background-color: #6C0BA9;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s ease; /* Smooth transition for background color */
+            transition: background-color 0.3s ease;
             margin-left: 10px;
         }
 
         .input-button .button:hover {
-            background-color: #4F0672; /* Darker purple on hover */
+            background-color: #4F0672;
         }
+
+        /* Custom Context Menu */
+        #customMenu {
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+            z-index: 1000;
+        }
+
+        #customMenu ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        #customMenu ul li {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        #customMenu ul li:hover {
+            background-color: #f0f0f0;
+        }
+
     </style>
 </head>
 <body>
@@ -140,6 +166,16 @@
             <button class="button" onclick="changeBackground()">Save</button>
             <button class="button" onclick="removeBackgroundButton()">Cancel</button>
         </div>
+    </div>
+
+    <!-- Custom Context Menu -->
+    <div id="customMenu" class="hidden">
+        <ul>
+            <li onclick="tabCloak()">Tab Cloak</li>
+            <li onclick="lastVisitedSite()">Last Visited Site</li>
+            <li onclick="aboutBlankCloak()">About:Blank Cloak</li>
+            <li onclick="viewSettings()">View all Settings</li>
+        </ul>
     </div>
 
     <!-- JavaScript Code -->
@@ -225,6 +261,43 @@
         const storedBackgroundUrl = localStorage.getItem("backgroundUrl");
         if (storedBackgroundUrl) {
             document.body.style.backgroundImage = `url('${storedBackgroundUrl}')`;
+        }
+
+        // Custom Right-Click Menu
+        const customMenu = document.getElementById('customMenu');
+
+        // Prevent default right-click menu and show custom menu
+        document.addEventListener('contextmenu', function(event) {
+            event.preventDefault();
+            customMenu.style.left = `${event.pageX}px`;
+            customMenu.style.top = `${event.pageY}px`;
+            customMenu.classList.remove('hidden');
+        });
+
+        // Hide the custom menu when clicking anywhere else
+        document.addEventListener('click', function() {
+            customMenu.classList.add('hidden');
+        });
+
+        // Custom Menu Actions
+        function tabCloak() {
+            alert("Tab Cloak Activated");
+            customMenu.classList.add('hidden');
+        }
+
+        function lastVisitedSite() {
+            alert("Last Visited Site: " + document.referrer);
+            customMenu.classList.add('hidden');
+        }
+
+        function aboutBlankCloak() {
+            window.open('about:blank', '_blank');
+            customMenu.classList.add('hidden');
+        }
+
+        function viewSettings() {
+            alert("Viewing Settings...");
+            customMenu.classList.add('hidden');
         }
     </script>
 </body>
