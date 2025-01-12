@@ -3,26 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="robots" content="noindex">
     <title>Home</title>
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Google_Classroom_Logo.svg/2372px-Google_Classroom_Logo.svg.png" type="image/png">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js">
     <style>
-        /* Basic CSS Styles */
+        /* CSS styles for improved aesthetics */
         body {
             font-family: 'Arial', sans-serif;
             text-align: center;
             margin: 0;
             padding: 0;
-            background-color: #f0f0f0;
-            color: #333;
+            background-color: #f0f0f0; /* Light background */
+            color: #333; /* Dark text */
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            background-size: cover;
-            background-position: center;
+            min-height: 100vh; /* Ensure full viewport height */
+            background-size: cover; /* Cover background image */
+            background-position: center; /* Center the background image */
         }
 
         .navbar {
@@ -34,17 +32,17 @@
         .navbar a {
             padding: 10px 20px;
             font-size: 16px;
-            background-color: #6C0BA9;
+            background-color: #6C0BA9; /* Purple */
             color: white;
             text-decoration: none;
             border-radius: 5px;
             margin-left: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
+            cursor: pointer; /* Add cursor pointer */
+            transition: background-color 0.3s ease; /* Smooth transition for background color */
         }
 
         .navbar a:hover {
-            background-color: #4F0672;
+            background-color: #4F0672; /* Darker purple on hover */
         }
 
         #placeholder {
@@ -64,17 +62,17 @@
         .button {
             padding: 10px 20px;
             font-size: 16px;
-            background-color: #6C0BA9;
+            background-color: #6C0BA9; /* Purple */
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease; /* Smooth transition for background color */
             margin: 0 10px;
         }
 
         .button:hover {
-            background-color: #4F0672;
+            background-color: #4F0672; /* Darker purple on hover */
         }
 
         #background-input {
@@ -100,41 +98,36 @@
         .input-button .button {
             padding: 10px 20px;
             font-size: 16px;
-            background-color: #6C0BA9;
+            background-color: #6C0BA9; /* Purple */
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease; /* Smooth transition for background color */
             margin-left: 10px;
         }
 
         .input-button .button:hover {
-            background-color: #4F0672;
+            background-color: #4F0672; /* Darker purple on hover */
         }
 
-        /* Custom Context Menu */
-        #customMenu {
+        /* Context Menu Styles */
+        .context-menu {
             position: absolute;
-            background-color: #fff;
-            border: 1px solid #ccc;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             display: none;
+            background-color: #ffffff;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
             z-index: 1000;
         }
 
-        #customMenu ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        #customMenu ul li {
-            padding: 8px;
+        .context-menu-item {
+            padding: 10px 15px;
             cursor: pointer;
+            color: #333;
         }
 
-        #customMenu ul li:hover {
+        .context-menu-item:hover {
             background-color: #f0f0f0;
         }
     </style>
@@ -143,7 +136,7 @@
     <!-- Navigation Bar -->
     <div class="navbar">
         <a onclick="openGameApps()">Games</a>
-        <a onclick="openLinks()">Links</a>
+        <a onclick="openlinks()">Links</a>
         <a onclick="openTabs()">Tabs</a>
         <a onclick="openSettings()">Settings</a>
         <a onclick="openTvShowPlayer()">Movie+TV</a>
@@ -151,7 +144,7 @@
 
     <!-- Random Placeholder Text -->
     <p id="placeholder"></p>
-
+    
     <!-- Current Time -->
     <p id="time"></p>
 
@@ -169,14 +162,12 @@
         </div>
     </div>
 
-    <!-- Custom Context Menu -->
-    <div id="customMenu" class="hidden">
-        <ul>
-            <li onclick="tabCloak()">Tab Cloak</li>
-            <li onclick="lastVisitedSite()">Last Visited Site</li>
-            <li onclick="aboutBlankCloak()">About:Blank Cloak</li>
-            <li onclick="viewSettings()">View all Settings</li>
-        </ul>
+    <!-- Right Click Context Menu -->
+    <div id="context-menu" class="context-menu">
+        <div class="context-menu-item" onclick="openSettings()">Settings</div>
+        <div class="context-menu-item" onclick="changeBackground()">Change Background</div>
+        <div class="context-menu-item" onclick="openGameApps()">Games</div>
+        <div class="context-menu-item" onclick="openlinks()">Links</div>
     </div>
 
     <!-- JavaScript Code -->
@@ -224,7 +215,7 @@
             window.location.href = "games.html";
         }
 
-        function openLinks() {
+        function openlinks() {
             window.location.href = "links.html";
         }
 
@@ -264,44 +255,22 @@
             document.body.style.backgroundImage = `url('${storedBackgroundUrl}')`;
         }
 
-        // Custom Right-Click Menu
-        const customMenu = document.getElementById('customMenu');
-
-        // Prevent default right-click menu and show custom menu
-        document.addEventListener('contextmenu', function(event) {
+        // Right Click Menu
+        window.addEventListener('contextmenu', function(event) {
             event.preventDefault();
-            customMenu.style.left = `${event.pageX}px`;
-            customMenu.style.top = `${event.pageY}px`;
-            customMenu.classList.remove('hidden');
+            const contextMenu = document.getElementById('context-menu');
+            contextMenu.style.display = 'block';
+            contextMenu.style.left = `${event.pageX}px`;
+            contextMenu.style.top = `${event.pageY}px`;
         });
 
-        // Hide the custom menu when clicking anywhere else
-        document.addEventListener('click', function(event) {
-            if (!customMenu.contains(event.target)) {
-                customMenu.classList.add('hidden');
+        // Hide the context menu when clicked elsewhere
+        window.addEventListener('click', function(event) {
+            const contextMenu = document.getElementById('context-menu');
+            if (event.target !== contextMenu && !contextMenu.contains(event.target)) {
+                contextMenu.style.display = 'none';
             }
         });
-
-        // Custom Menu Actions
-        function tabCloak() {
-            alert("Tab Cloak Activated");
-            customMenu.classList.add('hidden');
-        }
-
-        function lastVisitedSite() {
-            alert("Last Visited Site: " + document.referrer);
-            customMenu.classList.add('hidden');
-        }
-
-        function aboutBlankCloak() {
-            window.open('about:blank', '_blank');
-            customMenu.classList.add('hidden');
-        }
-
-        function viewSettings() {
-            alert("Viewing Settings...");
-            customMenu.classList.add('hidden');
-        }
     </script>
 </body>
 </html>
