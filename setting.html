@@ -17,28 +17,25 @@
     :root {
       --bg-color: #ffffff;
       --text-color: #333;
-      --card-color: #f9f9f9;
-      --button-color: #4CAF50;
     }
 
     :root.dark-mode {
       --bg-color: #121212;
       --text-color: #ffffff;
-      --card-color: #1f1f1f;
-      --button-color: #388E3C;
     }
 
     header {
-      background-color: var(--button-color);
+      background-color: #4CAF50;
       color: white;
       padding: 20px;
       text-align: center;
       font-size: 24px;
+      border-bottom: 2px solid #ddd;
     }
 
     .container {
       max-width: 700px;
-      margin: 20px auto;
+      margin: 30px auto;
       padding: 20px;
       background: var(--card-color, #f9f9f9);
       border-radius: 12px;
@@ -54,6 +51,7 @@
 
     label {
       font-size: 18px;
+      font-weight: 500;
     }
 
     input[type="checkbox"] {
@@ -96,7 +94,7 @@
       width: 100%;
       padding: 12px;
       margin: 10px 0;
-      background-color: var(--button-color);
+      background-color: #4CAF50;
       color: white;
       font-size: 18px;
       border: none;
@@ -111,9 +109,19 @@
 
     footer {
       text-align: center;
-      margin-top: 20px;
+      margin-top: 30px;
       font-size: 14px;
       color: var(--text-color, #333);
+    }
+
+    footer a {
+      color: var(--text-color, #333);
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    footer a:hover {
+      color: #4CAF50;
     }
   </style>
 </head>
@@ -132,17 +140,21 @@
     <button id="windowButton">Open in New Window</button>
   </div>
 
-  <footer>&copy; 2024 SUSYSAM</footer>
+  <footer>
+    <p>&copy; 2024 <a href="https://susysam.github.io/start27.html" target="_blank">SUSYSAM</a></p>
+  </footer>
 
   <script>
-    // Function to load the saved theme and preferences on page load
+    // Load Dark Mode preference
     document.addEventListener('DOMContentLoaded', () => {
-      // Load Dark Mode preference from localStorage
       if (localStorage.getItem('theme') === 'dark') {
         document.documentElement.classList.add('dark-mode');
+        document.querySelector(':root').style.setProperty('--card-color', '#1f1f1f');
+      } else {
+        document.querySelector(':root').style.setProperty('--card-color', '#f9f9f9');
       }
 
-      // Update the toggle button state
+      // Toggle switch state
       document.getElementById('darkModeToggle').checked =
         document.documentElement.classList.contains('dark-mode');
     });
@@ -151,9 +163,11 @@
     document.getElementById('darkModeToggle').addEventListener('change', function () {
       if (this.checked) {
         document.documentElement.classList.add('dark-mode');
+        document.querySelector(':root').style.setProperty('--card-color', '#1f1f1f');
         localStorage.setItem('theme', 'dark');
       } else {
         document.documentElement.classList.remove('dark-mode');
+        document.querySelector(':root').style.setProperty('--card-color', '#f9f9f9');
         localStorage.setItem('theme', 'light');
       }
     });
