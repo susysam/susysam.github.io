@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Improved Links</title>
+    <title>Links</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -70,6 +70,13 @@
         .dropbtn:hover, .dropbtn:focus {
             background-color: #6C0BA9;
         }
+
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -83,7 +90,7 @@
 
     <!-- Categories -->
     <div class="dropdown">
-        <button class="dropbtn" onclick="openLink('https://social.valah.net/')" aria-label="Open Interstellar Links">Interstellar</button>
+        <button class="dropbtn" onclick="showIframe('https://interstellar.jgc.linkpc.net/')" aria-label="Open Interstellar Links">Interstellar</button>
     </div>
     <div class="dropdown">
         <button class="dropbtn" aria-label="Light Links Coming Soon">Light (New Links Coming Soon)</button>
@@ -95,9 +102,19 @@
         <button class="dropbtn" aria-label="Spoofs Links Coming Soon">Spoofs (New Links Coming Soon)</button>
     </div>
 
+    <!-- Iframe for displaying the Interstellar link -->
+    <div id="iframeContainer"></div>
+
     <script>
         function openLink(url) {
             window.open(url, '_blank', 'noopener');
+        }
+
+        function showIframe(url) {
+            var iframe = document.createElement("iframe");
+            iframe.src = url;
+            document.getElementById("iframeContainer").innerHTML = "";
+            document.getElementById("iframeContainer").appendChild(iframe);
         }
 
         function goBack() {
