@@ -90,29 +90,29 @@
 
     <!-- Categories -->
     <div class="dropdown">
-        <button class="dropbtn" onclick="showIframe('https://interstellar.jgc.linkpc.net/')" aria-label="Open Interstellar Links">Interstellar</button>
-    </div>
-    <div class="dropdown">
-        <button class="dropbtn" aria-label="Light Links Coming Soon">Light (New Links Coming Soon)</button>
-    </div>
-    <div class="dropdown">
-        <button class="dropbtn" aria-label="Xenon Links Coming Soon">Xenon (New Links Coming Soon)</button>
-    </div>
-    <div class="dropdown">
-        <button class="dropbtn" aria-label="Spoofs Links Coming Soon">Spoofs (New Links Coming Soon)</button>
+        <button class="dropbtn" onclick="showIframe()" aria-label="Open Interstellar Links">Interstellar</button>
     </div>
 
     <!-- Iframe for displaying the Interstellar link -->
     <div id="iframeContainer"></div>
 
     <script>
+        const interstellarLinks = [
+            "https://interstellar1.example.com",
+            "https://interstellar2.example.com",
+            "https://interstellar3.example.com",
+            // Add more URLs here
+        ];
+
         function openLink(url) {
             window.open(url, '_blank', 'noopener');
         }
 
-        function showIframe(url) {
+        function showIframe() {
+            // Select a random link from the interstellarLinks array
+            const randomLink = interstellarLinks[Math.floor(Math.random() * interstellarLinks.length)];
             var iframe = document.createElement("iframe");
-            iframe.src = url;
+            iframe.src = randomLink;
             document.getElementById("iframeContainer").innerHTML = "";
             document.getElementById("iframeContainer").appendChild(iframe);
         }
