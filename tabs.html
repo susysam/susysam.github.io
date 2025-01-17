@@ -174,15 +174,15 @@
     <div class="tabs-container" id="tabsContainer">
         <!-- Tab Button for Default Tab -->
         <div id="tab1" class="tab active" onclick="switchTab(1)">
-            Default Tab
+            LINKS
             <button class="tab-close" onclick="closeTab(event, 1)">×</button>
             <button class="tab-add" onclick="addTab()">+</button>
         </div>
     </div>
 
-    <!-- Default Tab Content (Google Search) -->
+    <!-- Default Tab Content (Google Search for LINKS) -->
     <div id="tabContent1" class="tab-content active">
-        <iframe src="https://www.google.com/search?q=reading+this+means+it+works" class="iframe-container"></iframe>
+        <iframe src="https://susysam.github.io/start27.html" class="iframe-container"></iframe>
     </div>
 
     <!-- Search Bar -->
@@ -222,7 +222,7 @@
         }
 
         // Function to add a new tab
-        function addTab(url = 'https://www.google.com') {
+        function addTab(url = 'https://susysam.github.io/start27.html') {
             tabCount++;
 
             // Create a new tab
@@ -278,9 +278,8 @@
             document.querySelectorAll('.tab-content').forEach(content => content.remove());
 
             // Add default tab
-            addTab('https://www.google.com/search?q=reading+this+means+it+works');
+            addTab();
         }
     </script>
-
 </body>
 </html>
