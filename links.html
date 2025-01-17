@@ -90,7 +90,7 @@
 
     <!-- Categories -->
     <div class="dropdown">
-        <button class="dropbtn" onclick="showIframe()" aria-label="Open Interstellar Links">Interstellar</button>
+        <button class="dropbtn" onclick="showRandomIframe()" aria-label="Open Interstellar Links">Interstellar</button>
     </div>
 
     <!-- Iframe for displaying the Interstellar link -->
@@ -98,19 +98,63 @@
 
     <script>
         const interstellarLinks = [
-            "https://interstellar1.example.com",
-            "https://interstellar2.example.com",
-            "https://interstellar3.example.com",
-            // Add more URLs here
+            "https://404error.404.mn/",
+            "https://haghhhh.mundolinux.ca/",
+            "https://matheiuslikesmen.bouncers4rent.com/",
+            "https://fish-finder.mooo.com/",
+            "https://lab2.computerlab.fin-tech.com/",
+            "https://griitarevive.ppeb.me/",
+            "https://interstellar.jgc.linkpc.net/",
+            "https://educate.justlearning.net/",
+            "https://mathedu.saugatnepal.com.np/",
+            "https://interstellar.tailkinker.net/",
+            "https://travel.bsfa.info/",
+            "https://visit-that.home.kg/",
+            "https://you-made-me.verymad.net/",
+            "https://view-the.h-o-s-t.name/",
+            "https://x.viewsafetyinyour.home.kg/",
+            "https://add.renub.on-discord.home.kg/",
+            "https://hz.ix.tc/",
+            "https://old.death.cl/",
+            "https://xfaus-jdowhf.helwhueg.imdb.gq/",
+            "https://interstellar.sysops.cl/",
+            "https://please-go.away.pk/",
+            "https://make-sure-the-house-is.spotless.cl/",
+            "https://bmtisd.it.linux.math.baselinux.net/",
+            "https://arbooks.bookworm.com.np/",
+            "https://clever.com.cerrajeriasanmiguel.com/",
+            "https://ilovecocacola.mooo.com/",
+            "https://arizonastatefair.info.gf/",
+            "https://kablooey.chillcrew.net/",
+            "https://learnsome.pythonabc.org/",
+            "https://kjms.eduinnova.cl/",
+            "https://krava.poci.cz/",
+            "https://ixlmathhomework6thgrade.tedfullwood.com/",
+            "https://stranded-in.dimensionless.space/",
+            "https://whatdoesthiswordmean.lol.coute.au/",
+            "https://tutorhelp.ignorelist.com/",
+            "https://powerschool.ignorelist.com/",
+            "https://i.live.in.your.bathroom.zigboxs.com/",
+            "https://remote.seocabragadoaportes.com.ar/",
+            "https://doyle.thirty-one.is.currently.strokin.it/",
+            "https://bak2skewl.konpan.ch/",
+            "https://s.abl.cl/",
+            "https://1932is-when.it.happened.klingler.us/",
+            "https://dididoitright.wiki.gd/",
+            "https://my-learning-hall.jemix.sg/",
+            "https://julius.caeser.is.my-homie.burgermap.org/",
+            "https://theunitedstatesofcanada.raspberryip.com/",
+            "https://andrewstopadminabusing.raspberryip.com/"
         ];
 
         function openLink(url) {
             window.open(url, '_blank', 'noopener');
         }
 
-        function showIframe() {
-            // Select a random link from the interstellarLinks array
-            const randomLink = interstellarLinks[Math.floor(Math.random() * interstellarLinks.length)];
+        function showRandomIframe() {
+            const randomIndex = Math.floor(Math.random() * interstellarLinks.length);
+            const randomLink = interstellarLinks[randomIndex];
+
             var iframe = document.createElement("iframe");
             iframe.src = randomLink;
             document.getElementById("iframeContainer").innerHTML = "";
