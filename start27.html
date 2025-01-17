@@ -6,73 +6,74 @@
     <title>Home</title>
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Google_Classroom_Logo.svg/2372px-Google_Classroom_Logo.svg.png" type="image/png">
     <style>
-        /* CSS styles for improved aesthetics */
         body {
             font-family: 'Arial', sans-serif;
             text-align: center;
             margin: 0;
             padding: 0;
-            background-color: #f0f0f0; /* Light background */
-            color: #333; /* Dark text */
+            background-color: #f5f5f5;
+            color: #333;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh; /* Ensure full viewport height */
-            background-size: cover; /* Cover background image */
-            background-position: center; /* Center the background image */
+            min-height: 100vh;
+            background-size: cover;
+            background-position: center;
+            transition: background-color 0.3s ease;
         }
 
         .navbar {
             position: absolute;
             top: 20px;
             right: 20px;
+            display: flex;
+            gap: 10px;
         }
 
         .navbar a {
             padding: 10px 20px;
             font-size: 16px;
-            background-color: #6C0BA9; /* Purple */
+            background-color: #6C0BA9;
             color: white;
             text-decoration: none;
             border-radius: 5px;
-            margin-left: 10px;
-            cursor: pointer; /* Add cursor pointer */
-            transition: background-color 0.3s ease; /* Smooth transition for background color */
+            transition: background-color 0.3s;
         }
 
         .navbar a:hover {
-            background-color: #4F0672; /* Darker purple on hover */
+            background-color: #4F0672;
         }
 
         #placeholder {
-            font-size: 18px;
+            font-size: 20px;
             margin-top: 20px;
         }
 
         #time {
-            font-size: 24px;
+            font-size: 26px;
+            font-weight: bold;
             margin-top: 20px;
+            color: #222;
         }
 
         .button-container {
-            margin-top: 20px;
+            margin-top: 30px;
         }
 
         .button {
             padding: 10px 20px;
             font-size: 16px;
-            background-color: #6C0BA9; /* Purple */
+            background-color: #6C0BA9;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s ease; /* Smooth transition for background color */
-            margin: 0 10px;
+            transition: background-color 0.3s ease;
         }
 
         .button:hover {
-            background-color: #4F0672; /* Darker purple on hover */
+            background-color: #4F0672;
         }
 
         #background-input {
@@ -83,7 +84,6 @@
         #background-input input[type="text"] {
             padding: 10px;
             font-size: 14px;
-            margin-top: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
             width: 300px;
@@ -91,29 +91,26 @@
 
         .input-button {
             margin-top: 10px;
-            display: flex;
-            justify-content: center;
         }
 
         .input-button .button {
             padding: 10px 20px;
             font-size: 16px;
-            background-color: #6C0BA9; /* Purple */
+            background-color: #6C0BA9;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s ease; /* Smooth transition for background color */
+            transition: background-color 0.3s ease;
             margin-left: 10px;
         }
 
         .input-button .button:hover {
-            background-color: #4F0672; /* Darker purple on hover */
+            background-color: #4F0672;
         }
     </style>
 </head>
 <body>
-    <!-- Navigation Bar -->
     <div class="navbar">
         <a onclick="openGameApps()">Games</a>
         <a onclick="openlinks()">Links</a>
@@ -122,18 +119,13 @@
         <a onclick="openTvShowPlayer()">Movie+TV</a>
     </div>
 
-    <!-- Random Placeholder Text -->
     <p id="placeholder"></p>
-    
-    <!-- Current Time -->
     <p id="time"></p>
 
-    <!-- Button to Change Background -->
-    <div class="button-container" id="button-container">
+    <div class="button-container">
         <button class="button" onclick="showBackgroundInput()">Change Background</button>
     </div>
 
-    <!-- Input for Background URL -->
     <div id="background-input">
         <input type="text" id="background-url" placeholder="Enter background URL">
         <div class="input-button">
@@ -142,9 +134,7 @@
         </div>
     </div>
 
-    <!-- JavaScript Code -->
     <script>
-        // Random Placeholder Text
         const options = [
             "Tab Cloak (opens the tab in about:blank format)",
             "Links (opens the links tab)",
@@ -158,15 +148,16 @@
 
         document.getElementById("placeholder").textContent = getRandomOption();
 
-        // Update Clock
         function updateClock() {
             const now = new Date();
+            const offset = -5; // EST is UTC-5
+            now.setHours(now.getHours() + offset);
             let hours = now.getHours();
             const minutes = now.getMinutes().toString().padStart(2, '0');
             const seconds = now.getSeconds().toString().padStart(2, '0');
             const ampm = hours >= 12 ? 'PM' : 'AM';
             hours = hours % 12;
-            hours = hours ? 12 : 12;
+            hours = hours ? hours : 12;
 
             const timeString = `${hours}:${minutes}:${seconds} ${ampm}`;
             document.getElementById('time').textContent = timeString;
@@ -175,7 +166,6 @@
         updateClock();
         setInterval(updateClock, 1000);
 
-        // Open Other Pages
         function openGameApps() {
             window.location.href = "games.html";
         }
@@ -185,7 +175,7 @@
         }
 
         function openTabs() {
-            window.location.href = "tabs.html"; 
+            window.location.href = "tabs.html";
         }
 
         function openSettings() {
@@ -196,80 +186,24 @@
             window.location.href = "movie+tv.html";
         }
 
-        // Show Background Input
         function showBackgroundInput() {
             document.getElementById("background-input").style.display = "block";
         }
 
-        // Change Background
         function changeBackground() {
             const backgroundUrl = document.getElementById("background-url").value;
             document.body.style.backgroundImage = `url('${backgroundUrl}')`;
             localStorage.setItem("backgroundUrl", backgroundUrl);
-            document.getElementById("background-input").style.display = "none"; 
+            document.getElementById("background-input").style.display = "none";
         }
 
-        // Remove Background Input
         function removeBackgroundButton() {
             document.getElementById("background-input").style.display = "none";
         }
 
-        // Load Background from Local Storage
         const storedBackgroundUrl = localStorage.getItem("backgroundUrl");
         if (storedBackgroundUrl) {
             document.body.style.backgroundImage = `url('${storedBackgroundUrl}')`;
-        }
-
-        // Add Right-click Context Menu
-        document.addEventListener('contextmenu', function (e) {
-            e.preventDefault();
-            const menu = document.createElement('div');
-            menu.style.position = 'absolute';
-            menu.style.top = e.clientY + 'px';
-            menu.style.left = e.clientX + 'px';
-            menu.style.backgroundColor = '#fff';
-            menu.style.border = '1px solid #ccc';
-            menu.style.boxShadow = '0px 4px 8px rgba(0, 0, 0, 0.2)';
-            menu.style.padding = '10px';
-            menu.style.zIndex = '1000';
-
-            options.forEach(function (option) {
-                const item = document.createElement('div');
-                item.style.padding = '8px';
-                item.style.cursor = 'pointer';
-                item.style.color = '#333';
-                item.innerText = option;
-                item.onclick = function () {
-                    handleMenuOption(option);
-                    document.body.removeChild(menu);
-                };
-                item.onmouseover = function () {
-                    item.style.backgroundColor = '#eee';
-                };
-                item.onmouseout = function () {
-                    item.style.backgroundColor = 'transparent';
-                };
-                menu.appendChild(item);
-            });
-
-            document.body.appendChild(menu);
-
-            document.addEventListener('click', function () {
-                if (menu) {
-                    document.body.removeChild(menu);
-                }
-            });
-        });
-
-        // Handle Menu Option Selection
-        function handleMenuOption(option) {
-            if (option === "Tab Cloak (opens the tab in about:blank format)") {
-                window.open('about:blank', '_blank');
-            } else if (option === "Links (opens the links tab)") {
-                openlinks();
-            } else if (option === "View all Settings (opens settings)") {
-                openSettings();
-            }
         }
     </script>
 </body>
