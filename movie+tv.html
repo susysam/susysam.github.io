@@ -6,57 +6,73 @@
     <title>Entertainment Player</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             background-color: #f3f3f3;
             text-align: center;
             margin-top: 50px;
+            padding: 20px;
         }
+
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
+
         h1 {
-            font-size: 36px;
-            margin-bottom: 30px;
+            font-size: 40px;
             color: #333;
+            margin-bottom: 30px;
         }
+
         .buttons-container {
             display: flex;
             justify-content: center;
             margin-bottom: 30px;
+            gap: 15px;
         }
+
         .button {
-            padding: 15px 30px;
+            padding: 12px 30px;
             font-size: 18px;
             border-radius: 8px;
             background-color: #6C0BA9;
-            color: #fff;
+            color: white;
             border: none;
             cursor: pointer;
-            margin: 0 10px;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s, transform 0.2s ease;
         }
+
         .button:hover {
             background-color: #4F0672;
+            transform: scale(1.05);
         }
+
         .input-container {
             display: none;
             justify-content: center;
+            margin-top: 20px;
             margin-bottom: 20px;
         }
+
         input[type="text"] {
-            padding: 15px;
+            padding: 12px;
             font-size: 16px;
             border-radius: 5px;
             border: 1px solid #ccc;
-            width: 300px;
+            width: 250px;
+            margin-right: 10px;
         }
+
         .return-button {
             position: absolute;
             top: 20px;
             right: 20px;
             padding: 10px 20px;
-            background-color: #FF5733; /* Orange button color */
+            background-color: #FF5733;
             color: #fff;
             font-size: 16px;
             border: none;
@@ -64,8 +80,31 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
+
         .return-button:hover {
-            background-color: #C74426; /* Darker orange on hover */
+            background-color: #C74426;
+        }
+
+        .welcome h2 {
+            margin-bottom: 10px;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .welcome p {
+            font-size: 18px;
+            color: #555;
+        }
+
+        @media (max-width: 600px) {
+            .button {
+                font-size: 16px;
+                padding: 10px 20px;
+            }
+
+            input[type="text"] {
+                width: 200px;
+            }
         }
     </style>
 </head>
@@ -79,10 +118,10 @@
         </div>
 
         <div class="buttons-container">
-            <button onclick="selectMedia('movie')">Movie</button>
-            <button onclick="selectMedia('tv')">TV Show</button>
-            <button onclick="openAnime()">Anime</button>
-            <button onclick="continueWatching()">Continue Watching</button>
+            <button class="button" onclick="selectMedia('movie')">Movie</button>
+            <button class="button" onclick="selectMedia('tv')">TV Show</button>
+            <button class="button" onclick="openAnime()">Anime</button>
+            <button class="button" onclick="continueWatching()">Continue Watching</button>
         </div>
 
         <div class="input-container">
@@ -96,7 +135,7 @@
 
     <script>
         function selectMedia(mediaType) {
-            document.querySelector('.input-container').style.display = 'block';
+            document.querySelector('.input-container').style.display = 'flex';
             document.querySelector('.welcome').style.display = 'none';
             document.querySelector('.buttons-container').style.display = 'none';
 
@@ -109,9 +148,8 @@
             const imdbId = imdbInput.value.trim();
             const mediaType = imdbInput.getAttribute('data-media-type');
 
-            if (!imdbId) return; // Don't proceed if IMDb ID is empty
+            if (!imdbId) return;
 
-            // Generate the link to open in a new about:blank tab
             let url = '';
             if (mediaType === 'tv') {
                 url = `https://vidsrc.me/embed/tv?imdb=${imdbId}`;
@@ -119,7 +157,6 @@
                 url = `https://vidsrc.me/embed/movie?imdb=${imdbId}`;
             }
 
-            // Open in a new about:blank tab
             const newTab = window.open("about:blank", "_blank");
             newTab.document.write(`
                 <!DOCTYPE html>
@@ -148,13 +185,12 @@
                 </html>
             `);
 
-            // Save last watched media to localStorage
             localStorage.setItem('lastWatched', JSON.stringify({ imdbId, mediaType }));
         }
 
         function continueWatching() {
             const lastWatched = localStorage.getItem('lastWatched');
-            if (!lastWatched) return; // No media to continue watching
+            if (!lastWatched) return;
 
             const { imdbId, mediaType } = JSON.parse(lastWatched);
 
