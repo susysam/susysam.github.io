@@ -6,12 +6,14 @@
     <title>Tabs</title>
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Google_Classroom_Logo.svg/2372px-Google_Classroom_Logo.svg.png" type="image/png">
     <style>
+        /* Reset margin and padding */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        /* Body styling */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f7fc;
@@ -24,6 +26,7 @@
             overflow: hidden;
         }
 
+        /* Navbar styling */
         .navbar {
             margin-bottom: 20px;
             text-align: center;
@@ -44,6 +47,7 @@
             background-color: #4F0672;
         }
 
+        /* Tab container styling */
         .tabs-container {
             width: 100%;
             display: flex;
@@ -56,6 +60,7 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
+        /* Individual tab styling */
         .tab {
             padding: 12px 25px;
             cursor: pointer;
@@ -80,6 +85,7 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         }
 
+        /* Tab close and add button positioning */
         .tab-close,
         .tab-add {
             position: absolute;
@@ -97,6 +103,7 @@
             right: 40px;
         }
 
+        /* Tab content styling */
         .tab-content {
             width: 100%;
             height: 70vh;
@@ -118,6 +125,7 @@
             border-radius: 10px;
         }
 
+        /* Search bar styling */
         .search-bar {
             margin-top: 20px;
             padding: 10px;
@@ -127,6 +135,7 @@
             border: 1px solid #ccc;
         }
 
+        /* Search button styling */
         .search-button {
             padding: 10px 20px;
             background-color: #6C0BA9;
@@ -141,6 +150,7 @@
             background-color: #4F0672;
         }
 
+        /* Restart button styling */
         .restart-button {
             background-color: #ff6347;
             color: white;
@@ -154,12 +164,8 @@
         .restart-button:hover {
             background-color: #e03e2d;
         }
-        
-        .search-bar,
-        .search-button {
-            margin-bottom: 20px;
-        }
 
+        /* Responsive design for smaller screens */
         @media (max-width: 600px) {
             .tabs-container {
                 flex-direction: column;
@@ -182,13 +188,13 @@
 </head>
 <body>
 
-    <!-- Back to Tabs Button -->
-    <a href="https://susysam.github.io/start27.html" class="back-button">Back to Tabs</a>
+    <!-- Navigation Links -->
+    <div class="navbar">
+        <a href="https://susysam.github.io/start27.html" class="back-button">Back to Tabs</a>
+        <a href="#" class="restart-button" onclick="restartTabs()">Restart</a>
+    </div>
 
-    <!-- Restart Button -->
-    <a href="#" class="restart-button" onclick="restartTabs()">Restart</a>
-
-    <!-- Tab Window -->
+    <!-- Tabs Container -->
     <div class="tabs-container" id="tabsContainer">
         <!-- Default Tab Button -->
         <div id="tab1" class="tab active" onclick="switchTab(1)">
@@ -210,7 +216,7 @@
     <script>
         let tabCount = 1;
 
-        // Function to switch between tabs
+        // Switch between tabs
         function switchTab(tabNumber) {
             const tabs = document.querySelectorAll('.tab');
             tabs.forEach(tab => tab.classList.remove('active'));
@@ -222,7 +228,7 @@
             document.getElementById(`tabContent${tabNumber}`).classList.add('active');
         }
 
-        // Search and open website
+        // Open website from search bar
         function searchWebsite() {
             const url = document.getElementById('searchInput').value;
             if (!url) return;
@@ -235,10 +241,11 @@
             addTab(formattedUrl);
         }
 
-        // Add a new tab with the URL
+        // Add a new tab
         function addTab(url = 'https://susysam.github.io/start27.html') {
             tabCount++;
 
+            // Create new tab button
             const newTab = document.createElement('div');
             newTab.classList.add('tab');
             newTab.id = `tab${tabCount}`;
@@ -248,6 +255,7 @@
             newTab.setAttribute('onclick', `switchTab(${tabCount})`);
             document.querySelector('.tabs-container').appendChild(newTab);
 
+            // Create new tab content with iframe
             const newTabContent = document.createElement('div');
             newTabContent.classList.add('tab-content');
             newTabContent.id = `tabContent${tabCount}`;
@@ -268,6 +276,7 @@
             document.getElementById(`tab${tabNumber}`).remove();
             document.getElementById(`tabContent${tabNumber}`).remove();
 
+            // Restart if no tabs remain
             if (document.querySelectorAll('.tab').length === 0) {
                 restartTabs();
             }
