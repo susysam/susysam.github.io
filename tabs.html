@@ -141,11 +141,6 @@
             background-color: #4F0672;
         }
 
-        .search-bar,
-        .search-button {
-            margin-bottom: 20px;
-        }
-
         .restart-button {
             background-color: #ff6347;
             color: white;
@@ -159,6 +154,30 @@
         .restart-button:hover {
             background-color: #e03e2d;
         }
+        
+        .search-bar,
+        .search-button {
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .tabs-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .tab {
+                margin: 5px 0;
+            }
+
+            .search-bar {
+                width: 100%;
+            }
+
+            .search-button {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -171,7 +190,7 @@
 
     <!-- Tab Window -->
     <div class="tabs-container" id="tabsContainer">
-        <!-- Tab Button for Default Tab -->
+        <!-- Default Tab Button -->
         <div id="tab1" class="tab active" onclick="switchTab(1)">
             LINKS
             <button class="tab-close" onclick="closeTab(event, 1)">×</button>
@@ -179,7 +198,7 @@
         </div>
     </div>
 
-    <!-- Default Tab Content (Google Search for LINKS) -->
+    <!-- Default Tab Content -->
     <div id="tabContent1" class="tab-content active">
         <iframe src="https://susysam.github.io/start27.html" class="iframe-container"></iframe>
     </div>
@@ -193,50 +212,42 @@
 
         // Function to switch between tabs
         function switchTab(tabNumber) {
-            // Deactivate all tabs
             const tabs = document.querySelectorAll('.tab');
             tabs.forEach(tab => tab.classList.remove('active'));
 
-            // Hide all tab content
             const tabContents = document.querySelectorAll('.tab-content');
             tabContents.forEach(content => content.classList.remove('active'));
 
-            // Activate clicked tab and corresponding content
             document.getElementById(`tab${tabNumber}`).classList.add('active');
             document.getElementById(`tabContent${tabNumber}`).classList.add('active');
         }
 
-        // Function to handle website search and open
+        // Search and open website
         function searchWebsite() {
             const url = document.getElementById('searchInput').value;
             if (!url) return;
 
             let formattedUrl = url;
             if (!formattedUrl.startsWith('http://') && !formattedUrl.startsWith('https://')) {
-                formattedUrl = 'http://' + formattedUrl; // Add 'http://' if missing
+                formattedUrl = 'http://' + formattedUrl;
             }
 
-            // Create a new tab for the website
             addTab(formattedUrl);
         }
 
-        // Function to add a new tab
+        // Add a new tab with the URL
         function addTab(url = 'https://susysam.github.io/start27.html') {
             tabCount++;
 
-            // Create a new tab
             const newTab = document.createElement('div');
             newTab.classList.add('tab');
             newTab.id = `tab${tabCount}`;
-            newTab.innerHTML = `Tab ${tabCount}
+            newTab.innerHTML = `Tab ${tabCount} 
                 <button class="tab-close" onclick="closeTab(event, ${tabCount})">×</button>
                 <button class="tab-add" onclick="addTab()">+</button>`;
             newTab.setAttribute('onclick', `switchTab(${tabCount})`);
-
-            // Append the new tab
             document.querySelector('.tabs-container').appendChild(newTab);
 
-            // Create corresponding content for the new tab
             const newTabContent = document.createElement('div');
             newTabContent.classList.add('tab-content');
             newTabContent.id = `tabContent${tabCount}`;
@@ -245,38 +256,27 @@
             iframe.src = url;
             iframe.classList.add('iframe-container');
             newTabContent.appendChild(iframe);
-
             document.body.appendChild(newTabContent);
 
-            // Switch to the newly created tab
             switchTab(tabCount);
         }
 
-        // Function to close a tab
+        // Close a tab
         function closeTab(event, tabNumber) {
-            event.stopPropagation(); // Prevent tab switch
+            event.stopPropagation();
 
-            // Remove the tab
-            const tab = document.getElementById(`tab${tabNumber}`);
-            tab.remove();
+            document.getElementById(`tab${tabNumber}`).remove();
+            document.getElementById(`tabContent${tabNumber}`).remove();
 
-            // Remove the tab content
-            const tabContent = document.getElementById(`tabContent${tabNumber}`);
-            tabContent.remove();
-
-            // If no tabs are left, reset to the default state
             if (document.querySelectorAll('.tab').length === 0) {
                 restartTabs();
             }
         }
 
-        // Function to restart tabs to the default state
+        // Restart to default state
         function restartTabs() {
-            // Remove all current tabs
             document.querySelectorAll('.tab').forEach(tab => tab.remove());
             document.querySelectorAll('.tab-content').forEach(content => content.remove());
-
-            // Add default tab
             addTab();
         }
     </script>
