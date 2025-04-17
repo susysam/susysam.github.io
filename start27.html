@@ -135,76 +135,83 @@
     </div>
 
     <script>
-        const options = [
-            "We got leo making proxy's before gta 6",
-            "Its 2025",
-            "Welcome to home."
-        ];
+    const options = [
+        "We got leo making proxy's before gta 6",
+        "Welcome to home."
+    ];
 
-        function getRandomOption() {
-            const randomNumber = Math.floor(Math.random() * options.length);
-            return options[randomNumber];
-        }
+    function getRandomOption() {
+        const randomNumber = Math.floor(Math.random() * options.length);
+        return options[randomNumber];
+    }
 
-        document.getElementById("placeholder").textContent = getRandomOption();
+    document.getElementById("placeholder").textContent = getRandomOption();
 
-        function updateClock() {
-            const now = new Date();
-            const offset = -5; // EST is UTC-5
-            now.setHours(now.getHours() + offset);
-            let hours = now.getHours();
-            const minutes = now.getMinutes().toString().padStart(2, '0');
-            const seconds = now.getSeconds().toString().padStart(2, '0');
-            const ampm = hours >= 12 ? 'PM' : 'AM';
-            hours = hours % 12;
-            hours = hours ? hours : 12;
+    function updateClock() {
+        const now = new Date();
 
-            const timeString = `${hours}:${minutes}:${seconds} ${ampm}`;
-            document.getElementById('time').textContent = timeString;
-        }
+        // Get UTC time parts
+        const utcHours = now.getUTCHours();
+        const utcMinutes = now.getUTCMinutes();
+        const utcSeconds = now.getUTCSeconds();
 
-        updateClock();
-        setInterval(updateClock, 1000);
+        // Apply EST offset (UTC-5)
+        let estHours = utcHours + (-5);
+        if (estHours < 0) estHours += 24;
 
-        function openGameApps() {
-            window.location.href = "games.html";
-        }
+        const minutes = utcMinutes.toString().padStart(2, '0');
+        const seconds = utcSeconds.toString().padStart(2, '0');
+        const ampm = estHours >= 12 ? 'PM' : 'AM';
+        estHours = estHours % 12;
+        estHours = estHours ? estHours : 12;
 
-        function openlinks() {
-            window.location.href = "links.html";
-        }
+        const timeString = `${estHours}:${minutes}:${seconds} ${ampm}`;
+        document.getElementById('time').textContent = timeString;
+    }
 
-        function openTabs() {
-            window.location.href = "tabs.html";
-        }
+    updateClock();
+    setInterval(updateClock, 1000);
 
-        function openSettings() {
-            window.location.href = "setting.html";
-        }
+    function openGameApps() {
+        window.location.href = "games.html";
+    }
 
-        function openTvShowPlayer() {
-            window.location.href = "movie+tv.html";
-        }
+    function openlinks() {
+        window.location.href = "links.html";
+    }
 
-        function showBackgroundInput() {
-            document.getElementById("background-input").style.display = "block";
-        }
+    function openTabs() {
+        window.location.href = "tabs.html";
+    }
 
-        function changeBackground() {
-            const backgroundUrl = document.getElementById("background-url").value;
-            document.body.style.backgroundImage = `url('${backgroundUrl}')`;
-            localStorage.setItem("backgroundUrl", backgroundUrl);
-            document.getElementById("background-input").style.display = "none";
-        }
+    function openSettings() {
+        window.location.href = "setting.html";
+    }
 
-        function removeBackgroundButton() {
-            document.getElementById("background-input").style.display = "none";
-        }
+    function openTvShowPlayer() {
+        window.location.href = "movie+tv.html";
+    }
 
-        const storedBackgroundUrl = localStorage.getItem("backgroundUrl");
-        if (storedBackgroundUrl) {
-            document.body.style.backgroundImage = `url('${storedBackgroundUrl}')`;
-        }
-    </script>
+    function showBackgroundInput() {
+        document.getElementById("background-input").style.display = "block";
+    }
+
+    function changeBackground() {
+        const backgroundUrl = document.getElementById("background-url").value;
+        document.body.style.backgroundImage = `url('${backgroundUrl}')`;
+        localStorage.setItem("backgroundUrl", backgroundUrl);
+        document.getElementById("background-input").style.display = "none";
+    }
+
+    function removeBackgroundButton() {
+        document.getElementById("background-input").style.display = "none";
+    }
+
+    const storedBackgroundUrl = localStorage.getItem("backgroundUrl");
+    if (storedBackgroundUrl) {
+        document.body.style.backgroundImage = `url('${storedBackgroundUrl}')`;
+    }
+</script>
+
 </body>
 </html>
