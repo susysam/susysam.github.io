@@ -150,13 +150,11 @@
     function updateClock() {
         const now = new Date();
 
-        // Get UTC time parts
         const utcHours = now.getUTCHours();
         const utcMinutes = now.getUTCMinutes();
         const utcSeconds = now.getUTCSeconds();
 
-        // Apply EST offset (UTC-5)
-        let estHours = utcHours + (-5);
+        let estHours = utcHours + (-6);
         if (estHours < 0) estHours += 24;
 
         const minutes = utcMinutes.toString().padStart(2, '0');
