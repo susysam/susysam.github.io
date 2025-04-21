@@ -1,41 +1,36 @@
 const express = require('express');
 const { createProxyMiddleware } = require('http-proxy-middleware');
-const { URL } = require('url');
+const cors = require('cors'); // Include CORS middleware
 
 const app = express();
 
-// Middleware to proxy any URL via `/proxy?url=...`
+// Enable CORS for all origins
+app.use(cors());
+
 app.use('/proxy', (req, res, next) => {
   const targetUrl = req.query.url;
 
   if (!targetUrl) {
-    return res.status(400).send('Missing ?url= parameter');
+    return res.status(400).send('Error: No URL provided.');
   }
 
-  let parsedUrl;
   try {
-    parsedUrl = new URL(targetUrl);
-  } catch (err) {
-    return res.status(400).send('Invalid URL');
+    new URL(targetUrl);  // Validate URL
+  } catch (e) {
+    return res.status(400).send('Error: Invalid URL.');
   }
 
   const proxy = createProxyMiddleware({
-    target: `${parsedUrl.protocol}//${parsedUrl.host}`,
+    target: targetUrl,
     changeOrigin: true,
     pathRewrite: {
-      '^/proxy': parsedUrl.pathname + parsedUrl.search,
+      '^/proxy': '',
     },
-    onProxyReq: (proxyReq, req, res) => {
-      proxyReq.setHeader('origin', parsedUrl.origin);
-    },
-    onError: (err, req, res) => {
-      res.status(500).send('Proxy Error: ' + err.message);
-    }
   });
 
-  return proxy(req, res, next);
+  proxy(req, res, next);
 });
 
 app.listen(3000, () => {
-  console.log('Proxy server running on port 3000');
+  console.log('Server is running on port 3000');
 });
