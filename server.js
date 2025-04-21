@@ -1,41 +1,41 @@
 const express = require('express');
 const { createProxyMiddleware } = require('http-proxy-middleware');
+const { URL } = require('url');
 
 const app = express();
 
+// Middleware to proxy any URL via `/proxy?url=...`
 app.use('/proxy', (req, res, next) => {
   const targetUrl = req.query.url;
 
   if (!targetUrl) {
-    return res.status(400).send('Error: No URL provided in ?url=');
+    return res.status(400).send('Missing ?url= parameter');
   }
 
+  let parsedUrl;
   try {
-    new URL(targetUrl); // Validate
+    parsedUrl = new URL(targetUrl);
   } catch (err) {
-    return res.status(400).send('Error: Invalid URL.');
+    return res.status(400).send('Invalid URL');
   }
 
   const proxy = createProxyMiddleware({
-    target: targetUrl,
+    target: `${parsedUrl.protocol}//${parsedUrl.host}`,
     changeOrigin: true,
-    pathRewrite: (path, req) => {
-      const urlObj = new URL(req.originalUrl, `http://${req.headers.host}`);
-      return urlObj.searchParams.get('path') || '/';
+    pathRewrite: {
+      '^/proxy': parsedUrl.pathname + parsedUrl.search,
     },
-    router: (req) => {
-      const urlObj = new URL(req.originalUrl, `http://${req.headers.host}`);
-      return urlObj.searchParams.get('url');
+    onProxyReq: (proxyReq, req, res) => {
+      proxyReq.setHeader('origin', parsedUrl.origin);
     },
-    onError(err, req, res) {
-      console.error('Proxy error:', err);
-      res.status(500).send('Internal Server Error: Proxy failed.');
+    onError: (err, req, res) => {
+      res.status(500).send('Proxy Error: ' + err.message);
     }
   });
 
-  proxy(req, res, next);
+  return proxy(req, res, next);
 });
 
 app.listen(3000, () => {
-  console.log('Proxy server is running on port 3000');
+  console.log('Proxy server running on port 3000');
 });
