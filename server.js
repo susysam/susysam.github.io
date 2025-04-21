@@ -1,18 +1,17 @@
 const express = require('express');
-const httpProxy = require('http-proxy-middleware');
+const httpProxyMiddleware = require('http-proxy-middleware');
+
 const app = express();
 
-// Set up the proxy middleware
-app.use('/proxy', httpProxy({
-  target: 'https://example.com', // Target website you want to proxy
+// Use the proxy middleware for your route
+app.use('/proxy', httpProxyMiddleware({
+  target: 'https://example.com', // Change to your target URL
   changeOrigin: true,
   pathRewrite: {
-    '^/proxy': '', // Remove the '/proxy' part in the request URL
+    '^/proxy': '', // Optional: Rewrites the proxy path
   },
 }));
 
-// Start the server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+app.listen(3000, () => {
+  console.log('Server is running on port 3000');
 });
