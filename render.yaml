@@ -1,15 +1,12 @@
-services:
-  - type: web
-    name: proxy-server
-    env: node
-    plan: free
-    buildCommand: npm install
-    startCommand: node server.js
-    branches:
-      - main
-    autoscale:
-      minInstances: 1
-      maxInstances: 3
-    envVars:
-      - key: NODE_ENV
-        value: production
+{
+  "name": "proxy-server",
+  "version": "1.0.0",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "http-proxy-middleware": "^2.0.1"
+  },
+  "scripts": {
+    "start": "node server.js"
+  }
+}
