@@ -1,11 +1,11 @@
 const express = require('express');
-const httpProxyMiddleware = require('http-proxy-middleware');
+const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const app = express();
 
 // Use the proxy middleware for your route
-app.use('/proxy', httpProxyMiddleware({
-  target: 'https://example.com', // Change to your target URL
+app.use('/proxy', createProxyMiddleware({
+  target: 'https://example.com', // Change this to your target URL
   changeOrigin: true,
   pathRewrite: {
     '^/proxy': '', // Optional: Rewrites the proxy path
