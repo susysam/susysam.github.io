@@ -15,12 +15,25 @@ app.use('/proxy', (req, res, next) => {
     return res.status(400).send('Error: Invalid URL.');
   }
 
-  // Set up the proxy
-  httpProxyMiddleware({
+  // Set up the proxy with enhanced options
+  const proxy = httpProxyMiddleware({
     target: targetUrl,
-    changeOrigin: true,
-    pathRewrite: { '^/proxy': '' },
-  })(req, res, next);
+    changeOrigin: true,   // Adjust the origin of the request to the target
+    pathRewrite: { '^/proxy': '' }, // Remove /proxy from the path
+    onProxyReq: (proxyReq, req, res) => {
+      // Pass through any necessary headers for the proxy
+      proxyReq.setHeader('X-Forwarded-Host', req.get('Host'));
+      proxyReq.setHeader('X-Forwarded-Proto', req.protocol);
+    },
+    onError: (err, req, res) => {
+      // Handle errors
+      console.error('Proxy error:', err);
+      res.status(500).send('Internal Server Error');
+    }
+  });
+
+  // Apply the proxy middleware
+  proxy(req, res, next);
 });
 
 // Start the server
