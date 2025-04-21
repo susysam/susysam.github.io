@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Leo</title>
+  <title>Site</title>
   <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Google_Classroom_Logo.svg/2372px-Google_Classroom_Logo.svg.png" type="image/png"/>
   <style>
     * {
@@ -31,17 +31,22 @@
       border: 1px solid #ccc;
     }
 
-    .search-button {
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .button {
       padding: 10px 20px;
       background-color: #6C0BA9;
       color: white;
       border-radius: 5px;
       cursor: pointer;
-      margin-top: 10px;
       border: none;
     }
 
-    .search-button:hover {
+    .button:hover {
       background-color: #4F0672;
     }
 
@@ -50,42 +55,67 @@
       font-size: 14px;
       margin-top: 5px;
     }
+
+    iframe {
+      width: 100%;
+      height: 90vh;
+      border: none;
+      margin-top: 20px;
+      display: none;
+    }
   </style>
 </head>
 <body>
   <input type="text" id="searchInput" class="search-bar" placeholder="Enter a website URL (e.g., youtube.com)">
-  <button class="search-button" onclick="loadInProxy()">Open Site</button>
+  <div class="button-group">
+    <button class="button" onclick="loadInProxy()">Open via Proxy</button>
+    <button class="button" onclick="openAboutBlank()">Open in New Tab</button>
+  </div>
   <div id="statusMessage" class="loading"></div>
+  <iframe id="proxyFrame"></iframe>
 
   <script>
+    function sanitizeUrl(input) {
+      return input.startsWith('http://') || input.startsWith('https://') ? input : 'https://' + input;
+    }
+
     function loadInProxy() {
       const input = document.getElementById('searchInput').value.trim();
       const statusMsg = document.getElementById('statusMessage');
-
+      const iframe = document.getElementById('proxyFrame');
       statusMsg.textContent = '';
+      iframe.style.display = 'none';
 
       if (!input) {
         statusMsg.textContent = '❌ Please enter a URL.';
         return;
       }
 
-      let url = input.startsWith('http://') || input.startsWith('https://') ? input : 'https://' + input;
+      const url = sanitizeUrl(input);
       const encoded = encodeURIComponent(url);
       const proxyUrl = `https://proxy-server-wdju.onrender.com/proxy?url=${encoded}`;
 
-      // Open a blank page first
+      iframe.src = proxyUrl;
+      iframe.style.display = 'block';
+      statusMsg.textContent = '✅ Loaded via proxy.';
+    }
+
+    function openAboutBlank() {
+      const input = document.getElementById('searchInput').value.trim();
+      const url = sanitizeUrl(input);
+
+      if (!input) return;
+
       const newTab = window.open('about:blank', '_blank');
       newTab.document.write(`
         <html>
           <head><title>${url}</title></head>
           <body style="margin:0;">
-            <iframe src="${proxyUrl}" style="border:none;width:100%;height:100vh;"></iframe>
+            <iframe src="${url}" style="width:100%;height:100vh;border:none;"></iframe>
           </body>
         </html>
       `);
       newTab.document.close();
-
-      statusMsg.textContent = '✅ Opened via proxy in a new tab.';
     }
   </script>
 </body>
