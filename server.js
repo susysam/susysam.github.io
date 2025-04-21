@@ -7,13 +7,17 @@ app.use('/proxy', (req, res, next) => {
   const targetUrl = req.query.url;  // Get the URL from the query parameter
 
   if (!targetUrl) {
+    console.error("Error: No URL provided.");
     return res.status(400).send('Error: No URL provided.');
   }
 
   // Validate URL (optional)
   if (!/^https?:\/\//.test(targetUrl)) {
+    console.error("Error: Invalid URL format:", targetUrl);
     return res.status(400).send('Error: Invalid URL.');
   }
+
+  console.log("Proxying to:", targetUrl);
 
   // Set up the proxy with enhanced options
   const proxy = httpProxyMiddleware({
@@ -21,13 +25,12 @@ app.use('/proxy', (req, res, next) => {
     changeOrigin: true,   // Adjust the origin of the request to the target
     pathRewrite: { '^/proxy': '' }, // Remove /proxy from the path
     onProxyReq: (proxyReq, req, res) => {
-      // Pass through any necessary headers for the proxy
+      console.log('Proxying request with headers:', proxyReq.getHeaders());
       proxyReq.setHeader('X-Forwarded-Host', req.get('Host'));
       proxyReq.setHeader('X-Forwarded-Proto', req.protocol);
     },
     onError: (err, req, res) => {
-      // Handle errors
-      console.error('Proxy error:', err);
+      console.error("Proxy error:", err);
       res.status(500).send('Internal Server Error');
     }
   });
