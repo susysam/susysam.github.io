@@ -2,16 +2,20 @@ const express = require('express');
 const httpProxyMiddleware = require('http-proxy-middleware');
 const app = express();
 
-// Middleware to handle the proxy
 app.use('/proxy', (req, res) => {
   const targetUrl = req.query.url;  // Get the URL from the query parameter
 
-  // If no URL is provided
   if (!targetUrl) {
     return res.status(400).send('Error: No URL provided.');
   }
 
-  // Proxy configuration
+  // Check if the URL is valid
+  try {
+    new URL(targetUrl);  // Validate the URL
+  } catch (e) {
+    return res.status(400).send('Error: Invalid URL.');
+  }
+
   const proxy = httpProxyMiddleware({
     target: targetUrl,  // URL to be proxied
     changeOrigin: true,  // Adjust the origin of the request to the target
@@ -19,7 +23,12 @@ app.use('/proxy', (req, res) => {
   });
 
   // Apply the proxy
-  proxy(req, res);
+  proxy(req, res, (err) => {
+    if (err) {
+      console.error('Proxy error:', err);
+      return res.status(500).send('Internal Server Error');
+    }
+  });
 });
 
 // Start the server
