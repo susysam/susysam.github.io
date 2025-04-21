@@ -7,6 +7,12 @@ const app = express();
 // Enable CORS for all origins
 app.use(cors());
 
+// Root route handler
+app.get('/', (req, res) => {
+  res.send('Welcome to the Proxy Server. Please use /proxy?url=YOUR_URL to access a site.');
+});
+
+// Proxy route
 app.use('/proxy', (req, res, next) => {
   const targetUrl = req.query.url;
 
