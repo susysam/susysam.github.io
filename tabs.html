@@ -1,32 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Tabs</title>
-    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Google_Classroom_Logo.svg/2372px-Google_Classroom_Logo.svg.png" type="image/png">
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Google_Classroom_Logo.svg/2372px-Google_Classroom_Logo.svg.png" type="image/png"/>
     <style>
-        /* Reset margin and padding */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        /* Body styling */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Rubik', sans-serif;
             background-color: #f4f7fc;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
             height: 100vh;
             padding: 20px;
-            overflow: hidden;
         }
 
-        /* Navbar styling */
         .navbar {
             margin-bottom: 20px;
             text-align: center;
@@ -40,78 +35,32 @@
             border-radius: 5px;
             margin: 5px;
             display: inline-block;
-            transition: background-color 0.3s ease;
         }
 
-        .navbar a:hover {
-            background-color: #4F0672;
-        }
-
-        /* Tab container styling */
         .tabs-container {
-            width: 100%;
             display: flex;
-            justify-content: flex-start;
-            background-color: #fff;
-            padding: 10px 0;
             overflow-x: auto;
-            border-radius: 15px;
             margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
-        /* Individual tab styling */
         .tab {
-            padding: 12px 25px;
-            cursor: pointer;
+            padding: 10px 20px;
             background-color: #ddd;
-            border: 1px solid #ccc;
             border-radius: 12px;
-            margin-right: 15px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            position: relative;
+            margin-right: 10px;
+            cursor: pointer;
             font-weight: bold;
-            text-transform: capitalize;
-        }
-
-        .tab:hover {
-            background-color: #bbb;
-            transform: scale(1.05);
         }
 
         .tab.active {
             background-color: #6C0BA9;
             color: white;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         }
 
-        /* Tab close and add button positioning */
-        .tab-close,
-        .tab-add {
-            position: absolute;
-            top: 2px;
-            right: 2px;
-            background: transparent;
-            border: none;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        .tab-add {
-            top: 2px;
-            right: 40px;
-        }
-
-        /* Tab content styling */
         .tab-content {
+            display: none;
             width: 100%;
             height: 70vh;
-            background-color: white;
-            padding: 20px;
-            display: none;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
         .tab-content.active {
@@ -125,7 +74,6 @@
             border-radius: 10px;
         }
 
-        /* Search bar styling */
         .search-bar {
             margin-top: 20px;
             padding: 10px;
@@ -135,7 +83,6 @@
             border: 1px solid #ccc;
         }
 
-        /* Search button styling */
         .search-button {
             padding: 10px 20px;
             background-color: #6C0BA9;
@@ -143,150 +90,106 @@
             border-radius: 5px;
             cursor: pointer;
             margin-top: 10px;
-            transition: background-color 0.3s ease;
         }
 
         .search-button:hover {
             background-color: #4F0672;
         }
-
-        /* Restart button styling */
-        .restart-button {
-            background-color: #ff6347;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            margin-top: 20px;
-            transition: background-color 0.3s ease;
-        }
-
-        .restart-button:hover {
-            background-color: #e03e2d;
-        }
-
-        /* Responsive design for smaller screens */
-        @media (max-width: 600px) {
-            .tabs-container {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .tab {
-                margin: 5px 0;
-            }
-
-            .search-bar {
-                width: 100%;
-            }
-
-            .search-button {
-                width: 100%;
-            }
-        }
     </style>
 </head>
 <body>
-
-    <!-- Navigation Links -->
     <div class="navbar">
         <a href="https://susysam.github.io/start27.html" class="back-button">Back to Tabs</a>
         <a href="#" class="restart-button" onclick="restartTabs()">Restart</a>
     </div>
 
-    <!-- Tabs Container -->
     <div class="tabs-container" id="tabsContainer">
-        <!-- Default Tab Button -->
         <div id="tab1" class="tab active" onclick="switchTab(1)">
             LINKS
-            <button class="tab-close" onclick="closeTab(event, 1)">×</button>
-            <button class="tab-add" onclick="addTab()">+</button>
         </div>
     </div>
 
-    <!-- Default Tab Content -->
     <div id="tabContent1" class="tab-content active">
         <iframe src="https://susysam.github.io/start27.html" class="iframe-container"></iframe>
     </div>
 
-    <!-- Search Bar -->
+    <!-- Search bar and open button -->
     <input type="text" id="searchInput" class="search-bar" placeholder="Enter a website URL (e.g., youtube.com)">
-    <button class="search-button" onclick="searchWebsite()">Open Website</button>
+    <button class="search-button" onclick="openInAboutBlank()">Open Website</button>
 
     <script>
         let tabCount = 1;
 
-        // Switch between tabs
         function switchTab(tabNumber) {
-            const tabs = document.querySelectorAll('.tab');
-            tabs.forEach(tab => tab.classList.remove('active'));
-
-            const tabContents = document.querySelectorAll('.tab-content');
-            tabContents.forEach(content => content.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
 
             document.getElementById(`tab${tabNumber}`).classList.add('active');
             document.getElementById(`tabContent${tabNumber}`).classList.add('active');
         }
 
-        // Open website from search bar
-        function searchWebsite() {
-            const url = document.getElementById('searchInput').value;
-            if (!url) return;
-
-            let formattedUrl = url;
-            if (!formattedUrl.startsWith('http://') && !formattedUrl.startsWith('https://')) {
-                formattedUrl = 'http://' + formattedUrl;
-            }
-
-            addTab(formattedUrl);
-        }
-
-        // Add a new tab
-        function addTab(url = 'https://susysam.github.io/start27.html') {
-            tabCount++;
-
-            // Create new tab button
-            const newTab = document.createElement('div');
-            newTab.classList.add('tab');
-            newTab.id = `tab${tabCount}`;
-            newTab.innerHTML = `Tab ${tabCount} 
-                <button class="tab-close" onclick="closeTab(event, ${tabCount})">×</button>
-                <button class="tab-add" onclick="addTab()">+</button>`;
-            newTab.setAttribute('onclick', `switchTab(${tabCount})`);
-            document.querySelector('.tabs-container').appendChild(newTab);
-
-            // Create new tab content with iframe
-            const newTabContent = document.createElement('div');
-            newTabContent.classList.add('tab-content');
-            newTabContent.id = `tabContent${tabCount}`;
-
-            const iframe = document.createElement('iframe');
-            iframe.src = url;
-            iframe.classList.add('iframe-container');
-            newTabContent.appendChild(iframe);
-            document.body.appendChild(newTabContent);
-
-            switchTab(tabCount);
-        }
-
-        // Close a tab
-        function closeTab(event, tabNumber) {
-            event.stopPropagation();
-
-            document.getElementById(`tab${tabNumber}`).remove();
-            document.getElementById(`tabContent${tabNumber}`).remove();
-
-            // Restart if no tabs remain
-            if (document.querySelectorAll('.tab').length === 0) {
-                restartTabs();
-            }
-        }
-
-        // Restart to default state
         function restartTabs() {
             document.querySelectorAll('.tab').forEach(tab => tab.remove());
             document.querySelectorAll('.tab-content').forEach(content => content.remove());
-            addTab();
+            tabCount = 1;
+
+            // Add the default tab back
+            const defaultTab = document.createElement('div');
+            defaultTab.classList.add('tab', 'active');
+            defaultTab.id = 'tab1';
+            defaultTab.textContent = 'LINKS';
+            defaultTab.setAttribute('onclick', 'switchTab(1)');
+            document.getElementById('tabsContainer').appendChild(defaultTab);
+
+            const defaultContent = document.createElement('div');
+            defaultContent.classList.add('tab-content', 'active');
+            defaultContent.id = 'tabContent1';
+            defaultContent.innerHTML = `<iframe src="https://susysam.github.io/start27.html" class="iframe-container"></iframe>`;
+            document.body.appendChild(defaultContent);
+        }
+
+        function openInAboutBlank() {
+            let input = document.getElementById('searchInput').value.trim();
+            if (!input) return;
+
+            let url = input.startsWith('http://') || input.startsWith('https://') ? input : 'https://' + input;
+
+            let newWindow = window.open('about:blank', '_blank');
+            let doc = newWindow.document;
+
+            doc.write(`
+                <html>
+                <head>
+                    <title>Loading...</title>
+                    <style>
+                        html, body {
+                            margin: 0;
+                            padding: 0;
+                            background-color: #000;
+                            height: 100%;
+                            overflow: hidden;
+                        }
+                        embed {
+                            width: 100%;
+                            height: 100%;
+                            border: none;
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <embed src="${url}" />
+                    <script>
+                        window.onbeforeunload = function() {
+                            return "Reloading or closing will end the session. Are you sure?";
+                        };
+                    </script>
+                </body>
+                </html>
+            `);
+            doc.close();
         }
     </script>
 </body>
