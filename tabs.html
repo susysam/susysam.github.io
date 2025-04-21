@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Open</title>
+  <title>Leo</title>
   <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Google_Classroom_Logo.svg/2372px-Google_Classroom_Logo.svg.png" type="image/png"/>
   <style>
     * {
@@ -73,8 +73,18 @@
       const encoded = encodeURIComponent(url);
       const proxyUrl = `https://proxy-server-wdju.onrender.com/proxy?url=${encoded}`;
 
-      // Open in a new tab
-      window.open(proxyUrl, '_blank');
+      // Open a blank page first
+      const newTab = window.open('about:blank', '_blank');
+      newTab.document.write(`
+        <html>
+          <head><title>${url}</title></head>
+          <body style="margin:0;">
+            <iframe src="${proxyUrl}" style="border:none;width:100%;height:100vh;"></iframe>
+          </body>
+        </html>
+      `);
+      newTab.document.close();
+
       statusMsg.textContent = '✅ Opened via proxy in a new tab.';
     }
   </script>
