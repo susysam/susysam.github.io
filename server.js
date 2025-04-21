@@ -1,36 +1,41 @@
 const express = require('express');
 const { createProxyMiddleware } = require('http-proxy-middleware');
+
 const app = express();
 
-// Use the proxy middleware for your route
 app.use('/proxy', (req, res, next) => {
-  const targetUrl = req.query.url;  // Get the URL from the query parameter
+  const targetUrl = req.query.url;
 
-  // If no URL is provided, return a 400 error
   if (!targetUrl) {
-    return res.status(400).send('Error: No URL provided.');
+    return res.status(400).send('Error: No URL provided in ?url=');
   }
 
   try {
-    // Validate the URL
-    new URL(targetUrl);  // This will throw an error if the URL is invalid
-  } catch (e) {
+    new URL(targetUrl); // Validate
+  } catch (err) {
     return res.status(400).send('Error: Invalid URL.');
   }
 
-  // Create the proxy middleware dynamically with the target URL
   const proxy = createProxyMiddleware({
-    target: targetUrl, // Use the user-specified URL as the target
+    target: targetUrl,
     changeOrigin: true,
-    pathRewrite: {
-      '^/proxy': '', // Optional: Rewrites the proxy path
+    pathRewrite: (path, req) => {
+      const urlObj = new URL(req.originalUrl, `http://${req.headers.host}`);
+      return urlObj.searchParams.get('path') || '/';
     },
+    router: (req) => {
+      const urlObj = new URL(req.originalUrl, `http://${req.headers.host}`);
+      return urlObj.searchParams.get('url');
+    },
+    onError(err, req, res) {
+      console.error('Proxy error:', err);
+      res.status(500).send('Internal Server Error: Proxy failed.');
+    }
   });
 
-  // Apply the proxy
   proxy(req, res, next);
 });
 
 app.listen(3000, () => {
-  console.log('Server is running on port 3000');
+  console.log('Proxy server is running on port 3000');
 });
