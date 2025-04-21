@@ -1,22 +1,29 @@
 const express = require('express');
-const { createProxyMiddleware } = require('http-proxy-middleware');
-
+const httpProxyMiddleware = require('http-proxy-middleware');
 const app = express();
 
-// Default route for root to prevent "Cannot GET /"
-app.get('/', (req, res) => {
-  res.send('Proxy server is running. Use /proxy to access the proxied content.');
+// Middleware to handle the proxy
+app.use('/proxy', (req, res, next) => {
+  const targetUrl = req.query.url;  // Get the URL from the query parameter
+
+  if (!targetUrl) {
+    return res.status(400).send('Error: No URL provided.');
+  }
+
+  // Validate URL (optional)
+  if (!/^https?:\/\//.test(targetUrl)) {
+    return res.status(400).send('Error: Invalid URL.');
+  }
+
+  // Set up the proxy
+  httpProxyMiddleware({
+    target: targetUrl,
+    changeOrigin: true,
+    pathRewrite: { '^/proxy': '' },
+  })(req, res, next);
 });
 
-// Proxy route
-app.use('/proxy', createProxyMiddleware({
-  target: 'https://example.com', // Change this to your target URL
-  changeOrigin: true,
-  pathRewrite: {
-    '^/proxy': '', // Optional: Rewrites the proxy path
-  },
-}));
-
+// Start the server
 app.listen(3000, () => {
-  console.log('Server is running on port 3000');
+  console.log('Proxy server is running on port 3000');
 });
