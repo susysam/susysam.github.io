@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>work</title>
+  <title>Open Site via Proxy</title>
   <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Google_Classroom_Logo.svg/2372px-Google_Classroom_Logo.svg.png" type="image/png"/>
   <style>
     * {
@@ -50,34 +50,19 @@
       font-size: 14px;
       margin-top: 5px;
     }
-
-    .error-msg {
-      color: red;
-      font-size: 14px;
-      margin-top: 10px;
-    }
-
-    iframe {
-      width: 100%;
-      height: 90vh;
-      border: none;
-      margin-top: 20px;
-    }
   </style>
 </head>
 <body>
   <input type="text" id="searchInput" class="search-bar" placeholder="Enter a website URL (e.g., youtube.com)">
   <button class="search-button" onclick="loadInProxy()">Open Site</button>
   <div id="statusMessage" class="loading"></div>
-  <iframe id="proxyFrame" src="" style="display:none;"></iframe>
 
   <script>
     function loadInProxy() {
       const input = document.getElementById('searchInput').value.trim();
       const statusMsg = document.getElementById('statusMessage');
-      const iframe = document.getElementById('proxyFrame');
+
       statusMsg.textContent = '';
-      iframe.style.display = 'none';
 
       if (!input) {
         statusMsg.textContent = '❌ Please enter a URL.';
@@ -88,9 +73,9 @@
       const encoded = encodeURIComponent(url);
       const proxyUrl = `https://proxy-server-wdju.onrender.com/proxy?url=${encoded}`;
 
-      iframe.src = proxyUrl;
-      iframe.style.display = 'block';
-      statusMsg.textContent = '✅ Loaded via proxy.';
+      // Open in a new tab
+      window.open(proxyUrl, '_blank');
+      statusMsg.textContent = '✅ Opened via proxy in a new tab.';
     }
   </script>
 </body>
