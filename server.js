@@ -3,40 +3,23 @@ const httpProxyMiddleware = require('http-proxy-middleware');
 const app = express();
 
 // Middleware to handle the proxy
-app.use('/proxy', (req, res, next) => {
+app.use('/proxy', (req, res) => {
   const targetUrl = req.query.url;  // Get the URL from the query parameter
 
+  // If no URL is provided
   if (!targetUrl) {
-    console.error("Error: No URL provided.");
     return res.status(400).send('Error: No URL provided.');
   }
 
-  // Validate URL (optional)
-  if (!/^https?:\/\//.test(targetUrl)) {
-    console.error("Error: Invalid URL format:", targetUrl);
-    return res.status(400).send('Error: Invalid URL.');
-  }
-
-  console.log("Proxying to:", targetUrl);
-
-  // Set up the proxy with enhanced options
+  // Proxy configuration
   const proxy = httpProxyMiddleware({
-    target: targetUrl,
-    changeOrigin: true,   // Adjust the origin of the request to the target
-    pathRewrite: { '^/proxy': '' }, // Remove /proxy from the path
-    onProxyReq: (proxyReq, req, res) => {
-      console.log('Proxying request with headers:', proxyReq.getHeaders());
-      proxyReq.setHeader('X-Forwarded-Host', req.get('Host'));
-      proxyReq.setHeader('X-Forwarded-Proto', req.protocol);
-    },
-    onError: (err, req, res) => {
-      console.error("Proxy error:", err);
-      res.status(500).send('Internal Server Error');
-    }
+    target: targetUrl,  // URL to be proxied
+    changeOrigin: true,  // Adjust the origin of the request to the target
+    pathRewrite: { '^/proxy': '' },  // Remove /proxy from the path
   });
 
-  // Apply the proxy middleware
-  proxy(req, res, next);
+  // Apply the proxy
+  proxy(req, res);
 });
 
 // Start the server
