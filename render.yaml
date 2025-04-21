@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: proxy-server
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    branches:
+      - main
+    autoscale:
+      minInstances: 1
+      maxInstances: 3
+    envVars:
+      - key: NODE_ENV
+        value: production
