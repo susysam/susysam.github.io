@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Tabs</title>
+  <title>Open Site</title>
   <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Google_Classroom_Logo.svg/2372px-Google_Classroom_Logo.svg.png" type="image/png"/>
   <style>
     * {
@@ -20,59 +20,6 @@
       align-items: center;
       padding: 20px;
       min-height: 100vh;
-    }
-
-    .navbar {
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
-    .navbar a {
-      padding: 10px 20px;
-      background-color: #6C0BA9;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-      margin: 5px;
-      display: inline-block;
-    }
-
-    .tabs-container {
-      display: flex;
-      overflow-x: auto;
-      margin-bottom: 20px;
-    }
-
-    .tab {
-      padding: 10px 20px;
-      background-color: #ddd;
-      border-radius: 12px;
-      margin-right: 10px;
-      cursor: pointer;
-      font-weight: bold;
-      white-space: nowrap;
-    }
-
-    .tab.active {
-      background-color: #6C0BA9;
-      color: white;
-    }
-
-    .tab-content {
-      display: none;
-      width: 100%;
-      height: 70vh;
-    }
-
-    .tab-content.active {
-      display: block;
-    }
-
-    .iframe-container {
-      width: 100%;
-      height: 100%;
-      border: none;
-      border-radius: 10px;
     }
 
     .search-bar {
@@ -111,92 +58,30 @@
   </style>
 </head>
 <body>
-  <div class="navbar">
-    <a href="https://susysam.github.io/start27.html">Back to Tabs</a>
-    <a href="#" onclick="restartTabs()">Restart</a>
-  </div>
-
-  <div class="tabs-container" id="tabsContainer">
-    <div id="tab1" class="tab active" onclick="switchTab(1)">LINKS</div>
-  </div>
-
-  <div id="tabContent1" class="tab-content active">
-    <iframe src="https://susysam.github.io/start27.html" class="iframe-container"></iframe>
-  </div>
-
   <input type="text" id="searchInput" class="search-bar" placeholder="Enter a website URL (e.g., youtube.com)">
-  <button class="search-button" onclick="openNewTab()">Open Website</button>
+  <button class="search-button" onclick="openInNewTab()">Open Site</button>
   <div id="statusMessage" class="loading"></div>
 
   <script>
-    let tabCount = 1;
-
-    function switchTab(tabNumber) {
-      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-
-      document.getElementById(`tab${tabNumber}`).classList.add('active');
-      document.getElementById(`tabContent${tabNumber}`).classList.add('active');
-    }
-
-    function restartTabs() {
-      document.querySelectorAll('.tab').forEach(tab => tab.remove());
-      document.querySelectorAll('.tab-content').forEach(content => content.remove());
-      tabCount = 1;
-
-      const defaultTab = document.createElement('div');
-      defaultTab.classList.add('tab', 'active');
-      defaultTab.id = 'tab1';
-      defaultTab.textContent = 'LINKS';
-      defaultTab.setAttribute('onclick', 'switchTab(1)');
-      document.getElementById('tabsContainer').appendChild(defaultTab);
-
-      const defaultContent = document.createElement('div');
-      defaultContent.classList.add('tab-content', 'active');
-      defaultContent.id = 'tabContent1';
-      defaultContent.innerHTML = `<iframe src="https://susysam.github.io/start27.html" class="iframe-container"></iframe>`;
-      document.body.appendChild(defaultContent);
-    }
-
-    function openNewTab() {
+    function openInNewTab() {
       const input = document.getElementById('searchInput').value.trim();
       const statusMsg = document.getElementById('statusMessage');
       statusMsg.textContent = '';
-      
-      if (!input) return;
 
+      if (!input) return;
       let url = input.startsWith('http://') || input.startsWith('https://') ? input : 'https://' + input;
 
-      tabCount++;
-      const tabId = `tab${tabCount}`;
-      const contentId = `tabContent${tabCount}`;
-
-      const newTab = document.createElement('div');
-      newTab.classList.add('tab');
-      newTab.id = tabId;
-      newTab.textContent = input;
-      newTab.setAttribute('onclick', `switchTab(${tabCount})`);
-      document.getElementById('tabsContainer').appendChild(newTab);
-
-      const newContent = document.createElement('div');
-      newContent.classList.add('tab-content');
-      newContent.id = contentId;
-
-      const iframe = document.createElement('iframe');
-      iframe.className = 'iframe-container';
-      iframe.src = url;
-      iframe.onload = () => {
-        statusMsg.textContent = '';
-      };
-      iframe.onerror = () => {
-        statusMsg.textContent = '❌ This site does not allow embedding or is unavailable.';
-      };
-
-      newContent.appendChild(iframe);
-      document.body.appendChild(newContent);
-
-      switchTab(tabCount);
-      statusMsg.textContent = '⏳ Loading...';
+      const newTab = window.open('about:blank', '_blank');
+      newTab.document.write(`
+        <html>
+          <head><title>${url}</title></head>
+          <body style="margin:0;">
+            <iframe src="${url}" style="border:none;width:100%;height:100vh;"></iframe>
+          </body>
+        </html>
+      `);
+      newTab.document.close();
+      statusMsg.textContent = '✅ Opened in new tab.';
     }
   </script>
 </body>
