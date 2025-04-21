@@ -3,7 +3,12 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const app = express();
 
-// Use the proxy middleware for your route
+// Default route for root to prevent "Cannot GET /"
+app.get('/', (req, res) => {
+  res.send('Proxy server is running. Use /proxy to access the proxied content.');
+});
+
+// Proxy route
 app.use('/proxy', createProxyMiddleware({
   target: 'https://example.com', // Change this to your target URL
   changeOrigin: true,
