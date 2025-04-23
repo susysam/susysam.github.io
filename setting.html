@@ -1,27 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Settings</title>
+  <link rel="stylesheet" href="theme.css" />
+  <script src="theme.js" defer></script>
   <style>
     body {
       font-family: 'Arial', sans-serif;
       margin: 0;
       padding: 0;
-      background-color: var(--bg-color, #ffffff);
-      color: var(--text-color, #333);
-      transition: background-color 0.3s, color 0.3s;
-    }
-
-    :root {
-      --bg-color: #ffffff;
-      --text-color: #333;
-    }
-
-    :root.dark-mode {
-      --bg-color: #121212;
-      --text-color: #ffffff;
     }
 
     header {
@@ -37,9 +26,10 @@
       max-width: 700px;
       margin: 30px auto;
       padding: 20px;
-      background: var(--card-color, #f9f9f9);
+      background: var(--card-color);
       border-radius: 12px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s;
     }
 
     .setting {
@@ -111,11 +101,11 @@
       text-align: center;
       margin-top: 30px;
       font-size: 14px;
-      color: var(--text-color, #333);
+      color: var(--text-color);
     }
 
     footer a {
-      color: var(--text-color, #333);
+      color: var(--text-color);
       text-decoration: none;
       font-weight: bold;
     }
@@ -130,9 +120,9 @@
 
   <div class="container">
     <div class="setting">
-      <label>Dark Mode</label>
-      <input type="checkbox" id="darkModeToggle">
-      <div class="toggle-switch"></div>
+      <label for="darkModeToggle">Dark Mode</label>
+      <input type="checkbox" id="darkModeToggle" />
+      <div class="toggle-switch" onclick="document.getElementById('darkModeToggle').click()"></div>
     </div>
 
     <button id="homeButton">Go to Home</button>
@@ -145,45 +135,26 @@
   </footer>
 
   <script>
-    // Load Dark Mode preference
+    // Set toggle switch state on load
     document.addEventListener('DOMContentLoaded', () => {
-      if (localStorage.getItem('theme') === 'dark') {
-        document.documentElement.classList.add('dark-mode');
-        document.querySelector(':root').style.setProperty('--card-color', '#1f1f1f');
-      } else {
-        document.querySelector(':root').style.setProperty('--card-color', '#f9f9f9');
-      }
-
-      // Toggle switch state
-      document.getElementById('darkModeToggle').checked =
-        document.documentElement.classList.contains('dark-mode');
+      const theme = localStorage.getItem('theme');
+      document.getElementById('darkModeToggle').checked = theme === 'dark';
     });
 
-    // Dark Mode Toggle
-    document.getElementById('darkModeToggle').addEventListener('change', function () {
-      if (this.checked) {
-        document.documentElement.classList.add('dark-mode');
-        document.querySelector(':root').style.setProperty('--card-color', '#1f1f1f');
-        localStorage.setItem('theme', 'dark');
-      } else {
-        document.documentElement.classList.remove('dark-mode');
-        document.querySelector(':root').style.setProperty('--card-color', '#f9f9f9');
-        localStorage.setItem('theme', 'light');
-      }
-    });
+    // Sync toggle state when changed
+    document.getElementById('darkModeToggle').addEventListener('change', toggleTheme);
 
-    // Go to Home Button
-    document.getElementById('homeButton').addEventListener('click', function () {
+    // Navigation buttons
+    document.getElementById('homeButton').addEventListener('click', () => {
       window.location.href = 'https://susysam.github.io/start27.html';
     });
 
-    // Open in New Tab (about:blank format)
-    document.getElementById('tabButton').addEventListener('click', function () {
+    document.getElementById('tabButton').addEventListener('click', () => {
       const newTab = window.open('about:blank', '_blank');
       newTab.document.write(`
         <html>
           <head><title>Settings</title></head>
-          <body>
+          <body style="margin:0">
             <iframe src="https://susysam.github.io/setting.html" style="border:none;width:100%;height:100vh;"></iframe>
           </body>
         </html>
@@ -191,13 +162,12 @@
       newTab.document.close();
     });
 
-    // Open in New Window (about:blank format)
-    document.getElementById('windowButton').addEventListener('click', function () {
+    document.getElementById('windowButton').addEventListener('click', () => {
       const newWindow = window.open('about:blank', '_blank', 'width=800,height=600');
       newWindow.document.write(`
         <html>
           <head><title>Settings</title></head>
-          <body>
+          <body style="margin:0">
             <iframe src="https://susysam.github.io/setting.html" style="border:none;width:100%;height:100vh;"></iframe>
           </body>
         </html>
