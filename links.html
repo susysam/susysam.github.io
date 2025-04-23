@@ -1,139 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Links</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #121212;
-            color: #fff;
-            text-align: center;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Links</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Rubik', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(145deg, #0f0f0f, #1a1a1a);
+      color: #fff;
+      text-align: center;
+    }
 
-        header {
-            padding: 20px;
-            background: linear-gradient(90deg, #6C0BA9, #3E0F87);
-            color: white;
-            font-size: 24px;
-            font-weight: bold;
-        }
+    header {
+      padding: 25px;
+      background: linear-gradient(90deg, #6C0BA9, #3E0F87);
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+    }
 
-        .last-update {
-            font-size: 14px;
-            margin-top: 10px;
-            color: #ccc;
-        }
+    .last-update {
+      font-size: 14px;
+      margin-top: 5px;
+      color: #aaa;
+    }
 
-        .button-container {
-            margin: 20px 0;
-        }
+    .button-container, .dropdown {
+      margin: 25px 0;
+    }
 
-        .button {
-            padding: 12px 25px;
-            background-color: #1f1f1f;
-            border: 2px solid #fff;
-            border-radius: 10px;
-            color: #fff;
-            font-size: 16px;
-            margin: 0 10px;
-            cursor: pointer;
-            transition: all 0.3s ease-in-out;
-            text-decoration: none;
-        }
+    .button, .dropbtn {
+      padding: 14px 30px;
+      background-color: #1f1f1f;
+      border: 2px solid #6C0BA9;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 16px;
+      margin: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+      box-shadow: 0 4px 10px rgba(108, 11, 169, 0.3);
+    }
 
-        .button:hover, .button:focus {
-            background-color: #6C0BA9;
-            color: white;
-            transform: scale(1.1);
-        }
+    .button:hover, .dropbtn:hover {
+      background-color: #6C0BA9;
+      transform: translateY(-2px) scale(1.05);
+    }
 
-        .dropdown {
-            display: inline-block;
-            margin: 20px;
-        }
+    iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+      margin-top: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(255,255,255,0.1);
+    }
 
-        .dropbtn {
-            padding: 12px 25px;
-            background-color: #1f1f1f;
-            border: 2px solid #fff;
-            border-radius: 10px;
-            color: #fff;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease-in-out;
-            text-decoration: none;
-        }
+    @media (max-width: 600px) {
+      iframe {
+        height: 400px;
+      }
 
-        .dropbtn:hover, .dropbtn:focus {
-            background-color: #6C0BA9;
-        }
-
-        iframe {
-            width: 100%;
-            height: 600px;
-            border: none;
-            margin-top: 20px;
-        }
-
-        @media (max-width: 600px) {
-            iframe {
-                height: 400px;
-            }
-
-            .button, .dropbtn {
-                width: 100%;
-                margin: 10px 0;
-            }
-        }
-    </style>
+      .button, .dropbtn {
+        width: 90%;
+        margin: 10px auto;
+      }
+    }
+  </style>
 </head>
 <body>
-    <header>Links</header>
-    <div class="last-update">Last Update: 12-11-24</div>
+  <header>✨ SideloadHub - Links</header>
+  <div class="last-update">Last Update: 12-11-24</div>
 
-    <div class="button-container">
-        <button class="button" onclick="goBack()" aria-label="Go back to the previous page">Back</button>
-        <button class="button" onclick="goToSearch()" aria-label="Go to the search page">Blocked?</button>
-    </div>
+  <div class="button-container">
+    <button class="button" onclick="goBack()">⬅ Back</button>
+    <button class="button" onclick="goToSearch()">Blocked?</button>
+  </div>
 
-    <!-- Categories -->
-    <div class="dropdown">
-        <button class="dropbtn" onclick="showRandomIframe()" aria-label="Open Interstellar Links">Interstellar</button>
-    </div>
+  <div class="dropdown">
+    <button class="dropbtn" onclick="openInBlankProxy()">🚀 Interstellar Proxy</button>
+  </div>
 
-    <!-- Iframe for displaying the Interstellar link -->
-    <div id="iframeContainer"></div>
+  <script>
+    const interstellarLinks = [
+      "https://learnsome.pythonabc.org/"
+    ];
 
-    <script>
-        const interstellarLinks = [
-            "https://learnsome.pythonabc.org/"
-        ];
+    function getRandomLink() {
+      const index = Math.floor(Math.random() * interstellarLinks.length);
+      return interstellarLinks[index];
+    }
 
-        function openLink(url) {
-            window.open(url, '_blank', 'noopener');
-        }
+    function openInBlankProxy() {
+      const link = getRandomLink();
+      const proxyURL = `https://proxy-server-wdju.onrender.com/proxy?url=${encodeURIComponent(link)}`;
+      const tab = window.open('about:blank', '_blank');
+      tab.document.write(`
+        <html>
+          <head><title>Interstellar</title></head>
+          <body style="margin:0;">
+            <iframe src="${proxyURL}" style="width:100%; height:100vh; border:none;"></iframe>
+          </body>
+        </html>
+      `);
+      tab.document.close();
+    }
 
-        function showRandomIframe() {
-            const randomIndex = Math.floor(Math.random() * interstellarLinks.length);
-            const randomLink = interstellarLinks[randomIndex];
+    function goBack() {
+      window.location.href = "start27.html";
+    }
 
-            var iframe = document.createElement("iframe");
-            iframe.src = randomLink;
-            document.getElementById("iframeContainer").innerHTML = "";
-            document.getElementById("iframeContainer").appendChild(iframe);
-        }
-
-        function goBack() {
-            window.location.href = "start27.html";
-        }
-
-        function goToSearch() {
-            window.location.href = "search.html";
-        }
-    </script>
+    function goToSearch() {
+      window.location.href = "search.html";
+    }
+  </script>
 </body>
 </html>
