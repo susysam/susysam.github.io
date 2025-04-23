@@ -1,196 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Settings</title>
-  <link rel="stylesheet" href="theme.css" />
-  <script src="theme.js" defer></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: var(--bg-color);
-      color: var(--text-color);
-    }
-
-    header {
-      background-color: #4CAF50;
-      padding: 16px 24px;
-      font-size: 22px;
-      font-weight: bold;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .container {
-      max-width: 900px;
-      margin: 30px auto;
-      padding: 20px;
-    }
-
-    .settings-grid {
-      display: grid;
-      gap: 16px;
-    }
-
-    .setting-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: var(--card-color);
-      padding: 16px 20px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      transition: background-color 0.3s;
-    }
-
-    .setting-label {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 17px;
-      font-weight: 500;
-    }
-
-    .toggle {
-      width: 50px;
-      height: 26px;
-      background: #ccc;
-      border-radius: 50px;
-      position: relative;
-      transition: background-color 0.3s;
-      cursor: pointer;
-    }
-
-    .toggle::before {
-      content: "";
-      position: absolute;
-      width: 22px;
-      height: 22px;
-      background: white;
-      top: 2px;
-      left: 2px;
-      border-radius: 50%;
-      transition: transform 0.3s;
-    }
-
-    input[type="checkbox"] {
-      display: none;
-    }
-
-    input[type="checkbox"]:checked + .toggle {
-      background: #4CAF50;
-    }
-
-    input[type="checkbox"]:checked + .toggle::before {
-      transform: translateX(24px);
-    }
-
-    .actions {
-      display: grid;
-      gap: 10px;
-      margin-top: 30px;
-    }
-
-    .actions button {
-      padding: 12px;
-      border: none;
-      background-color: #4CAF50;
-      color: white;
-      font-size: 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    .actions button:hover {
-      background-color: #388E3C;
-    }
-
-    footer {
-      text-align: center;
-      margin-top: 40px;
-      font-size: 14px;
-      color: var(--text-color);
-    }
-
-    footer a {
-      color: var(--text-color);
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    footer a:hover {
-      color: #4CAF50;
-    }
-  </style>
+  <link rel="stylesheet" href="settings.css">
 </head>
 <body>
   <header>
-    Settings
-    <i class="fa-solid fa-gear"></i>
+    <h1>Settings</h1>
   </header>
 
   <div class="container">
-    <div class="settings-grid">
-      <div class="setting-item">
-        <div class="setting-label">
-          <i class="fa-solid fa-moon"></i> Dark Mode
-        </div>
-        <label>
-          <input type="checkbox" id="darkModeToggle" />
-          <div class="toggle"></div>
-        </label>
-      </div>
+    <div class="setting">
+      <label for="darkModeToggle">Dark Mode</label>
+      <input type="checkbox" id="darkModeToggle">
+      <div class="toggle-switch"></div>
     </div>
 
-    <div class="actions">
-      <button id="homeButton"><i class="fa-solid fa-house"></i> Go to Home</button>
-      <button id="tabButton"><i class="fa-solid fa-up-right-from-square"></i> Open in New Tab</button>
-      <button id="windowButton"><i class="fa-solid fa-window-maximize"></i> Open in New Window</button>
-    </div>
+    <button id="homeButton">Go to Home</button>
+    <button id="tabButton">Open in New Tab</button>
+    <button id="windowButton">Open in New Window</button>
   </div>
 
   <footer>
     <p>&copy; 2024 <a href="https://susysam.github.io/start27.html" target="_blank">SUSYSAM</a></p>
   </footer>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const theme = localStorage.getItem('theme');
-      document.getElementById('darkModeToggle').checked = theme === 'dark';
-    });
-
-    document.getElementById('darkModeToggle').addEventListener('change', toggleTheme);
-
-    document.getElementById('homeButton').addEventListener('click', () => {
-      window.location.href = 'https://susysam.github.io/start27.html';
-    });
-
-    document.getElementById('tabButton').addEventListener('click', () => {
-      const newTab = window.open('about:blank', '_blank');
-      newTab.document.write(`
-        <html><head><title>Settings</title></head><body style="margin:0">
-        <iframe src="https://susysam.github.io/setting.html" style="width:100%;height:100vh;border:none;"></iframe>
-        </body></html>
-      `);
-      newTab.document.close();
-    });
-
-    document.getElementById('windowButton').addEventListener('click', () => {
-      const newWindow = window.open('about:blank', '_blank', 'width=800,height=600');
-      newWindow.document.write(`
-        <html><head><title>Settings</title></head><body style="margin:0">
-        <iframe src="https://susysam.github.io/setting.html" style="width:100%;height:100vh;border:none;"></iframe>
-        </body></html>
-      `);
-      newWindow.document.close();
-    });
-  </script>
+  <script src="site-settings.js"></script>
 </body>
 </html>
