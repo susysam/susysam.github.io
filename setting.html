@@ -2,104 +2,119 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Settings</title>
   <link rel="stylesheet" href="theme.css" />
   <script src="theme.js" defer></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     body {
-      font-family: 'Arial', sans-serif;
+      font-family: 'Segoe UI', sans-serif;
       margin: 0;
       padding: 0;
+      background-color: var(--bg-color);
+      color: var(--text-color);
     }
 
     header {
       background-color: #4CAF50;
+      padding: 16px 24px;
+      font-size: 22px;
+      font-weight: bold;
       color: white;
-      padding: 20px;
-      text-align: center;
-      font-size: 24px;
-      border-bottom: 2px solid #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
     .container {
-      max-width: 700px;
+      max-width: 900px;
       margin: 30px auto;
       padding: 20px;
+    }
+
+    .settings-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .setting-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       background: var(--card-color);
+      padding: 16px 20px;
       border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
       transition: background-color 0.3s;
     }
 
-    .setting {
+    .setting-label {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      margin: 20px 0;
+      gap: 12px;
+      font-size: 17px;
+      font-weight: 500;
     }
 
-    label {
-      font-size: 18px;
-      font-weight: 500;
+    .toggle {
+      width: 50px;
+      height: 26px;
+      background: #ccc;
+      border-radius: 50px;
+      position: relative;
+      transition: background-color 0.3s;
+      cursor: pointer;
+    }
+
+    .toggle::before {
+      content: "";
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      background: white;
+      top: 2px;
+      left: 2px;
+      border-radius: 50%;
+      transition: transform 0.3s;
     }
 
     input[type="checkbox"] {
       display: none;
     }
 
-    .toggle-switch {
-      position: relative;
-      display: inline-block;
-      width: 50px;
-      height: 26px;
-      background: #ccc;
-      border-radius: 13px;
+    input[type="checkbox"]:checked + .toggle {
+      background: #4CAF50;
+    }
+
+    input[type="checkbox"]:checked + .toggle::before {
+      transform: translateX(24px);
+    }
+
+    .actions {
+      display: grid;
+      gap: 10px;
+      margin-top: 30px;
+    }
+
+    .actions button {
+      padding: 12px;
+      border: none;
+      background-color: #4CAF50;
+      color: white;
+      font-size: 16px;
+      border-radius: 8px;
       cursor: pointer;
       transition: background-color 0.3s;
     }
 
-    .toggle-switch::after {
-      content: '';
-      position: absolute;
-      top: 3px;
-      left: 3px;
-      width: 20px;
-      height: 20px;
-      background: white;
-      border-radius: 50%;
-      transition: transform 0.3s;
-    }
-
-    input[type="checkbox"]:checked + .toggle-switch {
-      background: #4CAF50;
-    }
-
-    input[type="checkbox"]:checked + .toggle-switch::after {
-      transform: translateX(24px);
-    }
-
-    button {
-      display: block;
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      background-color: #4CAF50;
-      color: white;
-      font-size: 18px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    button:hover {
+    .actions button:hover {
       background-color: #388E3C;
     }
 
     footer {
       text-align: center;
-      margin-top: 30px;
+      margin-top: 40px;
       font-size: 14px;
       color: var(--text-color);
     }
@@ -116,18 +131,29 @@
   </style>
 </head>
 <body>
-  <header>Settings</header>
+  <header>
+    Settings
+    <i class="fa-solid fa-gear"></i>
+  </header>
 
   <div class="container">
-    <div class="setting">
-      <label for="darkModeToggle">Dark Mode</label>
-      <input type="checkbox" id="darkModeToggle" />
-      <div class="toggle-switch" onclick="document.getElementById('darkModeToggle').click()"></div>
+    <div class="settings-grid">
+      <div class="setting-item">
+        <div class="setting-label">
+          <i class="fa-solid fa-moon"></i> Dark Mode
+        </div>
+        <label>
+          <input type="checkbox" id="darkModeToggle" />
+          <div class="toggle"></div>
+        </label>
+      </div>
     </div>
 
-    <button id="homeButton">Go to Home</button>
-    <button id="tabButton">Open in New Tab</button>
-    <button id="windowButton">Open in New Window</button>
+    <div class="actions">
+      <button id="homeButton"><i class="fa-solid fa-house"></i> Go to Home</button>
+      <button id="tabButton"><i class="fa-solid fa-up-right-from-square"></i> Open in New Tab</button>
+      <button id="windowButton"><i class="fa-solid fa-window-maximize"></i> Open in New Window</button>
+    </div>
   </div>
 
   <footer>
@@ -135,16 +161,13 @@
   </footer>
 
   <script>
-    // Set toggle switch state on load
     document.addEventListener('DOMContentLoaded', () => {
       const theme = localStorage.getItem('theme');
       document.getElementById('darkModeToggle').checked = theme === 'dark';
     });
 
-    // Sync toggle state when changed
     document.getElementById('darkModeToggle').addEventListener('change', toggleTheme);
 
-    // Navigation buttons
     document.getElementById('homeButton').addEventListener('click', () => {
       window.location.href = 'https://susysam.github.io/start27.html';
     });
@@ -152,12 +175,9 @@
     document.getElementById('tabButton').addEventListener('click', () => {
       const newTab = window.open('about:blank', '_blank');
       newTab.document.write(`
-        <html>
-          <head><title>Settings</title></head>
-          <body style="margin:0">
-            <iframe src="https://susysam.github.io/setting.html" style="border:none;width:100%;height:100vh;"></iframe>
-          </body>
-        </html>
+        <html><head><title>Settings</title></head><body style="margin:0">
+        <iframe src="https://susysam.github.io/setting.html" style="width:100%;height:100vh;border:none;"></iframe>
+        </body></html>
       `);
       newTab.document.close();
     });
@@ -165,12 +185,9 @@
     document.getElementById('windowButton').addEventListener('click', () => {
       const newWindow = window.open('about:blank', '_blank', 'width=800,height=600');
       newWindow.document.write(`
-        <html>
-          <head><title>Settings</title></head>
-          <body style="margin:0">
-            <iframe src="https://susysam.github.io/setting.html" style="border:none;width:100%;height:100vh;"></iframe>
-          </body>
-        </html>
+        <html><head><title>Settings</title></head><body style="margin:0">
+        <iframe src="https://susysam.github.io/setting.html" style="width:100%;height:100vh;border:none;"></iframe>
+        </body></html>
       `);
       newWindow.document.close();
     });
