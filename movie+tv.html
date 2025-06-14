@@ -107,7 +107,7 @@
         <button class="button" onclick="selectServer('vidsrc')">Server 1 (IMDb)</button>
         <button class="button" onclick="selectServer('pstream')">Server 2 (TMDB)</button>
       </div>
-      <input type="text" id="media-id" placeholder="Enter IMDb or TMDB ID">
+      <input type="text" id="media-id" placeholder="Enter IMDb or TMDB ID" />
       <button class="button" onclick="playMedia()">Play</button>
     </div>
   </div>
@@ -117,23 +117,6 @@
   <script>
     let selectedMediaType = '';
     let selectedServer = '';
-
-    // Default parameter string for pstream embeds
-    const PSTREAM_PARAMS = [
-      't=00:00',
-      'theme=default',
-      'language=en',
-      'logo=true',
-      'downloads=true',
-      'has-watchparty=true',
-      'language-order=en,hi,fr,de,nl,pt',
-      'allinone=true',
-      'scale=0.9',
-      'backlink=https://susysam.github.io/movie+tv.html',
-      'fedapi=true',
-      'interface-setting=true',
-      'tips=true'
-    ].join('&');
 
     function selectMedia(mediaType) {
       selectedMediaType = mediaType;
@@ -145,11 +128,9 @@
     function selectServer(server) {
       selectedServer = server;
       const input = document.getElementById('media-id');
-      if (server === 'vidsrc') {
-        input.placeholder = "Enter IMDb ID (e.g., tt1234567)";
-      } else {
-        input.placeholder = "Enter TMDB ID (e.g., 123456)";
-      }
+      input.placeholder = server === 'vidsrc'
+        ? "Enter IMDb ID (e.g., tt1234567)"
+        : "Enter TMDB ID (e.g., 123456)";
     }
 
     function playMedia() {
@@ -157,16 +138,18 @@
       if (!mediaId || !selectedServer || !selectedMediaType) return;
 
       let url = '';
+
       if (selectedServer === 'vidsrc') {
         url = `https://vidsrc.me/embed/${selectedMediaType}?imdb=${mediaId}`;
       } else {
+        const params = `?logo=false&backlink=https://susysam.github.io/movie+tv.html`;
         if (selectedMediaType === 'movie') {
-          url = `https://iframe.pstream.org/media/tmdb-movie-${mediaId}?${PSTREAM_PARAMS}`;
+          url = `https://iframe.pstream.org/embed/tmdb-movie-${mediaId}${params}`;
         } else {
-          const seasonNumber = prompt("Enter Season Number:");
-          const episodeNumber = prompt("Enter Episode Number:");
-          if (!seasonNumber || !episodeNumber) return;
-          url = `https://iframe.pstream.org/media/tmdb-tv-${mediaId}/${seasonNumber}/${episodeNumber}?${PSTREAM_PARAMS}`;
+          const season = prompt("Enter Season Number:");
+          const episode = prompt("Enter Episode Number:");
+          if (!season || !episode) return;
+          url = `https://iframe.pstream.org/embed/tmdb-tv-${mediaId}/${season}/${episode}${params}`;
         }
       }
 
@@ -183,21 +166,24 @@
     function continueWatching() {
       const data = localStorage.getItem('lastWatched');
       if (!data) return;
-      const { mediaId, selectedServer: srv, selectedMediaType: mType } = JSON.parse(data);
+      const { mediaId, selectedServer, selectedMediaType } = JSON.parse(data);
 
       let url = '';
-      if (srv === 'vidsrc') {
-        url = `https://vidsrc.me/embed/${mType}?imdb=${mediaId}`;
+
+      if (selectedServer === 'vidsrc') {
+        url = `https://vidsrc.me/embed/${selectedMediaType}?imdb=${mediaId}`;
       } else {
-        if (mType === 'movie') {
-          url = `https://iframe.pstream.org/media/tmdb-movie-${mediaId}?${PSTREAM_PARAMS}`;
+        const params = `?logo=false&backlink=https://susysam.github.io/movie+tv.html`;
+        if (selectedMediaType === 'movie') {
+          url = `https://iframe.pstream.org/embed/tmdb-movie-${mediaId}${params}`;
         } else {
-          const seasonNumber = prompt("Enter Season Number:");
-          const episodeNumber = prompt("Enter Episode Number:");
-          if (!seasonNumber || !episodeNumber) return;
-          url = `https://iframe.pstream.org/media/tmdb-tv-${mediaId}/${seasonNumber}/${episodeNumber}?${PSTREAM_PARAMS}`;
+          const season = prompt("Enter Season Number:");
+          const episode = prompt("Enter Episode Number:");
+          if (!season || !episode) return;
+          url = `https://iframe.pstream.org/embed/tmdb-tv-${mediaId}/${season}/${episode}${params}`;
         }
       }
+
       const win = window.open("about:blank", "_blank");
       win.document.write(`
         <html><head><title>Now Playing</title>
