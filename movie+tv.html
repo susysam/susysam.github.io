@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Entertainment Player</title>
   <style>
     body {
@@ -118,6 +118,29 @@
     let selectedMediaType = '';
     let selectedServer = '';
 
+    // Default parameter string for pstream embeds (example you provided)
+    // You can change these values as needed.
+    const PSTREAM_PARAMS = [
+      // Timestamp parameter, if you want to start at 00:45 you can set t=00:45; else omit or set t=00:00
+      't=00:45',
+      'theme=default',
+      'language=en',
+      'logo=true',
+      'downloads=true',
+      'has-watchparty=true',
+      // language-order: comma-separated
+      'language-order=en,hi,fr,de,nl,pt',
+      'allinone=true',
+      'scale=0.9',
+      // backlink: your site
+      'backlink=https://pstream.org',
+      'fedapi=true',
+      // The parameter in docs is "interface-setting"; sometimes examples use "interface-settings", but
+      // P-Stream expects "interface-setting". If the player expects "interface-settings", adjust here.
+      'interface-setting=true',
+      'tips=true'
+    ].join('&');
+
     function selectMedia(mediaType) {
       selectedMediaType = mediaType;
       document.querySelector('.input-container').style.display = 'flex';
@@ -141,18 +164,27 @@
 
       let url = '';
       if (selectedServer === 'vidsrc') {
+        // IMDb server: unchanged
         url = `https://vidsrc.me/embed/${selectedMediaType}?imdb=${mediaId}`;
       } else {
+        // P-Stream server: use “media” endpoint with full parameters
         if (selectedMediaType === 'movie') {
-          url = `https://iframe.pstream.org/embed/tmdb-movie-${mediaId}`;
+          // Movie
+          // Use /media/ path with TMDB movie ID
+          url = `https://iframe.pstream.org/media/tmdb-movie-${mediaId}?${PSTREAM_PARAMS}`;
         } else {
-          const season = prompt("Enter Season Number:");
-          const episode = prompt("Enter Episode Number:");
-          if (!season || !episode) return;
-          url = `https://iframe.pstream.org/embed/tmdb-tv-${mediaId}/${season}/${episode}`;
+          // TV show: need season and episode IDs for /media/
+          const seasonNumber = prompt("Enter Season Number:");
+          const episodeNumber = prompt("Enter Episode Number:");
+          if (!seasonNumber || !episodeNumber) return;
+          // Note: for /media/ format, you may need TMDB season ID and TMDB episode ID,
+          // but if the endpoint supports numbers, you can try:
+          // `media/tmdb-tv-{tmdb_id}/{season_number}/{episode_number}`
+          url = `https://iframe.pstream.org/media/tmdb-tv-${mediaId}/${seasonNumber}/${episodeNumber}?${PSTREAM_PARAMS}`;
         }
       }
 
+      // Open in a new window/tab
       const win = window.open("about:blank", "_blank");
       win.document.write(`
         <html><head><title>Now Playing</title>
@@ -160,24 +192,27 @@
         </head><body><iframe src="${url}" allowfullscreen></iframe></body></html>
       `);
 
+      // Save for Continue Watching
       localStorage.setItem('lastWatched', JSON.stringify({ mediaId, selectedServer, selectedMediaType }));
     }
 
     function continueWatching() {
       const data = localStorage.getItem('lastWatched');
       if (!data) return;
-      const { mediaId, selectedServer, selectedMediaType } = JSON.parse(data);
+      const { mediaId, selectedServer: srv, selectedMediaType: mType } = JSON.parse(data);
+
       let url = '';
-      if (selectedServer === 'vidsrc') {
-        url = `https://vidsrc.me/embed/${selectedMediaType}?imdb=${mediaId}`;
+      if (srv === 'vidsrc') {
+        url = `https://vidsrc.me/embed/${mType}?imdb=${mediaId}`;
       } else {
-        if (selectedMediaType === 'movie') {
-          url = `https://iframe.pstream.org/embed/tmdb-movie-${mediaId}`;
+        if (mType === 'movie') {
+          url = `https://iframe.pstream.org/media/tmdb-movie-${mediaId}?${PSTREAM_PARAMS}`;
         } else {
-          const season = prompt("Enter Season Number:");
-          const episode = prompt("Enter Episode Number:");
-          if (!season || !episode) return;
-          url = `https://iframe.pstream.org/embed/tmdb-tv-${mediaId}/${season}/${episode}`;
+          // For TV, we prompt again (or you could store last season/episode in localStorage too)
+          const seasonNumber = prompt("Enter Season Number:");
+          const episodeNumber = prompt("Enter Episode Number:");
+          if (!seasonNumber || !episodeNumber) return;
+          url = `https://iframe.pstream.org/media/tmdb-tv-${mediaId}/${seasonNumber}/${episodeNumber}?${PSTREAM_PARAMS}`;
         }
       }
       const win = window.open("about:blank", "_blank");
@@ -202,6 +237,11 @@
     function goToHome() {
       window.location.href = "https://susysam.github.io/start27.html";
     }
+
+    // Example: If you also want to allow the user to customize some parameters in the UI,
+    // you can expose inputs (checkboxes, selects) to toggle parts of PSTREAM_PARAMS,
+    // rebuild that string dynamically, and then use it in playMedia().
+    // For now, we use the fixed PSTREAM_PARAMS constant.
   </script>
 </body>
 </html>
