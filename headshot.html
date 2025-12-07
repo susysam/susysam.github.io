@@ -69,51 +69,30 @@ button:hover {
 <body>
 
 <h1>Roblox Headshot Finder</h1>
-<p>Enter a Roblox username or UserId:</p>
+<p>Enter a Roblox UserId:</p>
 
-<input type="text" id="userInput" placeholder="Username or UserId">
+<input type="text" id="userInput" placeholder="UserId only">
 <button id="fetchBtn">Get Headshot</button>
 
 <div id="loader"></div>
 <div id="result"></div>
 
 <script>
-async function fetchHeadshot() {
+function fetchHeadshot() {
     const input = document.getElementById('userInput').value.trim();
-    if (!input) return alert("Please enter a username or UserId");
+    if (!input || isNaN(input)) return alert("Please enter a valid numeric UserId");
 
     const loader = document.getElementById('loader');
     const resultDiv = document.getElementById('result');
     resultDiv.innerHTML = '';
     loader.style.display = 'block';
 
-    let userId;
+    // Construct the direct headshot URL
+    const userId = input;
+    const imageUrl = `https://www.roblox.com/headshot-thumbnail/image?userId=${userId}&width=420&height=420&format=png`;
 
-    // Check if input is numeric
-    if (!isNaN(input)) {
-        userId = input;
-    } else {
-        // Get UserId from username
-        try {
-            const res = await fetch(`https://api.roblox.com/users/get-by-username?username=${encodeURIComponent(input)}`);
-            const data = await res.json();
-            if (data.success === false || !data.Id) {
-                loader.style.display = 'none';
-                return alert("Username not found!");
-            }
-            userId = data.Id;
-        } catch (err) {
-            loader.style.display = 'none';
-            return alert("Error fetching UserId");
-        }
-    }
-
-    // Fetch headshot
-    try {
-        const res = await fetch(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=420x420&format=Png&isCircular=false`);
-        const data = await res.json();
-        const imageUrl = data.data[0].imageUrl;
-
+    // Show result after short delay to show loader
+    setTimeout(() => {
         loader.style.display = 'none';
         resultDiv.innerHTML = `
             <p>Direct Headshot URL:</p>
@@ -131,10 +110,7 @@ async function fetchHeadshot() {
             alert('URL copied to clipboard!');
         });
 
-    } catch (err) {
-        loader.style.display = 'none';
-        alert("Error fetching headshot");
-    }
+    }, 500); // 0.5s for loader animation
 }
 
 document.getElementById('fetchBtn').addEventListener('click', fetchHeadshot);
