@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Headshot</title>
+<title>Roblox Headshot Finder</title>
 <style>
 body {
     font-family: 'Segoe UI', sans-serif;
@@ -12,58 +12,13 @@ body {
     text-align: center;
     padding: 50px;
 }
-
-input {
-    padding: 10px;
-    width: 250px;
-    border-radius: 5px;
-    border: none;
-    margin-right: 10px;
-    font-size: 16px;
-}
-
-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 5px;
-    border: none;
-    background-color: #ff9800;
-    color: white;
-    cursor: pointer;
-    transition: transform 0.2s;
-}
-
-button:hover {
-    transform: scale(1.1);
-}
-
-#loader {
-    display: none;
-    margin: 20px auto;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: conic-gradient(red, orange, yellow, green, blue, indigo, violet, red);
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-#result {
-    margin-top: 20px;
-    font-size: 16px;
-    word-break: break-all;
-}
-
-#headshot {
-    margin-top: 15px;
-    max-width: 300px;
-    border: 3px solid white;
-    border-radius: 10px;
-}
+input { padding:10px; width:250px; border-radius:5px; border:none; margin-right:10px; font-size:16px; }
+button { padding:10px 20px; font-size:16px; border-radius:5px; border:none; background-color:#ff9800; color:white; cursor:pointer; transition: transform 0.2s; }
+button:hover { transform: scale(1.1); }
+#loader { display:none; margin:20px auto; width:50px; height:50px; border-radius:50%; background:conic-gradient(red,orange,yellow,green,blue,indigo,violet,red); animation:spin 1s linear infinite; }
+@keyframes spin { 0%{transform:rotate(0deg);}100%{transform:rotate(360deg);} }
+#result { margin-top:20px; font-size:16px; word-break:break-all; }
+#headshot { margin-top:15px; max-width:300px; border:3px solid white; border-radius:10px; }
 </style>
 </head>
 <body>
@@ -78,7 +33,7 @@ button:hover {
 <div id="result"></div>
 
 <script>
-async function fetchHeadshot() {
+function fetchHeadshot() {
     const input = document.getElementById('userInput').value.trim();
     if (!input || isNaN(input)) return alert("Please enter a valid numeric UserId");
 
@@ -88,19 +43,9 @@ async function fetchHeadshot() {
     loader.style.display = 'block';
 
     const userId = input;
+    const cdnUrl = `https://www.roblox.com/headshot-thumbnail/image?userId=${userId}&width=420&height=420&format=png`;
 
-    try {
-        // Fetch thumbnail JSON from Roblox API
-        const response = await fetch(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=420x420&format=Png&isCircular=false`);
-        const data = await response.json();
-
-        if (!data.data || data.data.length === 0 || !data.data[0].imageUrl) {
-            loader.style.display = 'none';
-            return alert("Unable to fetch headshot. Make sure the UserId is correct.");
-        }
-
-        const cdnUrl = data.data[0].imageUrl; // This is the tr.rbxcdn.com direct link
-
+    setTimeout(() => {
         loader.style.display = 'none';
         resultDiv.innerHTML = `
             <p>Direct CDN Headshot URL:</p>
@@ -108,8 +53,6 @@ async function fetchHeadshot() {
             <button id="copyBtn">Copy URL</button>
             <br><img id="headshot" src="${cdnUrl}" alt="Headshot">
         `;
-
-        // Copy-to-clipboard button
         document.getElementById('copyBtn').addEventListener('click', () => {
             const urlInput = document.getElementById('headshotUrl');
             urlInput.select();
@@ -117,12 +60,7 @@ async function fetchHeadshot() {
             document.execCommand('copy');
             alert('Direct CDN link copied to clipboard!');
         });
-
-    } catch (err) {
-        loader.style.display = 'none';
-        console.error(err);
-        alert("Error fetching headshot from Roblox API");
-    }
+    }, 500);
 }
 
 document.getElementById('fetchBtn').addEventListener('click', fetchHeadshot);
