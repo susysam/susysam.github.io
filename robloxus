@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roblox Headshot Finder</title>
+<style>
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    color: white;
+    text-align: center;
+    padding: 50px;
+  }
+
+  input {
+    padding: 10px;
+    width: 250px;
+    border-radius: 5px;
+    border: none;
+    margin-right: 10px;
+    font-size: 16px;
+  }
+
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    background-color: #ff9800;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+
+  button:hover {
+    transform: scale(1.1);
+  }
+
+  #loader {
+    display: none;
+    margin-top: 20px;
+    border: 5px solid rgba(255,255,255,0.2);
+    border-top: 5px solid #fff;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  #result {
+    margin-top: 20px;
+    font-size: 16px;
+    word-break: break-all;
+  }
+</style>
+</head>
+<body>
+
+<h1>Roblox Headshot Finder</h1>
+<p>Enter a Roblox username or UserId:</p>
+
+<input type="text" id="userInput" placeholder="Username or UserId">
+<button id="fetchBtn">Get Headshot</button>
+
+<div id="loader"></div>
+<div id="result"></div>
+
+<script>
+async function fetchHeadshot() {
+  const input = document.getElementById('userInput').value.trim();
+  if (!input) return alert("Please enter a username or UserId");
+
+  const loader = document.getElementById('loader');
+  const resultDiv = document.getElementById('result');
+  resultDiv.textContent = '';
+  loader.style.display = 'block';
+
+  let userId;
+
+  // Check if input is numeric (UserId)
+  if (!isNaN(input)) {
+    userId = input;
+  } else {
+    // Get UserId from username
+    try {
+      const res = await fetch(`https://api.roblox.com/users/get-by-username?username=${input}`);
+      const data = await res.json();
+      if (data.success === false) {
+        loader.style.display = 'none';
+        return alert("Username not found!");
+      }
+      userId = data.Id;
+    } catch (err) {
+      loader.style.display = 'none';
+      return alert("Error fetching UserId");
+    }
+  }
+
+  // Fetch headshot JSON
+  try {
+    const res = await fetch(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=420x420&format=Png&isCircular=false`);
+    const data = await res.json();
+    const imageUrl = data.data[0].imageUrl;
+
+    loader.style.display = 'none';
+    resultDiv.innerHTML = `<p>Direct Headshot URL:</p><a href="${imageUrl}" target="_blank">${imageUrl}</a><br><br><img src="${imageUrl}" alt="Headshot">`;
+  } catch (err) {
+    loader.style.display = 'none';
+    alert("Error fetching headshot");
+  }
+}
+
+document.getElementById('fetchBtn').addEventListener('click', fetchHeadshot);
+</script>
+
+</body>
+</html>
