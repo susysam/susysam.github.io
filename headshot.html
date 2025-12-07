@@ -9,9 +9,6 @@ body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(to right
 input { padding:10px; width:250px; border-radius:5px; border:none; margin-right:10px; font-size:16px;}
 button { padding:10px 20px; font-size:16px; border-radius:5px; border:none; background-color:#ff9800; color:white; cursor:pointer; transition: transform 0.2s;}
 button:hover { transform: scale(1.1);}
-#loader { display:none; margin:20px auto; width:50px; height:50px; border-radius:50%; background:conic-gradient(red,orange,yellow,green,blue,indigo,violet,red); animation:spin 1s linear infinite;}
-@keyframes spin {0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
-#result { margin-top:20px; font-size:16px; word-break:break-all;}
 #headshot { margin-top:15px; max-width:300px; border:3px solid white; border-radius:10px;}
 </style>
 </head>
@@ -20,54 +17,32 @@ button:hover { transform: scale(1.1);}
 <h1>Roblox Headshot Finder</h1>
 <p>Enter a Roblox UserId:</p>
 <input type="text" id="userInput" placeholder="UserId only">
-<button id="fetchBtn">Get Headshot</button>
-<div id="loader"></div>
+<button onclick="getHeadshot()">Get Headshot</button>
+
 <div id="result"></div>
+<img id="headshot" src="" alt="Headshot" style="display:none;">
 
 <script>
-const BACKEND_URL = "https://susysam-github-io.onrender.com"; // Replace with your deployed backend URL
-
-async function fetchHeadshot() {
-    const input = document.getElementById('userInput').value.trim();
-    if (!input || isNaN(input)) return alert("Please enter a valid numeric UserId");
-
-    const loader = document.getElementById('loader');
-    const resultDiv = document.getElementById('result');
-    resultDiv.innerHTML = '';
-    loader.style.display = 'block';
-
-    try {
-        const res = await fetch(`${BACKEND_URL}/headshot/${input}`);
-        const data = await res.json();
-
-        loader.style.display = 'none';
-
-        if (!data.imageUrl) {
-            return alert("Headshot not found");
-        }
-
-        resultDiv.innerHTML = `
-            <p>Direct CDN Headshot URL:</p>
-            <input type="text" id="headshotUrl" value="${data.imageUrl}" readonly style="width:90%;padding:5px;border-radius:5px;border:none;text-align:center;">
-            <button id="copyBtn">Copy URL</button>
-            <br><img id="headshot" src="${data.imageUrl}" alt="Headshot">
-        `;
-
-        document.getElementById('copyBtn').addEventListener('click', () => {
-            const urlInput = document.getElementById('headshotUrl');
-            urlInput.select();
-            document.execCommand('copy');
-            alert('CDN URL copied to clipboard!');
-        });
-
-    } catch (err) {
-        loader.style.display = 'none';
-        console.error(err);
-        alert("Error fetching headshot. Make sure the UserId is valid and your backend is running.");
+function getHeadshot() {
+    const userId = document.getElementById('userInput').value.trim();
+    if(!userId || isNaN(userId)) {
+        alert("Please enter a valid numeric UserId");
+        return;
     }
-}
 
-document.getElementById('fetchBtn').addEventListener('click', fetchHeadshot);
+    // Roblox headshot URL
+    const url = `https://www.roblox.com/headshot-thumbnail/image?userId=${userId}&width=420&height=420&format=png`;
+
+    const img = document.getElementById('headshot');
+    img.src = url;
+    img.style.display = 'block';
+
+    const resultDiv = document.getElementById('result');
+    resultDiv.innerHTML = `
+        <p>Direct Headshot URL:</p>
+        <input type="text" value="${url}" readonly style="width:90%;padding:5px;border-radius:5px;border:none;text-align:center;">
+    `;
+}
 </script>
 
 </body>
