@@ -5,11 +5,41 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Roblox Headshot Finder</title>
 <style>
-body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(to right,#6a11cb,#2575fc); color:white; text-align:center; padding:50px;}
-input { padding:10px; width:250px; border-radius:5px; border:none; margin-right:10px; font-size:16px;}
-button { padding:10px 20px; font-size:16px; border-radius:5px; border:none; background-color:#ff9800; color:white; cursor:pointer; transition: transform 0.2s;}
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(to right,#6a11cb,#2575fc);
+    color:white;
+    text-align:center;
+    padding:50px;
+}
+input {
+    padding:10px;
+    width:250px;
+    border-radius:5px;
+    border:none;
+    margin-right:10px;
+    font-size:16px;
+}
+button {
+    padding:10px 20px;
+    font-size:16px;
+    border-radius:5px;
+    border:none;
+    background-color:#ff9800;
+    color:white;
+    cursor:pointer;
+    transition: transform 0.2s;
+}
 button:hover { transform: scale(1.1);}
-#headshot { margin-top:15px; max-width:300px; border:3px solid white; border-radius:10px;}
+#headshot {
+    margin-top:15px;
+    max-width:300px;
+    border:3px solid white;
+    border-radius:10px;
+}
+#result {
+    margin-top:15px;
+}
 </style>
 </head>
 <body>
@@ -30,35 +60,33 @@ async function getHeadshot() {
         return;
     }
 
+    // Default Roblox Thumbnails API URL
+    const apiURL = `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=420x420&format=Png&isCircular=false`;
+
     try {
-        // Fetch user avatar info
-        const apiURL = `https://users.roblox.com/v1/users/${userId}/avatar`;
         const response = await fetch(apiURL);
         const data = await response.json();
 
-        if(!data || !data.assetId) {
-            alert("Could not get avatar hash for this UserId.");
-            return;
+        if(data.data && data.data[0] && data.data[0].imageUrl) {
+            const url = data.data[0].imageUrl;
+
+            // Display headshot image
+            const img = document.getElementById('headshot');
+            img.src = url;
+            img.style.display = 'block';
+
+            // Display direct URL
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `
+                <p>Direct Headshot URL:</p>
+                <input type="text" value="${url}" readonly style="width:90%;padding:5px;border-radius:5px;border:none;text-align:center;">
+            `;
+        } else {
+            alert("Headshot not found for this UserId.");
         }
-
-        // Use the current avatar hash to build the headshot URL
-        const hash = data.assetId; // unique hash of the avatar
-        const headshotUrl = `https://tr.rbxcdn.com/30DAY-AvatarHeadshot-${hash}-Png/420/420/AvatarHeadshot/Png/noFilter`;
-
-        // Display headshot
-        const img = document.getElementById('headshot');
-        img.src = headshotUrl;
-        img.style.display = 'block';
-
-        const resultDiv = document.getElementById('result');
-        resultDiv.innerHTML = `
-            <p>Direct Headshot URL:</p>
-            <input type="text" value="${headshotUrl}" readonly style="width:90%;padding:5px;border-radius:5px;border:none;text-align:center;">
-        `;
-
     } catch (err) {
         console.error(err);
-        alert("Error fetching headshot.");
+        alert("Error fetching headshot. Make sure the UserId is valid.");
     }
 }
 </script>
