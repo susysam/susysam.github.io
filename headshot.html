@@ -30,7 +30,9 @@ async function getHeadshot() {
         return;
     }
 
-    const apiURL = `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=420x420&format=Png&isCircular=false`;
+    // CORS proxy + Roblox Thumbnails API
+    const proxy = "https://corsproxy.io/?";
+    const apiURL = `${proxy}https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=420x420&format=Png&isCircular=false`;
 
     try {
         const response = await fetch(apiURL);
