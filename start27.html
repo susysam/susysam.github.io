@@ -65,7 +65,6 @@
       position: relative;
     }
 
-    /* Dim overlay in dark mode */
     body::before{
       content:"";
       position: fixed;
@@ -101,7 +100,6 @@
       cursor: pointer;
       user-select: none;
     }
-
     .navbar a:hover { background-color: var(--accent2); }
 
     #placeholder {
@@ -194,7 +192,6 @@
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
-
     .button:hover { background-color: var(--accent2); }
 
     #background-input { display: none; margin-top: 20px; }
@@ -226,13 +223,11 @@
 
   <p id="placeholder"></p>
 
-  <div class="time-window" role="group" aria-label="Time window (EST)">
+  <div class="time-window" role="group" aria-label="Time window (Eastern Time)">
     <div class="time-titlebar">
       <div class="left">
         <div class="window-dots" aria-hidden="true">
-          <div class="dot"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div>
         </div>
         <div class="time-title">Current Time</div>
       </div>
@@ -261,143 +256,124 @@
       "We got leo making proxy's before gta 6",
       "Welcome to home."
     ];
-
     function getRandomOption() {
-      const randomNumber = Math.floor(Math.random() * options.length);
-      return options[randomNumber];
+      return options[Math.floor(Math.random() * options.length)];
     }
     document.getElementById("placeholder").textContent = getRandomOption();
 
-    <script>
-  const options = [
-    "We got leo making proxy's before gta 6",
-    "Welcome to home."
-  ];
+    // ---------------- Time (Intl first, API fallback) ----------------
+    const TIME_ZONE = "America/New_York";
+    const timeEl = document.getElementById("time");
 
-  function getRandomOption() {
-    const randomNumber = Math.floor(Math.random() * options.length);
-    return options[randomNumber];
-  }
-  document.getElementById("placeholder").textContent = getRandomOption();
-
-  // ---------- Accurate EST/ET clock using online UTC source ----------
-  let baseUtcMs = null;     // UTC time (ms) returned by API
-  let basePerfMs = null;    // performance.now() at the moment we got baseUtcMs
-  let tickTimer = null;
-
-  function isDSTInNewYork(dateUtc) {
-    // Determine DST by comparing NY offset in Jan vs current date.
-    // Works without relying on Intl timeZone support.
-    const year = dateUtc.getUTCFullYear();
-
-    // Helper: get the offset minutes for America/New_York using US DST rules:
-    // DST starts 2nd Sunday in March, ends 1st Sunday in November.
-    function nthSundayOfMonthUTC(year, monthIndex, nth, hourUTC) {
-      // monthIndex: 0=Jan ... 11=Dec
-      const first = new Date(Date.UTC(year, monthIndex, 1, hourUTC, 0, 0));
-      const firstDay = first.getUTCDay(); // 0=Sun
-      const daysUntilSunday = (7 - firstDay) % 7;
-      const day = 1 + daysUntilSunday + (nth - 1) * 7;
-      return new Date(Date.UTC(year, monthIndex, day, hourUTC, 0, 0));
+    function formatViaIntl(dateObj) {
+      return new Intl.DateTimeFormat("en-US", {
+        timeZone: TIME_ZONE,
+        hour: "numeric",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true
+      }).format(dateObj);
     }
 
-    // US DST change times in local time:
-    // Start: 2nd Sunday in March at 2:00 AM local (EST -> EDT)
-    // End:   1st Sunday in Nov at 2:00 AM local (EDT -> EST)
-    //
-    // Convert these to UTC:
-    // Before start, offset is -5, so 2:00 AM EST = 07:00 UTC
-    // Before end, offset is -4, so 2:00 AM EDT = 06:00 UTC
-    const dstStartUtc = nthSundayOfMonthUTC(year, 2, 2, 7);  // March, 2nd Sunday, 07:00 UTC
-    const dstEndUtc   = nthSundayOfMonthUTC(year,10, 1, 6);  // Nov,   1st Sunday, 06:00 UTC
+    // DST rules (US) fallback conversion from UTC -> ET (EDT/EST)
+    function isDSTInNewYork(dateUtc) {
+      const year = dateUtc.getUTCFullYear();
 
-    return dateUtc >= dstStartUtc && dateUtc < dstEndUtc;
-  }
+      function nthSundayOfMonthUTC(year, monthIndex, nth, hourUTC) {
+        const first = new Date(Date.UTC(year, monthIndex, 1, hourUTC, 0, 0));
+        const firstDay = first.getUTCDay();
+        const daysUntilSunday = (7 - firstDay) % 7;
+        const day = 1 + daysUntilSunday + (nth - 1) * 7;
+        return new Date(Date.UTC(year, monthIndex, day, hourUTC, 0, 0));
+      }
 
-  function formatEasternFromUtcMs(utcMs) {
-    const dUtc = new Date(utcMs);
-    const dst = isDSTInNewYork(dUtc);
-    const offsetHours = dst ? -4 : -5; // EDT:-4, EST:-5
-    const easternMs = utcMs + offsetHours * 60 * 60 * 1000;
-    const d = new Date(easternMs);
+      const dstStartUtc = nthSundayOfMonthUTC(year, 2, 2, 7);  // March 2nd Sunday 07:00 UTC
+      const dstEndUtc   = nthSundayOfMonthUTC(year,10, 1, 6);  // Nov   1st Sunday 06:00 UTC
+      return dateUtc >= dstStartUtc && dateUtc < dstEndUtc;
+    }
 
-    let h = d.getUTCHours();
-    const m = String(d.getUTCMinutes()).padStart(2, "0");
-    const s = String(d.getUTCSeconds()).padStart(2, "0");
-    const ampm = h >= 12 ? "PM" : "AM";
-    h = h % 12;
-    h = h ? h : 12;
+    function formatEasternFromUtcMs(utcMs) {
+      const dUtc = new Date(utcMs);
+      const dst = isDSTInNewYork(dUtc);
+      const offsetHours = dst ? -4 : -5;
+      const easternMs = utcMs + offsetHours * 60 * 60 * 1000;
+      const d = new Date(easternMs);
 
-    return `${h}:${m}:${s} ${ampm}`;
-  }
+      let h = d.getUTCHours();
+      const m = String(d.getUTCMinutes()).padStart(2, "0");
+      const s = String(d.getUTCSeconds()).padStart(2, "0");
+      const ampm = h >= 12 ? "PM" : "AM";
+      h = h % 12;
+      h = h ? h : 12;
 
-  function tick() {
-    if (baseUtcMs == null || basePerfMs == null) return;
-    const elapsed = performance.now() - basePerfMs;
-    const nowUtcMs = baseUtcMs + elapsed;
+      return `${h}:${m}:${s} ${ampm}`;
+    }
 
-    document.getElementById("time").textContent = formatEasternFromUtcMs(nowUtcMs);
-  }
+    // Detect if Intl timezone formatting seems broken (basic sanity test)
+    function intlLooksBroken() {
+      try {
+        const now = new Date();
+        const ny = formatViaIntl(now);
+        // If it can't format at all, it's broken
+        return !ny || typeof ny !== "string";
+      } catch {
+        return true;
+      }
+    }
 
-  async function syncTimeOnce() {
-    try {
+    let baseUtcMs = null;
+    let basePerfMs = null;
+    let tickTimer = null;
+    let usingApiFallback = false;
+
+    function tick() {
+      if (usingApiFallback) {
+        const elapsed = performance.now() - basePerfMs;
+        const nowUtcMs = baseUtcMs + elapsed;
+        timeEl.textContent = formatEasternFromUtcMs(nowUtcMs);
+      } else {
+        timeEl.textContent = formatViaIntl(new Date());
+      }
+    }
+
+    async function syncUtcFromApi() {
       const res = await fetch("https://worldtimeapi.org/api/timezone/Etc/UTC", { cache: "no-store" });
-      if (!res.ok) throw new Error("Time sync failed");
+      if (!res.ok) throw new Error("UTC sync failed");
       const data = await res.json();
-
-      // worldtimeapi gives "unixtime" in seconds (UTC)
       baseUtcMs = data.unixtime * 1000;
       basePerfMs = performance.now();
-
-      // Start ticking locally
-      if (tickTimer) clearInterval(tickTimer);
-      tick();
-      tickTimer = setInterval(tick, 250); // smooth-ish, updates 4x/sec (your display still shows seconds)
-    } catch (e) {
-      // Fallback to local clock if API blocked
-      // (still uses your browser's idea of time)
-      baseUtcMs = Date.now();
-      basePerfMs = performance.now();
-
-      if (tickTimer) clearInterval(tickTimer);
-      tick();
-      tickTimer = setInterval(tick, 250);
-      console.warn("Time API blocked, using local time fallback.", e);
     }
-  }
 
-  // Sync now, then re-sync every 10 minutes to prevent drift
-  syncTimeOnce();
-  setInterval(syncTimeOnce, 10 * 60 * 1000);
+    async function startClock() {
+      usingApiFallback = intlLooksBroken();
 
-  // ---------- Navigation + background ----------
-  function openGameApps() { window.location.href = "games.html"; }
-  function openlinks() { window.location.href = "links.html"; }
-  function openTabs() { window.location.href = "tabs.html"; }
-  function openSettings() { window.location.href = "settings.html"; }
-  function openTvShowPlayer() { window.location.href = "movie+tv.html"; }
+      if (usingApiFallback) {
+        // Use online UTC as source of truth
+        try {
+          await syncUtcFromApi();
+        } catch (e) {
+          // If API blocked, fallback to local Date.now but still apply ET math
+          baseUtcMs = Date.now();
+          basePerfMs = performance.now();
+          console.warn("Time API blocked; using local fallback.", e);
+        }
+      }
 
-  function showBackgroundInput() {
-    document.getElementById("background-input").style.display = "block";
-  }
+      if (tickTimer) clearInterval(tickTimer);
+      tick();
+      tickTimer = setInterval(tick, 1000);
 
-  function changeBackground() {
-    const backgroundUrl = document.getElementById("background-url").value.trim();
-    document.body.style.backgroundImage = backgroundUrl ? `url('${backgroundUrl}')` : "none";
-    localStorage.setItem("backgroundUrl", backgroundUrl);
-    document.getElementById("background-input").style.display = "none";
-  }
+      // re-sync every 10 min if using API fallback
+      if (usingApiFallback) {
+        setInterval(async () => {
+          try { await syncUtcFromApi(); } catch {}
+        }, 10 * 60 * 1000);
+      }
+    }
 
-  function removeBackgroundButton() {
-    document.getElementById("background-input").style.display = "none";
-  }
+    startClock();
 
-  const storedBackgroundUrl = localStorage.getItem("backgroundUrl");
-  if (storedBackgroundUrl) {
-    document.body.style.backgroundImage = `url('${storedBackgroundUrl}')`;
-  }
-</script>
-
+    // ---------------- Navigation + background ----------------
     function openGameApps() { window.location.href = "games.html"; }
     function openlinks() { window.location.href = "links.html"; }
     function openTabs() { window.location.href = "tabs.html"; }
