@@ -1,208 +1,565 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Settings</title>
+
   <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: var(--bg-color, #ffffff);
-      color: var(--text-color, #333);
-      transition: background-color 0.3s, color 0.3s;
+    :root{
+      --bg: #f6f7fb;
+      --text: #14161a;
+      --muted: rgba(20,22,26,.65);
+      --card: rgba(255,255,255,.75);
+      --border: rgba(0,0,0,.10);
+      --shadow: 0 18px 45px rgba(0,0,0,.12);
+      --accent: #6C0BA9; /* purple to match your home */
+      --accent2: #4F0672;
+      --good: #14b86a;
+      --warn: #ffb020;
+      --danger: #ff4d4d;
+      --radius: 16px;
+    }
+    :root.dark{
+      --bg: #0f1116;
+      --text: #f2f4f8;
+      --muted: rgba(242,244,248,.68);
+      --card: rgba(25,28,36,.72);
+      --border: rgba(255,255,255,.10);
+      --shadow: 0 18px 55px rgba(0,0,0,.55);
     }
 
-    :root {
-      --bg-color: #ffffff;
-      --text-color: #333;
+    *{ box-sizing: border-box; }
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family: Arial, sans-serif;
+      background:
+        radial-gradient(900px 500px at 10% 10%, rgba(108,11,169,.18), transparent 60%),
+        radial-gradient(900px 500px at 90% 20%, rgba(79,6,114,.16), transparent 60%),
+        linear-gradient(180deg, var(--bg), var(--bg));
+      color: var(--text);
+      transition: background-color .25s ease, color .25s ease;
+      display:flex;
+      flex-direction:column;
     }
 
-    :root.dark-mode {
-      --bg-color: #121212;
-      --text-color: #ffffff;
+    header{
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      padding: 18px 16px;
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      background: rgba(255,255,255,.45);
+    }
+    :root.dark header{ background: rgba(15,17,22,.55); }
+
+    .header-inner{
+      max-width: 980px;
+      margin: 0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
     }
 
-    header {
-      background-color: #4CAF50;
-      color: white;
-      padding: 20px;
-      text-align: center;
-      font-size: 24px;
-      border-bottom: 2px solid #ddd;
+    .title{
+      display:flex;
+      flex-direction:column;
+      gap: 2px;
+      min-width: 0;
     }
-
-    .container {
-      max-width: 700px;
-      margin: 30px auto;
-      padding: 20px;
-      background: var(--card-color, #f9f9f9);
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .setting {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 20px 0;
-    }
-
-    label {
+    .title h1{
+      margin:0;
       font-size: 18px;
-      font-weight: 500;
+      letter-spacing:.2px;
+    }
+    .title p{
+      margin:0;
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+      max-width: 70vw;
     }
 
-    input[type="checkbox"] {
-      display: none;
+    .pill{
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      box-shadow: 0 10px 28px rgba(0,0,0,.08);
+      font-size: 12px;
+      color: var(--muted);
+      display:flex;
+      align-items:center;
+      gap: 8px;
     }
 
-    .toggle-switch {
-      position: relative;
-      display: inline-block;
-      width: 50px;
-      height: 26px;
-      background: #ccc;
-      border-radius: 13px;
-      cursor: pointer;
-      transition: background-color 0.3s;
+    main{
+      flex:1;
+      width:100%;
+      padding: 18px 14px 26px;
     }
 
-    .toggle-switch::after {
-      content: '';
-      position: absolute;
-      top: 3px;
-      left: 3px;
-      width: 20px;
-      height: 20px;
-      background: white;
-      border-radius: 50%;
-      transition: transform 0.3s;
+    .grid{
+      max-width: 980px;
+      margin: 0 auto;
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 14px;
+    }
+    @media (max-width: 860px){
+      .grid{ grid-template-columns: 1fr; }
     }
 
-    input[type="checkbox"]:checked + .toggle-switch {
-      background: #4CAF50;
+    .card{
+      border: 1px solid var(--border);
+      background: var(--card);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      overflow:hidden;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
 
-    input[type="checkbox"]:checked + .toggle-switch::after {
-      transform: translateX(24px);
+    .card-head{
+      padding: 14px 14px 10px;
+      border-bottom: 1px solid var(--border);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
     }
-
-    button {
-      display: block;
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      background-color: #4CAF50;
-      color: white;
-      font-size: 18px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #388E3C;
-    }
-
-    footer {
-      text-align: center;
-      margin-top: 30px;
+    .card-head h2{
+      margin:0;
       font-size: 14px;
-      color: var(--text-color, #333);
+      letter-spacing:.2px;
+    }
+    .card-head .sub{
+      font-size: 12px;
+      color: var(--muted);
     }
 
-    footer a {
-      color: var(--text-color, #333);
-      text-decoration: none;
-      font-weight: bold;
+    .card-body{ padding: 12px 14px 14px; }
+
+    .row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px dashed rgba(0,0,0,.10);
+    }
+    :root.dark .row{ border-bottom: 1px dashed rgba(255,255,255,.12); }
+    .row:last-child{ border-bottom:none; padding-bottom: 0; }
+
+    .row .left{
+      min-width:0;
+    }
+    .row .left .label{
+      font-size: 14px;
+      font-weight: 700;
+      margin: 0;
+    }
+    .row .left .hint{
+      margin: 4px 0 0;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.25;
     }
 
-    footer a:hover {
-      color: #4CAF50;
+    /* Toggle */
+    .toggle{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      user-select:none;
     }
+    .toggle input{ display:none; }
+    .switch{
+      width: 52px;
+      height: 28px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.14);
+      border: 1px solid var(--border);
+      position: relative;
+      transition: background .2s ease;
+      cursor:pointer;
+      flex: 0 0 auto;
+    }
+    :root.dark .switch{ background: rgba(255,255,255,.10); }
+    .switch::after{
+      content:"";
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      position:absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 3px;
+      background: white;
+      box-shadow: 0 6px 14px rgba(0,0,0,.18);
+      transition: left .2s ease, background .2s ease;
+    }
+    .toggle input:checked + .switch{
+      background: rgba(108,11,169,.35);
+    }
+    .toggle input:checked + .switch::after{
+      left: 26px;
+      background: #fff;
+    }
+
+    /* Inputs */
+    .text-input{
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.75);
+      color: var(--text);
+      outline: none;
+    }
+    :root.dark .text-input{
+      background: rgba(0,0,0,.25);
+    }
+
+    .btns{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    button{
+      border: 1px solid transparent;
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 14px;
+      cursor:pointer;
+      transition: transform .05s ease, background-color .2s ease, border-color .2s ease, opacity .2s ease;
+      color: white;
+      background: var(--accent);
+    }
+    button:hover{ background: var(--accent2); }
+    button:active{ transform: translateY(1px); }
+
+    .btn-ghost{
+      background: transparent;
+      border-color: var(--border);
+      color: var(--text);
+    }
+    .btn-ghost:hover{
+      background: rgba(0,0,0,.06);
+      border-color: rgba(0,0,0,.18);
+    }
+    :root.dark .btn-ghost:hover{
+      background: rgba(255,255,255,.06);
+      border-color: rgba(255,255,255,.18);
+    }
+
+    .btn-danger{
+      background: var(--danger);
+    }
+    .btn-danger:hover{ opacity: .9; }
+
+    .mini{
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 10px;
+      line-height: 1.35;
+    }
+
+    .toast{
+      position: fixed;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,.78);
+      color: #fff;
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      opacity: 0;
+      pointer-events:none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .toast.show{
+      opacity: 1;
+      transform: translateX(-50%) translateY(-6px);
+    }
+
+    footer{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 14px 14px 20px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    footer a{
+      color: inherit;
+      font-weight: 700;
+      text-decoration:none;
+    }
+    footer a:hover{ color: var(--accent); }
   </style>
 </head>
+
 <body>
-  <header>Settings</header>
-
-  <div class="container">
-    <div class="setting">
-      <label>Dark Mode</label>
-      <input type="checkbox" id="darkModeToggle">
-      <div class="toggle-switch"></div>
+  <header>
+    <div class="header-inner">
+      <div class="title">
+        <h1>Settings</h1>
+        <p id="subtitle">Customize look + quick actions</p>
+      </div>
+      <div class="pill" title="Synced via localStorage">
+        <span>Saved</span>
+        <span id="saveState">●</span>
+      </div>
     </div>
+  </header>
 
-    <button id="homeButton">Go to Home</button>
-    <button id="tabButton">Open in New Tab</button>
-    <button id="windowButton">Open in New Window</button>
-  </div>
+  <main>
+    <div class="grid">
+      <!-- Appearance -->
+      <section class="card">
+        <div class="card-head">
+          <div>
+            <h2>Appearance</h2>
+            <div class="sub">Theme + background controls</div>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="row">
+            <div class="left">
+              <p class="label">Dark mode</p>
+              <p class="hint">Applies instantly and saves for next time.</p>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="darkModeToggle">
+              <span class="switch" aria-hidden="true"></span>
+            </label>
+          </div>
+
+          <div class="row">
+            <div class="left">
+              <p class="label">Background image URL (Home)</p>
+              <p class="hint">This edits the same <code>backgroundUrl</code> your Home page uses.</p>
+            </div>
+          </div>
+
+          <input class="text-input" id="bgUrlInput" type="text" placeholder="https://example.com/image.jpg" />
+
+          <div class="btns">
+            <button id="saveBgBtn">Save background</button>
+            <button class="btn-ghost" id="previewBgBtn" type="button">Preview on this page</button>
+            <button class="btn-danger" id="clearBgBtn" type="button">Remove background</button>
+          </div>
+
+          <div class="mini" id="bgStatus">Current: <span id="bgCurrent">none</span></div>
+        </div>
+      </section>
+
+      <!-- Quick actions -->
+      <section class="card">
+        <div class="card-head">
+          <div>
+            <h2>Quick actions</h2>
+            <div class="sub">Open pages in different ways</div>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="btns">
+            <button id="homeButton">Go to Home</button>
+            <button class="btn-ghost" id="tabButton" type="button">Open Settings in New Tab</button>
+            <button class="btn-ghost" id="windowButton" type="button">Open Settings in New Window</button>
+          </div>
+
+          <div class="row" style="margin-top:10px;">
+            <div class="left">
+              <p class="label">Reset all saved settings</p>
+              <p class="hint">Clears theme + background and refreshes this page.</p>
+            </div>
+            <button class="btn-danger" id="resetAllBtn" type="button">Reset</button>
+          </div>
+
+          <div class="mini">
+            Tip: If your time on Home looks wrong, switch your timezone display there to
+            <code>America/New_York</code> (it auto-handles DST).
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
 
   <footer>
-    <p>&copy; 2024 <a href="https://susysam.github.io/start27.html" target="_blank">SUSYSAM</a></p>
+    <div>
+      &copy; 2024 <a href="https://susysam.github.io/start27.html" target="_blank" rel="noreferrer">SUSYSAM</a>
+    </div>
   </footer>
 
+  <div class="toast" id="toast">Saved</div>
+
   <script>
-    // Load Dark Mode preference
-    document.addEventListener('DOMContentLoaded', () => {
-      if (localStorage.getItem('theme') === 'dark') {
-        document.documentElement.classList.add('dark-mode');
-        document.querySelector(':root').style.setProperty('--card-color', '#1f1f1f');
+    const HOME_URL = "https://susysam.github.io/start27.html";
+    // Your actual settings page URL (used for iframe open):
+    const SETTINGS_URL = "https://susysam.github.io/setting.html";
+
+    const toastEl = document.getElementById("toast");
+    const saveStateEl = document.getElementById("saveState");
+
+    function toast(msg) {
+      toastEl.textContent = msg;
+      toastEl.classList.add("show");
+      clearTimeout(window.__toastT);
+      window.__toastT = setTimeout(() => toastEl.classList.remove("show"), 1200);
+    }
+
+    function setSavedDot(active) {
+      saveStateEl.style.color = active ? "#14b86a" : "rgba(255,255,255,.85)";
+      if (!active) saveStateEl.style.color = "rgba(20,22,26,.35)";
+      document.querySelector(".pill").style.borderColor = active ? "rgba(20,184,106,.55)" : "var(--border)";
+    }
+
+    // ---------- Theme ----------
+    const darkToggle = document.getElementById("darkModeToggle");
+
+    function applyTheme(theme) {
+      if (theme === "dark") {
+        document.documentElement.classList.add("dark");
       } else {
-        document.querySelector(':root').style.setProperty('--card-color', '#f9f9f9');
+        document.documentElement.classList.remove("dark");
       }
+      localStorage.setItem("theme", theme);
+    }
 
-      // Toggle switch state
-      document.getElementById('darkModeToggle').checked =
-        document.documentElement.classList.contains('dark-mode');
-    });
+    // ---------- Background (shared with Home page) ----------
+    const bgUrlInput = document.getElementById("bgUrlInput");
+    const bgCurrent = document.getElementById("bgCurrent");
 
-    // Dark Mode Toggle
-    document.getElementById('darkModeToggle').addEventListener('change', function () {
-      if (this.checked) {
-        document.documentElement.classList.add('dark-mode');
-        document.querySelector(':root').style.setProperty('--card-color', '#1f1f1f');
-        localStorage.setItem('theme', 'dark');
+    function refreshBgUI() {
+      const stored = localStorage.getItem("backgroundUrl") || "";
+      bgUrlInput.value = stored;
+      bgCurrent.textContent = stored ? stored : "none";
+    }
+
+    function previewBackground(url) {
+      if (url) {
+        document.body.style.backgroundImage = `url('${url}')`;
+        document.body.style.backgroundSize = "cover";
+        document.body.style.backgroundPosition = "center";
       } else {
-        document.documentElement.classList.remove('dark-mode');
-        document.querySelector(':root').style.setProperty('--card-color', '#f9f9f9');
-        localStorage.setItem('theme', 'light');
+        document.body.style.backgroundImage = "";
       }
+    }
+
+    // ---------- Load saved preferences ----------
+    document.addEventListener("DOMContentLoaded", () => {
+      const theme = localStorage.getItem("theme") || "light";
+      applyTheme(theme);
+      darkToggle.checked = (theme === "dark");
+
+      refreshBgUI();
+
+      // If user already has a background saved, lightly preview it here too
+      const savedBg = localStorage.getItem("backgroundUrl") || "";
+      if (savedBg) previewBackground(savedBg);
+
+      setSavedDot(true);
+      document.getElementById("subtitle").textContent =
+        `Customize look + quick actions • ${new Date().toLocaleDateString()}`;
     });
 
-    // Go to Home Button
-    document.getElementById('homeButton').addEventListener('click', function () {
-      window.location.href = 'https://susysam.github.io/start27.html';
+    // Dark mode toggle
+    darkToggle.addEventListener("change", () => {
+      applyTheme(darkToggle.checked ? "dark" : "light");
+      toast("Theme saved");
+      setSavedDot(true);
     });
 
-    // Open in New Tab (about:blank format)
-    document.getElementById('tabButton').addEventListener('click', function () {
-      const newTab = window.open('about:blank', '_blank');
+    // Save background
+    document.getElementById("saveBgBtn").addEventListener("click", () => {
+      const url = bgUrlInput.value.trim();
+      localStorage.setItem("backgroundUrl", url);
+      refreshBgUI();
+      toast(url ? "Background saved" : "Background cleared");
+      setSavedDot(true);
+    });
+
+    // Preview background only
+    document.getElementById("previewBgBtn").addEventListener("click", () => {
+      previewBackground(bgUrlInput.value.trim());
+      toast("Previewing");
+    });
+
+    // Clear background
+    document.getElementById("clearBgBtn").addEventListener("click", () => {
+      localStorage.removeItem("backgroundUrl");
+      bgUrlInput.value = "";
+      refreshBgUI();
+      previewBackground("");
+      toast("Background removed");
+      setSavedDot(true);
+    });
+
+    // Go to Home
+    document.getElementById("homeButton").addEventListener("click", () => {
+      window.location.href = HOME_URL;
+    });
+
+    // Open in New Tab (about:blank + iframe)
+    document.getElementById("tabButton").addEventListener("click", () => {
+      const newTab = window.open("about:blank", "_blank");
+      if (!newTab) return toast("Popup blocked");
       newTab.document.write(`
         <html>
-          <head><title>Settings</title></head>
+          <head>
+            <title>Settings</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <style>html,body{margin:0;height:100%;} iframe{border:none;width:100%;height:100%;}</style>
+          </head>
           <body>
-            <iframe src="https://susysam.github.io/setting.html" style="border:none;width:100%;height:100vh;"></iframe>
+            <iframe src="${SETTINGS_URL}"></iframe>
           </body>
         </html>
       `);
       newTab.document.close();
     });
 
-    // Open in New Window (about:blank format)
-    document.getElementById('windowButton').addEventListener('click', function () {
-      const newWindow = window.open('about:blank', '_blank', 'width=800,height=600');
+    // Open in New Window (about:blank + iframe)
+    document.getElementById("windowButton").addEventListener("click", () => {
+      const newWindow = window.open("about:blank", "_blank", "width=900,height=650");
+      if (!newWindow) return toast("Popup blocked");
       newWindow.document.write(`
         <html>
-          <head><title>Settings</title></head>
+          <head>
+            <title>Settings</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <style>html,body{margin:0;height:100%;} iframe{border:none;width:100%;height:100%;}</style>
+          </head>
           <body>
-            <iframe src="https://susysam.github.io/setting.html" style="border:none;width:100%;height:100vh;"></iframe>
+            <iframe src="${SETTINGS_URL}"></iframe>
           </body>
         </html>
       `);
       newWindow.document.close();
+    });
+
+    // Reset all
+    document.getElementById("resetAllBtn").addEventListener("click", () => {
+      const ok = confirm("Reset theme + background for this site?");
+      if (!ok) return;
+
+      localStorage.removeItem("theme");
+      localStorage.removeItem("backgroundUrl");
+      toast("Reset done");
+      setSavedDot(true);
+
+      setTimeout(() => location.reload(), 350);
     });
   </script>
 </body>
