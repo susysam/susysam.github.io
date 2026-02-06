@@ -3,144 +3,175 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Site</title>
-  <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Google_Classroom_Logo.svg/2372px-Google_Classroom_Logo.svg.png" type="image/png"/>
+  <title>Links</title>
+
+  <!-- Apply theme ASAP (site-wide) -->
+  <script>
+    (function () {
+      const theme = localStorage.getItem('theme');
+      if (theme === 'dark') document.documentElement.classList.add('dark');
+      else document.documentElement.classList.remove('dark');
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet">
+
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    :root{
+      --bg1: #f4f6fb;
+      --bg2: #e9ecf6;
+      --text: #14161a;
+      --muted: rgba(20,22,26,.65);
+
+      --accent: #6C0BA9;
+      --accent2: #3E0F87;
+
+      --panel: rgba(255,255,255,.80);
+      --border: rgba(0,0,0,.12);
+      --overlay: rgba(255,255,255,0);
+      --shadow: 0 10px 30px rgba(108,11,169,.18);
+    }
+    :root.dark{
+      --bg1: #0f0f0f;
+      --bg2: #1a1a1a;
+      --text: #ffffff;
+      --muted: rgba(255,255,255,.62);
+
+      --panel: rgba(25,28,36,.72);
+      --border: rgba(255,255,255,.10);
+      --overlay: rgba(0,0,0,.45);
+      --shadow: 0 10px 30px rgba(0,0,0,.45);
     }
 
     body {
       font-family: 'Rubik', sans-serif;
-      background-color: #f4f7fc;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(145deg, var(--bg1), var(--bg2));
+      color: var(--text);
+      text-align: center;
+      position: relative;
       min-height: 100vh;
     }
 
-    .back-button {
-      padding: 10px 20px;
-      background-color: #FF5733;
-      color: white;
-      border-radius: 5px;
-      cursor: pointer;
-      border: none;
-      margin-bottom: 20px;
-      font-size: 16px;
+    body::before{
+      content:"";
+      position: fixed;
+      inset: 0;
+      background: var(--overlay);
+      pointer-events:none;
+      z-index: 0;
+    }
+    body > *{ position: relative; z-index: 1; }
+
+    header {
+      padding: 25px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
     }
 
-    .back-button:hover {
-      background-color: #C74426;
-    }
-
-    .search-bar {
-      margin-top: 20px;
-      padding: 10px;
-      width: 80%;
-      max-width: 600px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-
-    .button-group {
-      display: flex;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .button {
-      padding: 10px 20px;
-      background-color: #6C0BA9;
-      color: white;
-      border-radius: 5px;
-      cursor: pointer;
-      border: none;
-    }
-
-    .button:hover {
-      background-color: #4F0672;
-    }
-
-    .loading {
-      color: gray;
+    .last-update {
       font-size: 14px;
       margin-top: 5px;
+      color: var(--muted);
+    }
+
+    .button-container, .dropdown { margin: 25px 0; }
+
+    .button, .dropbtn {
+      padding: 14px 30px;
+      background-color: rgba(0,0,0,.08);
+      border: 2px solid var(--accent);
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 16px;
+      margin: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    :root.dark .button, :root.dark .dropbtn{
+      background-color: rgba(255,255,255,.06);
+    }
+
+    .button:hover, .dropbtn:hover {
+      background-color: var(--accent);
+      color: #fff;
+      transform: translateY(-2px) scale(1.05);
     }
 
     iframe {
       width: 100%;
-      height: 90vh;
+      height: 600px;
       border: none;
       margin-top: 20px;
-      display: none;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(255,255,255,0.1);
+    }
+
+    @media (max-width: 600px) {
+      iframe { height: 400px; }
+      .button, .dropbtn { width: 90%; margin: 10px auto; }
     }
   </style>
 </head>
 <body>
-  <!-- Back Button -->
-  <button class="back-button" onclick="goBack()">Back</button>
+  <header>Proxy Hub - Links</header>
+  <div class="last-update">Last Update: 12-11-24</div>
 
-  <input type="text" id="searchInput" class="search-bar" placeholder="Enter a website URL (e.g., youtube.com)">
-  <div class="button-group">
-    <button class="button" onclick="loadInProxy()">Open via Proxy</button>
-    <button class="button" onclick="openAboutBlank()">Open in New Tab</button>
+  <div class="button-container">
+    <button class="button" onclick="goBack()">Back</button>
+    <button class="button" onclick="goToSearch()">Blocked?</button>
   </div>
-  <div id="statusMessage" class="loading"></div>
-  <iframe id="proxyFrame"></iframe>
+
+  <div class="dropdown">
+    <button class="dropbtn" onclick="openInBlankProxy()">Interstellar Proxy</button>
+  </div>
 
   <script>
-    function sanitizeUrl(input) {
-      return input.startsWith('http://') || input.startsWith('https://') ? input : 'https://' + input;
+    const interstellarLinks = [
+      "https://learnsome.pythonabc.org/"
+    ];
+
+    function getRandomLink() {
+      const index = Math.floor(Math.random() * interstellarLinks.length);
+      return interstellarLinks[index];
     }
 
-    function loadInProxy() {
-      const input = document.getElementById('searchInput').value.trim();
-      const statusMsg = document.getElementById('statusMessage');
-      const iframe = document.getElementById('proxyFrame');
-      statusMsg.textContent = '';
-      iframe.style.display = 'none';
+    function openInBlankProxy() {
+      const link = getRandomLink();
+      const proxyURL = `https://proxy-server-wdju.onrender.com/proxy?url=${encodeURIComponent(link)}`;
+      const tab = window.open('about:blank', '_blank');
+      if (!tab) return alert("Popup blocked.");
 
-      if (!input) {
-        statusMsg.textContent = '❌ Please enter a URL.';
-        return;
-      }
-
-      const url = sanitizeUrl(input);
-      const encoded = encodeURIComponent(url);
-      const proxyUrl = `https://proxy-server-wdju.onrender.com/proxy?url=${encoded}`;
-
-      iframe.src = proxyUrl;
-      iframe.style.display = 'block';
-      statusMsg.textContent = '✅ Loaded via proxy.';
-    }
-
-    function openAboutBlank() {
-      const input = document.getElementById('searchInput').value.trim();
-      const url = sanitizeUrl(input);
-
-      if (!input) return;
-
-      const newTab = window.open('about:blank', '_blank');
-      newTab.document.write(`
+      tab.document.write(`
         <html>
-          <head><title>${url}</title></head>
-          <body style="margin:0;">
-            <iframe src="${url}" style="width:100%;height:100vh;border:none;"></iframe>
+          <head>
+            <title>Interstellar</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+            <style>html,body{margin:0;height:100%;} iframe{border:none;width:100%;height:100%;}</style>
+          </head>
+          <body>
+            <iframe src="${proxyURL}"></iframe>
           </body>
         </html>
       `);
-      newTab.document.close();
+      tab.document.close();
     }
 
-    // Go back to the previous page
     function goBack() {
-      window.history.back();
+      window.location.href = "start27.html";
+    }
+
+    function goToSearch() {
+      window.location.href = "search.html";
     }
   </script>
- <script src="site-settings.js"></script>
 </body>
 </html>
