@@ -268,23 +268,135 @@
     }
     document.getElementById("placeholder").textContent = getRandomOption();
 
-    const TIME_ZONE = "America/New_York";
+    <script>
+  const options = [
+    "We got leo making proxy's before gta 6",
+    "Welcome to home."
+  ];
 
-    function updateClock() {
-      const now = new Date();
-      const timeString = new Intl.DateTimeFormat("en-US", {
-        timeZone: TIME_ZONE,
-        hour: "numeric",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: true
-      }).format(now);
+  function getRandomOption() {
+    const randomNumber = Math.floor(Math.random() * options.length);
+    return options[randomNumber];
+  }
+  document.getElementById("placeholder").textContent = getRandomOption();
 
-      document.getElementById('time').textContent = timeString;
+  // ---------- Accurate EST/ET clock using online UTC source ----------
+  let baseUtcMs = null;     // UTC time (ms) returned by API
+  let basePerfMs = null;    // performance.now() at the moment we got baseUtcMs
+  let tickTimer = null;
+
+  function isDSTInNewYork(dateUtc) {
+    // Determine DST by comparing NY offset in Jan vs current date.
+    // Works without relying on Intl timeZone support.
+    const year = dateUtc.getUTCFullYear();
+
+    // Helper: get the offset minutes for America/New_York using US DST rules:
+    // DST starts 2nd Sunday in March, ends 1st Sunday in November.
+    function nthSundayOfMonthUTC(year, monthIndex, nth, hourUTC) {
+      // monthIndex: 0=Jan ... 11=Dec
+      const first = new Date(Date.UTC(year, monthIndex, 1, hourUTC, 0, 0));
+      const firstDay = first.getUTCDay(); // 0=Sun
+      const daysUntilSunday = (7 - firstDay) % 7;
+      const day = 1 + daysUntilSunday + (nth - 1) * 7;
+      return new Date(Date.UTC(year, monthIndex, day, hourUTC, 0, 0));
     }
 
-    updateClock();
-    setInterval(updateClock, 1000);
+    // US DST change times in local time:
+    // Start: 2nd Sunday in March at 2:00 AM local (EST -> EDT)
+    // End:   1st Sunday in Nov at 2:00 AM local (EDT -> EST)
+    //
+    // Convert these to UTC:
+    // Before start, offset is -5, so 2:00 AM EST = 07:00 UTC
+    // Before end, offset is -4, so 2:00 AM EDT = 06:00 UTC
+    const dstStartUtc = nthSundayOfMonthUTC(year, 2, 2, 7);  // March, 2nd Sunday, 07:00 UTC
+    const dstEndUtc   = nthSundayOfMonthUTC(year,10, 1, 6);  // Nov,   1st Sunday, 06:00 UTC
+
+    return dateUtc >= dstStartUtc && dateUtc < dstEndUtc;
+  }
+
+  function formatEasternFromUtcMs(utcMs) {
+    const dUtc = new Date(utcMs);
+    const dst = isDSTInNewYork(dUtc);
+    const offsetHours = dst ? -4 : -5; // EDT:-4, EST:-5
+    const easternMs = utcMs + offsetHours * 60 * 60 * 1000;
+    const d = new Date(easternMs);
+
+    let h = d.getUTCHours();
+    const m = String(d.getUTCMinutes()).padStart(2, "0");
+    const s = String(d.getUTCSeconds()).padStart(2, "0");
+    const ampm = h >= 12 ? "PM" : "AM";
+    h = h % 12;
+    h = h ? h : 12;
+
+    return `${h}:${m}:${s} ${ampm}`;
+  }
+
+  function tick() {
+    if (baseUtcMs == null || basePerfMs == null) return;
+    const elapsed = performance.now() - basePerfMs;
+    const nowUtcMs = baseUtcMs + elapsed;
+
+    document.getElementById("time").textContent = formatEasternFromUtcMs(nowUtcMs);
+  }
+
+  async function syncTimeOnce() {
+    try {
+      const res = await fetch("https://worldtimeapi.org/api/timezone/Etc/UTC", { cache: "no-store" });
+      if (!res.ok) throw new Error("Time sync failed");
+      const data = await res.json();
+
+      // worldtimeapi gives "unixtime" in seconds (UTC)
+      baseUtcMs = data.unixtime * 1000;
+      basePerfMs = performance.now();
+
+      // Start ticking locally
+      if (tickTimer) clearInterval(tickTimer);
+      tick();
+      tickTimer = setInterval(tick, 250); // smooth-ish, updates 4x/sec (your display still shows seconds)
+    } catch (e) {
+      // Fallback to local clock if API blocked
+      // (still uses your browser's idea of time)
+      baseUtcMs = Date.now();
+      basePerfMs = performance.now();
+
+      if (tickTimer) clearInterval(tickTimer);
+      tick();
+      tickTimer = setInterval(tick, 250);
+      console.warn("Time API blocked, using local time fallback.", e);
+    }
+  }
+
+  // Sync now, then re-sync every 10 minutes to prevent drift
+  syncTimeOnce();
+  setInterval(syncTimeOnce, 10 * 60 * 1000);
+
+  // ---------- Navigation + background ----------
+  function openGameApps() { window.location.href = "games.html"; }
+  function openlinks() { window.location.href = "links.html"; }
+  function openTabs() { window.location.href = "tabs.html"; }
+  function openSettings() { window.location.href = "settings.html"; }
+  function openTvShowPlayer() { window.location.href = "movie+tv.html"; }
+
+  function showBackgroundInput() {
+    document.getElementById("background-input").style.display = "block";
+  }
+
+  function changeBackground() {
+    const backgroundUrl = document.getElementById("background-url").value.trim();
+    document.body.style.backgroundImage = backgroundUrl ? `url('${backgroundUrl}')` : "none";
+    localStorage.setItem("backgroundUrl", backgroundUrl);
+    document.getElementById("background-input").style.display = "none";
+  }
+
+  function removeBackgroundButton() {
+    document.getElementById("background-input").style.display = "none";
+  }
+
+  const storedBackgroundUrl = localStorage.getItem("backgroundUrl");
+  if (storedBackgroundUrl) {
+    document.body.style.backgroundImage = `url('${storedBackgroundUrl}')`;
+  }
+</script>
 
     function openGameApps() { window.location.href = "games.html"; }
     function openlinks() { window.location.href = "links.html"; }
