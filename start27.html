@@ -1,215 +1,274 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Google_Classroom_Logo.svg/2372px-Google_Classroom_Logo.svg.png" type="image/png">
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            background-size: cover;
-            background-position: center;
-            transition: background-color 0.3s ease;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home</title>
+  <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Google_Classroom_Logo.svg/2372px-Google_Classroom_Logo.svg.png" type="image/png">
 
-        .navbar {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            gap: 10px;
-        }
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+      color: #333;
 
-        .navbar a {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #6C0BA9;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
 
-        .navbar a:hover {
-            background-color: #4F0672;
-        }
+      background-size: cover;
+      background-position: center;
+      transition: background-color 0.3s ease;
+    }
 
-        #placeholder {
-            font-size: 20px;
-            margin-top: 20px;
-        }
+    .navbar {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      max-width: calc(100vw - 40px);
+    }
 
-        #time {
-            font-size: 26px;
-            font-weight: bold;
-            margin-top: 20px;
-            color: #222;
-        }
+    .navbar a {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #6C0BA9;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+      cursor: pointer;
+      user-select: none;
+    }
 
-        .button-container {
-            margin-top: 30px;
-        }
+    .navbar a:hover { background-color: #4F0672; }
 
-        .button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #6C0BA9;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+    #placeholder {
+      font-size: 20px;
+      margin-top: 20px;
+    }
 
-        .button:hover {
-            background-color: #4F0672;
-        }
+    /* Time "window" UI */
+    .time-window {
+      margin-top: 18px;
+      width: min(560px, calc(100vw - 40px));
+      border-radius: 14px;
+      overflow: hidden;
 
-        #background-input {
-            display: none;
-            margin-top: 20px;
-        }
+      background: rgba(255, 255, 255, 0.75);
+      border: 1px solid rgba(0,0,0,0.10);
+      box-shadow: 0 18px 45px rgba(0,0,0,0.18);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
 
-        #background-input input[type="text"] {
-            padding: 10px;
-            font-size: 14px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            width: 300px;
-        }
+    .time-titlebar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
 
-        .input-button {
-            margin-top: 10px;
-        }
+      background: rgba(108, 11, 169, 0.10);
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
 
-        .input-button .button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #6C0BA9;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-left: 10px;
-        }
+    .time-titlebar .left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
 
-        .input-button .button:hover {
-            background-color: #4F0672;
-        }
-    </style>
+    .window-dots {
+      display: flex;
+      gap: 7px;
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.18);
+    }
+
+    .time-title {
+      font-size: 13px;
+      color: rgba(0,0,0,0.65);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .tz-badge {
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(108, 11, 169, 0.12);
+      color: #4F0672;
+      border: 1px solid rgba(108, 11, 169, 0.22);
+    }
+
+    .time-body {
+      padding: 18px 16px 20px;
+    }
+
+    #time {
+      font-size: 34px;
+      font-weight: 800;
+      margin: 0;
+      color: #1f1f1f;
+      letter-spacing: 0.5px;
+    }
+
+    #time-sub {
+      margin-top: 6px;
+      font-size: 13px;
+      color: rgba(0,0,0,0.55);
+    }
+
+    .button-container { margin-top: 24px; }
+
+    .button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #6C0BA9;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .button:hover { background-color: #4F0672; }
+
+    #background-input {
+      display: none;
+      margin-top: 20px;
+    }
+
+    #background-input input[type="text"] {
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: min(320px, calc(100vw - 60px));
+    }
+
+    .input-button { margin-top: 10px; }
+
+    .input-button .button {
+      margin-left: 10px;
+    }
+  </style>
 </head>
+
 <body>
-    <div class="navbar">
-        <a onclick="openGameApps()">Games</a>
-        <a onclick="openlinks()">Links</a>
-        <a onclick="openTabs()">Tabs</a>
-        <a onclick="openSettings()">Settings</a>
-        <a onclick="openTvShowPlayer()">Movie+TV</a>
-    </div>
+  <div class="navbar">
+    <a onclick="openGameApps()">Games</a>
+    <a onclick="openlinks()">Links</a>
+    <a onclick="openTabs()">Tabs</a>
+    <a onclick="openSettings()">Settings</a>
+    <a onclick="openTvShowPlayer()">Movie+TV</a>
+  </div>
 
-    <p id="placeholder"></p>
-    <p id="time"></p>
+  <p id="placeholder"></p>
 
-    <div class="button-container">
-        <button class="button" onclick="showBackgroundInput()">Change Background</button>
-    </div>
-
-    <div id="background-input">
-        <input type="text" id="background-url" placeholder="Enter background URL">
-        <div class="input-button">
-            <button class="button" onclick="changeBackground()">Save</button>
-            <button class="button" onclick="removeBackgroundButton()">Cancel</button>
+  <!-- Time Window UI -->
+  <div class="time-window" role="group" aria-label="Time window (EST)">
+    <div class="time-titlebar">
+      <div class="left">
+        <div class="window-dots" aria-hidden="true">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
         </div>
+        <div class="time-title">Current Time</div>
+      </div>
+      <div class="tz-badge" title="Eastern Time Zone">EST</div>
     </div>
+    <div class="time-body">
+      <p id="time">--:--:--</p>
+      <div id="time-sub">Eastern Time (America/New_York)</div>
+    </div>
+  </div>
 
-    <script>
+  <div class="button-container">
+    <button class="button" onclick="showBackgroundInput()">Change Background</button>
+  </div>
+
+  <div id="background-input">
+    <input type="text" id="background-url" placeholder="Enter background URL" />
+    <div class="input-button">
+      <button class="button" onclick="changeBackground()">Save</button>
+      <button class="button" onclick="removeBackgroundButton()">Cancel</button>
+    </div>
+  </div>
+
+  <script>
     const options = [
-        "We got leo making proxy's before gta 6",
-        "Welcome to home."
+      "We got leo making proxy's before gta 6",
+      "Welcome to home."
     ];
 
     function getRandomOption() {
-        const randomNumber = Math.floor(Math.random() * options.length);
-        return options[randomNumber];
+      const randomNumber = Math.floor(Math.random() * options.length);
+      return options[randomNumber];
     }
-
     document.getElementById("placeholder").textContent = getRandomOption();
 
+    // Proper EST/ET handling (auto DST) using IANA timezone
+    // If you *only* want fixed EST (UTC-5 always), tell me and I’ll switch it.
+    const TIME_ZONE = "America/New_York";
+
     function updateClock() {
-        const now = new Date();
+      const now = new Date();
 
-        const utcHours = now.getUTCHours();
-        const utcMinutes = now.getUTCMinutes();
-        const utcSeconds = now.getUTCSeconds();
+      const timeString = new Intl.DateTimeFormat("en-US", {
+        timeZone: TIME_ZONE,
+        hour: "numeric",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true
+      }).format(now);
 
-        let estHours = utcHours + (-4);
-        if (estHours < 0) estHours += 24;
-
-        const minutes = utcMinutes.toString().padStart(2, '0');
-        const seconds = utcSeconds.toString().padStart(2, '0');
-        const ampm = estHours >= 12 ? 'PM' : 'AM';
-        estHours = estHours % 12;
-        estHours = estHours ? estHours : 12;
-
-        const timeString = `${estHours}:${minutes}:${seconds} ${ampm}`;
-        document.getElementById('time').textContent = timeString;
+      document.getElementById("time").textContent = timeString;
     }
 
     updateClock();
     setInterval(updateClock, 1000);
 
-    function openGameApps() {
-        window.location.href = "games.html";
-    }
-
-    function openlinks() {
-        window.location.href = "links.html";
-    }
-
-    function openTabs() {
-        window.location.href = "tabs.html";
-    }
-
-    function openSettings() {
-        window.location.href = "settings.html";
-    }
-
-    function openTvShowPlayer() {
-        window.location.href = "movie+tv.html";
-    }
+    function openGameApps() { window.location.href = "games.html"; }
+    function openlinks() { window.location.href = "links.html"; }
+    function openTabs() { window.location.href = "tabs.html"; }
+    function openSettings() { window.location.href = "settings.html"; }
+    function openTvShowPlayer() { window.location.href = "movie+tv.html"; }
 
     function showBackgroundInput() {
-        document.getElementById("background-input").style.display = "block";
+      document.getElementById("background-input").style.display = "block";
     }
 
     function changeBackground() {
-        const backgroundUrl = document.getElementById("background-url").value;
-        document.body.style.backgroundImage = `url('${backgroundUrl}')`;
-        localStorage.setItem("backgroundUrl", backgroundUrl);
-        document.getElementById("background-input").style.display = "none";
+      const backgroundUrl = document.getElementById("background-url").value.trim();
+      document.body.style.backgroundImage = backgroundUrl ? `url('${backgroundUrl}')` : "none";
+      localStorage.setItem("backgroundUrl", backgroundUrl);
+      document.getElementById("background-input").style.display = "none";
     }
 
     function removeBackgroundButton() {
-        document.getElementById("background-input").style.display = "none";
+      document.getElementById("background-input").style.display = "none";
     }
 
     const storedBackgroundUrl = localStorage.getItem("backgroundUrl");
     if (storedBackgroundUrl) {
-        document.body.style.backgroundImage = `url('${storedBackgroundUrl}')`;
+      document.body.style.backgroundImage = `url('${storedBackgroundUrl}')`;
     }
-</script>
-
+  </script>
 </body>
 </html>
