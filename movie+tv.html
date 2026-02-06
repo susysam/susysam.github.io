@@ -4,27 +4,80 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Entertainment Player</title>
+
+  <!-- Apply theme ASAP (site-wide) -->
+  <script>
+    (function () {
+      const theme = localStorage.getItem('theme');
+      if (theme === 'dark') document.documentElement.classList.add('dark');
+      else document.documentElement.classList.remove('dark');
+    })();
+  </script>
+
   <style>
+    :root{
+      --bg: #f3f3f3;
+      --text: #333;
+      --muted: #555;
+      --card: rgba(255,255,255,.90);
+      --border: rgba(0,0,0,.10);
+      --shadow: 0 10px 30px rgba(0,0,0,.12);
+      --accent: #6C0BA9;
+      --accent2: #4F0672;
+      --danger: #FF5733;
+      --danger2: #C74426;
+      --overlay: rgba(255,255,255,0);
+    }
+    :root.dark{
+      --bg: #0f1116;
+      --text: #f2f4f8;
+      --muted: rgba(242,244,248,.68);
+      --card: rgba(25,28,36,.75);
+      --border: rgba(255,255,255,.12);
+      --shadow: 0 18px 55px rgba(0,0,0,.55);
+      --overlay: rgba(0,0,0,.45);
+    }
+
     body {
-      font-family: 'Arial', sans-serif;
-      background-color: #f3f3f3;
+      font-family: Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
       text-align: center;
       margin-top: 50px;
       padding: 20px;
+      transition: background-color .25s ease, color .25s ease;
+      position: relative;
+      min-height: 100vh;
     }
+
+    body::before{
+      content:"";
+      position: fixed;
+      inset: 0;
+      background: var(--overlay);
+      pointer-events:none;
+      z-index: 0;
+    }
+    body > *{ position: relative; z-index: 1; }
+
     .container {
       max-width: 900px;
       margin: 0 auto;
       padding: 20px;
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      background-color: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
+
     h1 {
       font-size: 40px;
-      color: #333;
+      color: var(--text);
       margin-bottom: 30px;
     }
+
     .buttons-container {
       display: flex;
       flex-wrap: wrap;
@@ -32,20 +85,23 @@
       gap: 15px;
       margin-bottom: 20px;
     }
+
     .button {
       padding: 12px 30px;
       font-size: 18px;
-      border-radius: 8px;
-      background-color: #6C0BA9;
+      border-radius: 10px;
+      background-color: var(--accent);
       color: white;
       border: none;
       cursor: pointer;
       transition: background-color 0.3s, transform 0.2s ease;
     }
+
     .button:hover {
-      background-color: #4F0672;
+      background-color: var(--accent2);
       transform: scale(1.05);
     }
+
     .input-container {
       display: none;
       flex-direction: column;
@@ -53,61 +109,83 @@
       gap: 10px;
       margin-top: 20px;
     }
+
     input[type="text"] {
       padding: 12px;
       font-size: 16px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      width: 250px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      width: 320px;
+      max-width: calc(100vw - 60px);
+      background: rgba(255,255,255,.75);
+      color: var(--text);
+      outline: none;
     }
+    :root.dark input[type="text"]{ background: rgba(0,0,0,.25); }
+
     .return-button {
       position: absolute;
       top: 20px;
       right: 20px;
       padding: 10px 20px;
-      background-color: #FF5733;
+      background-color: var(--danger);
       color: #fff;
       font-size: 16px;
       border: none;
-      border-radius: 5px;
+      border-radius: 10px;
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
-    .return-button:hover {
-      background-color: #C74426;
-    }
+
+    .return-button:hover { background-color: var(--danger2); }
+
     .welcome h2 {
       margin-bottom: 10px;
       font-size: 24px;
-      color: #333;
+      color: var(--text);
     }
+
     .welcome p {
       font-size: 18px;
-      color: #555;
+      color: var(--muted);
+    }
+
+    .server-hint{
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+      max-width: 720px;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Entertainment Player</h1>
+
     <div class="welcome">
       <h2>Welcome!</h2>
       <p>Select what you want to watch and where:</p>
     </div>
 
-    <div class="buttons-container">
+    <div class="buttons-container" id="topButtons">
       <button class="button" onclick="selectMedia('movie')">Movie</button>
       <button class="button" onclick="selectMedia('tv')">TV Show</button>
       <button class="button" onclick="openAnime()">Anime</button>
       <button class="button" onclick="continueWatching()">Continue Watching</button>
     </div>
 
-    <div class="input-container">
+    <div class="input-container" id="inputContainer">
       <div class="buttons-container">
         <button class="button" onclick="selectServer('vidsrc')">Server 1 (IMDb)</button>
-        <button class="button" onclick="selectServer('pstream')">Server 2 (TMDB)</button>
+        <button class="button" onclick="selectServer('pstream')">Server 2 (TMDB / P-Stream)</button>
       </div>
-      <input type="text" id="media-id" placeholder="Enter IMDb or TMDB ID" />
+
+      <div class="server-hint">
+        P-Stream uses TMDB IDs:
+        Movie: <code>embed/tmdb-movie-ID</code> • TV: <code>embed/tmdb-tv-ID/season/episode</code>
+      </div>
+
+      <input type="text" id="media-id" placeholder="Pick server first" />
       <button class="button" onclick="playMedia()">Play</button>
     </div>
   </div>
@@ -120,76 +198,110 @@
 
     function selectMedia(mediaType) {
       selectedMediaType = mediaType;
-      document.querySelector('.input-container').style.display = 'flex';
+      document.getElementById('inputContainer').style.display = 'flex';
       document.querySelector('.welcome').style.display = 'none';
-      document.querySelector('.buttons-container').style.display = 'none';
+      document.getElementById('topButtons').style.display = 'none';
     }
 
     function selectServer(server) {
       selectedServer = server;
       const input = document.getElementById('media-id');
-      input.placeholder = server === 'vidsrc'
-        ? "Enter IMDb ID (e.g., tt1234567)"
-        : "Enter TMDB ID (e.g., 123456)";
+
+      if (server === 'vidsrc') {
+        input.placeholder = selectedMediaType === 'tv'
+          ? "Enter IMDb ID (e.g., tt1234567)"
+          : "Enter IMDb ID (e.g., tt1234567)";
+      } else {
+        input.placeholder = selectedMediaType === 'tv'
+          ? "Enter TMDB ID (e.g., 1399)"
+          : "Enter TMDB ID (e.g., 603)";
+      }
+    }
+
+    function pstreamParams() {
+      // You can tweak any of these
+      const params = new URLSearchParams({
+        logo: "false",
+        downloads: "true",
+        "has-watchparty": "true",
+        allinone: "true",
+        theme: "default",
+        language: "en",
+        tips: "true",
+        "interface-settings": "true",
+        backlink: "https://susysam.github.io/movie+tv.html"
+      });
+      return params.toString();
+    }
+
+    function buildUrl(mediaId, server, mediaType) {
+      let url = "";
+
+      if (server === 'vidsrc') {
+        // vidsrc uses imdb query style
+        url = `https://vidsrc.me/embed/${mediaType}?imdb=${encodeURIComponent(mediaId)}`;
+        return url;
+      }
+
+      // P-Stream (updated docs)
+      const qs = pstreamParams();
+
+      if (mediaType === 'movie') {
+        url = `https://iframe.pstream.mov/embed/tmdb-movie-${encodeURIComponent(mediaId)}?${qs}`;
+      } else {
+        const season = prompt("Enter Season Number:");
+        const episode = prompt("Enter Episode Number:");
+        if (!season || !episode) return "";
+        url = `https://iframe.pstream.mov/embed/tmdb-tv-${encodeURIComponent(mediaId)}/${encodeURIComponent(season)}/${encodeURIComponent(episode)}?${qs}`;
+      }
+
+      return url;
+    }
+
+    function openPlayer(url) {
+      const win = window.open("about:blank", "_blank");
+      if (!win) return alert("Popup blocked.");
+
+      win.document.write(`
+        <html>
+          <head>
+            <title>Gmail</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+            <style>body{margin:0;background:#000}iframe{border:none;width:100%;height:100vh}</style>
+          </head>
+          <body>
+            <iframe src="${url}" allowfullscreen></iframe>
+          </body>
+        </html>
+      `);
+      win.document.close();
     }
 
     function playMedia() {
       const mediaId = document.getElementById('media-id').value.trim();
       if (!mediaId || !selectedServer || !selectedMediaType) return;
 
-      let url = '';
+      const url = buildUrl(mediaId, selectedServer, selectedMediaType);
+      if (!url) return;
 
-      if (selectedServer === 'vidsrc') {
-        url = `https://vidsrc.me/embed/${selectedMediaType}?imdb=${mediaId}`;
-      } else {
-        const params = `?logo=false&backlink=https://susysam.github.io/movie+tv.html`;
-        if (selectedMediaType === 'movie') {
-          url = `https://iframe.pstream.mov/tmdb-movie-${mediaId}${params}`;
-        } else {
-          const season = prompt("Enter Season Number:");
-          const episode = prompt("Enter Episode Number:");
-          if (!season || !episode) return;
-          url = `https://iframe.pstream.mov/tmdb-tv-${mediaId}/${season}/${episode}${params}`;
-        }
-      }
+      openPlayer(url);
 
-      const win = window.open("about:blank", "_blank");
-      win.document.write(`
-        <html><head><title>Gmail</title>
-        <style>body{margin:0;background:#000}iframe{border:none;width:100%;height:100vh}</style>
-        </head><body><iframe src="${url}" allowfullscreen></iframe></body></html>
-      `);
-
-      localStorage.setItem('lastWatched', JSON.stringify({ mediaId, selectedServer, selectedMediaType }));
+      localStorage.setItem('lastWatched', JSON.stringify({
+        mediaId,
+        selectedServer,
+        selectedMediaType
+      }));
     }
 
     function continueWatching() {
       const data = localStorage.getItem('lastWatched');
       if (!data) return;
+
       const { mediaId, selectedServer, selectedMediaType } = JSON.parse(data);
+      const url = buildUrl(mediaId, selectedServer, selectedMediaType);
+      if (!url) return;
 
-      let url = '';
-
-      if (selectedServer === 'vidsrc') {
-        url = `https://vidsrc.me/embed/${selectedMediaType}?imdb=${mediaId}`;
-      } else {
-        const params = `?logo=false&backlink=https://susysam.github.io/movie+tv.html`;
-        if (selectedMediaType === 'movie') {
-          url = `https://iframe.pstream.mov/tmdb-movie-${mediaId}${params}`;
-        } else {
-          const season = prompt("Enter Season Number:");
-          const episode = prompt("Enter Episode Number:");
-          if (!season || !episode) return;
-          url = `https://iframe.pstream.mov/tmdb-tv-${mediaId}/${season}/${episode}${params}`;
-        }
-      }
-
-      const win = window.open("about:blank", "_blank");
-      win.document.write(`
-        <html><head><title>Gmail</title>
-        <style>body{margin:0;background:#000}iframe{border:none;width:100%;height:100vh}</style>
-        </head><body><iframe src="${url}" allowfullscreen></iframe></body></html>
-      `);
+      openPlayer(url);
     }
 
     function openAnime() {
