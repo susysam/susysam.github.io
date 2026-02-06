@@ -6,14 +6,52 @@
   <title>Home</title>
   <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Google_Classroom_Logo.svg/2372px-Google_Classroom_Logo.svg.png" type="image/png">
 
+  <!-- Apply theme ASAP (site-wide) -->
+  <script>
+    (function () {
+      const theme = localStorage.getItem('theme');
+      if (theme === 'dark') document.documentElement.classList.add('dark');
+      else document.documentElement.classList.remove('dark');
+    })();
+  </script>
+
   <style>
+    :root{
+      --bg: #f5f5f5;
+      --text: #222;
+      --muted: rgba(0,0,0,0.65);
+
+      --accent: #6C0BA9;
+      --accent2: #4F0672;
+
+      --card: rgba(255, 255, 255, 0.75);
+      --border: rgba(0,0,0,0.10);
+      --shadow: 0 18px 45px rgba(0,0,0,0.18);
+
+      --overlay: rgba(255,255,255,0);
+      --inputBg: rgba(255,255,255,.78);
+    }
+
+    :root.dark{
+      --bg: #0f1116;
+      --text: #f2f4f8;
+      --muted: rgba(242,244,248,0.68);
+
+      --card: rgba(25,28,36,.72);
+      --border: rgba(255,255,255,0.12);
+      --shadow: 0 18px 55px rgba(0,0,0,0.55);
+
+      --overlay: rgba(0,0,0,0.45);
+      --inputBg: rgba(0,0,0,.25);
+    }
+
     body {
       font-family: Arial, sans-serif;
       text-align: center;
       margin: 0;
       padding: 0;
-      background-color: #f5f5f5;
-      color: #333;
+      background-color: var(--bg);
+      color: var(--text);
 
       display: flex;
       flex-direction: column;
@@ -23,7 +61,22 @@
 
       background-size: cover;
       background-position: center;
-      transition: background-color 0.3s ease;
+      transition: background-color 0.25s ease, color 0.25s ease;
+      position: relative;
+    }
+
+    /* Dim overlay in dark mode */
+    body::before{
+      content:"";
+      position: fixed;
+      inset: 0;
+      background: var(--overlay);
+      pointer-events:none;
+      z-index: 0;
+    }
+    body > *{
+      position: relative;
+      z-index: 1;
     }
 
     .navbar {
@@ -40,7 +93,7 @@
     .navbar a {
       padding: 10px 20px;
       font-size: 16px;
-      background-color: #6C0BA9;
+      background-color: var(--accent);
       color: white;
       text-decoration: none;
       border-radius: 5px;
@@ -49,23 +102,23 @@
       user-select: none;
     }
 
-    .navbar a:hover { background-color: #4F0672; }
+    .navbar a:hover { background-color: var(--accent2); }
 
     #placeholder {
       font-size: 20px;
       margin-top: 20px;
+      color: var(--text);
     }
 
-    /* Time "window" UI */
     .time-window {
       margin-top: 18px;
       width: min(560px, calc(100vw - 40px));
       border-radius: 14px;
       overflow: hidden;
 
-      background: rgba(255, 255, 255, 0.75);
-      border: 1px solid rgba(0,0,0,0.10);
-      box-shadow: 0 18px 45px rgba(0,0,0,0.18);
+      background: var(--card);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
     }
@@ -77,7 +130,7 @@
       padding: 10px 12px;
 
       background: rgba(108, 11, 169, 0.10);
-      border-bottom: 1px solid rgba(0,0,0,0.08);
+      border-bottom: 1px solid var(--border);
     }
 
     .time-titlebar .left {
@@ -87,20 +140,18 @@
       min-width: 0;
     }
 
-    .window-dots {
-      display: flex;
-      gap: 7px;
-    }
+    .window-dots { display: flex; gap: 7px; }
     .dot {
       width: 10px;
       height: 10px;
       border-radius: 50%;
       background: rgba(0,0,0,0.18);
     }
+    :root.dark .dot{ background: rgba(255,255,255,0.18); }
 
     .time-title {
       font-size: 13px;
-      color: rgba(0,0,0,0.65);
+      color: var(--muted);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -111,26 +162,24 @@
       padding: 4px 8px;
       border-radius: 999px;
       background: rgba(108, 11, 169, 0.12);
-      color: #4F0672;
+      color: var(--accent2);
       border: 1px solid rgba(108, 11, 169, 0.22);
     }
 
-    .time-body {
-      padding: 18px 16px 20px;
-    }
+    .time-body { padding: 18px 16px 20px; }
 
     #time {
       font-size: 34px;
       font-weight: 800;
       margin: 0;
-      color: #1f1f1f;
+      color: var(--text);
       letter-spacing: 0.5px;
     }
 
     #time-sub {
       margin-top: 6px;
       font-size: 13px;
-      color: rgba(0,0,0,0.55);
+      color: var(--muted);
     }
 
     .button-container { margin-top: 24px; }
@@ -138,7 +187,7 @@
     .button {
       padding: 10px 20px;
       font-size: 16px;
-      background-color: #6C0BA9;
+      background-color: var(--accent);
       color: white;
       border: none;
       border-radius: 5px;
@@ -146,26 +195,23 @@
       transition: background-color 0.3s ease;
     }
 
-    .button:hover { background-color: #4F0672; }
+    .button:hover { background-color: var(--accent2); }
 
-    #background-input {
-      display: none;
-      margin-top: 20px;
-    }
+    #background-input { display: none; margin-top: 20px; }
 
     #background-input input[type="text"] {
       padding: 10px;
       font-size: 14px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
       width: min(320px, calc(100vw - 60px));
+      background: var(--inputBg);
+      color: var(--text);
+      outline: none;
     }
 
     .input-button { margin-top: 10px; }
-
-    .input-button .button {
-      margin-left: 10px;
-    }
+    .input-button .button { margin-left: 10px; }
   </style>
 </head>
 
@@ -180,7 +226,6 @@
 
   <p id="placeholder"></p>
 
-  <!-- Time Window UI -->
   <div class="time-window" role="group" aria-label="Time window (EST)">
     <div class="time-titlebar">
       <div class="left">
@@ -223,13 +268,10 @@
     }
     document.getElementById("placeholder").textContent = getRandomOption();
 
-    // Proper EST/ET handling (auto DST) using IANA timezone
-    // If you *only* want fixed EST (UTC-5 always), tell me and I’ll switch it.
     const TIME_ZONE = "America/New_York";
 
     function updateClock() {
       const now = new Date();
-
       const timeString = new Intl.DateTimeFormat("en-US", {
         timeZone: TIME_ZONE,
         hour: "numeric",
@@ -238,7 +280,7 @@
         hour12: true
       }).format(now);
 
-      document.getElementById("time").textContent = timeString;
+      document.getElementById('time').textContent = timeString;
     }
 
     updateClock();
