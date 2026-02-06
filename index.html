@@ -5,162 +5,276 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login</title>
+
+  <!-- Apply theme ASAP (site-wide) -->
+  <script>
+    (function () {
+      const theme = localStorage.getItem('theme');
+      if (theme === 'dark') document.documentElement.classList.add('dark');
+      else document.documentElement.classList.remove('dark');
+    })();
+  </script>
+
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap">
+
   <style>
-    * {
+    :root{
+      --bg: #f4f6fb;
+      --text: #14161a;
+      --muted: rgba(20,22,26,.65);
+      --card: rgba(255,255,255,.85);
+      --border: rgba(0,0,0,.10);
+      --shadow: 0 18px 45px rgba(0,0,0,.12);
+
+      --accent: #6C0BA9;
+      --accent2: #4F0672;
+
+      --warn: #ffcc00;
+      --overlay: rgba(255,255,255,0);
+      --inputBg: rgba(255,255,255,.78);
+    }
+    :root.dark{
+      --bg: #0f1116;
+      --text: #f2f4f8;
+      --muted: rgba(242,244,248,.68);
+      --card: rgba(25,28,36,.75);
+      --border: rgba(255,255,255,.12);
+      --shadow: 0 18px 55px rgba(0,0,0,.55);
+
+      --overlay: rgba(0,0,0,.45);
+      --inputBg: rgba(0,0,0,.25);
+    }
+
+    *{
       margin: 0;
       padding: 0;
       box-sizing: border-box;
       font-family: 'Poppins', sans-serif;
     }
-    body {
+
+    body{
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      background: #000;
-    }
-    .wrapper {
+      background:
+        radial-gradient(900px 500px at 15% 15%, rgba(108,11,169,.20), transparent 60%),
+        radial-gradient(900px 500px at 85% 20%, rgba(79,6,114,.16), transparent 60%),
+        linear-gradient(180deg, var(--bg), var(--bg));
+      color: var(--text);
+      padding: 16px;
       position: relative;
-      width: 400px;
-      background: #000;
-      box-shadow: 0 0 50px #0ef;
-      border-radius: 20px;
-      padding: 40px;
+      transition: background-color .25s ease, color .25s ease;
+    }
+
+    body::before{
+      content:"";
+      position: fixed;
+      inset: 0;
+      background: var(--overlay);
+      pointer-events:none;
+      z-index: 0;
+    }
+    body > *{ position: relative; z-index: 1; }
+
+    .wrapper{
+      width: 420px;
+      max-width: 100%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      border-radius: 18px;
+      padding: 26px;
       overflow: hidden;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
-    h2 {
-      font-size: 30px;
-      color: #fff;
+
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap: 6px;
+      align-items:center;
+      margin-bottom: 12px;
+    }
+    .brand h2{
+      font-size: 26px;
+      color: var(--text);
       text-align: center;
-      margin-bottom: 20px;
+      margin: 0;
+      letter-spacing: .2px;
     }
-    .input-group {
-      position: relative;
-      margin: 20px 0;
-      border-bottom: 2px solid #fff;
-    }
-    .input-group label {
-      position: absolute;
-      top: 50%;
-      left: 5px;
-      transform: translateY(-50%);
-      font-size: 16px;
-      color: #fff;
-      pointer-events: none;
-      transition: .5s;
-    }
-    .input-group input {
-      width: 100%;
-      height: 40px;
-      font-size: 16px;
-      color: #fff;
-      background: transparent;
-      border: none;
-      outline: none;
-      padding: 5px;
-    }
-    .input-group input:focus~label,
-    .input-group input:valid~label {
-      top: -10px;
+    .brand p{
       font-size: 12px;
+      color: var(--muted);
+      text-align:center;
     }
-    .remember {
-      margin: 10px 0 15px;
+
+    .input-group{
+      position: relative;
+      margin: 18px 0;
     }
-    .remember label {
-      color: #fff;
-      font-size: 14px;
-    }
-    .remember label input {
-      accent-color: #0ef;
-    }
-    button {
+
+    .input-group input{
       width: 100%;
-      height: 40px;
-      background: #0ef;
-      box-shadow: 0 0 10px #0ef;
-      font-size: 16px;
-      color: #000;
-      font-weight: 500;
+      height: 44px;
+      font-size: 15px;
+      color: var(--text);
+      background: var(--inputBg);
+      border: 1px solid var(--border);
+      outline: none;
+      padding: 10px 12px;
+      border-radius: 12px;
+    }
+
+    .input-group label{
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 13px;
+      color: var(--muted);
+      pointer-events: none;
+      transition: .15s ease;
+      background: transparent;
+      padding: 0 6px;
+    }
+
+    .input-group input:focus + label,
+    .input-group input:not(:placeholder-shown) + label{
+      top: -8px;
+      transform: none;
+      font-size: 11px;
+      background: var(--card);
+      border-radius: 999px;
+    }
+
+    .row{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 8px 0 14px;
+    }
+
+    .remember{
+      display:flex;
+      align-items:center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--muted);
+      user-select:none;
+    }
+    .remember input{ accent-color: var(--accent); }
+
+    .btn{
+      width: 100%;
+      height: 44px;
+      background: var(--accent);
+      font-size: 15px;
+      color: #fff;
+      font-weight: 600;
       cursor: pointer;
-      border-radius: 30px;
+      border-radius: 14px;
       border: none;
       outline: none;
-      transition: background 0.3s ease;
+      transition: background .2s ease, transform .05s ease;
     }
-    button:hover {
-      background: #08c;
-    }
-    .toggle-btn {
+    .btn:hover{ background: var(--accent2); }
+    .btn:active{ transform: translateY(1px); }
+
+    .toggle-btn{
       text-align: center;
       margin-top: 10px;
     }
-    .toggle-btn button {
+    .toggle-btn button{
       background: none;
       border: none;
-      color: #fff;
-      font-size: 14px;
+      color: var(--accent);
+      font-size: 13px;
       cursor: pointer;
       text-decoration: underline;
     }
-    .bypass-btn {
-      margin-top: 20px;
+
+    .divider{
+      height: 1px;
+      background: var(--border);
+      margin: 18px 0;
+    }
+
+    .bypass-btn{
       width: 100%;
-      background: #ff0;
-      color: #000;
-      font-size: 18px;
-      font-weight: bold;
-      text-align: center;
-      border-radius: 30px;
+      height: 44px;
+      border-radius: 14px;
+      border: 1px solid rgba(0,0,0,.12);
+      background: #ffcc00;
+      color: #14161a;
+      font-weight: 800;
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: opacity .2s ease, transform .05s ease;
     }
-    .bypass-btn:hover {
-      background: #ffc107;
-    }
+    .bypass-btn:hover{ opacity: .92; }
+    .bypass-btn:active{ transform: translateY(1px); }
   </style>
 </head>
+
 <body>
   <div class="wrapper">
+    <div class="brand">
+      <h2 id="titleText">Login</h2>
+      <p>Theme sync: Settings → Dark mode applies everywhere.</p>
+    </div>
+
     <div id="loginSection">
-      <h2>Login</h2>
-      <form id="loginForm">
+      <form id="loginForm" autocomplete="on">
         <div class="input-group">
-          <input type="text" id="username" required>
+          <input type="text" id="username" placeholder=" " required autocomplete="username">
           <label for="username">Username</label>
         </div>
+
         <div class="input-group">
-          <input type="password" id="password" required>
+          <input type="password" id="password" placeholder=" " required autocomplete="current-password">
           <label for="password">Password</label>
         </div>
-        <div class="remember">
-          <label><input type="checkbox"> Remember me</label>
+
+        <div class="row">
+          <label class="remember">
+            <input type="checkbox" id="rememberMe">
+            Remember username
+          </label>
         </div>
-        <button type="submit">Login</button>
+
+        <button class="btn" type="submit">Login</button>
+
         <div class="toggle-btn">
           <button type="button" id="showSignup">Sign Up</button>
         </div>
       </form>
     </div>
+
     <div id="signupSection" style="display: none;">
-      <h2>Sign Up</h2>
-      <form id="signupForm">
+      <form id="signupForm" autocomplete="on">
         <div class="input-group">
-          <input type="text" id="newUsername" required>
+          <input type="text" id="newUsername" placeholder=" " required autocomplete="username">
           <label for="newUsername">New Username</label>
         </div>
+
         <div class="input-group">
-          <input type="password" id="newPassword" required>
+          <input type="password" id="newPassword" placeholder=" " required autocomplete="new-password">
           <label for="newPassword">New Password</label>
         </div>
-        <button type="submit">Sign Up</button>
+
+        <button class="btn" type="submit">Sign Up</button>
+
         <div class="toggle-btn">
           <button type="button" id="showLogin">Back to Login</button>
         </div>
       </form>
     </div>
-    <button class="bypass-btn" id="bypassButton">Bypass Login Instantly</button>
+
+    <div class="divider"></div>
+
+    <button class="bypass-btn" id="bypassButton" type="button">Bypass Login Instantly</button>
   </div>
 
   <script>
@@ -171,17 +285,40 @@
     const showSignupBtn = document.getElementById("showSignup");
     const showLoginBtn = document.getElementById("showLogin");
     const bypassButton = document.getElementById("bypassButton");
+    const titleText = document.getElementById("titleText");
+
+    // Prefill remembered username (optional)
+    document.addEventListener("DOMContentLoaded", () => {
+      const remembered = localStorage.getItem("rememberedUsername");
+      if (remembered) {
+        document.getElementById("username").value = remembered;
+        document.getElementById("rememberMe").checked = true;
+      }
+    });
 
     // Login Handling
     loginForm.addEventListener("submit", function(event) {
       event.preventDefault();
-      const username = document.getElementById("username").value;
+
+      const username = document.getElementById("username").value.trim();
       const password = document.getElementById("password").value;
 
-      if ((username === "Leo" && password === "2024") || 
-          (username === localStorage.getItem("username") && password === localStorage.getItem("password"))) {
-        alert("Login successful!");
-        window.location.href = "about.html";
+      // Remember username only (not password)
+      if (document.getElementById("rememberMe").checked) {
+        localStorage.setItem("rememberedUsername", username);
+      } else {
+        localStorage.removeItem("rememberedUsername");
+      }
+
+      const savedUser = localStorage.getItem("username");
+      const savedPass = localStorage.getItem("password");
+
+      const ok =
+        (username === "Leo" && password === "2024") ||
+        (username === savedUser && password === savedPass);
+
+      if (ok) {
+        window.location.href = "start27.html";
       } else {
         alert("Invalid credentials.");
       }
@@ -190,25 +327,31 @@
     // Signup Handling
     signupForm.addEventListener("submit", function(event) {
       event.preventDefault();
-      const newUsername = document.getElementById("newUsername").value;
+
+      const newUsername = document.getElementById("newUsername").value.trim();
       const newPassword = document.getElementById("newPassword").value;
 
       localStorage.setItem("username", newUsername);
       localStorage.setItem("password", newPassword);
+
       alert("Sign up successful! Please log in.");
+
       signupSection.style.display = "none";
       loginSection.style.display = "block";
+      titleText.textContent = "Login";
     });
 
     // Toggle Signup/Login
     showSignupBtn.addEventListener("click", function() {
       loginSection.style.display = "none";
       signupSection.style.display = "block";
+      titleText.textContent = "Sign Up";
     });
 
     showLoginBtn.addEventListener("click", function() {
       signupSection.style.display = "none";
       loginSection.style.display = "block";
+      titleText.textContent = "Login";
     });
 
     // Bypass Button Handling
