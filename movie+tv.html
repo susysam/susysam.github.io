@@ -274,7 +274,6 @@
     function selectMedia(mediaType) {
       selectedMediaType = mediaType;
 
-      // Rename title based on selection
       if (mediaType === 'movie') pageTitle.textContent = 'Movies';
       if (mediaType === 'tv') pageTitle.textContent = 'TV-Shows';
 
@@ -282,7 +281,6 @@
       welcomeBlock.style.display = 'none';
       topButtons.style.display = 'none';
 
-      // reset server until they pick again
       selectedServer = '';
       document.getElementById('media-id').value = '';
       document.getElementById('media-id').placeholder = 'Pick server first';
@@ -325,12 +323,11 @@
       const qs = pstreamParams();
 
       if (mediaType === 'movie') {
-        return `https://iframe.pstream.net/embed/tmdb-movie-${encodeURIComponent(mediaId)}?${qs}`;
+        return `https://pstream.net/embed/tmdb-movie-${encodeURIComponent(mediaId)}?${qs}`;
       } else {
-        // Default Season 1 Episode 1 (no prompts)
         const season = 1;
         const episode = 1;
-        return `https://iframe.pstream.net/embed/tmdb-tv-${encodeURIComponent(mediaId)}/${season}/${episode}?${qs}`;
+        return `https://pstream.net/embed/tmdb-tv-${encodeURIComponent(mediaId)}/${season}/${episode}?${qs}`;
       }
     }
 
@@ -366,7 +363,6 @@
       const label = selectedMediaType === 'movie' ? "Launching Movies..." : "Launching TV-Shows...";
       showLaunch(label);
 
-      // tiny delay so the animation shows before popup work
       setTimeout(() => {
         const url = buildUrl(mediaId, selectedServer, selectedMediaType);
         openPlayer(url);
