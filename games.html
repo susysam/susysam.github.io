@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Games</title>
+  <title>🎮 Games</title>
+  <link rel="icon" href="https://em-content.zobj.net/source/google/387/video-game_1f3ae.png" type="image/png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Apply theme ASAP (site-wide) -->
   <script>
     (function () {
       const theme = localStorage.getItem('theme');
@@ -15,321 +16,663 @@
   </script>
 
   <style>
-    :root{
-      --bg: #f4f6fb;
-      --text: #14161a;
-      --overlay: rgba(255,255,255,0);
-      --card: rgba(255,255,255,.82);
-      --border: rgba(0,0,0,.10);
+    :root {
+      --bg: #0d0d14;
+      --text: #f0f0ff;
+      --muted: rgba(200,200,255,.55);
+      --card: rgba(255,255,255,.04);
+      --card-hover: rgba(255,255,255,.08);
+      --border: rgba(255,140,0,.25);
+      --border-hover: rgba(255,140,0,.7);
+      --accent: #ff8c00;
+      --accent2: #ff5500;
+      --accent-glow: rgba(255,140,0,.35);
+      --shadow: 0 8px 32px rgba(255,100,0,.18);
+      --shadow-hover: 0 16px 48px rgba(255,100,0,.38);
+      --tag: rgba(255,140,0,.12);
+    }
 
-      /* your games accent */
-      --accent: orange;
-      --accent2: darkorange;
-      --shadow: 0 10px 30px rgba(255,165,0,.18);
-    }
-    :root.dark{
-      --bg: #121212;
-      --text: #ffffff;
-      --overlay: rgba(0,0,0,.45);
-      --card: #222;
-      --border: rgba(255,255,255,.10);
-      --shadow: 0 5px 15px rgba(255,165,0,.50);
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Nunito', sans-serif;
       background-color: var(--bg);
       color: var(--text);
-      text-align: center;
-      position: relative;
-
-      /* keep your background-image ability if you ever add it */
-      background-size: cover;
-      background-position: center;
-      transition: background-color .25s ease, color .25s ease;
+      min-height: 100vh;
+      overflow-x: hidden;
     }
 
-    /* Surprise overlay: dims bg in dark mode */
-    body::before{
-      content:"";
+    /* Animated background */
+    body::before {
+      content: "";
       position: fixed;
       inset: 0;
-      background: var(--overlay);
+      background:
+        radial-gradient(ellipse 80% 50% at 10% 10%, rgba(255,100,0,.10) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 90% 80%, rgba(120,0,255,.10) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 30% at 50% 50%, rgba(255,50,0,.05) 0%, transparent 70%);
       pointer-events: none;
       z-index: 0;
-    }
-    body > *{
-      position: relative;
-      z-index: 1;
+      animation: bgShift 12s ease-in-out infinite alternate;
     }
 
-    h1 { margin-top: 20px; }
+    @keyframes bgShift {
+      0%   { opacity: 1; }
+      100% { opacity: .7; filter: hue-rotate(20deg); }
+    }
 
-    .games-container {
+    body > * { position: relative; z-index: 1; }
+
+    /* ── Header ── */
+    header {
       display: flex;
-      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 28px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(13,13,20,.75);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .back-button {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(255,140,0,.12);
+      border: 1px solid var(--border);
+      padding: 9px 18px;
+      font-size: 14px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      border-radius: 50px;
+      cursor: pointer;
+      color: var(--accent);
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .back-button:hover {
+      background: rgba(255,140,0,.22);
+      border-color: var(--accent);
+      transform: translateX(-2px);
+    }
+
+    .header-title {
+      font-family: 'Bangers', cursive;
+      font-size: 32px;
+      letter-spacing: 3px;
+      background: linear-gradient(135deg, #ff8c00, #ff3300);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: none;
+      filter: drop-shadow(0 0 12px rgba(255,120,0,.5));
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .game-count {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 600;
+      background: var(--tag);
+      border: 1px solid var(--border);
+      padding: 5px 12px;
+      border-radius: 50px;
+    }
+
+    /* ── Search ── */
+    .search-wrap {
+      padding: 24px 28px 0;
+      display: flex;
       justify-content: center;
+    }
+
+    .search-input {
+      width: 100%;
+      max-width: 480px;
+      padding: 12px 20px 12px 44px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      color: var(--text);
+      font-family: 'Nunito', sans-serif;
+      font-size: 15px;
+      outline: none;
+      transition: all 0.25s ease;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='rgba(255,140,0,.6)' stroke-width='2.5'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: 16px center;
+    }
+    .search-input::placeholder { color: var(--muted); }
+    .search-input:focus {
+      border-color: var(--accent);
+      background-color: rgba(255,140,0,.06);
+      box-shadow: 0 0 0 3px rgba(255,140,0,.12);
+    }
+
+    /* ── Games grid ── */
+    .games-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
       gap: 20px;
-      padding: 20px;
+      padding: 24px 28px;
     }
 
     .game-card {
       background: var(--card);
-      border: 2px solid var(--accent);
-      border-radius: 10px;
-      width: 250px;
-      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
       box-shadow: var(--shadow);
-      transition: transform 0.2s ease;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+      cursor: pointer;
+      animation: fadeUp .4s ease both;
     }
 
-    .game-card:hover { transform: scale(1.05); }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
 
-    .game-card img {
+    .game-card:hover {
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--border-hover);
+      background: var(--card-hover);
+    }
+
+    .game-card:nth-child(1)  { animation-delay: .03s; }
+    .game-card:nth-child(2)  { animation-delay: .06s; }
+    .game-card:nth-child(3)  { animation-delay: .09s; }
+    .game-card:nth-child(4)  { animation-delay: .12s; }
+    .game-card:nth-child(5)  { animation-delay: .15s; }
+    .game-card:nth-child(6)  { animation-delay: .18s; }
+    .game-card:nth-child(7)  { animation-delay: .21s; }
+    .game-card:nth-child(8)  { animation-delay: .24s; }
+    .game-card:nth-child(9)  { animation-delay: .27s; }
+    .game-card:nth-child(10) { animation-delay: .30s; }
+
+    .card-thumb {
       width: 100%;
-      height: 150px;
-      border-radius: 8px;
+      height: 140px;
       object-fit: cover;
-    }
-
-    .game-card h3 { margin: 10px 0; }
-
-    .game-card button {
-      background: var(--accent);
-      border: none;
-      padding: 10px 20px;
-      font-size: 16px;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.2s ease;
-      color: #111;
-    }
-
-    .game-card button:hover { background: var(--accent2); }
-
-    .add-game-container { margin: 20px; }
-    .hidden { display: none; }
-
-    .add-game-inputs { margin-top: 15px; }
-
-    .add-game-inputs input {
       display: block;
-      width: 300px;
-      max-width: calc(100vw - 50px);
-      margin: 10px auto;
-      padding: 10px;
-      border: 2px solid var(--accent);
-      border-radius: 5px;
-      background: var(--card);
-      color: var(--text);
-      font-size: 16px;
-      outline: none;
+      transition: transform 0.3s ease;
     }
+    .game-card:hover .card-thumb { transform: scale(1.06); }
 
-    .add-game-inputs button {
-      background: var(--accent);
-      border: none;
-      padding: 10px 20px;
-      font-size: 16px;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.2s ease;
-      color: #111;
+    .card-thumb-wrap {
+      overflow: hidden;
+      position: relative;
     }
-
-    .add-game-inputs button:hover { background: var(--accent2); }
-
-    .back-button {
+    .card-thumb-wrap::after {
+      content: "";
       position: absolute;
-      top: 20px;
-      left: 20px;
-      background: var(--accent);
-      border: none;
-      padding: 10px 20px;
-      font-size: 16px;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.2s ease;
-      color: #111;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 50%, rgba(13,13,20,.85) 100%);
+      pointer-events: none;
     }
 
-    .back-button:hover { background: var(--accent2); }
+    .card-body {
+      padding: 12px 14px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .card-title {
+      font-weight: 800;
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .play-btn {
+      flex-shrink: 0;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none;
+      padding: 7px 16px;
+      font-size: 13px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      border-radius: 50px;
+      cursor: pointer;
+      color: #fff;
+      transition: all 0.2s ease;
+      box-shadow: 0 3px 12px rgba(255,120,0,.35);
+      letter-spacing: .3px;
+    }
+    .play-btn:hover {
+      transform: scale(1.08);
+      box-shadow: 0 5px 18px rgba(255,120,0,.55);
+    }
+    .play-btn:active { transform: scale(.97); }
+
+    /* ── Add custom game ── */
+    .add-section {
+      padding: 0 28px 40px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .add-card {
+      width: 100%;
+      max-width: 460px;
+      background: var(--card);
+      border: 1px dashed var(--border);
+      border-radius: 16px;
+      padding: 20px 24px;
+      transition: border-color 0.2s;
+    }
+    .add-card:focus-within { border-color: var(--accent); border-style: solid; }
+
+    .add-toggle {
+      width: 100%;
+      background: rgba(255,140,0,.10);
+      border: 1px solid var(--border);
+      padding: 11px 20px;
+      font-size: 15px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      border-radius: 50px;
+      cursor: pointer;
+      color: var(--accent);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .add-toggle:hover { background: rgba(255,140,0,.20); border-color: var(--accent); }
+
+    .add-inputs {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .add-inputs.open { display: flex; }
+
+    .add-inputs input {
+      width: 100%;
+      padding: 11px 16px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .add-inputs input::placeholder { color: var(--muted); }
+    .add-inputs input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(255,140,0,.12);
+    }
+
+    .add-submit {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none;
+      padding: 11px;
+      font-size: 14px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      border-radius: 10px;
+      cursor: pointer;
+      color: #fff;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(255,120,0,.3);
+    }
+    .add-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(255,120,0,.45); }
+
+    /* ── No results ── */
+    .no-results {
+      display: none;
+      grid-column: 1 / -1;
+      text-align: center;
+      color: var(--muted);
+      padding: 40px 0;
+      font-size: 15px;
+    }
+
+    /* ── Launch overlay ── */
+    .launch-overlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,.7);
+      z-index: 200;
+      backdrop-filter: blur(4px);
+    }
+    .launch-card {
+      background: rgba(20,20,30,.95);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 30px 36px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,.6);
+      min-width: 220px;
+    }
+    .spinner {
+      width: 44px; height: 44px;
+      margin: 0 auto 14px;
+      border-radius: 50%;
+      border: 4px solid rgba(255,140,0,.2);
+      border-top-color: var(--accent);
+      animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .launch-text { font-family: 'Bangers', cursive; font-size: 22px; letter-spacing: 2px; color: var(--accent); }
+    .launch-sub { font-size: 12px; color: var(--muted); margin-top: 5px; }
+
+    /* scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,140,0,.3); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,140,0,.55); }
   </style>
 </head>
 <body>
-  <button class="back-button" onclick="window.location.href='https://susysam.github.io/start27.html'">Back to Home</button>
 
-  <h1>Games</h1>
+  <header>
+    <button class="back-button" onclick="window.location.href='https://susysam.github.io/start27.html'">
+      ← Home
+    </button>
+    <span class="header-title">🎮 GAMES</span>
+    <div class="header-right">
+      <span class="game-count" id="gameCount">17 games</span>
+    </div>
+  </header>
+
+  <div class="search-wrap">
+    <input type="text" class="search-input" id="searchInput" placeholder="Search games…" oninput="filterGames()">
+  </div>
 
   <div class="games-container" id="gamesContainer">
-    <div class="game-card">
-      <img src="/images/bob-the-robber-2.png" alt="Bob the Robber 2">
-      <h3>Bob the Robber 2</h3>
-      <button onclick="openGame('https://ubg365.github.io/bob-the-robber-2/')">Play</button>
+
+    <div class="game-card" data-name="bob the robber 2">
+      <div class="card-thumb-wrap">
+        <img class="card-thumb" src="/images/bob-the-robber-2.png" alt="Bob the Robber 2" onerror="this.src='https://placehold.co/400x200/1a1a2e/ff8c00?text=🎮'">
+      </div>
+      <div class="card-body">
+        <span class="card-title">Bob the Robber 2</span>
+        <button class="play-btn" onclick="openGame('https://ubg365.github.io/bob-the-robber-2/')">▶ Play</button>
+      </div>
     </div>
 
-    <div class="game-card">
-      <img src="/images/drive-mad.jpg" alt="Drive Mad">
-      <h3>Drive Mad</h3>
-      <button onclick="openGame('https://ubg77.github.io/game131022/drive-mad/')">Play</button>
+    <div class="game-card" data-name="drive mad">
+      <div class="card-thumb-wrap">
+        <img class="card-thumb" src="/images/drive-mad.jpg" alt="Drive Mad" onerror="this.src='https://placehold.co/400x200/1a1a2e/ff8c00?text=🎮'">
+      </div>
+      <div class="card-body">
+        <span class="card-title">Drive Mad</span>
+        <button class="play-btn" onclick="openGame('https://ubg77.github.io/game131022/drive-mad/')">▶ Play</button>
+      </div>
     </div>
 
-    <div class="game-card">
-      <img src="https://img.poki.com/cdn-cgi/image/quality=78,width=600,height=600,fit=cover,f=auto/7f53593c-4090-4cc5-a934-6a5e599d8eaa.png" alt="G Switch 3">
-      <h3>G Switch 3</h3>
-      <button onclick="openGame('https://webglmath.github.io/gswitch/')">Play</button>
+    <div class="game-card" data-name="g switch 3">
+      <div class="card-thumb-wrap">
+        <img class="card-thumb" src="https://img.poki.com/cdn-cgi/image/quality=78,width=600,height=600,fit=cover,f=auto/7f53593c-4090-4cc5-a934-6a5e599d8eaa.png" alt="G Switch 3" onerror="this.src='https://placehold.co/400x200/1a1a2e/ff8c00?text=🎮'">
+      </div>
+      <div class="card-body">
+        <span class="card-title">G Switch 3</span>
+        <button class="play-btn" onclick="openGame('https://webglmath.github.io/gswitch/')">▶ Play</button>
+      </div>
     </div>
 
-    <div class="game-card">
-      <img src="/images/vex.png" alt="Vex 7">
-      <h3>Vex 7</h3>
-      <button onclick="openGame('https://html5edu.github.io/h6/vex-7/')">Play</button>
+    <div class="game-card" data-name="vex 7">
+      <div class="card-thumb-wrap">
+        <img class="card-thumb" src="/images/vex.png" alt="Vex 7" onerror="this.src='https://placehold.co/400x200/1a1a2e/ff8c00?text=🎮'">
+      </div>
+      <div class="card-body">
+        <span class="card-title">Vex 7</span>
+        <button class="play-btn" onclick="openGame('https://html5edu.github.io/h6/vex-7/')">▶ Play</button>
+      </div>
     </div>
 
-    <div class="game-card">
-      <img src="/images/mc.png" alt="Minecraft">
-      <h3>Minecraft</h3>
-      <button onclick="openGame('https://xlegends.github.io/server-gxmehub/')">Play</button>
+    <div class="game-card" data-name="minecraft">
+      <div class="card-thumb-wrap">
+        <img class="card-thumb" src="/images/mc.png" alt="Minecraft" onerror="this.src='https://placehold.co/400x200/1a1a2e/ff8c00?text=🎮'">
+      </div>
+      <div class="card-body">
+        <span class="card-title">Minecraft</span>
+        <button class="play-btn" onclick="openGame('https://xlegends.github.io/server-gxmehub/')">▶ Play</button>
+      </div>
     </div>
 
-    <div class="game-card">
-      <img src="/images/moto-x3m.jpg" alt="Moto X3M">
-      <h3>Moto X3M</h3>
-      <button onclick="openGame('https://webglmath.github.io/moto-x3m/')">Play</button>
+    <div class="game-card" data-name="moto x3m">
+      <div class="card-thumb-wrap">
+        <img class="card-thumb" src="/images/moto-x3m.jpg" alt="Moto X3M" onerror="this.src='https://placehold.co/400x200/1a1a2e/ff8c00?text=🎮'">
+      </div>
+      <div class="card-body">
+        <span class="card-title">Moto X3M</span>
+        <button class="play-btn" onclick="openGame('https://webglmath.github.io/moto-x3m/')">▶ Play</button>
+      </div>
     </div>
 
-    <div class="game-card">
-      <img src="/images/retro-bowl.jpg" alt="Retro Bowl">
-      <h3>Retro Bowl</h3>
-      <button onclick="openGame('https://webglmath.github.io/retro-bowl/')">Play</button>
+    <div class="game-card" data-name="retro bowl">
+      <div class="card-thumb-wrap">
+        <img class="card-thumb" src="/images/retro-bowl.jpg" alt="Retro Bowl" onerror="this.src='https://placehold.co/400x200/1a1a2e/ff8c00?text=🎮'">
+      </div>
+      <div class="card-body">
+        <span class="card-title">Retro Bowl</span>
+        <button class="play-btn" onclick="openGame('https://webglmath.github.io/retro-bowl/')">▶ Play</button>
+      </div>
     </div>
 
-    <div class="game-card">
-      <img src="/images/slope.jpg" alt="Slope">
-      <h3>Slope</h3>
-      <button onclick="openGame('https://webglmath.github.io/slope/')">Play</button>
+    <div class="game-card" data-name="slope">
+      <div class="card-thumb-wrap">
+        <img class="card-thumb" src="/images/slope.jpg" alt="Slope" onerror="this.src='https://placehold.co/400x200/1a1a2e/ff8c00?text=🎮'">
+      </div>
+      <div class="card-body">
+        <span class="card-title">Slope</span>
+        <button class="play-btn" onclick="openGame('https://webglmath.github.io/slope/')">▶ Play</button>
+      </div>
     </div>
 
-    <div class="game-card">
-      <img src="/images/A1R.png" alt="A1R">
-      <h3>A1R</h3>
-      <button onclick="openGame('https://freeleo27.github.io/')">Play</button>
+    <div class="game-card" data-name="a1r">
+      <div class="card-thumb-wrap">
+        <img class="card-thumb" src="/images/A1R.png" alt="A1R" onerror="this.src='https://placehold.co/400x200/1a1a2e/ff8c00?text=🎮'">
+      </div>
+      <div class="card-body">
+        <span class="card-title">A1R</span>
+        <button class="play-btn" onclick="openGame('https://freeleo27.github.io/')">▶ Play</button>
+      </div>
     </div>
 
-    <div class="game-card">
-      <img src="/images/smash.png" alt="Smash Karts">
-      <h3>Smash Karts</h3>
-      <button onclick="openGame('https://smartcart1.github.io/s/smash-karts/')">Play</button>
+    <div class="game-card" data-name="smash karts">
+      <div class="card-thumb-wrap">
+        <img class="card-thumb" src="/images/smash.png" alt="Smash Karts" onerror="this.src='https://placehold.co/400x200/1a1a2e/ff8c00?text=🎮'">
+      </div>
+      <div class="card-body">
+        <span class="card-title">Smash Karts</span>
+        <button class="play-btn" onclick="openGame('https://smartcart1.github.io/s/smash-karts/')">▶ Play</button>
+      </div>
     </div>
 
-    <div class="game-card">
-      <img src="/images/roblox_logo.jpeg" alt="Roblox">
-      <h3>Roblox</h3>
-      <button onclick="openGame('https://now.gg/iframe/snippet?app_pkg=com.roblox.client&partner=skool')">Play</button>
+    <div class="game-card" data-name="roblox">
+      <div class="card-thumb-wrap">
+        <img class="card-thumb" src="/images/roblox_logo.jpeg" alt="Roblox" onerror="this.src='https://placehold.co/400x200/1a1a2e/ff8c00?text=🎮'">
+      </div>
+      <div class="card-body">
+        <span class="card-title">Roblox</span>
+        <button class="play-btn" onclick="openGame('https://now.gg/iframe/snippet?app_pkg=com.roblox.client&partner=skool')">▶ Play</button>
+      </div>
     </div>
 
-    <div class="game-card">
-      <img src="https://geometrydash.io/data/image/game/cluster-rush.jpg" alt="Cluster Rush">
-      <h3>Cluster Rush</h3>
-      <button onclick="openGame('https://www.snake-games.io/localgames/cluster-rush/')">Play</button>
+    <div class="game-card" data-name="cluster rush">
+      <div class="card-thumb-wrap">
+        <img class="card-thumb" src="https://geometrydash.io/data/image/game/cluster-rush.jpg" alt="Cluster Rush" onerror="this.src='https://placehold.co/400x200/1a1a2e/ff8c00?text=🎮'">
+      </div>
+      <div class="card-body">
+        <span class="card-title">Cluster Rush</span>
+        <button class="play-btn" onclick="openGame('https://www.snake-games.io/localgames/cluster-rush/')">▶ Play</button>
+      </div>
     </div>
 
-    <div class="game-card">
-      <img src="/images/vex3.jpg" alt="Vex 3">
-      <h3>Vex 3</h3>
-      <button onclick="openGame('https://html5.gamedistribution.com/rvvASMiM/762c932b4db74c6da0c1d101b2da8be6/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-3')">Play</button>
+    <div class="game-card" data-name="vex 3">
+      <div class="card-thumb-wrap">
+        <img class="card-thumb" src="/images/vex3.jpg" alt="Vex 3" onerror="this.src='https://placehold.co/400x200/1a1a2e/ff8c00?text=🎮'">
+      </div>
+      <div class="card-body">
+        <span class="card-title">Vex 3</span>
+        <button class="play-btn" onclick="openGame('https://html5.gamedistribution.com/rvvASMiM/762c932b4db74c6da0c1d101b2da8be6/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-3')">▶ Play</button>
+      </div>
     </div>
 
-    <div class="game-card">
-      <img src="/images/vex4.jpg" alt="Vex 4">
-      <h3>Vex 4</h3>
-      <button onclick="openGame('https://html5.gamedistribution.com/rvvASMiM/80e6a5ae477f4d4fbcd1ea293d10087d/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-4')">Play</button>
+    <div class="game-card" data-name="vex 4">
+      <div class="card-thumb-wrap">
+        <img class="card-thumb" src="/images/vex4.jpg" alt="Vex 4" onerror="this.src='https://placehold.co/400x200/1a1a2e/ff8c00?text=🎮'">
+      </div>
+      <div class="card-body">
+        <span class="card-title">Vex 4</span>
+        <button class="play-btn" onclick="openGame('https://html5.gamedistribution.com/rvvASMiM/80e6a5ae477f4d4fbcd1ea293d10087d/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-4')">▶ Play</button>
+      </div>
     </div>
 
-    <div class="game-card">
-      <img src="/images/vex5.jpg" alt="Vex 5">
-      <h3>Vex 5</h3>
-      <button onclick="openGame('https://html5.gamedistribution.com/rvvASMiM/f120262ab72743039fbce88c1f370df8/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-5')">Play</button>
+    <div class="game-card" data-name="vex 5">
+      <div class="card-thumb-wrap">
+        <img class="card-thumb" src="/images/vex5.jpg" alt="Vex 5" onerror="this.src='https://placehold.co/400x200/1a1a2e/ff8c00?text=🎮'">
+      </div>
+      <div class="card-body">
+        <span class="card-title">Vex 5</span>
+        <button class="play-btn" onclick="openGame('https://html5.gamedistribution.com/rvvASMiM/f120262ab72743039fbce88c1f370df8/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-5')">▶ Play</button>
+      </div>
     </div>
 
-    <div class="game-card">
-      <img src="/images/vex6.jpeg" alt="Vex 6">
-      <h3>Vex 6</h3>
-      <button onclick="openGame('https://html5.gamedistribution.com/rvvASMiM/4925e12574364121a48c61c35f649c36/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-6')">Play</button>
+    <div class="game-card" data-name="vex 6">
+      <div class="card-thumb-wrap">
+        <img class="card-thumb" src="/images/vex6.jpeg" alt="Vex 6" onerror="this.src='https://placehold.co/400x200/1a1a2e/ff8c00?text=🎮'">
+      </div>
+      <div class="card-body">
+        <span class="card-title">Vex 6</span>
+        <button class="play-btn" onclick="openGame('https://html5.gamedistribution.com/rvvASMiM/4925e12574364121a48c61c35f649c36/?gd_sdk_referrer_url=https://gamedistribution.com/games/vex-6')">▶ Play</button>
+      </div>
     </div>
 
-    <div class="game-card">
-      <img src="https://images.crazygames.com/games/basketball-stars-2019/cover-1583231506155.png?auto=format%2Ccompress&q=45&cs=strip&ch=DPR&w=1200&h=630&fit=crop" alt="Basketball Stars">
-      <h3>Basketball Stars</h3>
-      <button onclick="openGame('https://html5.gamedistribution.com/rvvASMiM/69d78d071f704fa183d75b4114ae40ec/?gd_sdk_referrer_url=https://gamedistribution.com/games/basketball-stars')">Play</button>
+    <div class="game-card" data-name="basketball stars">
+      <div class="card-thumb-wrap">
+        <img class="card-thumb" src="https://images.crazygames.com/games/basketball-stars-2019/cover-1583231506155.png?auto=format%2Ccompress&q=45&cs=strip&ch=DPR&w=1200&h=630&fit=crop" alt="Basketball Stars" onerror="this.src='https://placehold.co/400x200/1a1a2e/ff8c00?text=🎮'">
+      </div>
+      <div class="card-body">
+        <span class="card-title">Basketball Stars</span>
+        <button class="play-btn" onclick="openGame('https://html5.gamedistribution.com/rvvASMiM/69d78d071f704fa183d75b4114ae40ec/?gd_sdk_referrer_url=https://gamedistribution.com/games/basketball-stars')">▶ Play</button>
+      </div>
+    </div>
+
+    <div class="no-results" id="noResults">No games found 😔</div>
+  </div>
+
+  <!-- Add custom game -->
+  <div class="add-section">
+    <div class="add-card">
+      <button class="add-toggle" id="addToggle" onclick="toggleAdd()">
+        <span id="addIcon">＋</span> Custom Game
+      </button>
+      <div class="add-inputs" id="addInputs">
+        <input type="text" id="gameName" placeholder="Game name…">
+        <input type="text" id="gameLink" placeholder="Game URL…">
+        <button class="add-submit" onclick="addGame()">Add Game</button>
+      </div>
     </div>
   </div>
 
-  <div class="add-game-container">
-    <button id="addGameBtn">Custom Game</button>
-    <div class="add-game-inputs hidden" id="addGameInputs">
-      <input type="text" id="gameName" placeholder="Enter game name...">
-      <input type="text" id="gameLink" placeholder="Enter game link...">
-      <button onclick="addGame()">Submit</button>
+  <!-- Launch overlay -->
+  <div class="launch-overlay" id="launchOverlay">
+    <div class="launch-card">
+      <div class="spinner"></div>
+      <div class="launch-text">LOADING...</div>
+      <div class="launch-sub">Launching game</div>
     </div>
   </div>
 
   <script>
     function openGame(url) {
-      const win = window.open();
-      if (!win) return alert("Popup blocked.");
+      const overlay = document.getElementById('launchOverlay');
+      overlay.style.display = 'flex';
 
-      win.document.body.style.margin = '0';
-      win.document.body.style.height = '100vh';
+      setTimeout(() => {
+        overlay.style.display = 'none';
+        const win = window.open('about:blank', '_blank');
+        if (!win) return alert("Popup blocked.");
 
-      const iframe = win.document.createElement('iframe');
-      iframe.style.border = 'none';
-      iframe.style.width = '100%';
-      iframe.style.height = '100%';
-      iframe.src = url;
-
-      win.document.body.appendChild(iframe);
+        win.document.open();
+        win.document.write(`<!DOCTYPE html>
+<html>
+  <head>
+    <title>Gmail</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <style>html,body{margin:0;padding:0;height:100%;background:#000;overflow:hidden;}iframe{border:none;width:100%;height:100vh;display:block;}</style>
+  </head>
+  <body>
+    <iframe src="${url}" allowfullscreen sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-pointer-lock allow-top-navigation"></iframe>
+  </body>
+</html>`);
+        win.document.close();
+      }, 700);
     }
 
-    document.getElementById('addGameBtn').addEventListener('click', function () {
-      document.getElementById('addGameInputs').classList.remove('hidden');
-    });
+    function filterGames() {
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      const cards = document.querySelectorAll('.game-card[data-name]');
+      let visible = 0;
+      cards.forEach(card => {
+        const match = card.dataset.name.includes(q);
+        card.style.display = match ? '' : 'none';
+        if (match) visible++;
+      });
+      document.getElementById('noResults').style.display = visible === 0 ? 'block' : 'none';
+      document.getElementById('gameCount').textContent = visible + ' game' + (visible !== 1 ? 's' : '');
+    }
+
+    function toggleAdd() {
+      const inputs = document.getElementById('addInputs');
+      const icon = document.getElementById('addIcon');
+      const open = inputs.classList.toggle('open');
+      icon.textContent = open ? '✕' : '＋';
+    }
 
     function addGame() {
       const name = document.getElementById('gameName').value.trim();
       const link = document.getElementById('gameLink').value.trim();
+      if (!name || !link) return alert('Please enter both a name and a link.');
 
-      if (name && link) {
-        const gamesContainer = document.getElementById('gamesContainer');
+      const container = document.getElementById('gamesContainer');
+      const card = document.createElement('div');
+      card.className = 'game-card';
+      card.dataset.name = name.toLowerCase();
+      card.style.animationDelay = '0s';
+      card.innerHTML = `
+        <div class="card-thumb-wrap">
+          <img class="card-thumb" src="https://placehold.co/400x200/1a1a2e/ff8c00?text=🎮" alt="${name}">
+        </div>
+        <div class="card-body">
+          <span class="card-title">${name}</span>
+          <button class="play-btn" onclick="openGame('${link}')">▶ Play</button>
+        </div>`;
 
-        const gameCard = document.createElement('div');
-        gameCard.classList.add('game-card');
+      // insert before the no-results div
+      container.insertBefore(card, document.getElementById('noResults'));
 
-        const img = document.createElement('img');
-        img.src = '/images/custom-game.png';
-        img.alt = name;
+      document.getElementById('gameName').value = '';
+      document.getElementById('gameLink').value = '';
+      toggleAdd();
 
-        const title = document.createElement('h3');
-        title.textContent = name;
-
-        const button = document.createElement('button');
-        button.textContent = 'Play';
-        button.onclick = function () { openGame(link); };
-
-        gameCard.appendChild(img);
-        gameCard.appendChild(title);
-        gameCard.appendChild(button);
-
-        gamesContainer.appendChild(gameCard);
-
-        document.getElementById('gameName').value = '';
-        document.getElementById('gameLink').value = '';
-        document.getElementById('addGameInputs').classList.add('hidden');
-      } else {
-        alert('Please enter both the game name and link!');
-      }
+      // update count
+      const total = document.querySelectorAll('.game-card[data-name]').length;
+      document.getElementById('gameCount').textContent = total + ' games';
     }
   </script>
 </body>
