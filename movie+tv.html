@@ -325,12 +325,12 @@
       const qs = pstreamParams();
 
       if (mediaType === 'movie') {
-        return `https://iframe.pstream.mov/embed/tmdb-movie-${encodeURIComponent(mediaId)}?${qs}`;
+        return `https://iframe.pstream.net/embed/tmdb-movie-${encodeURIComponent(mediaId)}?${qs}`;
       } else {
         // Default Season 1 Episode 1 (no prompts)
         const season = 1;
         const episode = 1;
-        return `https://iframe.pstream.mov/embed/tmdb-tv-${encodeURIComponent(mediaId)}/${season}/${episode}?${qs}`;
+        return `https://iframe.pstream.net/embed/tmdb-tv-${encodeURIComponent(mediaId)}/${season}/${episode}?${qs}`;
       }
     }
 
