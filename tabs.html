@@ -113,16 +113,6 @@
       min-height: 18px;
       text-align: center;
     }
-
-    iframe {
-      width: 100%;
-      height: 90vh;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      margin-top: 20px;
-      display: none;
-      background: #000;
-    }
   </style>
 </head>
 <body>
@@ -132,40 +122,16 @@
     onkeydown="if(event.key==='Enter') openAboutBlank()">
 
   <div class="button-group">
-    <button class="button" onclick="loadInProxy()">Open via Proxy</button>
     <button class="button" onclick="openAboutBlank()">Open in New Tab</button>
   </div>
 
   <div id="statusMessage" class="loading"></div>
-  <iframe id="proxyFrame"></iframe>
 
   <script>
     function sanitizeUrl(input) {
       input = input.trim();
       if (input.startsWith('http://') || input.startsWith('https://')) return input;
       return 'https://' + input;
-    }
-
-    function loadInProxy() {
-      const input = document.getElementById('searchInput').value.trim();
-      const statusMsg = document.getElementById('statusMessage');
-      const iframe = document.getElementById('proxyFrame');
-
-      statusMsg.textContent = '';
-      iframe.style.display = 'none';
-
-      if (!input) {
-        statusMsg.textContent = 'Please enter a URL.';
-        return;
-      }
-
-      const url = sanitizeUrl(input);
-      const encoded = encodeURIComponent(url);
-      const proxyUrl = `https://proxy-server-wdju.onrender.com/proxy?url=${encoded}`;
-
-      iframe.src = proxyUrl;
-      iframe.style.display = 'block';
-      statusMsg.textContent = 'Loaded via proxy.';
     }
 
     function openAboutBlank() {
