@@ -6,7 +6,6 @@
   <title>Site</title>
   <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Google_Classroom_Logo.svg/2372px-Google_Classroom_Logo.svg.png" type="image/png"/>
 
-  <!-- Apply theme ASAP (site-wide) -->
   <script>
     (function () {
       const theme = localStorage.getItem('theme');
@@ -23,10 +22,8 @@
       --border: rgba(0,0,0,.14);
       --card: rgba(255,255,255,.82);
       --overlay: rgba(255,255,255,0);
-
       --accent: #6C0BA9;
       --accent2: #4F0672;
-
       --danger: #FF5733;
       --danger2: #C74426;
     }
@@ -54,7 +51,6 @@
       transition: background-color .25s ease, color .25s ease;
     }
 
-    /* Dim overlay in dark mode */
     body::before{
       content:"";
       position: fixed;
@@ -79,7 +75,7 @@
 
     .search-bar {
       margin-top: 20px;
-      padding: 12px 12px;
+      padding: 12px;
       width: 80%;
       max-width: 600px;
       border-radius: 12px;
@@ -87,6 +83,7 @@
       background: var(--card);
       color: var(--text);
       outline: none;
+      font-size: 15px;
     }
 
     .button-group {
@@ -104,8 +101,10 @@
       border-radius: 10px;
       cursor: pointer;
       border: none;
+      font-size: 15px;
+      transition: background-color 0.3s, transform 0.2s ease;
     }
-    .button:hover { background-color: var(--accent2); }
+    .button:hover { background-color: var(--accent2); transform: scale(1.05); }
 
     .loading {
       color: var(--muted);
@@ -129,7 +128,8 @@
 <body>
   <button class="back-button" onclick="goBack()">Back</button>
 
-  <input type="text" id="searchInput" class="search-bar" placeholder="Enter a website URL (e.g., youtube.com)">
+  <input type="text" id="searchInput" class="search-bar" placeholder="Enter a website URL (e.g., youtube.com)"
+    onkeydown="if(event.key==='Enter') openAboutBlank()">
 
   <div class="button-group">
     <button class="button" onclick="loadInProxy()">Open via Proxy</button>
@@ -141,7 +141,9 @@
 
   <script>
     function sanitizeUrl(input) {
-      return input.startsWith('http://') || input.startsWith('https://') ? input : 'https://' + input;
+      input = input.trim();
+      if (input.startsWith('http://') || input.startsWith('https://')) return input;
+      return 'https://' + input;
     }
 
     function loadInProxy() {
@@ -168,25 +170,39 @@
 
     function openAboutBlank() {
       const input = document.getElementById('searchInput').value.trim();
-      if (!input) return;
+      const statusMsg = document.getElementById('statusMessage');
+
+      if (!input) {
+        statusMsg.textContent = 'Please enter a URL.';
+        return;
+      }
 
       const url = sanitizeUrl(input);
       const newTab = window.open('about:blank', '_blank');
-      if (!newTab) return alert("Popup blocked.");
+      if (!newTab) {
+        statusMsg.textContent = 'Popup blocked. Please allow popups for this site.';
+        return;
+      }
 
-      newTab.document.write(`
-        <html>
-          <head>
-            <title>${url}</title>
-            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-            <style>html,body{margin:0;height:100%;} iframe{border:none;width:100%;height:100%;}</style>
-          </head>
-          <body>
-            <iframe src="${url}"></iframe>
-          </body>
-        </html>
-      `);
+      newTab.document.open();
+      newTab.document.write(`<!DOCTYPE html>
+<html>
+  <head>
+    <title>Gmail</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <style>
+      html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #000; }
+      iframe { border: none; width: 100%; height: 100vh; display: block; }
+    </style>
+  </head>
+  <body>
+    <iframe src="${url}" allowfullscreen
+      sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-pointer-lock allow-top-navigation">
+    </iframe>
+  </body>
+</html>`);
       newTab.document.close();
+      statusMsg.textContent = '';
     }
 
     function goBack() {
@@ -194,7 +210,6 @@
     }
   </script>
 
-  <!-- keep your file -->
   <script src="site-settings.js"></script>
 </body>
 </html>
