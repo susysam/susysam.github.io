@@ -187,28 +187,22 @@
     }
 
     .error-title {
-      font-size: 18px;
+      font-size: 20px;
       color: #ff6b6b;
       font-weight: bold;
-      margin-bottom: 8px;
-    }
-
-    .error-desc {
-      font-size: 13px;
-      color: #ccc;
-      line-height: 1.5;
       margin-bottom: 16px;
     }
 
     .error-action-btn {
-      padding: 8px 16px;
+      padding: 10px 20px;
       background: #ff5252;
       color: white;
       border: none;
       border-radius: 6px;
-      font-size: 13px;
+      font-size: 14px;
       font-weight: bold;
       cursor: pointer;
+      transition: background 0.2s;
     }
     .error-action-btn:hover { background: #ff3333; }
 
@@ -223,7 +217,6 @@
       position: relative;
     }
 
-    /* Small indent tab to open laptop screen realistically */
     .laptop-base-chassis::before {
       content: '';
       position: absolute;
@@ -246,7 +239,7 @@
     <input type="text" id="searchInput" class="search-bar" placeholder="Enter web URL (e.g., example.com)"
       onkeydown="if(event.key==='Enter') renderVirtualUrl()">
 
-    <button class="button" onclick="renderVirtualUrl()">Load on Laptop</button>
+    <button class="button" onclick="renderVirtualUrl()">Open Site</button>
 
     <div class="laptop-hardware">
       <div class="laptop-screen-frame">
@@ -257,11 +250,8 @@
           
           <div class="error-screen-overlay" id="errorModule">
             <div class="error-card">
-              <div class="error-title">Connection Refused</div>
-              <div class="error-desc">
-                This website rejected embedding because of protection rules (X-Frame-Options). Click below to launch it safely via a standard clean workspace instead.
-              </div>
-              <button class="error-action-btn" id="errorFallbackBtn">Open Clean Window</button>
+              <div class="error-title">Error 404</div>
+              <button class="error-action-btn" id="errorFallbackBtn">Open Tab</button>
             </div>
           </div>
 
@@ -279,13 +269,10 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       document.getElementById('searchInput').focus();
-      // Set initial desktop default screen view
+      // Set empty screen display baseline
       document.getElementById('monitorIframe').srcdoc = `
-        <html style="height:100%; background:#141519; display:flex; align-items:center; justify-content:center; font-family:sans-serif; color:#666;">
-          <body style="margin:0; text-align:center;">
-            <div style="font-size:32px; margin-bottom:6px;">💻</div>
-            <div style="font-size:13px; font-weight:bold; letter-spacing:0.5px;">SYSTEM POWERED ON</div>
-          </body>
+        <html style="height:100%; background:#141519;">
+          <body style="margin:0;"></body>
         </html>`;
     });
 
@@ -310,18 +297,15 @@
       frameNode.removeAttribute('srcdoc');
       frameNode.src = verifiedUrl;
 
-      // Clear any older pending time triggers running background validation loops
       if (confirmationTimer) clearTimeout(confirmationTimer);
 
       // Embedded Iframe connection confirmation timeout block
       confirmationTimer = setTimeout(() => {
         try {
-          // If security blocks access, testing origin access variables will trigger an exception
           if (!frameNode.contentWindow || frameNode.contentWindow.location.href === "about:blank") {
             triggerErrorPanel();
           }
         } catch (err) {
-          // Execution route falls here safely if same-origin header refuses structural connection
           triggerErrorPanel();
         }
       }, 3500);
@@ -332,23 +316,7 @@
       errorLayer.style.display = "flex";
       
       document.getElementById('errorFallbackBtn').onclick = () => {
-        const targetWindow = window.open('about:blank', '_blank');
-        if (!targetWindow) {
-          alert("Screen launch blocked. Please enable site popup options.");
-          return;
-        }
-        targetWindow.document.open();
-        targetWindow.document.write(`<!DOCTYPE html>
-          <html>
-            <head>
-              <title>Workspace Window</title>
-              <style>html,body{margin:0;padding:0;height:100%;overflow:hidden;background:#000;} iframe{border:none;width:100%;height:100vh;display:block;}</style>
-            </head>
-            <body>
-              <iframe src="${fallbackGlobalUrl}" allowfullscreen sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-pointer-lock allow-top-navigation"></iframe>
-            </body>
-          </html>`);
-        targetWindow.document.close();
+        window.open(fallbackGlobalUrl, '_blank');
       };
     }
 
