@@ -13,12 +13,15 @@
       --card: rgba(255,255,255,.75);
       --border: rgba(0,0,0,.10);
       --shadow: 0 18px 45px rgba(0,0,0,.12);
-      --accent: #6C0BA9; /* purple to match your home */
+      --accent: #6C0BA9; 
       --accent2: #4F0672;
       --good: #14b86a;
       --warn: #ffb020;
       --danger: #ff4d4d;
       --radius: 16px;
+
+      --glow1: rgba(108,11,169,.18);
+      --glow2: rgba(79,6,114,.16);
     }
     :root.dark{
       --bg: #0f1116;
@@ -35,8 +38,8 @@
       min-height:100vh;
       font-family: Arial, sans-serif;
       background:
-        radial-gradient(900px 500px at 10% 10%, rgba(108,11,169,.18), transparent 60%),
-        radial-gradient(900px 500px at 90% 20%, rgba(79,6,114,.16), transparent 60%),
+        radial-gradient(900px 500px at 10% 10%, var(--glow1), transparent 60%),
+        radial-gradient(900px 500px at 90% 20%, var(--glow2), transparent 60%),
         linear-gradient(180deg, var(--bg), var(--bg));
       color: var(--text);
       transition: background-color .25s ease, color .25s ease;
@@ -172,7 +175,51 @@
       line-height: 1.25;
     }
 
-    /* Toggle */
+    /* Preset Grid System */
+    .presets-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 10px;
+      margin: 12px 0 16px;
+    }
+
+    .preset-chip {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 10px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: all 0.2s ease;
+      text-align: left;
+    }
+    .preset-chip:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .preset-chip.active {
+      border-color: var(--accent);
+      background: rgba(108,11,169,0.08);
+      box-shadow: 0 0 0 2px var(--accent);
+    }
+
+    .preset-preview-box {
+      width: 100%;
+      height: 34px;
+      border-radius: 6px;
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .preset-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* Toggle Switch Component */
     .toggle{
       display:flex;
       align-items:center;
@@ -213,7 +260,6 @@
       background: #fff;
     }
 
-    /* Inputs */
     .text-input{
       width: 100%;
       padding: 10px 12px;
@@ -285,6 +331,7 @@
       opacity: 0;
       pointer-events:none;
       transition: opacity .2s ease, transform .2s ease;
+      z-index: 200;
     }
     .toast.show{
       opacity: 1;
@@ -323,7 +370,6 @@
 
   <main>
     <div class="grid">
-      <!-- Appearance -->
       <section class="card">
         <div class="card-head">
           <div>
@@ -344,26 +390,55 @@
             </label>
           </div>
 
+          <div class="row" style="border-bottom: none; padding-bottom: 2px;">
+            <div class="left">
+              <p class="label">Background Color Presets</p>
+              <p class="hint">Instantly swap theme canvas palettes across your home hub dashboard.</p>
+            </div>
+          </div>
+
+          <div class="presets-container" id="presetsGrid">
+            <div class="preset-chip" data-type="color" data-val="#0d0d14" data-glow1="rgba(255,140,0,0.15)" data-glow2="rgba(120,0,255,0.12)">
+              <div class="preset-preview-box" style="background: linear-gradient(135deg, #0d0d14, #1a1a2e);"></div>
+              <span class="preset-title">Midnight Neon</span>
+            </div>
+            <div class="preset-chip" data-type="color" data-val="#1f0f1d" data-glow1="rgba(255,85,0,0.18)" data-glow2="rgba(255,0,128,0.14)">
+              <div class="preset-preview-box" style="background: linear-gradient(135deg, #1f0f1d, #3d1435);"></div>
+              <span class="preset-title">Sunset Glow</span>
+            </div>
+            <div class="preset-chip" data-type="color" data-val="#050c08" data-glow1="rgba(0,255,100,0.12)" data-glow2="rgba(0,150,255,0.1)">
+              <div class="preset-preview-box" style="background: linear-gradient(135deg, #050c08, #0d2316);"></div>
+              <span class="preset-title">Matrix Code</span>
+            </div>
+            <div class="preset-chip" data-type="color" data-val="#12131a" data-glow1="rgba(0,240,255,0.15)" data-glow2="rgba(255,0,240,0.15)">
+              <div class="preset-preview-box" style="background: linear-gradient(135deg, #12131a, #221929);"></div>
+              <span class="preset-title">Cyberpunk</span>
+            </div>
+            <div class="preset-chip" data-type="color" data-val="#f6f7fb" data-glow1="rgba(108,11,169,0.12)" data-glow2="rgba(79,6,114,0.1)">
+              <div class="preset-preview-box" style="background: #f6f7fb; border: 1px solid #ddd;"></div>
+              <span class="preset-title">Clean Light</span>
+            </div>
+          </div>
+
           <div class="row">
             <div class="left">
-              <p class="label">Background image URL (Home)</p>
-              <p class="hint">This edits the same <code>backgroundUrl</code> your Home page uses.</p>
+              <p class="label">Background Image URL (Home)</p>
+              <p class="hint">Overrides presets with a custom direct image link path address.</p>
             </div>
           </div>
 
           <input class="text-input" id="bgUrlInput" type="text" placeholder="https://example.com/image.jpg" />
 
           <div class="btns">
-            <button id="saveBgBtn">Save background</button>
-            <button class="btn-ghost" id="previewBgBtn" type="button">Preview on this page</button>
-            <button class="btn-danger" id="clearBgBtn" type="button">Remove background</button>
+            <button id="saveBgBtn">Save background URL</button>
+            <button class="btn-ghost" id="previewBgBtn" type="button">Preview Here</button>
+            <button class="btn-danger" id="clearBgBtn" type="button">Remove Theme Layout</button>
           </div>
 
-          <div class="mini" id="bgStatus">Current: <span id="bgCurrent">none</span></div>
+          <div class="mini" id="bgStatus">Current Value: <span id="bgCurrent">none</span></div>
         </div>
       </section>
 
-      <!-- Quick actions -->
       <section class="card">
         <div class="card-head">
           <div>
@@ -382,7 +457,7 @@
           <div class="row" style="margin-top:10px;">
             <div class="left">
               <p class="label">Reset all saved settings</p>
-              <p class="hint">Clears theme + background and refreshes this page.</p>
+              <p class="hint">Clears theme, colors + background and refreshes configuration architecture.</p>
             </div>
             <button class="btn-danger" id="resetAllBtn" type="button">Reset</button>
           </div>
@@ -406,11 +481,13 @@
 
   <script>
     const HOME_URL = "https://susysam.github.io/start27.html";
-    // Your actual settings page URL (used for iframe open):
     const SETTINGS_URL = "https://susysam.github.io/settings.html";
 
     const toastEl = document.getElementById("toast");
     const saveStateEl = document.getElementById("saveState");
+    const bgUrlInput = document.getElementById("bgUrlInput");
+    const bgCurrent = document.getElementById("bgCurrent");
+    const darkToggle = document.getElementById("darkModeToggle");
 
     function toast(msg) {
       toastEl.textContent = msg;
@@ -425,9 +502,6 @@
       document.querySelector(".pill").style.borderColor = active ? "rgba(20,184,106,.55)" : "var(--border)";
     }
 
-    // ---------- Theme ----------
-    const darkToggle = document.getElementById("darkModeToggle");
-
     function applyTheme(theme) {
       if (theme === "dark") {
         document.documentElement.classList.add("dark");
@@ -437,27 +511,46 @@
       localStorage.setItem("theme", theme);
     }
 
-    // ---------- Background (shared with Home page) ----------
-    const bgUrlInput = document.getElementById("bgUrlInput");
-    const bgCurrent = document.getElementById("bgCurrent");
-
     function refreshBgUI() {
       const stored = localStorage.getItem("backgroundUrl") || "";
       bgUrlInput.value = stored;
-      bgCurrent.textContent = stored ? stored : "none";
+      
+      if(stored) {
+        bgCurrent.textContent = stored.startsWith("#") ? `Preset Color (${stored})` : `Custom Image URL`;
+      } else {
+        bgCurrent.textContent = "none";
+      }
+      
+      // Sync active states on preset chips matching current value
+      document.querySelectorAll('.preset-chip').forEach(chip => {
+        if(chip.dataset.val === stored) {
+          chip.classList.add('active');
+          // Dynamically adjust localized settings container glow profiles
+          if(chip.dataset.glow1 && chip.dataset.glow2) {
+            document.documentElement.style.setProperty('--glow1', chip.dataset.glow1);
+            document.documentElement.style.setProperty('--glow2', chip.dataset.glow2);
+          }
+        } else {
+          chip.classList.remove('active');
+        }
+      });
     }
 
     function previewBackground(url) {
-      if (url) {
+      if (!url) {
+        document.body.style.backgroundImage = "";
+        return;
+      }
+      if (url.startsWith("#") || url.startsWith("rgb")) {
+        document.body.style.backgroundImage = `linear-gradient(180deg, ${url}, ${url})`;
+      } else {
         document.body.style.backgroundImage = `url('${url}')`;
         document.body.style.backgroundSize = "cover";
         document.body.style.backgroundPosition = "center";
-      } else {
-        document.body.style.backgroundImage = "";
       }
     }
 
-    // ---------- Load saved preferences ----------
+    // Load saved settings engine
     document.addEventListener("DOMContentLoaded", () => {
       const theme = localStorage.getItem("theme") || "light";
       applyTheme(theme);
@@ -465,7 +558,6 @@
 
       refreshBgUI();
 
-      // If user already has a background saved, lightly preview it here too
       const savedBg = localStorage.getItem("backgroundUrl") || "";
       if (savedBg) previewBackground(savedBg);
 
@@ -474,44 +566,63 @@
         `Customize look + quick actions • ${new Date().toLocaleDateString()}`;
     });
 
-    // Dark mode toggle
+    // Preset chips interaction trigger loops
+    document.querySelectorAll('.preset-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const selectedValue = chip.dataset.val;
+        localStorage.setItem("backgroundUrl", selectedValue);
+        
+        // Match base layouts to theme configurations cleanly
+        if(selectedValue === "#f6f7fb") {
+          applyTheme("light");
+          darkToggle.checked = false;
+        } else if(selectedValue.startsWith("#") && selectedValue !== "#f6f7fb") {
+          applyTheme("dark");
+          darkToggle.checked = true;
+        }
+
+        refreshBgUI();
+        previewBackground(selectedValue);
+        toast("Preset Applied!");
+        setSavedDot(true);
+      });
+    });
+
     darkToggle.addEventListener("change", () => {
       applyTheme(darkToggle.checked ? "dark" : "light");
       toast("Theme saved");
       setSavedDot(true);
     });
 
-    // Save background
     document.getElementById("saveBgBtn").addEventListener("click", () => {
       const url = bgUrlInput.value.trim();
       localStorage.setItem("backgroundUrl", url);
       refreshBgUI();
-      toast(url ? "Background saved" : "Background cleared");
+      previewBackground(url);
+      toast(url ? "Background URL saved" : "Background cleared");
       setSavedDot(true);
     });
 
-    // Preview background only
     document.getElementById("previewBgBtn").addEventListener("click", () => {
       previewBackground(bgUrlInput.value.trim());
-      toast("Previewing");
+      toast("Previewing input source");
     });
 
-    // Clear background
     document.getElementById("clearBgBtn").addEventListener("click", () => {
       localStorage.removeItem("backgroundUrl");
       bgUrlInput.value = "";
+      document.documentElement.style.setProperty('--glow1', 'rgba(108,11,169,.18)');
+      document.documentElement.style.setProperty('--glow2', 'rgba(79,6,114,.16)');
       refreshBgUI();
       previewBackground("");
-      toast("Background removed");
+      toast("Background configurations wiped");
       setSavedDot(true);
     });
 
-    // Go to Home
     document.getElementById("homeButton").addEventListener("click", () => {
       window.location.href = HOME_URL;
     });
 
-    // Open in New Tab (about:blank + iframe)
     document.getElementById("tabButton").addEventListener("click", () => {
       const newTab = window.open("about:blank", "_blank");
       if (!newTab) return toast("Popup blocked");
@@ -530,7 +641,6 @@
       newTab.document.close();
     });
 
-    // Open in New Window (about:blank + iframe)
     document.getElementById("windowButton").addEventListener("click", () => {
       const newWindow = window.open("about:blank", "_blank", "width=900,height=650");
       if (!newWindow) return toast("Popup blocked");
@@ -549,7 +659,6 @@
       newWindow.document.close();
     });
 
-    // Reset all
     document.getElementById("resetAllBtn").addEventListener("click", () => {
       const ok = confirm("Reset theme + background for this site?");
       if (!ok) return;
