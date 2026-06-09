@@ -109,14 +109,12 @@
       transform: scale(1.05);
     }
 
-    /* Distinct look for Extra's button */
     .button.btn-extras {
       background-color: var(--extrasBtn);
     }
     .button.btn-extras:hover {
       background-color: var(--extrasBtnHover);
     }
-    /* Clicked Neon Glow Effect State */
     .button.btn-extras.active-glow {
       box-shadow: 0 0 15px var(--extrasBtn), 0 0 25px var(--extrasBtn);
       transform: scale(1.03);
@@ -225,7 +223,7 @@
     }
     :root.dark .launch-sub{ color: rgba(255,255,255,.68); }
 
-    /* Polished Extras Hub Panel */
+    /* Extras Hub Panel */
     .extras-panel {
       max-height: 0;
       overflow: hidden;
@@ -369,7 +367,7 @@
     <div id="standardAppContent">
       <div class="welcome" id="welcomeBlock">
         <h2>Welcome!</h2>
-        <p>Select what you want to watch and where:</p>
+        <p>Select what you want to watch:</p>
       </div>
 
       <div class="buttons-container" id="topButtons">
@@ -411,16 +409,11 @@
       </div>
 
       <div class="input-container" id="inputContainer">
-        <div class="buttons-container">
-          <button class="button" onclick="selectServer('vidsrc')">Server 1 (IMDb)</button>
-          <button class="button" onclick="selectServer('pstream')">Server 2 (TMDB / P-Stream)</button>
-        </div>
-
         <div class="server-hint" id="serverHint">
-          Pick a server, then enter your ID.
+          Enter your ID below to load the player.
         </div>
 
-        <input type="text" id="media-id" placeholder="Pick server first" />
+        <input type="text" id="media-id" placeholder="Enter ID" />
         <button class="button" onclick="playMedia()">Play</button>
       </div>
     </div>
@@ -451,7 +444,6 @@
 
   <script>
     let selectedMediaType = '';
-    let selectedServer = '';
     let currentActiveTargetUrl = '';
 
     const pageTitle = document.getElementById('pageTitle');
@@ -462,7 +454,7 @@
     const launchOverlay = document.getElementById('launchOverlay');
     const launchText = document.getElementById('launchText');
 
-    // Workspace Active Selectors
+    // Workspace Selectors
     const extrasPanel = document.getElementById('extrasPanel');
     const extrasBtn = document.getElementById('extrasBtn');
     const standardAppContent = document.getElementById('standardAppContent');
@@ -485,62 +477,26 @@
     function selectMedia(mediaType) {
       selectedMediaType = mediaType;
 
-      if (mediaType === 'movie') pageTitle.textContent = 'Movies';
-      if (mediaType === 'tv') pageTitle.textContent = 'TV-Shows';
+      if (mediaType === 'movie') {
+        pageTitle.textContent = 'Movies';
+        serverHint.innerHTML = "Using IMDb IDs (example: <code>tt1234567</code>).";
+        document.getElementById('media-id').placeholder = "Enter IMDb ID (e.g., tt1234567)";
+      }
+      if (mediaType === 'tv') {
+        pageTitle.textContent = 'TV-Shows';
+        serverHint.innerHTML = "Using IMDb IDs (example: <code>tt1234567</code>).";
+        document.getElementById('media-id').placeholder = "Enter IMDb ID (e.g., tt1234567)";
+      }
 
       inputContainer.style.display = 'flex';
       welcomeBlock.style.display = 'none';
       topButtons.style.display = 'none';
       document.getElementById('extrasTriggerContainer').style.display = 'none';
-
-      selectedServer = '';
       document.getElementById('media-id').value = '';
-      document.getElementById('media-id').placeholder = 'Pick server first';
-      serverHint.textContent = 'Pick a server, then enter your ID.';
     }
 
-    function selectServer(server) {
-      selectedServer = server;
-      const input = document.getElementById('media-id');
-
-      if (server === 'vidsrc') {
-        input.placeholder = "Enter IMDb ID (e.g., tt1234567)";
-        serverHint.innerHTML = "Using IMDb IDs (example: <code>tt1234567</code>).";
-      } else {
-        input.placeholder = "Enter TMDB ID (e.g., 603)";
-        serverHint.innerHTML = "Using TMDB IDs (example: <code>603</code>). TV auto-loads <code>S1E1</code>.";
-      }
-    }
-
-    function pstreamParams() {
-      const params = new URLSearchParams({
-        logo: "false",
-        downloads: "true",
-        "has-watchparty": "true",
-        allinone: "true",
-        theme: "default",
-        language: "en",
-        tips: "true",
-        "interface-settings": "true",
-        backlink: "https://susysam.github.io/movie+tv.html"
-      });
-      return params.toString();
-    }
-
-    function buildUrl(mediaId, server, mediaType) {
-      if (server === 'vidsrc') {
-        return `https://vidsrc.me/embed/${mediaType}?imdb=${encodeURIComponent(mediaId)}`;
-      }
-
-      const qs = pstreamParams();
-
-      if (mediaType === 'movie') {
-        return `https://pstream.net/embed/tmdb-movie-${encodeURIComponent(mediaId)}?${qs}`;
-      } else {
-        const season = 1;
-        const episode = 1;
-        return `https://pstream.net/embed/tmdb-tv-${encodeURIComponent(mediaId)}/${season}/${episode}?${qs}`;
-      }
+    function buildUrl(mediaId, mediaType) {
+      return `https://vidsrc.me/embed/${mediaType}?imdb=${encodeURIComponent(mediaId)}`;
     }
 
     function openPlayer(url) {
@@ -551,20 +507,18 @@
     function playMedia() {
       const mediaId = document.getElementById('media-id').value.trim();
       if (!selectedMediaType) return;
-      if (!selectedServer) return alert("Pick a server first.");
       if (!mediaId) return alert("Enter an ID first.");
 
       const label = selectedMediaType === 'movie' ? "Launching Movies..." : "Launching TV-Shows...";
       showLaunch(label);
 
       setTimeout(() => {
-        const url = buildUrl(mediaId, selectedServer, selectedMediaType);
+        const url = buildUrl(mediaId, selectedMediaType);
         openPlayer(url);
 
         localStorage.setItem('lastWatched', JSON.stringify({
           type: 'standard',
           mediaId,
-          selectedServer,
           selectedMediaType
         }));
       }, 650);
@@ -576,7 +530,6 @@
 
       const parsed = JSON.parse(data);
 
-      // Check if the last item watched was an Extra Hub item
       if (parsed.type === 'external') {
         showLaunch("Restoring External Hub Site...");
         setTimeout(() => {
@@ -586,29 +539,20 @@
         return;
       }
 
-      // Default standard logic path
-      const { mediaId, selectedServer, selectedMediaType } = parsed;
+      const { mediaId, selectedMediaType } = parsed;
       const label = selectedMediaType === 'movie' ? "Launching Movies..." : "Launching TV-Shows...";
       showLaunch(label);
 
       setTimeout(() => {
-        const url = buildUrl(mediaId, selectedServer, selectedMediaType);
+        const url = buildUrl(mediaId, selectedMediaType);
         openPlayer(url);
       }, 650);
     }
 
     function openAnime() {
-      const animeLinks = [
-        "https://unime.vercel.app/eng",
-        "https://kitsunee.me/",
-        "https://anify.tv/anime",
-        "https://kaido.to/"
-      ];
-      const randomLink = animeLinks[Math.floor(Math.random() * animeLinks.length)];
-      window.open(randomLink, "_blank");
+      window.open("https://kitsunee.moe/", "_blank");
     }
 
-    // Dynamic Extra Modules Scripts
     function toggleExtrasPanel() {
       extrasPanel.classList.toggle('show');
       extrasBtn.classList.toggle('active-glow');
@@ -617,20 +561,16 @@
     function loadExternalSite(url) {
       currentActiveTargetUrl = url;
       
-      // Wipe structural content elements out
       standardAppContent.style.display = 'none';
       pageTitle.textContent = "Movie Player";
 
-      // Bind functional dynamic navigation links
       actionOpenTab.onclick = () => window.open(url, '_blank');
       actionOpenBlank.onclick = () => openAboutBlankWindow(url);
 
-      // Trigger Iframe Generation & reveal structural workspace elements
       targetIframe.src = url;
       iframeWorkspace.style.display = 'flex';
       resetBar.style.display = 'flex';
 
-      // Track configuration inside storage matrix for Continue Watching integration
       localStorage.setItem('lastWatched', JSON.stringify({
         type: 'external',
         url: url
@@ -656,12 +596,10 @@
     }
 
     function resetPageToDefault() {
-      // Clear iframe targets
       targetIframe.src = "";
       iframeWorkspace.style.display = 'none';
       resetBar.style.display = 'none';
 
-      // Restore baseline standard view state
       standardAppContent.style.display = 'block';
       pageTitle.textContent = "Entertainment Player";
       welcomeBlock.style.display = 'block';
@@ -669,7 +607,6 @@
       document.getElementById('extrasTriggerContainer').style.display = 'block';
       inputContainer.style.display = 'none';
       
-      // Reset active extra menu components
       extrasPanel.classList.remove('show');
       extrasBtn.classList.remove('active-glow');
     }
