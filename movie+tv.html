@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Entertainment Player</title>
 
-  <!-- Apply theme ASAP (site-wide) -->
   <script>
     (function () {
       const theme = localStorage.getItem('theme');
@@ -28,6 +27,7 @@
       --danger2: #C74426;
       --overlay: rgba(255,255,255,0);
       --inputBg: rgba(255,255,255,.78);
+      --extrasBg: rgba(0, 0, 0, 0.03);
     }
     :root.dark{
       --bg: #0f1116;
@@ -38,6 +38,7 @@
       --shadow: 0 18px 55px rgba(0,0,0,.55);
       --overlay: rgba(0,0,0,.45);
       --inputBg: rgba(0,0,0,.25);
+      --extrasBg: rgba(255, 255, 255, 0.03);
     }
 
     body {
@@ -124,7 +125,7 @@
       outline: none;
     }
 
-    .return-button {
+    .home-button {
       position: absolute;
       top: 20px;
       right: 20px;
@@ -135,9 +136,11 @@
       border: none;
       border-radius: 10px;
       cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
       transition: background-color 0.3s ease;
     }
-    .return-button:hover { background-color: var(--danger2); }
+    .home-button:hover { background-color: var(--danger2); }
 
     .welcome h2 {
       margin-bottom: 10px;
@@ -204,42 +207,209 @@
       color: rgba(0,0,0,.65);
     }
     :root.dark .launch-sub{ color: rgba(255,255,255,.68); }
+
+    /* New Extras & Dynamic Hub Elements */
+    .extras-panel {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      background: var(--extrasBg);
+      border-radius: 12px;
+      padding: 0 15px;
+      margin-top: 10px;
+    }
+
+    .extras-panel.show {
+      max-height: 800px;
+      opacity: 1;
+      transform: translateY(0);
+      padding: 20px 15px;
+      border: 1px dashed var(--border);
+    }
+
+    .category-sec {
+      margin-bottom: 20px;
+    }
+
+    .category-sec h3 {
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .link-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .site-btn {
+      padding: 8px 16px;
+      font-size: 14px;
+      background: var(--inputBg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .site-btn:hover {
+      background: var(--accent);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    /* Iframe Hub Mode */
+    .iframe-workspace {
+      display: none;
+      flex-direction: column;
+      gap: 15px;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .iframe-controls {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      background: var(--inputBg);
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .control-btn {
+      padding: 8px 16px;
+      font-size: 14px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      transition: opacity 0.2s;
+    }
+
+    .control-btn:hover { opacity: 0.85; }
+    .btn-tab { background: #3498db; color: white; }
+    .btn-blank { background: #2ecc71; color: white; }
+
+    .embedded-frame {
+      width: 100%;
+      height: 65vh;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      background: #000;
+    }
+
+    .reset-bar {
+      display: none;
+      margin-top: 30px;
+      justify-content: center;
+    }
+
+    .reset-button {
+      padding: 12px 35px;
+      background-color: #e74c3c;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+      transition: background-color 0.2s, transform 0.2s;
+    }
+
+    .reset-button:hover {
+      background-color: #c0392b;
+      transform: scale(1.05);
+    }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="container" id="mainCard">
     <h1 id="pageTitle">Entertainment Player</h1>
 
-    <div class="welcome" id="welcomeBlock">
-      <h2>Welcome!</h2>
-      <p>Select what you want to watch and where:</p>
-    </div>
-
-    <div class="buttons-container" id="topButtons">
-      <button class="button" onclick="selectMedia('movie')">Movie</button>
-      <button class="button" onclick="selectMedia('tv')">TV Show</button>
-      <button class="button" onclick="openAnime()">Anime</button>
-      <button class="button" onclick="continueWatching()">Continue Watching</button>
-    </div>
-
-    <div class="input-container" id="inputContainer">
-      <div class="buttons-container">
-        <button class="button" onclick="selectServer('vidsrc')">Server 1 (IMDb)</button>
-        <button class="button" onclick="selectServer('pstream')">Server 2 (TMDB / P-Stream)</button>
+    <div id="standardAppContent">
+      <div class="welcome" id="welcomeBlock">
+        <h2>Welcome!</h2>
+        <p>Select what you want to watch and where:</p>
       </div>
 
-      <div class="server-hint" id="serverHint">
-        Pick a server, then enter your ID.
+      <div class="buttons-container" id="topButtons">
+        <button class="button" onclick="selectMedia('movie')">Movie</button>
+        <button class="button" onclick="selectMedia('tv')">TV Show</button>
+        <button class="button" onclick="openAnime()">Anime</button>
+        <button class="button" onclick="continueWatching()">Continue Watching</button>
       </div>
 
-      <input type="text" id="media-id" placeholder="Pick server first" />
-      <button class="button" onclick="playMedia()">Play</button>
+      <div style="margin-bottom: 20px;" id="extrasTriggerContainer">
+        <button class="button" style="background-color: #8e44ad;" onclick="toggleExtrasPanel()">Extra's</button>
+      </div>
+
+      <div class="extras-panel" id="extrasPanel">
+        <div class="category-sec">
+          <h3>Pstream Forks</h3>
+          <div class="link-grid">
+            <button class="site-btn" onclick="loadExternalSite('https://aether.bar/')">Aether Bar</button>
+            <button class="site-btn" onclick="loadExternalSite('https://aether.cx/')">Aether CX</button>
+            <button class="site-btn" onclick="loadExternalSite('https://zstream.mov/')">ZStream</button>
+            <button class="site-btn" onclick="loadExternalSite('https://afterstream.org/')">AfterStream</button>
+            <button class="site-btn" onclick="loadExternalSite('https://basementx.xyz/')">BasementX</button>
+            <button class="site-btn" onclick="loadExternalSite('https://streamwatch.online/')">StreamWatch</button>
+            <button class="site-btn" onclick="loadExternalSite('https://pstream.site/')">PStream Site</button>
+          </div>
+        </div>
+        <div class="category-sec">
+          <h3>Everything Else</h3>
+          <div class="link-grid">
+            <button class="site-btn" onclick="loadExternalSite('https://gotvseries.top/')">GoTV Series</button>
+            <button class="site-btn" onclick="loadExternalSite('https://www.cineby.at/')">Cineby</button>
+            <button class="site-btn" onclick="loadExternalSite('https://www.cineplay.to/')">Cineplay</button>
+            <button class="site-btn" onclick="loadExternalSite('https://www.fmovies.nz/')">FMovies</button>
+            <button class="site-btn" onclick="loadExternalSite('https://lordflix.org/')">LordFlix</button>
+            <button class="site-btn" onclick="loadExternalSite('https://flickystream.su/')">FlickyStream</button>
+            <button class="site-btn" onclick="loadExternalSite('https://meowtv.ru/')">MeowTV</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-container" id="inputContainer">
+        <div class="buttons-container">
+          <button class="button" onclick="selectServer('vidsrc')">Server 1 (IMDb)</button>
+          <button class="button" onclick="selectServer('pstream')">Server 2 (TMDB / P-Stream)</button>
+        </div>
+
+        <div class="server-hint" id="serverHint">
+          Pick a server, then enter your ID.
+        </div>
+
+        <input type="text" id="media-id" placeholder="Pick server first" />
+        <button class="button" onclick="playMedia()">Play</button>
+      </div>
     </div>
+
+    <div class="iframe-workspace" id="iframeWorkspace">
+      <div class="iframe-controls">
+        <button class="control-btn btn-tab" id="actionOpenTab">Open in New Tab</button>
+        <button class="control-btn btn-blank" id="actionOpenBlank">Open in about:blank</button>
+      </div>
+      <iframe src="" class="embedded-frame" id="targetIframe" allowfullscreen sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+    </div>
+
   </div>
 
-  <button class="return-button" onclick="goToHome()">Return</button>
+  <div class="reset-bar" id="resetBar">
+    <button class="reset-button" onclick="resetPageToDefault()">Return to Player</button>
+  </div>
 
-  <!-- Launching overlay -->
+  <a href="https://susysam.github.io/start27.html" class="home-button">Home</a>
+
   <div class="launch-overlay" id="launchOverlay" aria-hidden="true">
     <div class="launch-card">
       <div class="spinner"></div>
@@ -251,15 +421,24 @@
   <script>
     let selectedMediaType = '';
     let selectedServer = '';
+    let currentActiveTargetUrl = '';
 
     const pageTitle = document.getElementById('pageTitle');
     const inputContainer = document.getElementById('inputContainer');
     const welcomeBlock = document.getElementById('welcomeBlock');
     const topButtons = document.getElementById('topButtons');
     const serverHint = document.getElementById('serverHint');
-
     const launchOverlay = document.getElementById('launchOverlay');
     const launchText = document.getElementById('launchText');
+
+    // Extra's Workspace Nodes
+    const extrasPanel = document.getElementById('extrasPanel');
+    const standardAppContent = document.getElementById('standardAppContent');
+    const iframeWorkspace = document.getElementById('iframeWorkspace');
+    const targetIframe = document.getElementById('targetIframe');
+    const resetBar = document.getElementById('resetBar');
+    const actionOpenTab = document.getElementById('actionOpenTab');
+    const actionOpenBlank = document.getElementById('actionOpenBlank');
 
     function showLaunch(text){
       launchText.textContent = text;
@@ -280,6 +459,7 @@
       inputContainer.style.display = 'flex';
       welcomeBlock.style.display = 'none';
       topButtons.style.display = 'none';
+      document.getElementById('extrasTriggerContainer').style.display = 'none';
 
       selectedServer = '';
       document.getElementById('media-id').value = '';
@@ -332,25 +512,7 @@
     }
 
     function openPlayer(url) {
-      const win = window.open("about:blank", "_blank");
-      if (!win) {
-        hideLaunch();
-        return alert("Popup blocked.");
-      }
-
-      win.document.write(`
-        <html>
-          <head>
-            <title>Gmail</title>
-            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-            <style>body{margin:0;background:#000}iframe{border:none;width:100%;height:100vh}</style>
-          </head>
-          <body>
-            <iframe src="${url}" allowfullscreen></iframe>
-          </body>
-        </html>
-      `);
-      win.document.close();
+      openAboutBlankWindow(url);
       hideLaunch();
     }
 
@@ -401,8 +563,60 @@
       window.open(randomLink, "_blank");
     }
 
-    function goToHome() {
-      window.location.href = "https://susysam.github.io/start27.html";
+    // Modern Workspace Architecture Scripts
+    function toggleExtrasPanel() {
+      extrasPanel.classList.toggle('show');
+    }
+
+    function loadExternalSite(url) {
+      currentActiveTargetUrl = url;
+      
+      // Wipe structural content elements out
+      standardAppContent.style.display = 'none';
+      pageTitle.textContent = "External Site Hub";
+
+      // Bind functional dynamic links
+      actionOpenTab.onclick = () => window.open(url, '_blank');
+      actionOpenBlank.onclick = () => openAboutBlankWindow(url);
+
+      // Trigger Iframe Generation & reveal Reset Option Frame
+      targetIframe.src = url;
+      iframeWorkspace.style.display = 'flex';
+      resetBar.style.display = 'flex';
+    }
+
+    function openAboutBlankWindow(url) {
+      const win = window.open("about:blank", "_blank");
+      if (!win) return alert("Popup blocked.");
+      win.document.write(`
+        <html>
+          <head>
+            <title>Player Workspace</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+            <style>body{margin:0;background:#000}iframe{border:none;width:100%;height:100vh}</style>
+          </head>
+          <body>
+            <iframe src="${url}" allowfullscreen></iframe>
+          </body>
+        </html>
+      `);
+      win.document.close();
+    }
+
+    function resetPageToDefault() {
+      // Tear down ongoing frames
+      targetIframe.src = "";
+      iframeWorkspace.style.display = 'none';
+      resetBar.style.display = 'none';
+
+      // Restore baseline configuration
+      standardAppContent.style.display = 'block';
+      pageTitle.textContent = "Entertainment Player";
+      welcomeBlock.style.display = 'block';
+      topButtons.style.display = 'flex';
+      document.getElementById('extrasTriggerContainer').style.display = 'block';
+      inputContainer.style.display = 'none';
+      extrasPanel.classList.remove('show');
     }
   </script>
 </body>
