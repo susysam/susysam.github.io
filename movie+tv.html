@@ -27,7 +27,9 @@
       --danger2: #C74426;
       --overlay: rgba(255,255,255,0);
       --inputBg: rgba(255,255,255,.78);
-      --extrasBg: rgba(0, 0, 0, 0.03);
+      --extrasBg: rgba(0, 0, 0, 0.02);
+      --extrasBtn: #27ae60;
+      --extrasBtnHover: #219653;
     }
     :root.dark{
       --bg: #0f1116;
@@ -38,7 +40,9 @@
       --shadow: 0 18px 55px rgba(0,0,0,.55);
       --overlay: rgba(0,0,0,.45);
       --inputBg: rgba(0,0,0,.25);
-      --extrasBg: rgba(255, 255, 255, 0.03);
+      --extrasBg: rgba(255, 255, 255, 0.02);
+      --extrasBtn: #2ecc71;
+      --extrasBtnHover: #27ae60;
     }
 
     body {
@@ -97,12 +101,25 @@
       color: white;
       border: none;
       cursor: pointer;
-      transition: background-color 0.3s, transform 0.2s ease;
+      transition: background-color 0.3s, transform 0.2s ease, box-shadow 0.3s ease;
     }
 
     .button:hover {
       background-color: var(--accent2);
       transform: scale(1.05);
+    }
+
+    /* Distinct look for Extra's button */
+    .button.btn-extras {
+      background-color: var(--extrasBtn);
+    }
+    .button.btn-extras:hover {
+      background-color: var(--extrasBtnHover);
+    }
+    /* Clicked Neon Glow Effect State */
+    .button.btn-extras.active-glow {
+      box-shadow: 0 0 15px var(--extrasBtn), 0 0 25px var(--extrasBtn);
+      transform: scale(1.03);
     }
 
     .input-container {
@@ -208,64 +225,78 @@
     }
     :root.dark .launch-sub{ color: rgba(255,255,255,.68); }
 
-    /* New Extras & Dynamic Hub Elements */
+    /* Polished Extras Hub Panel */
     .extras-panel {
       max-height: 0;
       overflow: hidden;
       opacity: 0;
       transform: translateY(-10px);
-      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
       background: var(--extrasBg);
-      border-radius: 12px;
+      border-radius: 14px;
       padding: 0 15px;
-      margin-top: 10px;
+      margin-top: 5px;
+      margin-bottom: 15px;
     }
 
     .extras-panel.show {
-      max-height: 800px;
+      max-height: 900px;
       opacity: 1;
       transform: translateY(0);
-      padding: 20px 15px;
-      border: 1px dashed var(--border);
+      padding: 24px 20px;
+      border: 1px solid var(--border);
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.04);
     }
 
     .category-sec {
-      margin-bottom: 20px;
+      margin-bottom: 24px;
+    }
+    .category-sec:last-child {
+      margin-bottom: 0;
     }
 
     .category-sec h3 {
-      font-size: 18px;
-      margin-bottom: 10px;
-      color: var(--accent);
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      color: var(--muted);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 1.5px;
+      text-align: left;
+      padding-left: 10px;
+      border-left: 3px solid var(--extrasBtn);
     }
 
     .link-grid {
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
       gap: 10px;
-      justify-content: center;
     }
 
     .site-btn {
-      padding: 8px 16px;
+      padding: 10px 14px;
       font-size: 14px;
-      background: var(--inputBg);
+      font-weight: 500;
+      background: var(--card);
       color: var(--text);
       border: 1px solid var(--border);
-      border-radius: 6px;
+      border-radius: 8px;
       cursor: pointer;
       transition: all 0.2s ease;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
     }
 
     .site-btn:hover {
-      background: var(--accent);
+      background: var(--extrasBtn);
       color: white;
+      border-color: var(--extrasBtn);
       transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
-    /* Iframe Hub Mode */
+    /* Iframe Player Mode Layout */
     .iframe-workspace {
       display: none;
       flex-direction: column;
@@ -349,7 +380,7 @@
       </div>
 
       <div style="margin-bottom: 20px;" id="extrasTriggerContainer">
-        <button class="button" style="background-color: #8e44ad;" onclick="toggleExtrasPanel()">Extra's</button>
+        <button class="button btn-extras" id="extrasBtn" onclick="toggleExtrasPanel()">Extra's</button>
       </div>
 
       <div class="extras-panel" id="extrasPanel">
@@ -431,8 +462,9 @@
     const launchOverlay = document.getElementById('launchOverlay');
     const launchText = document.getElementById('launchText');
 
-    // Extra's Workspace Nodes
+    // Workspace Active Selectors
     const extrasPanel = document.getElementById('extrasPanel');
+    const extrasBtn = document.getElementById('extrasBtn');
     const standardAppContent = document.getElementById('standardAppContent');
     const iframeWorkspace = document.getElementById('iframeWorkspace');
     const targetIframe = document.getElementById('targetIframe');
@@ -530,6 +562,7 @@
         openPlayer(url);
 
         localStorage.setItem('lastWatched', JSON.stringify({
+          type: 'standard',
           mediaId,
           selectedServer,
           selectedMediaType
@@ -541,8 +574,20 @@
       const data = localStorage.getItem('lastWatched');
       if (!data) return alert("Nothing saved yet.");
 
-      const { mediaId, selectedServer, selectedMediaType } = JSON.parse(data);
+      const parsed = JSON.parse(data);
 
+      // Check if the last item watched was an Extra Hub item
+      if (parsed.type === 'external') {
+        showLaunch("Restoring External Hub Site...");
+        setTimeout(() => {
+          loadExternalSite(parsed.url);
+          hideLaunch();
+        }, 650);
+        return;
+      }
+
+      // Default standard logic path
+      const { mediaId, selectedServer, selectedMediaType } = parsed;
       const label = selectedMediaType === 'movie' ? "Launching Movies..." : "Launching TV-Shows...";
       showLaunch(label);
 
@@ -563,9 +608,10 @@
       window.open(randomLink, "_blank");
     }
 
-    // Modern Workspace Architecture Scripts
+    // Dynamic Extra Modules Scripts
     function toggleExtrasPanel() {
       extrasPanel.classList.toggle('show');
+      extrasBtn.classList.toggle('active-glow');
     }
 
     function loadExternalSite(url) {
@@ -573,16 +619,22 @@
       
       // Wipe structural content elements out
       standardAppContent.style.display = 'none';
-      pageTitle.textContent = "External Site Hub";
+      pageTitle.textContent = "Movie Player";
 
-      // Bind functional dynamic links
+      // Bind functional dynamic navigation links
       actionOpenTab.onclick = () => window.open(url, '_blank');
       actionOpenBlank.onclick = () => openAboutBlankWindow(url);
 
-      // Trigger Iframe Generation & reveal Reset Option Frame
+      // Trigger Iframe Generation & reveal structural workspace elements
       targetIframe.src = url;
       iframeWorkspace.style.display = 'flex';
       resetBar.style.display = 'flex';
+
+      // Track configuration inside storage matrix for Continue Watching integration
+      localStorage.setItem('lastWatched', JSON.stringify({
+        type: 'external',
+        url: url
+      }));
     }
 
     function openAboutBlankWindow(url) {
@@ -604,19 +656,22 @@
     }
 
     function resetPageToDefault() {
-      // Tear down ongoing frames
+      // Clear iframe targets
       targetIframe.src = "";
       iframeWorkspace.style.display = 'none';
       resetBar.style.display = 'none';
 
-      // Restore baseline configuration
+      // Restore baseline standard view state
       standardAppContent.style.display = 'block';
       pageTitle.textContent = "Entertainment Player";
       welcomeBlock.style.display = 'block';
       topButtons.style.display = 'flex';
       document.getElementById('extrasTriggerContainer').style.display = 'block';
       inputContainer.style.display = 'none';
+      
+      // Reset active extra menu components
       extrasPanel.classList.remove('show');
+      extrasBtn.classList.remove('active-glow');
     }
   </script>
 </body>
