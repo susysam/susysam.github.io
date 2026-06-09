@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Search Engine</title>
+  <title>Workspace Screen</title>
   <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Google_Classroom_Logo.svg/2372px-Google_Classroom_Logo.svg.png" type="image/png"/>
 
   <script>
@@ -26,6 +26,9 @@
       --accent2: #4F0672;
       --danger: #FF5733;
       --danger2: #C74426;
+
+      --laptopShell: #dcdde1;
+      --laptopBezel: #1e272e;
     }
     :root.dark{
       --bg: #0f1116;
@@ -34,6 +37,9 @@
       --border: rgba(255,255,255,.14);
       --card: rgba(25,28,36,.72);
       --overlay: rgba(0,0,0,.45);
+
+      --laptopShell: #2f3640;
+      --laptopBezel: #0f1418;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -49,6 +55,7 @@
       min-height: 100vh;
       position: relative;
       transition: background-color .25s ease, color .25s ease;
+      overflow-x: hidden;
     }
 
     body::before{
@@ -61,22 +68,20 @@
     }
     body > *{ position: relative; z-index: 1; }
 
-    /* Page-Load Fade-In Animation */
+    /* Entry Animation Wrapper */
     .app-container {
       width: 100%;
+      max-width: 900px;
       display: flex;
       flex-direction: column;
       align-items: center;
       opacity: 0;
-      transform: translateY(15px);
-      animation: pageReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      transform: translateY(20px);
+      animation: laptopReveal 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-    @keyframes pageReveal {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    @keyframes laptopReveal {
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .back-button {
@@ -86,101 +91,149 @@
       border-radius: 10px;
       cursor: pointer;
       border: none;
-      margin-bottom: 25px;
-      font-size: 16px;
-      align-self: center;
+      margin-bottom: 20px;
+      font-size: 15px;
+      font-weight: bold;
       transition: background-color 0.2s;
     }
     .back-button:hover { background-color: var(--danger2); }
 
     .search-bar {
-      margin-top: 10px;
-      padding: 14px 18px;
-      width: 90%;
-      max-width: 600px;
-      border-radius: 14px;
+      padding: 12px 16px;
+      width: 100%;
+      max-width: 550px;
+      border-radius: 12px;
       border: 1px solid var(--border);
       background: var(--card);
       color: var(--text);
       outline: none;
-      font-size: 16px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+      font-size: 15px;
+      margin-bottom: 12px;
       transition: border-color 0.2s;
     }
-    .search-bar:focus {
-      border-color: var(--accent);
-    }
-
-    .button-group {
-      display: flex;
-      gap: 10px;
-      margin-top: 15px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
+    .search-bar:focus { border-color: var(--accent); }
 
     .button {
-      padding: 11px 24px;
+      padding: 10px 22px;
       background-color: var(--accent);
       color: white;
-      border-radius: 10px;
+      border-radius: 8px;
       cursor: pointer;
       border: none;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: bold;
-      transition: background-color 0.3s, transform 0.2s ease;
+      margin-bottom: 25px;
+      transition: background-color 0.2s;
     }
-    .button:hover { background-color: var(--accent2); transform: scale(1.03); }
+    .button:hover { background-color: var(--accent2); }
 
-    /* Quick Links Hub Styling */
-    .quick-links-section {
-      margin-top: 35px;
-      width: 90%;
-      max-width: 600px;
-      text-align: left;
+    /* Laptop Structure CSS */
+    .laptop-hardware {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
-    .quick-links-title {
+    .laptop-screen-frame {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      background: var(--laptopBezel);
+      border-radius: 16px 16px 0 0;
+      padding: 20px 20px 24px 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+      position: relative;
+    }
+
+    /* Inner Virtual Operating Display */
+    .laptop-display-content {
+      width: 100%;
+      height: 100%;
+      background: #111;
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .virtual-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: #fff;
+      display: block;
+    }
+
+    /* Customized Internal Error Notification Module */
+    .error-screen-overlay {
+      position: absolute;
+      inset: 0;
+      background: #1e222b;
+      color: #fff;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      text-align: center;
+      z-index: 10;
+    }
+
+    .error-card {
+      max-width: 420px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 24px;
+      border-radius: 12px;
+    }
+
+    .error-title {
+      font-size: 18px;
+      color: #ff6b6b;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .error-desc {
+      font-size: 13px;
+      color: #ccc;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    .error-action-btn {
+      padding: 8px 16px;
+      background: #ff5252;
+      color: white;
+      border: none;
+      border-radius: 6px;
       font-size: 13px;
       font-weight: bold;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 12px;
-      padding-left: 4px;
-    }
-
-    .links-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-      gap: 10px;
-    }
-
-    .link-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      padding: 12px;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 500;
-      text-align: center;
       cursor: pointer;
-      color: var(--text);
-      transition: all 0.2s ease;
+    }
+    .error-action-btn:hover { background: #ff3333; }
+
+    /* Laptop Lower Keyboard Base Component */
+    .laptop-base-chassis {
+      width: 104%;
+      height: 14px;
+      background: var(--laptopShell);
+      border-radius: 0 0 16px 16px;
+      border-top: 2px solid rgba(255,255,255,0.2);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+      position: relative;
     }
 
-    .link-card:hover {
-      border-color: var(--accent);
-      background: rgba(108, 11, 169, 0.05);
-      transform: translateY(-2px);
-    }
-
-    .loading {
-      color: var(--muted);
-      font-size: 14px;
-      margin-top: 12px;
-      min-height: 18px;
-      text-align: center;
+    /* Small indent tab to open laptop screen realistically */
+    .laptop-base-chassis::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70px;
+      height: 4px;
+      background: rgba(0,0,0,0.15);
+      border-radius: 0 0 4px 4px;
     }
   </style>
 </head>
@@ -190,31 +243,50 @@
     
     <button class="back-button" onclick="goBack()">Back</button>
 
-    <input type="text" id="searchInput" class="search-bar" placeholder="Enter a website URL (e.g., youtube.com)"
-      onkeydown="if(event.key==='Enter') openAboutBlank()">
+    <input type="text" id="searchInput" class="search-bar" placeholder="Enter web URL (e.g., example.com)"
+      onkeydown="if(event.key==='Enter') renderVirtualUrl()">
 
-    <div class="button-group">
-      <button class="button" onclick="openAboutBlank()">Open in New Tab</button>
-    </div>
+    <button class="button" onclick="renderVirtualUrl()">Load on Laptop</button>
 
-    <div id="statusMessage" class="loading"></div>
+    <div class="laptop-hardware">
+      <div class="laptop-screen-frame">
+        
+        <div class="laptop-display-content">
+          
+          <iframe src="about:blank" class="virtual-iframe" id="monitorIframe" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+          
+          <div class="error-screen-overlay" id="errorModule">
+            <div class="error-card">
+              <div class="error-title">Connection Refused</div>
+              <div class="error-desc">
+                This website rejected embedding because of protection rules (X-Frame-Options). Click below to launch it safely via a standard clean workspace instead.
+              </div>
+              <button class="error-action-btn" id="errorFallbackBtn">Open Clean Window</button>
+            </div>
+          </div>
 
-    <div class="quick-links-section">
-      <div class="quick-links-title">Quick Navigation</div>
-      <div class="links-grid">
-        <div class="link-card" onclick="quickLoad('google.com')">Google</div>
-        <div class="link-card" onclick="quickLoad('wikipedia.org')">Wikipedia</div>
-        <div class="link-card" onclick="quickLoad('duckduckgo.com')">DuckDuckGo</div>
-        <div class="link-card" onclick="quickLoad('desmos.com/scientific')">Calculator</div>
+        </div>
+
       </div>
+      <div class="laptop-base-chassis"></div>
     </div>
 
   </div>
 
   <script>
-    // Auto-focus logic on load action
+    let confirmationTimer = null;
+    let fallbackGlobalUrl = "";
+
     window.addEventListener('DOMContentLoaded', () => {
       document.getElementById('searchInput').focus();
+      // Set initial desktop default screen view
+      document.getElementById('monitorIframe').srcdoc = `
+        <html style="height:100%; background:#141519; display:flex; align-items:center; justify-content:center; font-family:sans-serif; color:#666;">
+          <body style="margin:0; text-align:center;">
+            <div style="font-size:32px; margin-bottom:6px;">💻</div>
+            <div style="font-size:13px; font-weight:bold; letter-spacing:0.5px;">SYSTEM POWERED ON</div>
+          </body>
+        </html>`;
     });
 
     function sanitizeUrl(input) {
@@ -223,46 +295,61 @@
       return 'https://' + input;
     }
 
-    function quickLoad(targetUrl) {
-      document.getElementById('searchInput').value = targetUrl;
-      openAboutBlank();
+    function renderVirtualUrl() {
+      const input = document.getElementById('searchInput').value.trim();
+      const frameNode = document.getElementById('monitorIframe');
+      const errorLayer = document.getElementById('errorModule');
+
+      if (!input) return;
+      
+      const verifiedUrl = sanitizeUrl(input);
+      fallbackGlobalUrl = verifiedUrl;
+      
+      // Reset displays cleanly
+      errorLayer.style.display = "none";
+      frameNode.removeAttribute('srcdoc');
+      frameNode.src = verifiedUrl;
+
+      // Clear any older pending time triggers running background validation loops
+      if (confirmationTimer) clearTimeout(confirmationTimer);
+
+      // Embedded Iframe connection confirmation timeout block
+      confirmationTimer = setTimeout(() => {
+        try {
+          // If security blocks access, testing origin access variables will trigger an exception
+          if (!frameNode.contentWindow || frameNode.contentWindow.location.href === "about:blank") {
+            triggerErrorPanel();
+          }
+        } catch (err) {
+          // Execution route falls here safely if same-origin header refuses structural connection
+          triggerErrorPanel();
+        }
+      }, 3500);
     }
 
-    function openAboutBlank() {
-      const input = document.getElementById('searchInput').value.trim();
-      const statusMsg = document.getElementById('statusMessage');
-
-      if (!input) {
-        statusMsg.textContent = 'Please enter a URL.';
-        return;
-      }
-
-      const url = sanitizeUrl(input);
-      const newTab = window.open('about:blank', '_blank');
-      if (!newTab) {
-        statusMsg.textContent = 'Popup blocked. Please allow popups for this site.';
-        return;
-      }
-
-      newTab.document.open();
-      newTab.document.write(`<!DOCTYPE html>
-<html>
-  <head>
-    <title>Gmail</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <style>
-      html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #000; }
-      iframe { border: none; width: 100%; height: 100vh; display: block; }
-    </style>
-  </head>
-  <body>
-    <iframe src="${url}" allowfullscreen
-      sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-pointer-lock allow-top-navigation">
-    </iframe>
-  </body>
-</html>`);
-      newTab.document.close();
-      statusMsg.textContent = '';
+    function triggerErrorPanel() {
+      const errorLayer = document.getElementById('errorModule');
+      errorLayer.style.display = "flex";
+      
+      document.getElementById('errorFallbackBtn').onclick = () => {
+        const targetWindow = window.open('about:blank', '_blank');
+        if (!targetWindow) {
+          alert("Screen launch blocked. Please enable site popup options.");
+          return;
+        }
+        targetWindow.document.open();
+        targetWindow.document.write(`<!DOCTYPE html>
+          <html>
+            <head>
+              <title>Workspace Window</title>
+              <style>html,body{margin:0;padding:0;height:100%;overflow:hidden;background:#000;} iframe{border:none;width:100%;height:100vh;display:block;}</style>
+            </head>
+            <body>
+              <iframe src="${fallbackGlobalUrl}" allowfullscreen sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-pointer-lock allow-top-navigation"></iframe>
+            </body>
+          </html>`);
+        targetWindow.document.close();
+      };
     }
 
     function goBack() {
