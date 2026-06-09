@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Links</title>
+  <title>System Dashboard</title>
 
-  <!-- Apply theme ASAP (site-wide) -->
   <script>
     (function () {
       const theme = localStorage.getItem('theme');
@@ -15,7 +14,7 @@
   </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
     :root{
@@ -23,25 +22,27 @@
       --bg2: #e9ecf6;
       --text: #14161a;
       --muted: rgba(20,22,26,.65);
-
       --accent: #6C0BA9;
       --accent2: #3E0F87;
-
-      --panel: rgba(255,255,255,.80);
-      --border: rgba(0,0,0,.12);
-      --overlay: rgba(255,255,255,0);
-      --shadow: 0 10px 30px rgba(108,11,169,.18);
+      --panel: rgba(255,255,255,.75);
+      --border: rgba(0,0,0,.08);
+      --shadow: 0 10px 30px rgba(108,11,169,.08);
+      --dockBg: rgba(255, 255, 255, 0.4);
     }
     :root.dark{
-      --bg1: #0f0f0f;
-      --bg2: #1a1a1a;
+      --bg1: #0a0a0c;
+      --bg2: #121216;
       --text: #ffffff;
-      --muted: rgba(255,255,255,.62);
+      --muted: rgba(255,255,255,.60);
+      --panel: rgba(22,22,28,.65);
+      --border: rgba(255,255,255,.08);
+      --shadow: 0 15px 40px rgba(0,0,0,.50);
+      --dockBg: rgba(0, 0, 0, 0.4);
+    }
 
-      --panel: rgba(25,28,36,.72);
-      --border: rgba(255,255,255,.10);
-      --overlay: rgba(0,0,0,.45);
-      --shadow: 0 10px 30px rgba(0,0,0,.45);
+    * {
+      box-sizing: border-box;
+      user-select: none;
     }
 
     body {
@@ -50,121 +51,417 @@
       padding: 0;
       background: linear-gradient(145deg, var(--bg1), var(--bg2));
       color: var(--text);
-      text-align: center;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
       position: relative;
-      min-height: 100vh;
     }
 
-    body::before{
-      content:"";
+    /* Desktop Environment Grid */
+    .desktop-space {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 70px; /* Leave space for bottom dock */
+      padding: 30px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      grid-auto-rows: 120px;
+      gap: 25px;
+      justify-items: center;
+      align-content: start;
+      overflow-y: auto;
+    }
+
+    /* App Icon Styling */
+    .app-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100px;
+      height: 110px;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid transparent;
+      background: transparent;
+    }
+
+    .app-icon:hover {
+      background: var(--panel);
+      border-color: var(--border);
+      box-shadow: var(--shadow);
+      transform: translateY(-2px);
+    }
+
+    .icon-graphic {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      box-shadow: 0 4px 12px rgba(108, 11, 169, 0.25);
+    }
+
+    .app-icon:nth-child(2) .icon-graphic {
+      background: linear-gradient(135deg, #3498db, #2980b9);
+      box-shadow: 0 4px 12px rgba(52, 152, 219, 0.25);
+    }
+    .app-icon:nth-child(3) .icon-graphic {
+      background: linear-gradient(135deg, #2ecc71, #27ae60);
+      box-shadow: 0 4px 12px rgba(46, 204, 113, 0.25);
+    }
+    .app-icon:nth-child(4) .icon-graphic {
+      background: linear-gradient(135deg, #e67e22, #d35400);
+      box-shadow: 0 4px 12px rgba(230, 126, 34, 0.25);
+    }
+
+    .icon-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.05);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 90px;
+      text-align: center;
+    }
+
+    /* System Dock (Bottom Taskbar) */
+    .system-dock {
+      position: absolute;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      height: 55px;
+      background: var(--dockBg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      box-shadow: var(--shadow);
+      z-index: 100;
+      max-width: 90vw;
+    }
+
+    .dock-btn {
+      height: 38px;
+      padding: 0 16px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'Rubik', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .dock-btn:hover {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .dock-divider {
+      width: 1px;
+      height: 24px;
+      background: var(--border);
+    }
+
+    .system-time {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      min-width: 65px;
+      text-align: center;
+    }
+
+    /* Web Desktop Windows Wrapper */
+    .window-overlay {
       position: fixed;
       inset: 0;
-      background: var(--overlay);
-      pointer-events:none;
-      z-index: 0;
-    }
-    body > *{ position: relative; z-index: 1; }
-
-    header {
-      padding: 25px;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      font-size: 28px;
-      font-weight: 600;
-      letter-spacing: 1px;
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+      bottom: 70px;
+      padding: 20px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      animation: scaleUp 0.2s ease-out;
     }
 
-    .last-update {
-      font-size: 14px;
-      margin-top: 5px;
-      color: var(--muted);
+    @keyframes scaleUp {
+      from { transform: scale(0.96); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
     }
 
-    .button-container, .dropdown { margin: 25px 0; }
-
-    .button, .dropbtn {
-      padding: 14px 30px;
-      background-color: rgba(0,0,0,.08);
-      border: 2px solid var(--accent);
-      border-radius: 12px;
-      color: var(--text);
-      font-size: 16px;
-      margin: 10px;
-      cursor: pointer;
-      transition: all 0.3s ease-in-out;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    }
-    :root.dark .button, :root.dark .dropbtn{
-      background-color: rgba(255,255,255,.06);
-    }
-
-    .button:hover, .dropbtn:hover {
-      background-color: var(--accent);
-      color: #fff;
-      transform: translateY(-2px) scale(1.05);
-    }
-
-    iframe {
+    .window-frame {
       width: 100%;
-      height: 600px;
+      height: 100%;
+      max-width: 1000px;
+      background: var(--panel);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .window-header {
+      height: 45px;
+      background: rgba(0,0,0,0.02);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 15px;
+    }
+
+    .window-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .window-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .win-btn {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
       border: none;
-      margin-top: 20px;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(255,255,255,0.1);
+      cursor: pointer;
+    }
+    .win-close { background-color: #ff5f56; }
+    .win-close:hover { background-color: #e04f47; }
+
+    .window-body {
+      flex: 1;
+      width: 100%;
+      background: #fff;
+      position: relative;
+    }
+    :root.dark .window-body { background: #16161a; }
+
+    /* Browser Workspace Configurations */
+    .browser-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .browser-nav-bar {
+      height: 45px;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      gap: 10px;
+    }
+
+    .browser-input {
+      flex: 1;
+      height: 28px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--text);
+      padding: 0 12px;
+      font-family: 'Rubik', sans-serif;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .browser-launch-btn {
+      height: 28px;
+      padding: 0 14px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .browser-view {
+      flex: 1;
+      width: 100%;
+      border: none;
+      background: #fff;
+    }
+
+    /* General Embedded Frames */
+    .app-frame {
+      width: 100%;
+      height: 100%;
+      border: none;
     }
 
     @media (max-width: 600px) {
-      iframe { height: 400px; }
-      .button, .dropbtn { width: 90%; margin: 10px auto; }
+      .desktop-space { padding: 15px; gap: 15px; }
+      .system-dock { width: 95vw; gap: 8px; padding: 0 10px; }
+      .dock-btn { padding: 0 10px; font-size: 12px; }
     }
   </style>
 </head>
 <body>
-  <header>Proxy Hub - Links</header>
-  <div class="last-update">Last Update: 12-11-24</div>
 
-  <div class="button-container">
-    <button class="button" onclick="goBack()">Back</button>
-    <button class="button" onclick="goToSearch()">Blocked?</button>
+  <div class="desktop-space">
+    <div class="app-icon" onclick="openWindow('browser')">
+      <div class="icon-graphic">🌐</div>
+      <div class="icon-label">Web Browser</div>
+    </div>
+    
+    <div class="app-icon" onclick="openWindow('calculator')">
+      <div class="icon-graphic">🧮</div>
+      <div class="icon-label">Calculator</div>
+    </div>
+
+    <div class="app-icon" onclick="openWindow('games')">
+      <div class="icon-graphic">🎮</div>
+      <div class="icon-label">Games Hub</div>
+    </div>
+
+    <div class="app-icon" onclick="goToSearch()">
+      <div class="icon-graphic">🔍</div>
+      <div class="icon-label">Search Node</div>
+    </div>
   </div>
 
-  <div class="dropdown">
-    <button class="dropbtn" onclick="openInBlankProxy()">Interstellar Proxy</button>
+  <div class="system-dock">
+    <button class="dock-btn" onclick="goBack()">◀ Home</button>
+    <div class="dock-divider"></div>
+    <button class="dock-btn" onclick="openWindow('browser')">Browser</button>
+    <button class="dock-btn" onclick="openWindow('games')">Games</button>
+    <div class="dock-divider"></div>
+    <div class="system-time" id="liveClock">00:00 AM</div>
+  </div>
+
+  <div class="window-overlay" id="systemWindow">
+    <div class="window-frame">
+      <div class="window-header">
+        <div class="window-title" id="winTitle">Application</div>
+        <div class="window-controls">
+          <button class="win-btn win-close" onclick="closeWindow()"></button>
+        </div>
+      </div>
+      <div class="window-body" id="winBody">
+        </div>
+    </div>
   </div>
 
   <script>
-    const interstellarLinks = [
-      "https://learnsome.pythonabc.org/"
-    ];
+    // Live Taskbar UI Clock Node Routine
+    function updateClock() {
+      const now = new Date();
+      let hours = now.getHours();
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12; // convert 0 to 12
+      document.getElementById('liveClock').textContent = `${hours}:${minutes} ${ampm}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
 
-    function getRandomLink() {
-      const index = Math.floor(Math.random() * interstellarLinks.length);
-      return interstellarLinks[index];
+    // Window Management System Architecture
+    const systemWindow = document.getElementById('systemWindow');
+    const winTitle = document.getElementById('winTitle');
+    const winBody = document.getElementById('winBody');
+
+    function openWindow(appType) {
+      systemWindow.style.display = 'flex';
+      
+      if (appType === 'browser') {
+        winTitle.textContent = "Web Browser Explorer (Clean sandbox)";
+        winBody.innerHTML = `
+          <div class="browser-container">
+            <div class="browser-nav-bar">
+              <input type="text" class="browser-input" id="targetUrlInput" value="https://example.com" placeholder="Enter full https:// web address..." />
+              <button class="browser-launch-btn" onclick="deploySandboxBrowser()">Launch Screen</button>
+            </div>
+            <iframe src="https://example.com" class="browser-view" id="browserIframe" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+          </div>
+        `;
+      } 
+      else if (appType === 'calculator') {
+        winTitle.textContent = "System Calculator Core";
+        winBody.innerHTML = `
+          <iframe src="https://www.desmos.com/scientific" class="app-frame"></iframe>
+        `;
+      } 
+      else if (appType === 'games') {
+        winTitle.textContent = "Arcade Logic Gaming Network";
+        winBody.innerHTML = `
+          <iframe src="https://play2048.co/" class="app-frame"></iframe>
+        `;
+      }
     }
 
-    function openInBlankProxy() {
-      const link = getRandomLink();
-      const proxyURL = `https://proxy-server-wdju.onrender.com/proxy?url=${encodeURIComponent(link)}`;
+    function closeWindow() {
+      winBody.innerHTML = "";
+      systemWindow.style.display = 'none';
+    }
+
+    // Isolated Spawner Strategy
+    function deploySandboxBrowser() {
+      const targetUrl = document.getElementById('targetUrlInput').value.trim();
+      if (!targetUrl) return;
+      
+      // Spawn modern background page tracking matrix securely via window frame target
+      const targetIframe = document.getElementById('browserIframe');
+      
+      // Spawns tab matrix container directly inside parent architecture window
       const tab = window.open('about:blank', '_blank');
-      if (!tab) return alert("Popup blocked.");
+      if (!tab) return alert("System Warning: Popup script vector blocked by workspace engine.");
 
       tab.document.write(`
         <html>
           <head>
-            <title>Interstellar</title>
+            <title>Browser Workspace</title>
             <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-            <style>html,body{margin:0;height:100%;} iframe{border:none;width:100%;height:100%;}</style>
+            <style>
+              html, body { margin:0; padding:0; height:100%; background:#0f0f12; overflow:hidden; } 
+              iframe { border:none; width:100%; height:100%; background:#fff; }
+            </style>
           </head>
           <body>
-            <iframe src="${proxyURL}"></iframe>
+            <iframe src="${targetUrl}" allowfullscreen sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
           </body>
         </html>
       `);
       tab.document.close();
     }
 
+    // Navigational Core Functions
     function goBack() {
       window.location.href = "start27.html";
     }
