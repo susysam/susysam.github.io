@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Site</title>
+  <title>Search Engine</title>
   <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Google_Classroom_Logo.svg/2372px-Google_Classroom_Logo.svg.png" type="image/png"/>
 
   <script>
@@ -39,7 +39,7 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      font-family: 'Rubik', sans-serif;
+      font-family: Arial, sans-serif;
       background-color: var(--bg);
       color: var(--text);
       display: flex;
@@ -61,6 +61,24 @@
     }
     body > *{ position: relative; z-index: 1; }
 
+    /* Page-Load Fade-In Animation */
+    .app-container {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      opacity: 0;
+      transform: translateY(15px);
+      animation: pageReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes pageReveal {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     .back-button {
       padding: 10px 20px;
       background-color: var(--danger);
@@ -68,70 +86,146 @@
       border-radius: 10px;
       cursor: pointer;
       border: none;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
       font-size: 16px;
+      align-self: center;
+      transition: background-color 0.2s;
     }
     .back-button:hover { background-color: var(--danger2); }
 
     .search-bar {
-      margin-top: 20px;
-      padding: 12px;
-      width: 80%;
+      margin-top: 10px;
+      padding: 14px 18px;
+      width: 90%;
       max-width: 600px;
-      border-radius: 12px;
+      border-radius: 14px;
       border: 1px solid var(--border);
       background: var(--card);
       color: var(--text);
       outline: none;
-      font-size: 15px;
+      font-size: 16px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+      transition: border-color 0.2s;
+    }
+    .search-bar:focus {
+      border-color: var(--accent);
     }
 
     .button-group {
       display: flex;
       gap: 10px;
-      margin-top: 10px;
+      margin-top: 15px;
       flex-wrap: wrap;
       justify-content: center;
     }
 
     .button {
-      padding: 10px 20px;
+      padding: 11px 24px;
       background-color: var(--accent);
       color: white;
       border-radius: 10px;
       cursor: pointer;
       border: none;
       font-size: 15px;
+      font-weight: bold;
       transition: background-color 0.3s, transform 0.2s ease;
     }
-    .button:hover { background-color: var(--accent2); transform: scale(1.05); }
+    .button:hover { background-color: var(--accent2); transform: scale(1.03); }
+
+    /* Quick Links Hub Styling */
+    .quick-links-section {
+      margin-top: 35px;
+      width: 90%;
+      max-width: 600px;
+      text-align: left;
+    }
+
+    .quick-links-title {
+      font-size: 13px;
+      font-weight: bold;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      padding-left: 4px;
+    }
+
+    .links-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 10px;
+    }
+
+    .link-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      text-align: center;
+      cursor: pointer;
+      color: var(--text);
+      transition: all 0.2s ease;
+    }
+
+    .link-card:hover {
+      border-color: var(--accent);
+      background: rgba(108, 11, 169, 0.05);
+      transform: translateY(-2px);
+    }
 
     .loading {
       color: var(--muted);
       font-size: 14px;
-      margin-top: 8px;
+      margin-top: 12px;
       min-height: 18px;
       text-align: center;
     }
   </style>
 </head>
 <body>
-  <button class="back-button" onclick="goBack()">Back</button>
 
-  <input type="text" id="searchInput" class="search-bar" placeholder="Enter a website URL (e.g., youtube.com)"
-    onkeydown="if(event.key==='Enter') openAboutBlank()">
+  <div class="app-container">
+    
+    <button class="back-button" onclick="goBack()">Back</button>
 
-  <div class="button-group">
-    <button class="button" onclick="openAboutBlank()">Open in New Tab</button>
+    <input type="text" id="searchInput" class="search-bar" placeholder="Enter a website URL (e.g., youtube.com)"
+      onkeydown="if(event.key==='Enter') openAboutBlank()">
+
+    <div class="button-group">
+      <button class="button" onclick="openAboutBlank()">Open in New Tab</button>
+    </div>
+
+    <div id="statusMessage" class="loading"></div>
+
+    <div class="quick-links-section">
+      <div class="quick-links-title">Quick Navigation</div>
+      <div class="links-grid">
+        <div class="link-card" onclick="quickLoad('google.com')">Google</div>
+        <div class="link-card" onclick="quickLoad('wikipedia.org')">Wikipedia</div>
+        <div class="link-card" onclick="quickLoad('duckduckgo.com')">DuckDuckGo</div>
+        <div class="link-card" onclick="quickLoad('desmos.com/scientific')">Calculator</div>
+      </div>
+    </div>
+
   </div>
 
-  <div id="statusMessage" class="loading"></div>
-
   <script>
+    // Auto-focus logic on load action
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('searchInput').focus();
+    });
+
     function sanitizeUrl(input) {
       input = input.trim();
       if (input.startsWith('http://') || input.startsWith('https://')) return input;
       return 'https://' + input;
+    }
+
+    function quickLoad(targetUrl) {
+      document.getElementById('searchInput').value = targetUrl;
+      openAboutBlank();
     }
 
     function openAboutBlank() {
