@@ -1,623 +1,252 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Entertainment Player</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Entertainment Player</title>
 
-  <script>
-    (function () {
-      const theme = localStorage.getItem('theme');
-      if (theme === 'dark') document.documentElement.classList.add('dark');
-      else document.documentElement.classList.remove('dark');
-    })();
-  </script>
+<style>
+:root{
+  --bg:#f3f3f3;
+  --text:#333;
+  --card:rgba(255,255,255,.92);
+  --accent:#6C0BA9;
+  --accent2:#4F0672;
+  --danger:#ff3b3b;
+  --border:rgba(0,0,0,.1);
+}
 
-  <style>
-    :root{
-      --bg: #f3f3f3;
-      --text: #333;
-      --muted: #555;
-      --card: rgba(255,255,255,.90);
-      --border: rgba(0,0,0,.10);
-      --shadow: 0 10px 30px rgba(0,0,0,.12);
-      --accent: #6C0BA9;
-      --accent2: #4F0672;
-      --danger: #FF5733;
-      --danger2: #C74426;
-      --overlay: rgba(255,255,255,0);
-      --inputBg: rgba(255,255,255,.78);
-      --extrasBg: rgba(0, 0, 0, 0.03);
-    }
-    :root.dark{
-      --bg: #0f1116;
-      --text: #f2f4f8;
-      --muted: rgba(242,244,248,.68);
-      --card: rgba(25,28,36,.75);
-      --border: rgba(255,255,255,.12);
-      --shadow: 0 18px 55px rgba(0,0,0,.55);
-      --overlay: rgba(0,0,0,.45);
-      --inputBg: rgba(0,0,0,.25);
-      --extrasBg: rgba(255, 255, 255, 0.03);
-    }
+body{
+  margin:0;
+  font-family:Arial;
+  background:var(--bg);
+  color:var(--text);
+}
 
-    body {
-      font-family: Arial, sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      text-align: center;
-      margin-top: 50px;
-      padding: 20px;
-      transition: background-color .25s ease, color .25s ease;
-      position: relative;
-      min-height: 100vh;
-    }
+.container{
+  max-width:900px;
+  margin:40px auto;
+  padding:20px;
+  background:var(--card);
+  border-radius:14px;
+  box-shadow:0 10px 30px rgba(0,0,0,.15);
+  text-align:center;
+}
 
-    body::before{
-      content:"";
-      position: fixed;
-      inset: 0;
-      background: var(--overlay);
-      pointer-events:none;
-      z-index: 0;
-    }
-    body > *{ position: relative; z-index: 1; }
+/* buttons */
+.button{
+  padding:12px 22px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  background:var(--accent);
+  color:#fff;
+  margin:6px;
+  transition:.2s;
+}
+.button:hover{transform:scale(1.05);background:var(--accent2);}
 
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    }
+.extra-panel{
+  display:none;
+  margin-top:20px;
+  animation:fadeIn .3s ease;
+}
 
-    h1 {
-      font-size: 40px;
-      color: var(--text);
-      margin-bottom: 20px;
-    }
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(-10px);}
+  to{opacity:1; transform:translateY(0);}
+}
 
-    .buttons-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 15px;
-      margin-bottom: 20px;
-    }
+.category{
+  margin-top:15px;
+  padding:10px;
+  border:1px solid var(--border);
+  border-radius:10px;
+}
 
-    .button {
-      padding: 12px 30px;
-      font-size: 18px;
-      border-radius: 10px;
-      background-color: var(--accent);
-      color: white;
-      border: none;
-      cursor: pointer;
-      transition: background-color 0.3s, transform 0.2s ease;
-    }
+.site-btn{
+  display:block;
+  width:100%;
+  margin:6px 0;
+  padding:10px;
+  border-radius:8px;
+  border:none;
+  cursor:pointer;
+  background:#eee;
+}
 
-    .button:hover {
-      background-color: var(--accent2);
-      transform: scale(1.05);
-    }
+/* viewer */
+.viewer{
+  display:none;
+  height:100vh;
+  width:100%;
+  position:fixed;
+  top:0;
+  left:0;
+  background:#000;
+  flex-direction:column;
+}
 
-    .input-container {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      margin-top: 20px;
-    }
+.top-bar{
+  display:flex;
+  gap:10px;
+  padding:10px;
+  background:rgba(0,0,0,.85);
+}
 
-    input[type="text"] {
-      padding: 12px;
-      font-size: 16px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      width: 320px;
-      max-width: calc(100vw - 60px);
-      background: var(--inputBg);
-      color: var(--text);
-      outline: none;
-    }
+.top-bar button{
+  padding:10px;
+  border:none;
+  cursor:pointer;
+  border-radius:8px;
+  color:#fff;
+}
 
-    .home-button {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      padding: 10px 20px;
-      background-color: var(--danger);
-      color: #fff;
-      font-size: 16px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
-      transition: background-color 0.3s ease;
-    }
-    .home-button:hover { background-color: var(--danger2); }
+iframe{
+  flex:1;
+  width:100%;
+  border:none;
+}
 
-    .welcome h2 {
-      margin-bottom: 10px;
-      font-size: 24px;
-      color: var(--text);
-    }
-    .welcome p {
-      font-size: 18px;
-      color: var(--muted);
-    }
+.fallback{
+  display:none;
+  color:#fff;
+  text-align:center;
+  padding:20px;
+}
 
-    .server-hint{
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 4px;
-      max-width: 720px;
-    }
-
-    /* Launch overlay */
-    .launch-overlay{
-      position: fixed;
-      inset: 0;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0,0,0,.55);
-      z-index: 50;
-      padding: 16px;
-    }
-    .launch-card{
-      width: min(420px, 92vw);
-      background: rgba(255,255,255,.90);
-      border-radius: 16px;
-      padding: 18px 16px;
-      text-align: center;
-      box-shadow: 0 20px 60px rgba(0,0,0,.35);
-    }
-    :root.dark .launch-card{
-      background: rgba(25,28,36,.92);
-      color: var(--text);
-    }
-    .spinner{
-      width: 42px;
-      height: 42px;
-      margin: 6px auto 12px;
-      border-radius: 50%;
-      border: 4px solid rgba(255,255,255,.35);
-      border-top-color: #fff;
-      animation: spin 0.9s linear infinite;
-    }
-    :root.dark .spinner{
-      border: 4px solid rgba(255,255,255,.20);
-      border-top-color: #fff;
-    }
-    @keyframes spin{ to { transform: rotate(360deg); } }
-
-    .launch-text{
-      font-weight: 800;
-      letter-spacing: .2px;
-    }
-    .launch-sub{
-      margin-top: 6px;
-      font-size: 12px;
-      color: rgba(0,0,0,.65);
-    }
-    :root.dark .launch-sub{ color: rgba(255,255,255,.68); }
-
-    /* New Extras & Dynamic Hub Elements */
-    .extras-panel {
-      max-height: 0;
-      overflow: hidden;
-      opacity: 0;
-      transform: translateY(-10px);
-      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-      background: var(--extrasBg);
-      border-radius: 12px;
-      padding: 0 15px;
-      margin-top: 10px;
-    }
-
-    .extras-panel.show {
-      max-height: 800px;
-      opacity: 1;
-      transform: translateY(0);
-      padding: 20px 15px;
-      border: 1px dashed var(--border);
-    }
-
-    .category-sec {
-      margin-bottom: 20px;
-    }
-
-    .category-sec h3 {
-      font-size: 18px;
-      margin-bottom: 10px;
-      color: var(--accent);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .link-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-    }
-
-    .site-btn {
-      padding: 8px 16px;
-      font-size: 14px;
-      background: var(--inputBg);
-      color: var(--text);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .site-btn:hover {
-      background: var(--accent);
-      color: white;
-      transform: translateY(-2px);
-    }
-
-    /* Iframe Hub Mode */
-    .iframe-workspace {
-      display: none;
-      flex-direction: column;
-      gap: 15px;
-      width: 100%;
-      margin-top: 10px;
-    }
-
-    .iframe-controls {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      background: var(--inputBg);
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-    }
-
-    .control-btn {
-      padding: 8px 16px;
-      font-size: 14px;
-      border-radius: 6px;
-      border: none;
-      cursor: pointer;
-      font-weight: bold;
-      transition: opacity 0.2s;
-    }
-
-    .control-btn:hover { opacity: 0.85; }
-    .btn-tab { background: #3498db; color: white; }
-    .btn-blank { background: #2ecc71; color: white; }
-
-    .embedded-frame {
-      width: 100%;
-      height: 65vh;
-      border: 2px solid var(--border);
-      border-radius: 12px;
-      background: #000;
-    }
-
-    .reset-bar {
-      display: none;
-      margin-top: 30px;
-      justify-content: center;
-    }
-
-    .reset-button {
-      padding: 12px 35px;
-      background-color: #e74c3c;
-      color: white;
-      font-weight: bold;
-      font-size: 16px;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
-      transition: background-color 0.2s, transform 0.2s;
-    }
-
-    .reset-button:hover {
-      background-color: #c0392b;
-      transform: scale(1.05);
-    }
-  </style>
+/* reset */
+.reset{
+  position:fixed;
+  bottom:15px;
+  left:50%;
+  transform:translateX(-50%);
+  background:var(--danger);
+  color:#fff;
+  padding:12px 20px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  display:none;
+}
+</style>
 </head>
+
 <body>
-  <div class="container" id="mainCard">
-    <h1 id="pageTitle">Entertainment Player</h1>
 
-    <div id="standardAppContent">
-      <div class="welcome" id="welcomeBlock">
-        <h2>Welcome!</h2>
-        <p>Select what you want to watch and where:</p>
-      </div>
+<div class="container" id="mainUI">
 
-      <div class="buttons-container" id="topButtons">
-        <button class="button" onclick="selectMedia('movie')">Movie</button>
-        <button class="button" onclick="selectMedia('tv')">TV Show</button>
-        <button class="button" onclick="openAnime()">Anime</button>
-        <button class="button" onclick="continueWatching()">Continue Watching</button>
-      </div>
+<h1>Entertainment Player</h1>
 
-      <div style="margin-bottom: 20px;" id="extrasTriggerContainer">
-        <button class="button" style="background-color: #8e44ad;" onclick="toggleExtrasPanel()">Extra's</button>
-      </div>
+<button class="button" onclick="toggleExtra()">Extra’s</button>
 
-      <div class="extras-panel" id="extrasPanel">
-        <div class="category-sec">
-          <h3>Pstream Forks</h3>
-          <div class="link-grid">
-            <button class="site-btn" onclick="loadExternalSite('https://aether.bar/')">Aether Bar</button>
-            <button class="site-btn" onclick="loadExternalSite('https://aether.cx/')">Aether CX</button>
-            <button class="site-btn" onclick="loadExternalSite('https://zstream.mov/')">ZStream</button>
-            <button class="site-btn" onclick="loadExternalSite('https://afterstream.org/')">AfterStream</button>
-            <button class="site-btn" onclick="loadExternalSite('https://basementx.xyz/')">BasementX</button>
-            <button class="site-btn" onclick="loadExternalSite('https://streamwatch.online/')">StreamWatch</button>
-            <button class="site-btn" onclick="loadExternalSite('https://pstream.site/')">PStream Site</button>
-          </div>
-        </div>
-        <div class="category-sec">
-          <h3>Everything Else</h3>
-          <div class="link-grid">
-            <button class="site-btn" onclick="loadExternalSite('https://gotvseries.top/')">GoTV Series</button>
-            <button class="site-btn" onclick="loadExternalSite('https://www.cineby.at/')">Cineby</button>
-            <button class="site-btn" onclick="loadExternalSite('https://www.cineplay.to/')">Cineplay</button>
-            <button class="site-btn" onclick="loadExternalSite('https://www.fmovies.nz/')">FMovies</button>
-            <button class="site-btn" onclick="loadExternalSite('https://lordflix.org/')">LordFlix</button>
-            <button class="site-btn" onclick="loadExternalSite('https://flickystream.su/')">FlickyStream</button>
-            <button class="site-btn" onclick="loadExternalSite('https://meowtv.ru/')">MeowTV</button>
-          </div>
-        </div>
-      </div>
+<div class="extra-panel" id="extraPanel">
 
-      <div class="input-container" id="inputContainer">
-        <div class="buttons-container">
-          <button class="button" onclick="selectServer('vidsrc')">Server 1 (IMDb)</button>
-          <button class="button" onclick="selectServer('pstream')">Server 2 (TMDB / P-Stream)</button>
-        </div>
-
-        <div class="server-hint" id="serverHint">
-          Pick a server, then enter your ID.
-        </div>
-
-        <input type="text" id="media-id" placeholder="Pick server first" />
-        <button class="button" onclick="playMedia()">Play</button>
-      </div>
-    </div>
-
-    <div class="iframe-workspace" id="iframeWorkspace">
-      <div class="iframe-controls">
-        <button class="control-btn btn-tab" id="actionOpenTab">Open in New Tab</button>
-        <button class="control-btn btn-blank" id="actionOpenBlank">Open in about:blank</button>
-      </div>
-      <iframe src="" class="embedded-frame" id="targetIframe" allowfullscreen sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
-    </div>
-
+  <div class="category">
+    <h3>Pstream Forks</h3>
+    <button class="site-btn" onclick="openSite('https://aether.bar/')">aether.bar</button>
+    <button class="site-btn" onclick="openSite('https://aether.cx/')">aether.cx</button>
+    <button class="site-btn" onclick="openSite('https://zstream.mov/')">zstream.mov</button>
+    <button class="site-btn" onclick="openSite('https://afterstream.org/')">afterstream</button>
+    <button class="site-btn" onclick="openSite('https://basementx.xyz/')">basementx</button>
+    <button class="site-btn" onclick="openSite('https://streamwatch.online/')">streamwatch</button>
+    <button class="site-btn" onclick="openSite('https://pstream.site/')">pstream</button>
   </div>
 
-  <div class="reset-bar" id="resetBar">
-    <button class="reset-button" onclick="resetPageToDefault()">Return to Player</button>
+  <div class="category">
+    <h3>Everything Else</h3>
+    <button class="site-btn" onclick="openSite('https://gotvseries.top/')">gotvseries</button>
+    <button class="site-btn" onclick="openSite('https://www.cineby.at/')">cineby</button>
+    <button class="site-btn" onclick="openSite('https://www.cineplay.to/')">cineplay</button>
+    <button class="site-btn" onclick="openSite('https://www.fmovies.nz/')">fmovies</button>
+    <button class="site-btn" onclick="openSite('https://lordflix.org/')">lordflix</button>
+    <button class="site-btn" onclick="openSite('https://flickystream.su/')">flickystream</button>
+    <button class="site-btn" onclick="openSite('https://meowtv.ru/')">meowtv</button>
   </div>
 
-  <a href="https://susysam.github.io/start27.html" class="home-button">Home</a>
+</div>
 
-  <div class="launch-overlay" id="launchOverlay" aria-hidden="true">
-    <div class="launch-card">
-      <div class="spinner"></div>
-      <div class="launch-text" id="launchText">Launching...</div>
-      <div class="launch-sub">Preparing player</div>
-    </div>
+</div>
+
+<!-- VIEWER -->
+<div class="viewer" id="viewer">
+
+  <div class="top-bar">
+    <button onclick="openTab()">Open Tab</button>
+    <button onclick="openBlank()">Open about:blank</button>
+    <button onclick="closeViewer()">Home</button>
   </div>
 
-  <script>
-    let selectedMediaType = '';
-    let selectedServer = '';
-    let currentActiveTargetUrl = '';
+  <iframe id="frame"></iframe>
 
-    const pageTitle = document.getElementById('pageTitle');
-    const inputContainer = document.getElementById('inputContainer');
-    const welcomeBlock = document.getElementById('welcomeBlock');
-    const topButtons = document.getElementById('topButtons');
-    const serverHint = document.getElementById('serverHint');
-    const launchOverlay = document.getElementById('launchOverlay');
-    const launchText = document.getElementById('launchText');
+  <div class="fallback" id="fallback">
+    <h2>Site can’t be embedded</h2>
+    <p>Use one of the options above.</p>
+  </div>
 
-    // Extra's Workspace Nodes
-    const extrasPanel = document.getElementById('extrasPanel');
-    const standardAppContent = document.getElementById('standardAppContent');
-    const iframeWorkspace = document.getElementById('iframeWorkspace');
-    const targetIframe = document.getElementById('targetIframe');
-    const resetBar = document.getElementById('resetBar');
-    const actionOpenTab = document.getElementById('actionOpenTab');
-    const actionOpenBlank = document.getElementById('actionOpenBlank');
+</div>
 
-    function showLaunch(text){
-      launchText.textContent = text;
-      launchOverlay.style.display = 'flex';
-      launchOverlay.setAttribute('aria-hidden', 'false');
-    }
-    function hideLaunch(){
-      launchOverlay.style.display = 'none';
-      launchOverlay.setAttribute('aria-hidden', 'true');
-    }
+<button class="reset" id="resetBtn" onclick="resetAll()">Reset Viewer</button>
 
-    function selectMedia(mediaType) {
-      selectedMediaType = mediaType;
+<script>
 
-      if (mediaType === 'movie') pageTitle.textContent = 'Movies';
-      if (mediaType === 'tv') pageTitle.textContent = 'TV-Shows';
+let currentURL = "";
 
-      inputContainer.style.display = 'flex';
-      welcomeBlock.style.display = 'none';
-      topButtons.style.display = 'none';
-      document.getElementById('extrasTriggerContainer').style.display = 'none';
+function toggleExtra(){
+  const panel = document.getElementById("extraPanel");
+  panel.style.display = panel.style.display === "block" ? "none" : "block";
+}
 
-      selectedServer = '';
-      document.getElementById('media-id').value = '';
-      document.getElementById('media-id').placeholder = 'Pick server first';
-      serverHint.textContent = 'Pick a server, then enter your ID.';
-    }
+function openSite(url){
+  currentURL = url;
 
-    function selectServer(server) {
-      selectedServer = server;
-      const input = document.getElementById('media-id');
+  document.getElementById("mainUI").style.display = "none";
+  document.getElementById("viewer").style.display = "flex";
+  document.getElementById("resetBtn").style.display = "block";
 
-      if (server === 'vidsrc') {
-        input.placeholder = "Enter IMDb ID (e.g., tt1234567)";
-        serverHint.innerHTML = "Using IMDb IDs (example: <code>tt1234567</code>).";
-      } else {
-        input.placeholder = "Enter TMDB ID (e.g., 603)";
-        serverHint.innerHTML = "Using TMDB IDs (example: <code>603</code>). TV auto-loads <code>S1E1</code>.";
+  const frame = document.getElementById("frame");
+  const fallback = document.getElementById("fallback");
+
+  fallback.style.display = "none";
+  frame.style.display = "block";
+
+  frame.src = url;
+
+  // fallback trigger (cannot fully detect iframe block, so timeout)
+  setTimeout(() => {
+    try {
+      if (!frame.contentWindow || frame.contentWindow.location.href === "about:blank") {
+        throw new Error();
       }
+    } catch {
+      fallback.style.display = "block";
+      frame.style.display = "none";
     }
+  }, 2500);
+}
 
-    function pstreamParams() {
-      const params = new URLSearchParams({
-        logo: "false",
-        downloads: "true",
-        "has-watchparty": "true",
-        allinone: "true",
-        theme: "default",
-        language: "en",
-        tips: "true",
-        "interface-settings": "true",
-        backlink: "https://susysam.github.io/movie+tv.html"
-      });
-      return params.toString();
-    }
+function openTab(){
+  window.open(currentURL, "_blank");
+}
 
-    function buildUrl(mediaId, server, mediaType) {
-      if (server === 'vidsrc') {
-        return `https://vidsrc.me/embed/${mediaType}?imdb=${encodeURIComponent(mediaId)}`;
-      }
+function openBlank(){
+  const w = window.open("about:blank", "_blank");
+  w.document.write(`<iframe src="${currentURL}" style="border:none;width:100%;height:100vh"></iframe>`);
+}
 
-      const qs = pstreamParams();
+function closeViewer(){
+  window.location.href = window.location.href;
+}
 
-      if (mediaType === 'movie') {
-        return `https://pstream.net/embed/tmdb-movie-${encodeURIComponent(mediaId)}?${qs}`;
-      } else {
-        const season = 1;
-        const episode = 1;
-        return `https://pstream.net/embed/tmdb-tv-${encodeURIComponent(mediaId)}/${season}/${episode}?${qs}`;
-      }
-    }
+function resetAll(){
+  document.getElementById("viewer").style.display = "none";
+  document.getElementById("mainUI").style.display = "block";
+  document.getElementById("resetBtn").style.display = "none";
+  document.getElementById("frame").src = "";
+  currentURL = "";
+}
 
-    function openPlayer(url) {
-      openAboutBlankWindow(url);
-      hideLaunch();
-    }
+</script>
 
-    function playMedia() {
-      const mediaId = document.getElementById('media-id').value.trim();
-      if (!selectedMediaType) return;
-      if (!selectedServer) return alert("Pick a server first.");
-      if (!mediaId) return alert("Enter an ID first.");
-
-      const label = selectedMediaType === 'movie' ? "Launching Movies..." : "Launching TV-Shows...";
-      showLaunch(label);
-
-      setTimeout(() => {
-        const url = buildUrl(mediaId, selectedServer, selectedMediaType);
-        openPlayer(url);
-
-        localStorage.setItem('lastWatched', JSON.stringify({
-          mediaId,
-          selectedServer,
-          selectedMediaType
-        }));
-      }, 650);
-    }
-
-    function continueWatching() {
-      const data = localStorage.getItem('lastWatched');
-      if (!data) return alert("Nothing saved yet.");
-
-      const { mediaId, selectedServer, selectedMediaType } = JSON.parse(data);
-
-      const label = selectedMediaType === 'movie' ? "Launching Movies..." : "Launching TV-Shows...";
-      showLaunch(label);
-
-      setTimeout(() => {
-        const url = buildUrl(mediaId, selectedServer, selectedMediaType);
-        openPlayer(url);
-      }, 650);
-    }
-
-    function openAnime() {
-      const animeLinks = [
-        "https://unime.vercel.app/eng",
-        "https://kitsunee.me/",
-        "https://anify.tv/anime",
-        "https://kaido.to/"
-      ];
-      const randomLink = animeLinks[Math.floor(Math.random() * animeLinks.length)];
-      window.open(randomLink, "_blank");
-    }
-
-    // Modern Workspace Architecture Scripts
-    function toggleExtrasPanel() {
-      extrasPanel.classList.toggle('show');
-    }
-
-    function loadExternalSite(url) {
-      currentActiveTargetUrl = url;
-      
-      // Wipe structural content elements out
-      standardAppContent.style.display = 'none';
-      pageTitle.textContent = "External Site Hub";
-
-      // Bind functional dynamic links
-      actionOpenTab.onclick = () => window.open(url, '_blank');
-      actionOpenBlank.onclick = () => openAboutBlankWindow(url);
-
-      // Trigger Iframe Generation & reveal Reset Option Frame
-      targetIframe.src = url;
-      iframeWorkspace.style.display = 'flex';
-      resetBar.style.display = 'flex';
-    }
-
-    function openAboutBlankWindow(url) {
-      const win = window.open("about:blank", "_blank");
-      if (!win) return alert("Popup blocked.");
-      win.document.write(`
-        <html>
-          <head>
-            <title>Player Workspace</title>
-            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-            <style>body{margin:0;background:#000}iframe{border:none;width:100%;height:100vh}</style>
-          </head>
-          <body>
-            <iframe src="${url}" allowfullscreen></iframe>
-          </body>
-        </html>
-      `);
-      win.document.close();
-    }
-
-    function resetPageToDefault() {
-      // Tear down ongoing frames
-      targetIframe.src = "";
-      iframeWorkspace.style.display = 'none';
-      resetBar.style.display = 'none';
-
-      // Restore baseline configuration
-      standardAppContent.style.display = 'block';
-      pageTitle.textContent = "Entertainment Player";
-      welcomeBlock.style.display = 'block';
-      topButtons.style.display = 'flex';
-      document.getElementById('extrasTriggerContainer').style.display = 'block';
-      inputContainer.style.display = 'none';
-      extrasPanel.classList.remove('show');
-    }
-  </script>
 </body>
 </html>
