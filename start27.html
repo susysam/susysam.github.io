@@ -6,7 +6,6 @@
   <title>Home</title>
   <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Google_Classroom_Logo.svg/2372px-Google_Classroom_Logo.svg.png" type="image/png">
 
-  <!-- Apply theme ASAP (site-wide) -->
   <script>
     (function () {
       const theme = localStorage.getItem('theme');
@@ -105,6 +104,7 @@
     #placeholder {
       font-size: 20px;
       margin-top: 20px;
+      font-weight: 500;
       color: var(--text);
     }
 
@@ -215,7 +215,6 @@
 <body>
   <div class="navbar">
     <a onclick="openGameApps()">Games</a>
-    <a onclick="openlinks()">Links</a>
     <a onclick="openTabs()">Tabs</a>
     <a onclick="openSettings()">Settings</a>
     <a onclick="openTvShowPlayer()">Movie+TV</a>
@@ -231,7 +230,7 @@
         </div>
         <div class="time-title">Current Time</div>
       </div>
-      <div class="tz-badge" title="Eastern Time Zone">EST</div>
+      <div class="tz-badge" id="tzBadge" title="Eastern Time Zone">EST</div>
     </div>
     <div class="time-body">
       <p id="time">--:--:--</p>
@@ -244,7 +243,7 @@
   </div>
 
   <div id="background-input">
-    <input type="text" id="background-url" placeholder="Enter background URL" />
+    <input type="text" id="background-url" placeholder="Enter background URL" onkeydown="if(event.key === 'Enter') changeBackground()" />
     <div class="input-button">
       <button class="button" onclick="changeBackground()">Save</button>
       <button class="button" onclick="removeBackgroundButton()">Cancel</button>
@@ -264,6 +263,7 @@
     // ---------------- Time (Intl first, API fallback) ----------------
     const TIME_ZONE = "America/New_York";
     const timeEl = document.getElementById("time");
+    const tzBadge = document.getElementById("tzBadge");
 
     function formatViaIntl(dateObj) {
       return new Intl.DateTimeFormat("en-US", {
@@ -295,6 +295,10 @@
     function formatEasternFromUtcMs(utcMs) {
       const dUtc = new Date(utcMs);
       const dst = isDSTInNewYork(dUtc);
+      
+      // Update badge visuals contextually
+      tzBadge.textContent = dst ? "EDT" : "EST";
+
       const offsetHours = dst ? -4 : -5;
       const easternMs = utcMs + offsetHours * 60 * 60 * 1000;
       const d = new Date(easternMs);
@@ -309,12 +313,10 @@
       return `${h}:${m}:${s} ${ampm}`;
     }
 
-    // Detect if Intl timezone formatting seems broken (basic sanity test)
     function intlLooksBroken() {
       try {
         const now = new Date();
         const ny = formatViaIntl(now);
-        // If it can't format at all, it's broken
         return !ny || typeof ny !== "string";
       } catch {
         return true;
@@ -332,7 +334,17 @@
         const nowUtcMs = baseUtcMs + elapsed;
         timeEl.textContent = formatEasternFromUtcMs(nowUtcMs);
       } else {
-        timeEl.textContent = formatViaIntl(new Date());
+        const now = new Date();
+        timeEl.textContent = formatViaIntl(now);
+        // Dynamic badge update for regular system execution path
+        try {
+          const parts = new Intl.DateTimeFormat("en-US", {
+            timeZone: TIME_ZONE,
+            timeZoneName: "short"
+          }).formatToParts(now);
+          const tzPart = parts.find(p => p.type === "timeZoneName");
+          if (tzPart) tzBadge.textContent = tzPart.value;
+        } catch {}
       }
     }
 
@@ -348,11 +360,9 @@
       usingApiFallback = intlLooksBroken();
 
       if (usingApiFallback) {
-        // Use online UTC as source of truth
         try {
           await syncUtcFromApi();
         } catch (e) {
-          // If API blocked, fallback to local Date.now but still apply ET math
           baseUtcMs = Date.now();
           basePerfMs = performance.now();
           console.warn("Time API blocked; using local fallback.", e);
@@ -363,7 +373,6 @@
       tick();
       tickTimer = setInterval(tick, 1000);
 
-      // re-sync every 10 min if using API fallback
       if (usingApiFallback) {
         setInterval(async () => {
           try { await syncUtcFromApi(); } catch {}
@@ -375,13 +384,13 @@
 
     // ---------------- Navigation + background ----------------
     function openGameApps() { window.location.href = "games.html"; }
-    function openlinks() { window.location.href = "links.html"; }
     function openTabs() { window.location.href = "tabs.html"; }
     function openSettings() { window.location.href = "settings.html"; }
     function openTvShowPlayer() { window.location.href = "movie+tv.html"; }
 
     function showBackgroundInput() {
       document.getElementById("background-input").style.display = "block";
+      document.getElementById("background-url").focus();
     }
 
     function changeBackground() {
