@@ -84,9 +84,9 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .back-button {
-      padding: 10px 20px;
-      background-color: var(--danger);
+    .home-button {
+      padding: 10px 22px;
+      background-color: var(--accent);
       color: white;
       border-radius: 10px;
       cursor: pointer;
@@ -94,9 +94,10 @@
       margin-bottom: 20px;
       font-size: 15px;
       font-weight: bold;
-      transition: background-color 0.2s;
+      transition: background-color 0.2s, transform 0.1s;
     }
-    .back-button:hover { background-color: var(--danger2); }
+    .home-button:hover { background-color: var(--accent2); }
+    .home-button:active { transform: translateY(1px); }
 
     .search-bar {
       padding: 12px 16px;
@@ -127,7 +128,7 @@
     }
     .button:hover { background-color: var(--accent2); }
 
-    /* Laptop Structure CSS - Hidden until activated */
+    /* Laptop Structure CSS */
     .laptop-hardware {
       width: 100%;
       display: none;
@@ -267,7 +268,7 @@
 
   <div class="app-container">
     
-    <button class="back-button" onclick="goBack()">Back</button>
+    <button class="home-button" onclick="goHome()">Home</button>
 
     <input type="text" id="searchInput" class="search-bar" placeholder="Enter web URL (e.g., example.com)"
       onkeydown="if(event.key==='Enter') renderVirtualUrl()">
@@ -326,10 +327,8 @@
       const verifiedUrl = sanitizeUrl(input);
       fallbackGlobalUrl = verifiedUrl;
       
-      // Reveal laptop layout on initial execution 
       laptopRig.classList.add('visible');
       
-      // Toggle custom load animations immediately
       errorLayer.style.display = "none";
       loaderLayer.style.display = "flex";
       
@@ -337,7 +336,6 @@
 
       if (confirmationTimer) clearTimeout(confirmationTimer);
 
-      // Embedded Iframe connection confirmation timeout block
       confirmationTimer = setTimeout(() => {
         try {
           if (!frameNode.contentWindow || frameNode.contentWindow.location.href === "about:blank") {
@@ -350,7 +348,6 @@
     }
 
     function hideLoader() {
-      // Shuts down loader animation cleanly as soon as the DOM element registers data delivery
       const loaderLayer = document.getElementById('loaderModule');
       if (loaderLayer) loaderLayer.style.display = "none";
     }
@@ -365,8 +362,8 @@
       };
     }
 
-    function goBack() {
-      window.history.back();
+    function goHome() {
+      window.location.href = "https://susysam.github.io/start27.html";
     }
   </script>
 
