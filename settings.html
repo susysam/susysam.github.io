@@ -51,7 +51,7 @@
       position: sticky;
       top: 0;
       z-index: 10;
-      padding: 18px 16px;
+      padding: 14px 16px;
       border-bottom: 1px solid var(--border);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
@@ -65,7 +65,15 @@
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap: 12px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .header-left-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
     }
 
     .title{
@@ -86,7 +94,13 @@
       white-space: nowrap;
       overflow:hidden;
       text-overflow: ellipsis;
-      max-width: 70vw;
+      max-width: 40vw;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .pill{
@@ -111,12 +125,9 @@
     .grid{
       max-width: 980px;
       margin: 0 auto;
-      display:grid;
-      grid-template-columns: 1.1fr .9fr;
+      display: grid;
+      grid-template-columns: 1fr;
       gap: 14px;
-    }
-    @media (max-width: 860px){
-      .grid{ grid-template-columns: 1fr; }
     }
 
     .card{
@@ -282,8 +293,9 @@
     button{
       border: 1px solid transparent;
       border-radius: 12px;
-      padding: 10px 12px;
-      font-size: 14px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: bold;
       cursor:pointer;
       transition: transform .05s ease, background-color .2s ease, border-color .2s ease, opacity .2s ease;
       color: white;
@@ -357,13 +369,21 @@
 <body>
   <header>
     <div class="header-inner">
-      <div class="title">
-        <h1>Settings</h1>
-        <p id="subtitle">Customize look + quick actions</p>
+      <div class="header-left-group">
+        <button id="homeButton" style="padding: 8px 12px;">← Home</button>
+        <div class="title">
+          <h1>Settings</h1>
+          <p id="subtitle">Customize look + quick actions</p>
+        </div>
       </div>
-      <div class="pill" title="Synced via localStorage">
-        <span>Saved</span>
-        <span id="saveState">●</span>
+      
+      <div class="header-actions">
+        <button class="btn-ghost" id="tabButton" type="button">New Tab</button>
+        <button class="btn-ghost" id="windowButton" type="button">New Window</button>
+        <div class="pill" title="Synced via localStorage">
+          <span>Saved</span>
+          <span id="saveState">●</span>
+        </div>
       </div>
     </div>
   </header>
@@ -414,6 +434,18 @@
               <div class="preset-preview-box" style="background: linear-gradient(135deg, #12131a, #221929);"></div>
               <span class="preset-title">Cyberpunk</span>
             </div>
+            <div class="preset-chip" data-type="color" data-val="#0e171e" data-glow1="rgba(0,198,255,0.14)" data-glow2="rgba(20,100,240,0.1)">
+              <div class="preset-preview-box" style="background: linear-gradient(135deg, #0e171e, #182e3c);"></div>
+              <span class="preset-title">Nordic Frost</span>
+            </div>
+            <div class="preset-chip" data-type="color" data-val="#1f1112" data-glow1="rgba(255,70,80,0.16)" data-glow2="rgba(140,20,30,0.12)">
+              <div class="preset-preview-box" style="background: linear-gradient(135deg, #1f1112, #3b191b);"></div>
+              <span class="preset-title">Deep Crimson</span>
+            </div>
+            <div class="preset-chip" data-type="color" data-val="#1a1316" data-glow1="rgba(240,120,180,0.15)" data-glow2="rgba(180,70,140,0.12)">
+              <div class="preset-preview-box" style="background: linear-gradient(135deg, #1a1316, #36202b);"></div>
+              <span class="preset-title">Rose Quartz</span>
+            </div>
             <div class="preset-chip" data-type="color" data-val="#f6f7fb" data-glow1="rgba(108,11,169,0.12)" data-glow2="rgba(79,6,114,0.1)">
               <div class="preset-preview-box" style="background: #f6f7fb; border: 1px solid #ddd;"></div>
               <span class="preset-title">Clean Light</span>
@@ -436,35 +468,13 @@
           </div>
 
           <div class="mini" id="bgStatus">Current Value: <span id="bgCurrent">none</span></div>
-        </div>
-      </section>
 
-      <section class="card">
-        <div class="card-head">
-          <div>
-            <h2>Quick actions</h2>
-            <div class="sub">Open pages in different ways</div>
-          </div>
-        </div>
-
-        <div class="card-body">
-          <div class="btns">
-            <button id="homeButton">Go to Home</button>
-            <button class="btn-ghost" id="tabButton" type="button">Open Settings in New Tab</button>
-            <button class="btn-ghost" id="windowButton" type="button">Open Settings in New Window</button>
-          </div>
-
-          <div class="row" style="margin-top:10px;">
+          <div class="row" style="margin-top:24px;">
             <div class="left">
               <p class="label">Reset all saved settings</p>
               <p class="hint">Clears theme, colors + background and refreshes configuration architecture.</p>
             </div>
-            <button class="btn-danger" id="resetAllBtn" type="button">Reset</button>
-          </div>
-
-          <div class="mini">
-            Tip: If your time on Home looks wrong, switch your timezone display there to
-            <code>America/New_York</code> (it auto-handles DST).
+            <button class="btn-danger" id="resetAllBtn" type="button">Reset All Data</button>
           </div>
         </div>
       </section>
