@@ -110,10 +110,12 @@
     }
 
     .home-button {
+      display: inline-block;
       margin-bottom: 20px;
       padding: 10px 22px;
       border-radius: 10px;
       background: var(--accent);
+      text-decoration: none;
       font-size: 15px;
     }
 
@@ -358,7 +360,7 @@
 </head>
 <body>
   <main class="app-container">
-    <button class="home-button" type="button" onclick="goHome()">Home</button>
+    <a class="home-button" href="https://susysam.github.io/start27.html">Home</a>
 
     <label for="searchInput" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">Website URL</label>
     <input
@@ -408,7 +410,7 @@
   </main>
 
   <script>
-    const SECRET_MOVIE_URL = 'https://zstream.mov/";
+    const SECRET_MOVIE_URL = 'https://example.com/';
     let loadTimer = null;
     let fallbackGlobalUrl = '';
     let previewRequestId = 0;
@@ -496,7 +498,11 @@
         return;
       }
 
-      newWindow.opener = null;
+      try {
+        newWindow.opener = null;
+      } catch (error) {
+        // The tab is already open; some browsers block access after navigation.
+      }
     }
 
     function handlePreviewLoad() {
@@ -548,45 +554,35 @@
       }
 
       try {
-        blankWindow.document.open();
-        blankWindow.document.write(`<!DOCTYPE html>
-          <html lang="en">
-            <head>
-              <meta charset="UTF-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <title>Loading...</title>
-              <style>
-                html, body, iframe { width: 100%; height: 100%; margin: 0; border: 0; overflow: hidden; }
-                body { background: #111; }
-              </style>
-            </head>
-            <body>
-              <iframe src="${escapeHtmlAttribute(url)}" allow="fullscreen" referrerpolicy="no-referrer"></iframe>
-            </body>
-          </html>`);
-        blankWindow.document.close();
+        const blankDocument = blankWindow.document;
+        blankDocument.title = 'Workspace';
+        blankDocument.documentElement.style.width = '100%';
+        blankDocument.documentElement.style.height = '100%';
+        blankDocument.body.style.width = '100%';
+        blankDocument.body.style.height = '100%';
+        blankDocument.body.style.margin = '0';
+        blankDocument.body.style.overflow = 'hidden';
+        blankDocument.body.style.background = '#111';
+
+        const siteFrame = blankDocument.createElement('iframe');
+        siteFrame.src = url;
+        siteFrame.title = 'Opened website';
+        siteFrame.allow = 'fullscreen';
+        siteFrame.referrerPolicy = 'no-referrer';
+        siteFrame.style.width = '100%';
+        siteFrame.style.height = '100%';
+        siteFrame.style.border = '0';
+        siteFrame.style.display = 'block';
+        blankDocument.body.appendChild(siteFrame);
       } catch (error) {
         blankWindow.location.replace(url);
       }
-    }
-
-    function escapeHtmlAttribute(value) {
-      return value
-        .replaceAll('&', '&amp;')
-        .replaceAll('"', '&quot;')
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;');
     }
 
     function showStatus(message) {
       document.getElementById('statusMessage').textContent = message;
     }
 
-    function goHome() {
-      window.location.href = 'https://susysam.github.io/start27.html';
-    }
   </script>
-
-  <script src="site-settings.js"></script>
 </body>
 </html>
