@@ -2,73 +2,85 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Workspace Screen</title>
-  <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Google_Classroom_Logo.svg/2372px-Google_Classroom_Logo.svg.png" type="image/png"/>
+  <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Google_Classroom_Logo.svg/2372px-Google_Classroom_Logo.svg.png" type="image/png" />
 
   <script>
     (function () {
       const theme = localStorage.getItem('theme');
-      if (theme === 'dark') document.documentElement.classList.add('dark');
-      else document.documentElement.classList.remove('dark');
+      document.documentElement.classList.toggle('dark', theme === 'dark');
     })();
   </script>
 
   <style>
-    :root{
+    :root {
       --bg: #f4f7fc;
       --text: #14161a;
-      --muted: rgba(20,22,26,.65);
-      --border: rgba(0,0,0,.14);
-      --card: rgba(255,255,255,.82);
-      --overlay: rgba(255,255,255,0);
-      --accent: #6C0BA9;
-      --accent2: #4F0672;
-      --danger: #FF5733;
-      --danger2: #C74426;
-
-      --laptopShell: #dcdde1;
-      --laptopBezel: #1e272e;
+      --muted: rgba(20, 22, 26, .65);
+      --border: rgba(0, 0, 0, .14);
+      --card: rgba(255, 255, 255, .82);
+      --overlay: rgba(255, 255, 255, 0);
+      --accent: #6c0ba9;
+      --accent-hover: #4f0672;
+      --normal: #2563eb;
+      --normal-hover: #1d4ed8;
+      --blank: #059669;
+      --blank-hover: #047857;
+      --secret: #d97706;
+      --secret-hover: #b45309;
+      --preview: #7c3aed;
+      --preview-hover: #6d28d9;
+      --danger: #ff5733;
+      --laptop-shell: #dcdde1;
+      --laptop-bezel: #1e272e;
     }
-    :root.dark{
+
+    :root.dark {
       --bg: #0f1116;
       --text: #f2f4f8;
-      --muted: rgba(242,244,248,.68);
-      --border: rgba(255,255,255,.14);
-      --card: rgba(25,28,36,.72);
-      --overlay: rgba(0,0,0,.45);
-
-      --laptopShell: #2f3640;
-      --laptopBezel: #0f1418;
+      --muted: rgba(242, 244, 248, .68);
+      --border: rgba(255, 255, 255, .14);
+      --card: rgba(25, 28, 36, .72);
+      --overlay: rgba(0, 0, 0, .45);
+      --laptop-shell: #2f3640;
+      --laptop-bezel: #0f1418;
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
-      font-family: Arial, sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
+      min-height: 100vh;
+      padding: 20px;
+      overflow-x: hidden;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 20px;
-      min-height: 100vh;
       position: relative;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: Arial, sans-serif;
       transition: background-color .25s ease, color .25s ease;
-      overflow-x: hidden;
     }
 
-    body::before{
-      content:"";
+    body::before {
+      content: "";
       position: fixed;
       inset: 0;
-      background: var(--overlay);
-      pointer-events:none;
       z-index: 0;
+      pointer-events: none;
+      background: var(--overlay);
     }
-    body > *{ position: relative; z-index: 1; }
 
-    /* Entry Animation Wrapper */
+    body > * {
+      position: relative;
+      z-index: 1;
+    }
+
     .app-container {
       width: 100%;
       max-width: 900px;
@@ -77,66 +89,131 @@
       align-items: center;
       opacity: 0;
       transform: translateY(20px);
-      animation: uiReveal 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation: ui-reveal .65s cubic-bezier(.16, 1, .3, 1) forwards;
     }
 
-    @keyframes uiReveal {
-      to { opacity: 1; transform: translateY(0); }
+    @keyframes ui-reveal {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .home-button,
+    .action-button,
+    .error-action-btn {
+      border: 0;
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color .2s ease, transform .1s ease;
     }
 
     .home-button {
-      padding: 10px 22px;
-      background-color: var(--accent);
-      color: white;
-      border-radius: 10px;
-      cursor: pointer;
-      border: none;
       margin-bottom: 20px;
+      padding: 10px 22px;
+      border-radius: 10px;
+      background: var(--accent);
       font-size: 15px;
-      font-weight: bold;
-      transition: background-color 0.2s, transform 0.1s;
     }
-    .home-button:hover { background-color: var(--accent2); }
-    .home-button:active { transform: translateY(1px); }
+
+    .home-button:hover {
+      background: var(--accent-hover);
+    }
+
+    .home-button:active,
+    .action-button:active,
+    .error-action-btn:active {
+      transform: translateY(1px);
+    }
 
     .search-bar {
-      padding: 12px 16px;
       width: 100%;
       max-width: 550px;
-      border-radius: 12px;
+      margin-bottom: 12px;
+      padding: 12px 16px;
       border: 1px solid var(--border);
+      border-radius: 12px;
+      outline: none;
       background: var(--card);
       color: var(--text);
-      outline: none;
       font-size: 15px;
-      margin-bottom: 12px;
-      transition: border-color 0.2s;
+      transition: border-color .2s ease;
     }
-    .search-bar:focus { border-color: var(--accent); }
 
-    .button {
-      padding: 10px 22px;
-      background-color: var(--accent);
-      color: white;
-      border-radius: 8px;
-      cursor: pointer;
-      border: none;
-      font-size: 14px;
-      font-weight: bold;
+    .search-bar:focus {
+      border-color: var(--accent);
+    }
+
+    .action-buttons {
+      width: 100%;
       margin-bottom: 25px;
-      transition: background-color 0.2s;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
     }
-    .button:hover { background-color: var(--accent2); }
 
-    /* Laptop Structure CSS */
+    .action-button {
+      min-height: 42px;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .action-button.normal {
+      background: var(--normal);
+    }
+
+    .action-button.normal:hover {
+      background: var(--normal-hover);
+    }
+
+    .action-button.blank {
+      background: var(--blank);
+    }
+
+    .action-button.blank:hover {
+      background: var(--blank-hover);
+    }
+
+    .action-button.secret {
+      background: var(--secret);
+    }
+
+    .action-button.secret:hover {
+      background: var(--secret-hover);
+    }
+
+    .action-button.preview {
+      min-height: 36px;
+      align-self: center;
+      padding: 8px 14px;
+      background: var(--preview);
+      font-size: 13px;
+    }
+
+    .action-button.preview:hover {
+      background: var(--preview-hover);
+    }
+
+    .status-message {
+      min-height: 20px;
+      margin: -13px 0 18px;
+      color: var(--danger);
+      font-size: 14px;
+      font-weight: 700;
+      text-align: center;
+    }
+
     .laptop-hardware {
       width: 100%;
       display: none;
       flex-direction: column;
       align-items: center;
       opacity: 0;
-      transform: scale(0.96);
-      transition: opacity 0.4s ease, transform 0.4s ease;
+      transform: scale(.96);
+      transition: opacity .4s ease, transform .4s ease;
     }
 
     .laptop-hardware.visible {
@@ -148,222 +225,365 @@
     .laptop-screen-frame {
       width: 100%;
       aspect-ratio: 16 / 10;
-      background: var(--laptopBezel);
-      border-radius: 16px 16px 0 0;
-      padding: 20px 20px 24px 20px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+      padding: 20px 20px 24px;
       position: relative;
+      border-radius: 16px 16px 0 0;
+      background: var(--laptop-bezel);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, .25);
     }
 
-    /* Inner Virtual Operating Display */
     .laptop-display-content {
       width: 100%;
       height: 100%;
-      background: #111;
-      border-radius: 4px;
       overflow: hidden;
       position: relative;
+      border-radius: 4px;
+      background: #111;
     }
 
     .virtual-iframe {
       width: 100%;
       height: 100%;
-      border: none;
-      background: #fff;
       display: block;
+      border: 0;
+      background: #fff;
     }
 
-    /* Internal Screen Loading Screen Component */
-    .loader-screen-overlay {
+    .loader-screen-overlay,
+    .error-screen-overlay {
       position: absolute;
       inset: 0;
-      background: #141519;
       display: none;
       align-items: center;
       justify-content: center;
+    }
+
+    .loader-screen-overlay {
       z-index: 5;
+      background: #141519;
     }
 
     .loading-spinner {
       width: 40px;
       height: 40px;
-      border: 4px solid rgba(255, 255, 255, 0.1);
+      border: 4px solid rgba(255, 255, 255, .1);
       border-top-color: var(--accent);
       border-radius: 50%;
-      animation: spin 0.8s linear infinite;
+      animation: spin .8s linear infinite;
     }
 
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
 
-    /* Customized Internal Error Notification Module */
     .error-screen-overlay {
-      position: absolute;
-      inset: 0;
+      z-index: 10;
+      flex-direction: column;
+      padding: 20px;
       background: #1e222b;
       color: #fff;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
       text-align: center;
-      z-index: 10;
     }
 
     .error-card {
       max-width: 420px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
       padding: 24px;
+      border: 1px solid rgba(255, 255, 255, .1);
       border-radius: 12px;
+      background: rgba(255, 255, 255, .06);
     }
 
     .error-title {
-      font-size: 20px;
+      margin-bottom: 10px;
       color: #ff6b6b;
-      font-weight: bold;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .error-copy {
       margin-bottom: 16px;
+      color: rgba(255, 255, 255, .8);
+      font-size: 14px;
+      line-height: 1.45;
     }
 
     .error-action-btn {
       padding: 10px 20px;
-      background: #ff5252;
-      color: white;
-      border: none;
       border-radius: 6px;
+      background: #ff5252;
       font-size: 14px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.2s;
     }
-    .error-action-btn:hover { background: #ff3333; }
 
-    /* Laptop Lower Keyboard Base Component */
+    .error-action-btn:hover {
+      background: #ff3333;
+    }
+
     .laptop-base-chassis {
       width: 104%;
       height: 14px;
-      background: var(--laptopShell);
-      border-radius: 0 0 16px 16px;
-      border-top: 2px solid rgba(255,255,255,0.2);
-      box-shadow: 0 12px 25px rgba(0,0,0,0.2);
       position: relative;
+      border-top: 2px solid rgba(255, 255, 255, .2);
+      border-radius: 0 0 16px 16px;
+      background: var(--laptop-shell);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, .2);
     }
 
     .laptop-base-chassis::before {
-      content: '';
+      content: "";
+      width: 70px;
+      height: 4px;
       position: absolute;
       top: 0;
       left: 50%;
-      transform: translateX(-50%);
-      width: 70px;
-      height: 4px;
-      background: rgba(0,0,0,0.15);
       border-radius: 0 0 4px 4px;
+      background: rgba(0, 0, 0, .15);
+      transform: translateX(-50%);
+    }
+
+    @media (max-width: 650px) {
+      .action-buttons {
+        flex-direction: column;
+      }
+
+      .action-button {
+        width: 100%;
+      }
+
+      .laptop-screen-frame {
+        padding: 10px 10px 14px;
+        border-radius: 10px 10px 0 0;
+      }
     }
   </style>
 </head>
 <body>
+  <main class="app-container">
+    <button class="home-button" type="button" onclick="goHome()">Home</button>
 
-  <div class="app-container">
-    
-    <button class="home-button" onclick="goHome()">Home</button>
+    <label for="searchInput" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">Website URL</label>
+    <input
+      type="url"
+      id="searchInput"
+      class="search-bar"
+      placeholder="Enter web URL (e.g., example.com)"
+      autocomplete="url"
+      onkeydown="if (event.key === 'Enter') openInputNormally()"
+    />
 
-    <input type="text" id="searchInput" class="search-bar" placeholder="Enter web URL (e.g., example.com)"
-      onkeydown="if(event.key==='Enter') renderVirtualUrl()">
-
-    <button class="button" onclick="renderVirtualUrl()">Open Site</button>
-
-    <div class="laptop-hardware" id="laptopRig">
-      <div class="laptop-screen-frame">
-        
-        <div class="laptop-display-content">
-          
-          <iframe src="about:blank" class="virtual-iframe" id="monitorIframe" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" onload="hideLoader()"></iframe>
-          
-          <div class="loader-screen-overlay" id="loaderModule">
-            <div class="loading-spinner"></div>
-          </div>
-
-          <div class="error-screen-overlay" id="errorModule">
-            <div class="error-card">
-              <div class="error-title">Error 404</div>
-              <button class="error-action-btn" id="errorFallbackBtn">Open Tab</button>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-      <div class="laptop-base-chassis"></div>
+    <div class="action-buttons" aria-label="Site opening options">
+      <button class="action-button normal" type="button" onclick="openInputNormally()">Open Site (Normally)</button>
+      <button class="action-button blank" type="button" onclick="openInputInAboutBlank()">Open Site (About:Blank)</button>
+      <button class="action-button secret" type="button" onclick="openSecretMovieLink()">Secret Movie Link</button>
+      <button class="action-button preview" type="button" onclick="renderVirtualUrl()">Open in Preview</button>
     </div>
 
-  </div>
+    <p class="status-message" id="statusMessage" role="alert" aria-live="polite"></p>
+
+    <section class="laptop-hardware" id="laptopRig" aria-label="Website preview">
+      <div class="laptop-screen-frame">
+        <div class="laptop-display-content">
+          <iframe
+            src="about:blank"
+            title="Website preview"
+            class="virtual-iframe"
+            id="monitorIframe"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+          ></iframe>
+
+          <div class="loader-screen-overlay" id="loaderModule" aria-hidden="true">
+            <div class="loading-spinner" aria-label="Loading website"></div>
+          </div>
+
+          <div class="error-screen-overlay" id="errorModule" aria-hidden="true">
+            <div class="error-card">
+              <div class="error-title">Preview unavailable</div>
+              <p class="error-copy">This site may block embedded previews. You can still open it in a regular tab.</p>
+              <button class="error-action-btn" id="errorFallbackBtn" type="button">Open Tab</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="laptop-base-chassis"></div>
+    </section>
+  </main>
 
   <script>
-    let confirmationTimer = null;
-    let fallbackGlobalUrl = "";
+    const SECRET_MOVIE_URL = 'https://example.com/';
+    let loadTimer = null;
+    let fallbackGlobalUrl = '';
+    let previewRequestId = 0;
 
     window.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('searchInput').focus();
+      const input = document.getElementById('searchInput');
+      const frame = document.getElementById('monitorIframe');
+
+      input.focus();
+      frame.addEventListener('load', handlePreviewLoad);
     });
 
-    function sanitizeUrl(input) {
-      input = input.trim();
-      if (input.startsWith('http://') || input.startsWith('https://')) return input;
-      return 'https://' + input;
+    function getValidUrl(rawInput) {
+      const value = rawInput.trim();
+      if (!value) return null;
+
+      try {
+        const withProtocol = /^[a-zA-Z][a-zA-Z\d+.-]*:\/\//.test(value)
+          ? value
+          : 'https://' + value;
+        const url = new URL(withProtocol);
+
+        if (url.protocol !== 'http:' && url.protocol !== 'https:') return null;
+        return url.href;
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function getInputUrl() {
+      const input = document.getElementById('searchInput');
+      const url = getValidUrl(input.value);
+
+      if (!url) {
+        showStatus('Please enter a valid website address.');
+        input.focus();
+        return null;
+      }
+
+      showStatus('');
+      return url;
     }
 
     function renderVirtualUrl() {
-      const input = document.getElementById('searchInput').value.trim();
+      const verifiedUrl = getInputUrl();
+      if (!verifiedUrl) return;
+
       const laptopRig = document.getElementById('laptopRig');
       const loaderLayer = document.getElementById('loaderModule');
       const errorLayer = document.getElementById('errorModule');
-      const frameNode = document.getElementById('monitorIframe');
+      const frame = document.getElementById('monitorIframe');
 
-      if (!input) return;
-      
-      const verifiedUrl = sanitizeUrl(input);
       fallbackGlobalUrl = verifiedUrl;
-      
+      previewRequestId += 1;
+      frame.dataset.requestId = String(previewRequestId);
+      frame.dataset.loaded = 'false';
+
       laptopRig.classList.add('visible');
-      
-      errorLayer.style.display = "none";
-      loaderLayer.style.display = "flex";
-      
-      frameNode.src = verifiedUrl;
+      errorLayer.style.display = 'none';
+      errorLayer.setAttribute('aria-hidden', 'true');
+      loaderLayer.style.display = 'flex';
+      loaderLayer.setAttribute('aria-hidden', 'false');
 
-      if (confirmationTimer) clearTimeout(confirmationTimer);
+      frame.src = verifiedUrl;
 
-      confirmationTimer = setTimeout(() => {
-        try {
-          if (!frameNode.contentWindow || frameNode.contentWindow.location.href === "about:blank") {
-            triggerErrorPanel();
-          }
-        } catch (err) {
+      if (loadTimer) clearTimeout(loadTimer);
+      const activeRequestId = previewRequestId;
+      loadTimer = setTimeout(() => {
+        if (
+          activeRequestId === previewRequestId &&
+          frame.dataset.loaded !== 'true'
+        ) {
           triggerErrorPanel();
         }
-      }, 3500);
+      }, 12000);
+    }
+
+    function openInputNormally() {
+      const verifiedUrl = getInputUrl();
+      if (!verifiedUrl) return;
+
+      const newWindow = window.open(verifiedUrl, '_blank');
+      if (!newWindow) {
+        showStatus('Your browser blocked the new tab. Please allow pop-ups for this site.');
+        return;
+      }
+
+      newWindow.opener = null;
+    }
+
+    function handlePreviewLoad() {
+      const frame = document.getElementById('monitorIframe');
+
+      if (!frame.dataset.requestId) return;
+      frame.dataset.loaded = 'true';
+
+      if (loadTimer) {
+        clearTimeout(loadTimer);
+        loadTimer = null;
+      }
+
+      hideLoader();
     }
 
     function hideLoader() {
       const loaderLayer = document.getElementById('loaderModule');
-      if (loaderLayer) loaderLayer.style.display = "none";
+      loaderLayer.style.display = 'none';
+      loaderLayer.setAttribute('aria-hidden', 'true');
     }
 
     function triggerErrorPanel() {
       hideLoader();
       const errorLayer = document.getElementById('errorModule');
-      errorLayer.style.display = "flex";
-      
+      errorLayer.style.display = 'flex';
+      errorLayer.setAttribute('aria-hidden', 'false');
+
       document.getElementById('errorFallbackBtn').onclick = () => {
-        window.open(fallbackGlobalUrl, '_blank');
+        window.open(fallbackGlobalUrl, '_blank', 'noopener,noreferrer');
       };
     }
 
+    function openInputInAboutBlank() {
+      const verifiedUrl = getInputUrl();
+      if (verifiedUrl) openInAboutBlank(verifiedUrl);
+    }
+
+    function openSecretMovieLink() {
+      openInAboutBlank(SECRET_MOVIE_URL);
+    }
+
+    function openInAboutBlank(url) {
+      const blankWindow = window.open('about:blank', '_blank');
+
+      if (!blankWindow) {
+        showStatus('Your browser blocked the new tab. Please allow pop-ups for this site.');
+        return;
+      }
+
+      try {
+        blankWindow.document.open();
+        blankWindow.document.write(`<!DOCTYPE html>
+          <html lang="en">
+            <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Loading...</title>
+              <style>
+                html, body, iframe { width: 100%; height: 100%; margin: 0; border: 0; overflow: hidden; }
+                body { background: #111; }
+              </style>
+            </head>
+            <body>
+              <iframe src="${escapeHtmlAttribute(url)}" allow="fullscreen" referrerpolicy="no-referrer"></iframe>
+            </body>
+          </html>`);
+        blankWindow.document.close();
+      } catch (error) {
+        blankWindow.location.replace(url);
+      }
+    }
+
+    function escapeHtmlAttribute(value) {
+      return value
+        .replaceAll('&', '&amp;')
+        .replaceAll('"', '&quot;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;');
+    }
+
+    function showStatus(message) {
+      document.getElementById('statusMessage').textContent = message;
+    }
+
     function goHome() {
-      window.location.href = "https://susysam.github.io/start27.html";
+      window.location.href = 'https://susysam.github.io/start27.html';
     }
   </script>
 
