@@ -194,31 +194,16 @@
     }
     .button:hover { background-color: var(--accent2); }
 
-    #background-input { display: none; margin-top: 20px; }
-
-    #background-input input[type="text"] {
-      padding: 10px;
-      font-size: 14px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      width: min(320px, calc(100vw - 60px));
-      background: var(--inputBg);
-      color: var(--text);
-      outline: none;
-    }
-
-    .input-button { margin-top: 10px; }
-    .input-button .button { margin-left: 10px; }
   </style>
   <script src="/site-appearance.js"></script>
 </head>
 
 <body>
   <div class="navbar">
-    <a onclick="openGameApps()">Games</a>
-    <a onclick="openTabs()">Tabs</a>
-    <a onclick="openSettings()">Settings</a>
-    <a onclick="openTvShowPlayer()">Movie+TV</a>
+    <a href="games.html">Games</a>
+    <a href="tabs.html">Tabs</a>
+    <a href="settings.html">Settings</a>
+    <a href="movie+tv.html">Movie+TV</a>
   </div>
 
   <p id="placeholder"></p>
@@ -240,15 +225,6 @@
   </div>
 
   <div class="button-container">
-    <button class="button" onclick="showBackgroundInput()">Change Background</button>
-  </div>
-
-  <div id="background-input">
-    <input type="text" id="background-url" placeholder="Enter background URL" onkeydown="if(event.key === 'Enter') changeBackground()" />
-    <div class="input-button">
-      <button class="button" onclick="changeBackground()">Save</button>
-      <button class="button" onclick="removeBackgroundButton()">Cancel</button>
-    </div>
   </div>
 
   <script>
@@ -382,29 +358,6 @@
     }
 
     startClock();
-
-    // ---------------- Navigation + background ----------------
-    function openGameApps() { window.location.href = "games.html"; }
-    function openTabs() { window.location.href = "tabs.html"; }
-    function openSettings() { window.location.href = "settings.html"; }
-    function openTvShowPlayer() { window.location.href = "movie+tv.html"; }
-
-    function showBackgroundInput() {
-      document.getElementById("background-input").style.display = "block";
-      document.getElementById("background-url").focus();
-    }
-
-    function changeBackground() {
-      const backgroundUrl = document.getElementById("background-url").value.trim();
-      document.body.style.backgroundImage = backgroundUrl ? `url('${backgroundUrl}')` : "none";
-      localStorage.setItem("backgroundUrl", backgroundUrl);
-      window.applySiteAppearance();
-      document.getElementById("background-input").style.display = "none";
-    }
-
-    function removeBackgroundButton() {
-      document.getElementById("background-input").style.display = "none";
-    }
 
     const storedBackgroundUrl = localStorage.getItem("backgroundUrl");
     if (storedBackgroundUrl && !storedBackgroundUrl.startsWith("#")) {
