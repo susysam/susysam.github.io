@@ -230,6 +230,36 @@
       color: var(--text);
     }
 
+    .section-label { padding-top: 18px; }
+    .section-label .label, .custom-preset-form label { font-size: 14px; font-weight: 700; }
+    .section-label .hint, .card-body > .hint { color: var(--muted); font-size: 12px; margin-top: 4px; }
+    .preset-chip { position: relative; }
+    .preset-chip.custom { padding-right: 36px; }
+    .preset-remove {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      width: 26px;
+      height: 26px;
+      padding: 0;
+      border-radius: 50%;
+      background: var(--danger);
+      color: #fff;
+      font-size: 18px;
+      line-height: 1;
+    }
+    .custom-preset-form { margin-top: 16px; }
+    .custom-preset-fields { display: flex; gap: 10px; align-items: center; margin-top: 8px; }
+    .custom-preset-fields .text-input { flex: 1; min-width: 0; }
+    .custom-preset-fields input[type="color"] { width: 52px; height: 42px; padding: 2px; cursor: pointer; }
+    .custom-preset-fields button { white-space: nowrap; }
+    .image-url-input { margin-top: 12px; }
+    @media (max-width: 520px) {
+      .custom-preset-fields { flex-wrap: wrap; }
+      .custom-preset-fields .text-input { flex-basis: 100%; }
+      .header-actions { flex-wrap: wrap; }
+    }
+
     /* Toggle Switch Component */
     .toggle{
       display:flex;
@@ -374,7 +404,7 @@
         <button id="homeButton" style="padding: 8px 12px;">← Home</button>
         <div class="title">
           <h1>Settings</h1>
-          <p id="subtitle">Customize look + quick actions</p>
+          <p id="subtitle">Personalize your site</p>
         </div>
       </div>
       
@@ -395,29 +425,24 @@
         <div class="card-head">
           <div>
             <h2>Appearance</h2>
-            <div class="sub">Theme + background controls</div>
+            <div class="sub">Colors for the whole site</div>
           </div>
         </div>
-
         <div class="card-body">
           <div class="row">
             <div class="left">
               <p class="label">Dark mode</p>
-              <p class="hint">Applies instantly and saves for next time.</p>
+              <p class="hint">Choose a basic theme. Selecting a color preset replaces this choice.</p>
             </div>
             <label class="toggle">
-              <input type="checkbox" id="darkModeToggle">
+              <input type="checkbox" id="darkModeToggle" aria-label="Dark mode">
               <span class="switch" aria-hidden="true"></span>
             </label>
           </div>
-
-          <div class="row" style="border-bottom: none; padding-bottom: 2px;">
-            <div class="left">
-              <p class="label">Background Color Presets</p>
-              <p class="hint">Applies the selected color throughout this site.</p>
-            </div>
+          <div class="section-label">
+            <p class="label">Background Color Presets</p>
+            <p class="hint">Choose a color for every page.</p>
           </div>
-
           <div class="presets-container" id="presetsGrid">
             <div class="preset-chip" data-type="color" data-val="#0d0d14" data-glow1="rgba(255,140,0,0.15)" data-glow2="rgba(120,0,255,0.12)">
               <div class="preset-preview-box" style="background: linear-gradient(135deg, #0d0d14, #1a1a2e);"></div>
@@ -452,30 +477,46 @@
               <span class="preset-title">Clean Light</span>
             </div>
           </div>
+          <form id="customPresetForm" class="custom-preset-form">
+            <label for="customPresetName">Add your own color</label>
+            <div class="custom-preset-fields">
+              <input class="text-input" id="customPresetName" type="text" maxlength="30" placeholder="Name your color" required>
+              <input id="customPresetColor" type="color" value="#435d86" aria-label="Choose custom color">
+              <button type="submit">Add Color</button>
+            </div>
+          </form>
+          <p class="mini">Your custom colors are saved in this browser. Use × on a custom color to remove it.</p>
+        </div>
+      </section>
 
+      <section class="card">
+        <div class="card-head">
+          <div>
+            <h2>Home background image</h2>
+            <div class="sub">Optional image for the home page</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="hint">Paste a direct image URL. This replaces the selected color preset.</p>
+          <input class="text-input image-url-input" id="bgUrlInput" type="url" placeholder="https://example.com/background.jpg">
+          <div class="btns">
+            <button id="saveBgBtn" type="button">Save Image</button>
+            <button class="btn-ghost" id="previewBgBtn" type="button">Preview Here</button>
+            <button class="btn-danger" id="clearBgBtn" type="button">Remove Image</button>
+          </div>
+          <p class="mini" id="bgStatus">Current: <span id="bgCurrent">Default</span></p>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-head"><h2>Reset</h2></div>
+        <div class="card-body">
           <div class="row">
             <div class="left">
-              <p class="label">Background Image URL (Home)</p>
-              <p class="hint">Overrides presets with a custom direct image link path address.</p>
+              <p class="label">Reset appearance settings</p>
+              <p class="hint">Clears colors, image, custom presets, and performance mode in this browser.</p>
             </div>
-          </div>
-
-          <input class="text-input" id="bgUrlInput" type="text" placeholder="https://example.com/image.jpg" />
-
-          <div class="btns">
-            <button id="saveBgBtn">Save background URL</button>
-            <button class="btn-ghost" id="previewBgBtn" type="button">Preview Here</button>
-            <button class="btn-danger" id="clearBgBtn" type="button">Remove Theme Layout</button>
-          </div>
-
-          <div class="mini" id="bgStatus">Current Value: <span id="bgCurrent">none</span></div>
-
-          <div class="row" style="margin-top:24px;">
-            <div class="left">
-              <p class="label">Reset all saved settings</p>
-              <p class="hint">Clears theme, colors + background and refreshes configuration architecture.</p>
-            </div>
-            <button class="btn-danger" id="resetAllBtn" type="button">Reset All Data</button>
+            <button class="btn-danger" id="resetAllBtn" type="button">Reset</button>
           </div>
         </div>
       </section>
@@ -491,10 +532,10 @@
           <div class="row">
             <div class="left">
               <p class="label">Performance mode</p>
-              <p class="hint">Turns off site animations, blur, and shadows. This may help slower devices, but it cannot change a game's own FPS.</p>
+              <p class="hint">Turns off site animations, blur, and shadows. It cannot change a game's own FPS.</p>
             </div>
             <label class="toggle">
-              <input type="checkbox" id="performanceToggle">
+              <input type="checkbox" id="performanceToggle" aria-label="Performance mode">
               <span class="switch" aria-hidden="true"></span>
             </label>
           </div>
@@ -512,211 +553,230 @@
   <div class="toast" id="toast">Saved</div>
 
   <script>
-    const HOME_URL = "https://susysam.github.io/start27.html";
-    const SETTINGS_URL = "https://susysam.github.io/settings.html";
-
+    const HOME_URL = "/start27.html";
+    const SETTINGS_URL = "/settings.html";
+    const customPresetKey = "customBackgroundPresets";
     const toastEl = document.getElementById("toast");
     const saveStateEl = document.getElementById("saveState");
     const bgUrlInput = document.getElementById("bgUrlInput");
     const bgCurrent = document.getElementById("bgCurrent");
     const darkToggle = document.getElementById("darkModeToggle");
+    const performanceToggle = document.getElementById("performanceToggle");
+    const presetGrid = document.getElementById("presetsGrid");
 
-    function toast(msg) {
-      toastEl.textContent = msg;
+    function toast(message) {
+      toastEl.textContent = message;
       toastEl.classList.add("show");
       clearTimeout(window.__toastT);
-      window.__toastT = setTimeout(() => toastEl.classList.remove("show"), 1200);
+      window.__toastT = setTimeout(() => toastEl.classList.remove("show"), 1600);
     }
 
-    function setSavedDot(active) {
-      saveStateEl.style.color = active ? "#14b86a" : "rgba(255,255,255,.85)";
-      if (!active) saveStateEl.style.color = "rgba(20,22,26,.35)";
-      document.querySelector(".pill").style.borderColor = active ? "rgba(20,184,106,.55)" : "var(--border)";
-    }
-
-    function applyTheme(theme) {
-      if (theme === "dark") {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
+    function readCustomPresets() {
+      try {
+        const value = JSON.parse(localStorage.getItem(customPresetKey) || "[]");
+        return Array.isArray(value) ? value.filter(item =>
+          item && typeof item.id === "string" &&
+          typeof item.name === "string" &&
+          /^#[0-9a-f]{6}$/i.test(item.color)
+        ) : [];
+      } catch {
+        return [];
       }
-      localStorage.setItem("theme", theme);
     }
 
-    function refreshBgUI() {
-      const stored = localStorage.getItem("backgroundUrl") || "";
-      bgUrlInput.value = stored;
-      
-      if(stored) {
-        bgCurrent.textContent = stored.startsWith("#") ? `Preset Color (${stored})` : `Custom Image URL`;
-      } else {
-        bgCurrent.textContent = "none";
-      }
-      
-      // Sync active states on preset chips matching current value
-      document.querySelectorAll('.preset-chip').forEach(chip => {
-        if(chip.dataset.val === stored) {
-          chip.classList.add('active');
-          // Dynamically adjust localized settings container glow profiles
-          if(chip.dataset.glow1 && chip.dataset.glow2) {
-            document.documentElement.style.setProperty('--glow1', chip.dataset.glow1);
-            document.documentElement.style.setProperty('--glow2', chip.dataset.glow2);
-          }
-        } else {
-          chip.classList.remove('active');
-        }
+    let customPresets = readCustomPresets();
+
+    function saveCustomPresets() {
+      localStorage.setItem(customPresetKey, JSON.stringify(customPresets));
+    }
+
+    function refreshUI() {
+      const selected = (localStorage.getItem("backgroundUrl") || "").toLowerCase();
+      document.querySelectorAll(".preset-chip").forEach(chip => {
+        const active = chip.dataset.val === selected;
+        chip.classList.toggle("active", active);
+        chip.setAttribute("aria-pressed", String(active));
       });
-    }
-
-    function previewBackground(url) {
-      if (!url) {
-        document.body.style.backgroundImage = "";
-        return;
-      }
-      if (url.startsWith("#") || url.startsWith("rgb")) {
-        document.body.style.backgroundImage = "";
-      } else {
-        document.body.style.backgroundImage = `url('${url}')`;
-        document.body.style.backgroundSize = "cover";
-        document.body.style.backgroundPosition = "center";
-      }
-    }
-
-    // Load saved settings engine
-    document.addEventListener("DOMContentLoaded", () => {
-      window.applySiteAppearance();
+      const activeChip = document.querySelector(".preset-chip.active .preset-title");
+      bgCurrent.textContent = activeChip ? activeChip.textContent :
+        selected ? "Home image saved" : "Default";
+      bgUrlInput.value = selected && !selected.startsWith("#") ? selected : "";
       darkToggle.checked = document.documentElement.classList.contains("dark");
-      document.getElementById("performanceToggle").checked =
-        localStorage.getItem("performanceMode") === "on";
+      performanceToggle.checked = localStorage.getItem("performanceMode") === "on";
+      saveStateEl.style.color = "#14b86a";
+    }
 
-      refreshBgUI();
+    function selectPreset(color) {
+      localStorage.setItem("backgroundUrl", color);
+      document.body.style.backgroundImage = "";
+      window.applySiteAppearance();
+      localStorage.setItem("theme",
+        document.documentElement.classList.contains("dark") ? "dark" : "light");
+      refreshUI();
+      toast("Color applied across the site");
+    }
 
-      const savedBg = localStorage.getItem("backgroundUrl") || "";
-      if (savedBg) previewBackground(savedBg);
+    function renderCustomPresets() {
+      presetGrid.querySelectorAll(".preset-chip.custom").forEach(chip => chip.remove());
+      customPresets.forEach(item => {
+        const chip = document.createElement("div");
+        chip.className = "preset-chip custom";
+        chip.dataset.val = item.color.toLowerCase();
+        chip.setAttribute("role", "button");
+        chip.tabIndex = 0;
+        const preview = document.createElement("div");
+        preview.className = "preset-preview-box";
+        preview.style.background = item.color;
+        const title = document.createElement("span");
+        title.className = "preset-title";
+        title.textContent = item.name;
+        const remove = document.createElement("button");
+        remove.className = "preset-remove";
+        remove.type = "button";
+        remove.textContent = "×";
+        remove.setAttribute("aria-label", "Remove " + item.name);
+        remove.addEventListener("click", event => {
+          event.stopPropagation();
+          customPresets = customPresets.filter(saved => saved.id !== item.id);
+          saveCustomPresets();
+          if ((localStorage.getItem("backgroundUrl") || "").toLowerCase() === item.color.toLowerCase()) {
+            localStorage.setItem("backgroundUrl", "#f6f7fb");
+            localStorage.setItem("theme", "light");
+            window.applySiteAppearance();
+          }
+          renderCustomPresets();
+          refreshUI();
+          toast("Custom color removed");
+        });
+        chip.append(preview, title, remove);
+        presetGrid.appendChild(chip);
+      });
+      refreshUI();
+    }
 
-      setSavedDot(true);
-      document.getElementById("subtitle").textContent =
-        `Customize look + quick actions • ${new Date().toLocaleDateString()}`;
+    presetGrid.addEventListener("click", event => {
+      const chip = event.target.closest(".preset-chip");
+      if (chip && !event.target.closest(".preset-remove")) selectPreset(chip.dataset.val);
+    });
+    presetGrid.addEventListener("keydown", event => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      if (event.target.matches(".preset-chip")) {
+        event.preventDefault();
+        selectPreset(event.target.dataset.val);
+      }
+    });
+    document.querySelectorAll(".preset-chip:not(.custom)").forEach(chip => {
+      chip.setAttribute("role", "button");
+      chip.tabIndex = 0;
     });
 
-    // Preset chips interaction trigger loops
-    document.querySelectorAll('.preset-chip').forEach(chip => {
-      chip.addEventListener('click', () => {
-        const selectedValue = chip.dataset.val;
-        localStorage.setItem("backgroundUrl", selectedValue);
-        
-        // Match base layouts to theme configurations cleanly
-        if(selectedValue === "#f6f7fb") {
-          applyTheme("light");
-          darkToggle.checked = false;
-        } else if(selectedValue.startsWith("#") && selectedValue !== "#f6f7fb") {
-          applyTheme("dark");
-          darkToggle.checked = true;
-        }
-
-        window.applySiteAppearance();
-        refreshBgUI();
-        previewBackground(selectedValue);
-        toast("Preset Applied!");
-        setSavedDot(true);
-      });
+    document.getElementById("customPresetForm").addEventListener("submit", event => {
+      event.preventDefault();
+      const nameInput = document.getElementById("customPresetName");
+      const colorInput = document.getElementById("customPresetColor");
+      const name = nameInput.value.trim();
+      const color = colorInput.value.toLowerCase();
+      if (!name) return toast("Name your color first");
+      if (document.querySelector('.preset-chip[data-val="' + color + '"]')) {
+        return toast("That color is already saved");
+      }
+      customPresets.push({ id: crypto.randomUUID(), name, color });
+      saveCustomPresets();
+      renderCustomPresets();
+      selectPreset(color);
+      nameInput.value = "";
     });
 
     darkToggle.addEventListener("change", () => {
       if ((localStorage.getItem("backgroundUrl") || "").startsWith("#")) {
         localStorage.removeItem("backgroundUrl");
-        previewBackground("");
-        refreshBgUI();
       }
-      applyTheme(darkToggle.checked ? "dark" : "light");
+      localStorage.setItem("theme", darkToggle.checked ? "dark" : "light");
       window.applySiteAppearance();
+      refreshUI();
       toast("Theme saved");
-      setSavedDot(true);
     });
+
+    function parseImageUrl(value) {
+      try {
+        const url = new URL(value);
+        return url.protocol === "https:" || url.protocol === "http:" ? url.href : null;
+      } catch {
+        return null;
+      }
+    }
+
+    function previewImage(url) {
+      document.body.style.backgroundImage = url ? 'url("' + url + '")' : "";
+      document.body.style.backgroundSize = url ? "cover" : "";
+      document.body.style.backgroundPosition = url ? "center" : "";
+    }
 
     document.getElementById("saveBgBtn").addEventListener("click", () => {
-      const url = bgUrlInput.value.trim();
+      const url = parseImageUrl(bgUrlInput.value.trim());
+      if (!url) return toast("Enter a valid image URL");
       localStorage.setItem("backgroundUrl", url);
       window.applySiteAppearance();
-      refreshBgUI();
-      previewBackground(url);
-      toast(url ? "Background URL saved" : "Background cleared");
-      setSavedDot(true);
+      previewImage(url);
+      refreshUI();
+      toast("Home background saved");
     });
-
     document.getElementById("previewBgBtn").addEventListener("click", () => {
-      previewBackground(bgUrlInput.value.trim());
-      toast("Previewing input source");
+      const url = parseImageUrl(bgUrlInput.value.trim());
+      if (!url) return toast("Enter a valid image URL");
+      previewImage(url);
+      toast("Previewing image here");
     });
-
     document.getElementById("clearBgBtn").addEventListener("click", () => {
-      localStorage.removeItem("backgroundUrl");
-      bgUrlInput.value = "";
+      const saved = localStorage.getItem("backgroundUrl") || "";
+      if (saved && !saved.startsWith("#")) localStorage.removeItem("backgroundUrl");
+      previewImage("");
       window.applySiteAppearance();
-      refreshBgUI();
-      previewBackground("");
-      toast("Background configurations wiped");
-      setSavedDot(true);
+      refreshUI();
+      toast("Home image removed");
     });
 
-    document.getElementById("homeButton").addEventListener("click", () => {
-      window.location.href = HOME_URL;
-    });
-
-    document.getElementById("tabButton").addEventListener("click", () => {
-      const newTab = window.open("about:blank", "_blank");
-      if (!newTab) return toast("Popup blocked");
-      newTab.document.write(`
-        <html>
-          <head>
-            <title>Settings</title>
-            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-            <style>html,body{margin:0;height:100%;} iframe{border:none;width:100%;height:100%;}</style>
-          </head>
-          <body>
-            <iframe src="${SETTINGS_URL}"></iframe>
-          </body>
-        </html>
-      `);
-      newTab.document.close();
-    });
-
-    document.getElementById("windowButton").addEventListener("click", () => {
-      const newWindow = window.open("about:blank", "_blank", "width=900,height=650");
-      if (!newWindow) return toast("Popup blocked");
-      newWindow.document.write(`
-        <html>
-          <head>
-            <title>Settings</title>
-            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-            <style>html,body{margin:0;height:100%;} iframe{border:none;width:100%;height:100%;}</style>
-          </head>
-          <body>
-            <iframe src="${SETTINGS_URL}"></iframe>
-          </body>
-        </html>
-      `);
-      newWindow.document.close();
-    });
-
-    document.getElementById("performanceToggle").addEventListener("change", event => {
-      localStorage.setItem("performanceMode", event.target.checked ? "on" : "off");
+    performanceToggle.addEventListener("change", () => {
+      localStorage.setItem("performanceMode", performanceToggle.checked ? "on" : "off");
       window.applySiteAppearance();
-      toast(event.target.checked ? "Performance mode on" : "Performance mode off");
+      toast(performanceToggle.checked ? "Performance mode on" : "Performance mode off");
     });
 
     document.getElementById("resetAllBtn").addEventListener("click", () => {
-      const ok = confirm("Reset theme + background for this site?");
-      if (!ok) return;
-
-      localStorage.removeItem("theme");
-      localStorage.removeItem("backgroundUrl");
-      localStorage.removeItem("performanceMode");
-      toast("Reset done");
-      setSavedDot(true);
-
-      setTimeout(() => location.reload(), 350);
+      if (!confirm("Reset appearance settings in this browser?")) return;
+      ["theme", "backgroundUrl", customPresetKey, "performanceMode"].forEach(
+        key => localStorage.removeItem(key)
+      );
+      customPresets = [];
+      previewImage("");
+      window.applySiteAppearance();
+      renderCustomPresets();
+      refreshUI();
+      toast("Appearance reset");
     });
+
+    document.getElementById("homeButton").addEventListener("click", () => {
+      location.href = HOME_URL;
+    });
+    document.getElementById("tabButton").addEventListener("click", () => {
+      window.open(SETTINGS_URL, "_blank");
+    });
+    document.getElementById("windowButton").addEventListener("click", () => {
+      window.open(SETTINGS_URL, "_blank", "width=900,height=650");
+    });
+
+    window.addEventListener("storage", event => {
+      if (event.key === customPresetKey) {
+        customPresets = readCustomPresets();
+        renderCustomPresets();
+      }
+      if (["theme", "backgroundUrl", "performanceMode"].includes(event.key)) refreshUI();
+    });
+
+    renderCustomPresets();
+    const savedImage = localStorage.getItem("backgroundUrl") || "";
+    if (savedImage && !savedImage.startsWith("#")) previewImage(savedImage);
+    refreshUI();
   </script>
 </body>
 </html>
