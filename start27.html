@@ -210,6 +210,7 @@
     .input-button { margin-top: 10px; }
     .input-button .button { margin-left: 10px; }
   </style>
+  <script src="/site-appearance.js"></script>
 </head>
 
 <body>
@@ -397,6 +398,7 @@
       const backgroundUrl = document.getElementById("background-url").value.trim();
       document.body.style.backgroundImage = backgroundUrl ? `url('${backgroundUrl}')` : "none";
       localStorage.setItem("backgroundUrl", backgroundUrl);
+      window.applySiteAppearance();
       document.getElementById("background-input").style.display = "none";
     }
 
@@ -405,7 +407,7 @@
     }
 
     const storedBackgroundUrl = localStorage.getItem("backgroundUrl");
-    if (storedBackgroundUrl) {
+    if (storedBackgroundUrl && !storedBackgroundUrl.startsWith("#")) {
       document.body.style.backgroundImage = `url('${storedBackgroundUrl}')`;
     }
   </script>
