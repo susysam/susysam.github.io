@@ -424,6 +424,7 @@
         <button class="control-btn btn-tab" id="actionOpenTab">Open in New Tab</button>
         <button class="control-btn btn-blank" id="actionOpenBlank">Open in about:blank</button>
       </div>
+      <p style="margin: 8px 0; color: var(--muted); font-size: 13px;">If the preview is blank, use Open in New Tab.</p>
       <iframe src="" class="embedded-frame" id="targetIframe" allowfullscreen sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
     </div>
 
@@ -510,44 +511,35 @@
       if (!selectedMediaType) return;
       if (!mediaId) return alert("Enter an ID first.");
 
-      const label = selectedMediaType === 'movie' ? "Launching Movies..." : "Launching TV-Shows...";
-      showLaunch(label);
-
-      setTimeout(() => {
-        const url = buildUrl(mediaId, selectedMediaType);
-        openPlayer(url);
-
-        localStorage.setItem('lastWatched', JSON.stringify({
-          type: 'standard',
-          mediaId,
-          selectedMediaType
-        }));
-      }, 650);
+      const url = buildUrl(mediaId, selectedMediaType);
+      openPlayer(url);
+      localStorage.setItem('lastWatched', JSON.stringify({
+        type: 'standard',
+        mediaId,
+        selectedMediaType
+      }));
     }
 
     function continueWatching() {
       const data = localStorage.getItem('lastWatched');
       if (!data) return alert("Nothing saved yet.");
 
-      const parsed = JSON.parse(data);
-
+      let parsed;
+      try {
+        parsed = JSON.parse(data);
+      } catch {
+        return alert("Saved item could not be opened.");
+      }
       if (parsed.type === 'external') {
-        showLaunch("Restoring External Hub Site...");
-        setTimeout(() => {
-          loadExternalSite(parsed.url);
-          hideLaunch();
-        }, 650);
+        loadExternalSite(parsed.url);
         return;
       }
 
       const { mediaId, selectedMediaType } = parsed;
-      const label = selectedMediaType === 'movie' ? "Launching Movies..." : "Launching TV-Shows...";
-      showLaunch(label);
-
-      setTimeout(() => {
-        const url = buildUrl(mediaId, selectedMediaType);
-        openPlayer(url);
-      }, 650);
+      if (!mediaId || !['movie', 'tv'].includes(selectedMediaType)) {
+        return alert("Saved item could not be opened.");
+      }
+      openPlayer(buildUrl(mediaId, selectedMediaType));
     }
 
     function openAnime() {
@@ -581,19 +573,11 @@
     function openAboutBlankWindow(url) {
       const win = window.open("about:blank", "_blank");
       if (!win) return alert("Popup blocked.");
-      win.document.write(`
-        <html>
-          <head>
-            <title>Player Workspace</title>
-            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-            <style>body{margin:0;background:#000}iframe{border:none;width:100%;height:100vh}</style>
-          </head>
-          <body>
-            <iframe src="${url}" allowfullscreen></iframe>
-          </body>
-        </html>
-      `);
+      win.document.open();
+      win.document.write('<!doctype html><html><head><title>Player Workspace</title><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{margin:0;height:100%;background:#000;color:#fff;font-family:Arial,sans-serif}nav{height:40px;display:flex;align-items:center;justify-content:center;background:#15151f}a{color:#9fd7ff}iframe{border:0;width:100%;height:calc(100% - 40px);display:block}</style></head><body><nav><a id="directLink">Open directly if the preview is blank</a></nav><iframe id="playerFrame" allowfullscreen></iframe></body></html>');
       win.document.close();
+      win.document.getElementById('directLink').href = url;
+      win.document.getElementById('playerFrame').src = url;
     }
 
     function resetPageToDefault() {
