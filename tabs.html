@@ -224,6 +224,9 @@
       transform: scale(1);
     }
 
+    .preview-fallback { margin-top: 18px; color: var(--muted); font-size: 14px; text-align: center; }
+    .preview-fallback a { color: var(--accent); font-weight: 700; }
+
     .laptop-screen-frame {
       width: 100%;
       aspect-ratio: 16 / 10;
@@ -407,6 +410,7 @@
         </div>
       </div>
       <div class="laptop-base-chassis"></div>
+      <p class="preview-fallback">Preview blank? <a id="previewFallbackLink" target="_blank" rel="noopener noreferrer">Open this site in a new tab</a>.</p>
     </section>
   </main>
 
@@ -465,6 +469,7 @@
       const frame = document.getElementById('monitorIframe');
 
       fallbackGlobalUrl = verifiedUrl;
+      document.getElementById("previewFallbackLink").href = verifiedUrl;
       previewRequestId += 1;
       frame.dataset.requestId = String(previewRequestId);
       frame.dataset.loaded = 'false';
@@ -565,13 +570,19 @@
         blankDocument.body.style.overflow = 'hidden';
         blankDocument.body.style.background = '#111';
 
+        const directLink = blankDocument.createElement('a');
+        directLink.href = url;
+        directLink.textContent = 'Open directly if the preview is blank';
+        directLink.style.cssText = 'height:40px;display:flex;align-items:center;justify-content:center;background:#15151f;color:#9fd7ff;font:14px Arial,sans-serif';
+        blankDocument.body.appendChild(directLink);
+
         const siteFrame = blankDocument.createElement('iframe');
         siteFrame.src = url;
         siteFrame.title = 'Opened website';
         siteFrame.allow = 'fullscreen';
         siteFrame.referrerPolicy = 'no-referrer';
         siteFrame.style.width = '100%';
-        siteFrame.style.height = '100%';
+        siteFrame.style.height = 'calc(100% - 40px)';
         siteFrame.style.border = '0';
         siteFrame.style.display = 'block';
         blankDocument.body.appendChild(siteFrame);
