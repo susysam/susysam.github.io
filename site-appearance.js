@@ -71,7 +71,7 @@
       root.dataset.sitePreset = light ? 'light' : 'dark';
       root.classList.toggle('dark', !light);
       const colors = light ? {
-        '--bg': '#f6f7fb',
+        '--bg': saved,
         '--text': '#14161a',
         '--muted': 'rgba(20,22,26,.65)',
         '--card': 'rgba(255,255,255,.85)',
