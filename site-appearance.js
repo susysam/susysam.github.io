@@ -10,6 +10,29 @@
     '#1a1316': { glow1: 'rgba(240,120,180,.15)', glow2: 'rgba(180,70,140,.12)' },
     '#f6f7fb': { glow1: 'rgba(108,11,169,.12)', glow2: 'rgba(79,6,114,.10)' }
   };
+  const customPresetsKey = 'customBackgroundPresets';
+
+  function getPreset(color) {
+    if (presets[color]) return { ...presets[color], light: color === '#f6f7fb' };
+    try {
+      const saved = JSON.parse(localStorage.getItem(customPresetsKey) || '[]');
+      if (!Array.isArray(saved)) return null;
+      const custom = saved.find(item => item && item.color === color);
+      if (!custom || !/^#[0-9a-f]{6}$/i.test(custom.color)) return null;
+      const red = parseInt(color.slice(1, 3), 16);
+      const green = parseInt(color.slice(3, 5), 16);
+      const blue = parseInt(color.slice(5, 7), 16);
+      const glow = `rgba(${red},${green},${blue},.18)`;
+      return {
+        glow1: glow,
+        glow2: `rgba(${red},${green},${blue},.10)`,
+        light: (red * 299 + green * 587 + blue * 114) / 1000 >= 150
+      };
+    } catch {
+      return null;
+    }
+  }
+
   const paletteProperties = [
     '--bg', '--text', '--muted', '--card', '--card-hover', '--border',
     '--border-hover', '--inputBg', '--overlay', '--glow1', '--glow2'
@@ -40,11 +63,11 @@
 
   window.applySiteAppearance = function () {
     const saved = localStorage.getItem('backgroundUrl') || '';
-    const preset = presets[saved.toLowerCase()];
+    const preset = getPreset(saved.toLowerCase());
     paletteProperties.forEach(property => root.style.removeProperty(property));
 
     if (preset) {
-      const light = saved.toLowerCase() === '#f6f7fb';
+      const light = preset.light;
       root.dataset.sitePreset = light ? 'light' : 'dark';
       root.classList.toggle('dark', !light);
       const colors = light ? {
@@ -81,7 +104,7 @@
 
   window.applySiteAppearance();
   window.addEventListener('storage', event => {
-    if (['theme', 'backgroundUrl', 'performanceMode'].includes(event.key)) {
+    if (['theme', 'backgroundUrl', 'customBackgroundPresets', 'performanceMode'].includes(event.key)) {
       window.applySiteAppearance();
     }
   });
