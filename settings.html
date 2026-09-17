@@ -591,7 +591,8 @@
     }
 
     function refreshUI() {
-      const selected = (localStorage.getItem("backgroundUrl") || "").toLowerCase();
+      const savedBackground = localStorage.getItem("backgroundUrl") || "";
+      const selected = savedBackground.toLowerCase();
       document.querySelectorAll(".preset-chip").forEach(chip => {
         const active = chip.dataset.val === selected;
         chip.classList.toggle("active", active);
@@ -600,7 +601,7 @@
       const activeChip = document.querySelector(".preset-chip.active .preset-title");
       bgCurrent.textContent = activeChip ? activeChip.textContent :
         selected ? "Home image saved" : "Default";
-      bgUrlInput.value = selected && !selected.startsWith("#") ? selected : "";
+      bgUrlInput.value = savedBackground && !savedBackground.startsWith("#") ? savedBackground : "";
       darkToggle.checked = document.documentElement.classList.contains("dark");
       performanceToggle.checked = localStorage.getItem("performanceMode") === "on";
       saveStateEl.style.color = "#14b86a";
