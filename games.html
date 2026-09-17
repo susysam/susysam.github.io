@@ -177,6 +177,25 @@
       animation: fadeUp .4s ease both;
     }
 
+    .game-card { position: relative; }
+
+    .remove-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 2;
+      width: 30px;
+      height: 30px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      background: rgba(13,13,20,.9);
+      color: #fff;
+      font-size: 20px;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .remove-btn:hover { background: var(--accent2); }
+
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(18px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -508,36 +527,115 @@
       icon.textContent = open ? '✕' : '＋';
     }
 
-    function addGame() {
-      const name = document.getElementById('gameName').value.trim();
-      const link = document.getElementById('gameLink').value.trim();
-      if (!name || !link) return alert('Please enter both a name and a link.');
+    const customGamesKey = 'customGames';
+    let customGames = [];
 
-      const container = document.getElementById('gamesContainer');
+    function saveCustomGames() {
+      try {
+        localStorage.setItem(customGamesKey, JSON.stringify(customGames));
+      } catch (error) {
+        console.warn('Could not save custom games.', error);
+      }
+    }
+
+    function updateGameCount() {
+      const total = document.querySelectorAll('.game-card[data-name]').length;
+      document.getElementById('gameCount').textContent =
+        total + ' game' + (total === 1 ? '' : 's');
+    }
+
+    function renderCustomGame(game) {
       const card = document.createElement('div');
       card.className = 'game-card';
-      card.dataset.name = name.toLowerCase();
+      card.dataset.name = game.name.toLowerCase();
       card.style.animationDelay = '0s';
-      card.innerHTML = `
-        <div class="card-thumb-wrap">
-          <img class="card-thumb" src="https://placehold.co/400x200/1a1a2e/ff8c00?text=🎮" alt="${name}">
-        </div>
-        <div class="card-body">
-          <span class="card-title">${name}</span>
-          <button class="play-btn" onclick="openGame('${link}')">▶ Play</button>
-        </div>`;
 
-      // insert before the no-results div
-      container.insertBefore(card, document.getElementById('noResults'));
+      const thumbWrap = document.createElement('div');
+      thumbWrap.className = 'card-thumb-wrap';
+      const thumb = document.createElement('img');
+      thumb.className = 'card-thumb';
+      thumb.src = 'https://placehold.co/400x200/1a1a2e/ff8c00?text=🎮';
+      thumb.alt = game.name;
+      thumbWrap.appendChild(thumb);
 
-      document.getElementById('gameName').value = '';
-      document.getElementById('gameLink').value = '';
-      toggleAdd();
+      const body = document.createElement('div');
+      body.className = 'card-body';
+      const title = document.createElement('span');
+      title.className = 'card-title';
+      title.textContent = game.name;
+      const play = document.createElement('button');
+      play.className = 'play-btn';
+      play.type = 'button';
+      play.textContent = '▶ Play';
+      play.addEventListener('click', () => openGame(game.link));
+      body.append(title, play);
 
-      // update count
-      const total = document.querySelectorAll('.game-card[data-name]').length;
-      document.getElementById('gameCount').textContent = total + ' games';
+      const remove = document.createElement('button');
+      remove.className = 'remove-btn';
+      remove.type = 'button';
+      remove.textContent = '×';
+      remove.title = 'Remove ' + game.name;
+      remove.setAttribute('aria-label', 'Remove ' + game.name);
+      remove.addEventListener('click', () => {
+        customGames = customGames.filter(item => item.id !== game.id);
+        saveCustomGames();
+        card.remove();
+        updateGameCount();
+        filterGames();
+      });
+
+      card.append(thumbWrap, body, remove);
+      document.getElementById('gamesContainer')
+        .insertBefore(card, document.getElementById('noResults'));
     }
+
+    function addGame() {
+      const nameInput = document.getElementById('gameName');
+      const linkInput = document.getElementById('gameLink');
+      const name = nameInput.value.trim();
+      const link = linkInput.value.trim();
+      if (!name || !link) return alert('Please enter both a name and a link.');
+
+      let url;
+      try {
+        url = new URL(link);
+      } catch {
+        return alert('Please enter a valid game URL.');
+      }
+      if (url.protocol !== 'https:' && url.protocol !== 'http:') {
+        return alert('Please enter an http or https game URL.');
+      }
+
+      const game = {
+        id: crypto.randomUUID(),
+        name,
+        link: url.href
+      };
+      customGames.push(game);
+      saveCustomGames();
+      renderCustomGame(game);
+      nameInput.value = '';
+      linkInput.value = '';
+      toggleAdd();
+      updateGameCount();
+      filterGames();
+    }
+
+    try {
+      const saved = JSON.parse(localStorage.getItem(customGamesKey) || '[]');
+      if (Array.isArray(saved)) {
+        customGames = saved.filter(game =>
+          game && typeof game.id === 'string' &&
+          typeof game.name === 'string' &&
+          typeof game.link === 'string'
+        );
+      }
+    } catch (error) {
+      console.warn('Could not load custom games.', error);
+    }
+    customGames.forEach(renderCustomGame);
+    updateGameCount();
+    filterGames();
   </script>
 </body>
 </html>
