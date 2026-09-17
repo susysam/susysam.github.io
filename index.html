@@ -58,8 +58,8 @@
       align-items: center;
       min-height: 100vh;
       background:
-        radial-gradient(900px 500px at 15% 15%, rgba(108,11,169,.20), transparent 60%),
-        radial-gradient(900px 500px at 85% 20%, rgba(79,6,114,.16), transparent 60%),
+        radial-gradient(900px 500px at 15% 15%, var(--glow1, rgba(108,11,169,.20)), transparent 60%),
+        radial-gradient(900px 500px at 85% 20%, var(--glow2, rgba(79,6,114,.16)), transparent 60%),
         linear-gradient(180deg, var(--bg), var(--bg));
       color: var(--text);
       padding: 16px;
@@ -216,6 +216,7 @@
     .bypass-btn:hover{ opacity: .92; }
     .bypass-btn:active{ transform: translateY(1px); }
   </style>
+  <script src="/site-appearance.js"></script>
 </head>
 
 <body>
