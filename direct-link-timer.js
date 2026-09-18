@@ -2,7 +2,8 @@
 window.startDirectLinkCountdown = function (link, hideElement, frame) {
   if (!link || !hideElement) return;
   const timerWindow = link.ownerDocument.defaultView;
-  const label = link.textContent.trim();
+  const label = link.dataset.directLinkLabel || link.textContent.trim();
+  link.dataset.directLinkLabel = label;
   const deadline = Date.now() + 15000;
   let interval;
 
