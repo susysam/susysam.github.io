@@ -373,6 +373,7 @@
     }
   </style>
   <script src="/site-appearance.js"></script>
+  <script src="/direct-link-timer.js"></script>
 </head>
 <body>
   <div class="container" id="mainCard">
@@ -602,8 +603,11 @@
       win.document.open();
       win.document.write('<!doctype html><html><head><title>Player Workspace</title><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{margin:0;height:100%;background:#000;color:#fff;font-family:Arial,sans-serif}nav{height:40px;display:flex;align-items:center;justify-content:center;background:#15151f}a{color:#9fd7ff}iframe{border:0;width:100%;height:calc(100% - 40px);display:block}</style></head><body><nav><a id="directLink">Open directly if the preview is blank</a></nav><iframe id="playerFrame" allowfullscreen></iframe></body></html>');
       win.document.close();
-      win.document.getElementById('directLink').href = url;
-      win.document.getElementById('playerFrame').src = url;
+      const directLink = win.document.getElementById('directLink');
+      const playerFrame = win.document.getElementById('playerFrame');
+      directLink.href = url;
+      playerFrame.src = url;
+      startDirectLinkCountdown(directLink, directLink.parentElement, playerFrame);
       return true;
     }
 
