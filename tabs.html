@@ -363,6 +363,7 @@
     }
   </style>
   <script src="/site-appearance.js"></script>
+  <script src="/direct-link-timer.js"></script>
 </head>
 <body>
   <main class="app-container">
@@ -422,6 +423,7 @@
     let loadTimer = null;
     let fallbackGlobalUrl = '';
     let previewRequestId = 0;
+    let stopPreviewFallbackTimer = null;
 
     window.addEventListener('DOMContentLoaded', () => {
       const input = document.getElementById('searchInput');
@@ -472,7 +474,11 @@
       const frame = document.getElementById('monitorIframe');
 
       fallbackGlobalUrl = verifiedUrl;
-      document.getElementById("previewFallbackLink").href = verifiedUrl;
+      const fallbackLink = document.getElementById("previewFallbackLink");
+      if (stopPreviewFallbackTimer) stopPreviewFallbackTimer();
+      fallbackLink.href = verifiedUrl;
+      fallbackLink.parentElement.style.display = '';
+      stopPreviewFallbackTimer = startDirectLinkCountdown(fallbackLink, fallbackLink.parentElement);
       previewRequestId += 1;
       frame.dataset.requestId = String(previewRequestId);
       frame.dataset.loaded = 'false';
@@ -598,6 +604,7 @@
         siteFrame.style.border = '0';
         siteFrame.style.display = 'block';
         blankDocument.body.appendChild(siteFrame);
+        startDirectLinkCountdown(directLink, directLink, siteFrame);
       } catch (error) {
         blankWindow.location.replace(url);
       }
