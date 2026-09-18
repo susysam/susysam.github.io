@@ -322,6 +322,8 @@
     .error-action-btn:hover {
       background: #ff3333;
     }
+    .retry-btn { margin-left: 8px; background: #475569; }
+    .retry-btn:hover { background: #334155; }
 
     .laptop-base-chassis {
       width: 104%;
@@ -405,6 +407,7 @@
               <div class="error-title">Preview unavailable</div>
               <p class="error-copy">This site may block embedded previews. You can still open it in a regular tab.</p>
               <button class="error-action-btn" id="errorFallbackBtn" type="button">Open Tab</button>
+              <button class="error-action-btn retry-btn" id="errorRetryBtn" type="button" onclick="retryPreview()">Retry Preview</button>
             </div>
           </div>
         </div>
@@ -479,6 +482,7 @@
       errorLayer.setAttribute('aria-hidden', 'true');
       loaderLayer.style.display = 'flex';
       loaderLayer.setAttribute('aria-hidden', 'false');
+      showStatus('Loading preview…');
 
       frame.src = verifiedUrl;
 
@@ -523,6 +527,7 @@
       }
 
       hideLoader();
+      showStatus('Preview loaded. If it appears blank, open the site in a new tab.');
     }
 
     function hideLoader() {
@@ -533,6 +538,7 @@
 
     function triggerErrorPanel() {
       hideLoader();
+      showStatus('Preview timed out. Retry or open the site in a new tab.');
       const errorLayer = document.getElementById('errorModule');
       errorLayer.style.display = 'flex';
       errorLayer.setAttribute('aria-hidden', 'false');
@@ -540,6 +546,12 @@
       document.getElementById('errorFallbackBtn').onclick = () => {
         window.open(fallbackGlobalUrl, '_blank', 'noopener,noreferrer');
       };
+    }
+
+    function retryPreview() {
+      if (!fallbackGlobalUrl) return;
+      document.getElementById('searchInput').value = fallbackGlobalUrl;
+      renderVirtualUrl();
     }
 
     function openInputInAboutBlank() {
