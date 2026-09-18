@@ -98,10 +98,9 @@
     }
 
     .header-actions { display: flex; align-items: center; gap: 8px; }
-    .header-shortcut { display: inline-flex; align-items: center; justify-content: center; padding: 8px 14px; text-decoration: none; font-size: 13px; font-weight: bold; }
     @media (max-width: 600px) {
       .header-actions { width: 100%; }
-      .header-actions button, .header-actions a { flex: 1; }
+      .header-actions button { flex: 1; }
     }
 
     main{
@@ -396,7 +395,7 @@
         </div>
       </div>
       <div class="header-actions">
-        <a class="btn-ghost header-shortcut" id="tabButton" href="/settings.html" target="_blank" rel="noopener noreferrer">New Tab</a>
+        <button class="btn-ghost" id="tabButton" type="button">New Tab</button>
         <button class="btn-ghost" id="windowButton" type="button">New Window</button>
       </div>
     </div>
@@ -740,8 +739,29 @@
     document.getElementById("homeButton").addEventListener("click", () => {
       location.href = HOME_URL;
     });
+    function openSettingsInBlank(features) {
+      const popup = window.open("about:blank", "_blank", features);
+      if (!popup) {
+        toast("Popup blocked. Allow popups for this site.");
+        return;
+      }
+
+      const popupDocument = popup.document;
+      popupDocument.title = "Settings";
+      popupDocument.documentElement.style.cssText = "width:100%;height:100%;";
+      popupDocument.body.style.cssText = "width:100%;height:100%;margin:0;overflow:hidden;background:#0f1116;";
+      const frame = popupDocument.createElement("iframe");
+      frame.title = "Settings";
+      frame.src = new URL(SETTINGS_URL, location.href).href;
+      frame.style.cssText = "display:block;width:100%;height:100%;border:0;";
+      popupDocument.body.appendChild(frame);
+    }
+
+    document.getElementById("tabButton").addEventListener("click", () => {
+      openSettingsInBlank();
+    });
     document.getElementById("windowButton").addEventListener("click", () => {
-      window.open(SETTINGS_URL, "_blank", "width=900,height=650");
+      openSettingsInBlank("width=900,height=650");
     });
 
     window.addEventListener("storage", event => {
