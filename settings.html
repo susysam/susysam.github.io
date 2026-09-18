@@ -98,9 +98,10 @@
     }
 
     .header-actions { display: flex; align-items: center; gap: 8px; }
+    .header-shortcut { display: inline-flex; align-items: center; justify-content: center; padding: 8px 14px; text-decoration: none; font-size: 13px; font-weight: bold; }
     @media (max-width: 600px) {
       .header-actions { width: 100%; }
-      .header-actions button { flex: 1; }
+      .header-actions button, .header-actions a { flex: 1; }
     }
 
     main{
@@ -395,7 +396,7 @@
         </div>
       </div>
       <div class="header-actions">
-        <button class="btn-ghost" id="tabButton" type="button">New Tab</button>
+        <a class="btn-ghost header-shortcut" id="tabButton" href="/settings.html" target="_blank" rel="noopener noreferrer">New Tab</a>
         <button class="btn-ghost" id="windowButton" type="button">New Window</button>
       </div>
     </div>
@@ -739,11 +740,8 @@
     document.getElementById("homeButton").addEventListener("click", () => {
       location.href = HOME_URL;
     });
-    document.getElementById("tabButton").addEventListener("click", () => {
-      window.open(SETTINGS_URL, "_blank", "noopener,noreferrer");
-    });
     document.getElementById("windowButton").addEventListener("click", () => {
-      window.open(SETTINGS_URL, "_blank", "width=900,height=650,noopener,noreferrer");
+      window.open(SETTINGS_URL, "_blank", "width=900,height=650");
     });
 
     window.addEventListener("storage", event => {
