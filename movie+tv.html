@@ -182,7 +182,10 @@
     .recommendations { width: min(100%, 640px); margin-top: 12px; text-align: left; }
     .recommendations h3 { margin: 0 0 10px; font-size: 18px; }
     .recommendations-list { display: grid; gap: 8px; }
-    .recommendation { width: 100%; padding: 12px 14px; text-align: left; border: 1px solid var(--border); border-radius: 10px; background: var(--inputBg); color: var(--text); cursor: pointer; }
+    .recommendation-row { display: flex; gap: 8px; }
+    .recommendation { flex: 1; min-width: 0; padding: 12px 14px; text-align: left; border: 1px solid var(--border); border-radius: 10px; background: var(--inputBg); color: var(--text); cursor: pointer; }
+    .recommendation-remove { width: 42px; flex: none; border: 1px solid var(--border); border-radius: 10px; background: var(--inputBg); color: var(--danger); font-size: 20px; cursor: pointer; }
+    .recommendation-remove:hover { background: var(--danger); color: #fff; }
     .recommendation:hover { border-color: var(--accent); }
     .recommendation strong, .recommendation small { display: block; }
     .recommendation small { margin-top: 3px; color: var(--muted); }
@@ -483,6 +486,7 @@
     const recommendations = document.getElementById('recommendations');
     const recommendationsList = document.getElementById('recommendationsList');
     const recentMediaKey = 'recentImdbMedia';
+    const maxRecentMedia = 10;
     continueButton.disabled = !localStorage.getItem('lastWatched');
 
     function showLaunch(text){
@@ -531,7 +535,7 @@
         return Array.isArray(items) ? items.filter(item =>
           item && ['movie', 'tv'].includes(item.mediaType) &&
           /^tt\d{7,10}$/i.test(item.mediaId)
-        ).slice(0, 12) : [];
+        ).slice(0, maxRecentMedia) : [];
       } catch { return []; }
     }
 
@@ -540,6 +544,8 @@
       recommendationsList.replaceChildren();
       recommendations.hidden = items.length === 0;
       items.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'recommendation-row';
         const button = document.createElement('button');
         button.className = 'recommendation';
         button.type = 'button';
@@ -552,8 +558,31 @@
           document.getElementById('media-id').value = item.mediaId;
           playMedia();
         });
-        recommendationsList.append(button);
+        const remove = document.createElement('button');
+        remove.className = 'recommendation-remove';
+        remove.type = 'button';
+        remove.textContent = '×';
+        remove.setAttribute('aria-label', `Remove ${item.title || item.mediaId} from Recommended`);
+        remove.title = 'Remove from Recommended';
+        remove.addEventListener('click', () => removeRecentMedia(item.mediaId, item.mediaType));
+        row.append(button, remove);
+        recommendationsList.append(row);
       });
+    }
+
+    function removeRecentMedia(mediaId, mediaType) {
+      const items = getRecentMedia().filter(item =>
+        !(item.mediaId === mediaId && item.mediaType === mediaType)
+      );
+      localStorage.setItem(recentMediaKey, JSON.stringify(items));
+      try {
+        const last = JSON.parse(localStorage.getItem('lastWatched') || 'null');
+        if (last?.type === 'standard' && last.mediaId === mediaId && last.selectedMediaType === mediaType) {
+          localStorage.removeItem('lastWatched');
+          continueButton.disabled = true;
+        }
+      } catch { /* Keep the saved list usable if older data is malformed. */ }
+      renderRecommendations();
     }
 
     function saveRecentMedia(mediaId, mediaType) {
@@ -565,7 +594,7 @@
         !(item.mediaId === mediaId && item.mediaType === mediaType)
       );
       items.unshift({ mediaId, mediaType, title: existing?.title || '' });
-      localStorage.setItem(recentMediaKey, JSON.stringify(items.slice(0, 12)));
+      localStorage.setItem(recentMediaKey, JSON.stringify(items.slice(0, maxRecentMedia)));
       renderRecommendations();
       if (!existing?.title) fetchMediaTitle(mediaId, mediaType);
     }
