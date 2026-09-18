@@ -6,9 +6,14 @@ window.startDirectLinkCountdown = function (link, hideElement, frame) {
   const deadline = Date.now() + 15000;
   let interval;
 
-  function hide() {
+  function stop() {
     timerWindow.clearInterval(interval);
     timerWindow.clearTimeout(timeout);
+    link.removeEventListener('click', hide);
+  }
+
+  function hide() {
+    stop();
     hideElement.style.display = 'none';
     if (frame) frame.style.height = '100%';
   }
@@ -23,4 +28,5 @@ window.startDirectLinkCountdown = function (link, hideElement, frame) {
   interval = timerWindow.setInterval(update, 250);
   const timeout = timerWindow.setTimeout(hide, 15000);
   update();
+  return stop;
 };
