@@ -521,6 +521,12 @@
 
     function getRecentMedia() {
       try {
+        if (!localStorage.getItem(recentMediaKey)) {
+          const last = JSON.parse(localStorage.getItem('lastWatched') || 'null');
+          if (last?.type === 'standard' && ['movie', 'tv'].includes(last.selectedMediaType) && /^tt\d{7,10}$/i.test(last.mediaId)) {
+            localStorage.setItem(recentMediaKey, JSON.stringify([{ mediaId: last.mediaId.toLowerCase(), mediaType: last.selectedMediaType, title: '' }]));
+          }
+        }
         const items = JSON.parse(localStorage.getItem(recentMediaKey) || '[]');
         return Array.isArray(items) ? items.filter(item =>
           item && ['movie', 'tv'].includes(item.mediaType) &&
