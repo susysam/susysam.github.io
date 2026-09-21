@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script src="/site-storage.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Entertainment Player</title>
 
   <script>
     (function () {
-      const theme = localStorage.getItem('theme');
+      const theme = siteStorage.getItem('theme');
       if (theme === 'dark') document.documentElement.classList.add('dark');
       else document.documentElement.classList.remove('dark');
     })();
@@ -487,7 +488,30 @@
     const recommendationsList = document.getElementById('recommendationsList');
     const recentMediaKey = 'recentImdbMedia';
     const maxRecentMedia = 10;
-    continueButton.disabled = !localStorage.getItem('lastWatched');
+    continueButton.disabled = !readLastWatched();
+    getRecentMedia();
+
+    function readLastWatched() {
+      try {
+        const item = JSON.parse(siteStorage.getItem('lastWatched') || 'null');
+        if (item?.type === 'external') {
+          const url = window.siteHttpUrl(item.url);
+          return url ? { type: 'external', url } : null;
+        }
+        if (item?.type === 'standard' && ['movie', 'tv'].includes(item.selectedMediaType) &&
+            typeof item.mediaId === 'string' && /^tt\d{7,10}$/i.test(item.mediaId)) {
+          return { ...item, mediaId: item.mediaId.toLowerCase() };
+        }
+      } catch { /* An invalid entry must not break the player. */ }
+      return null;
+    }
+
+    window.addEventListener('storage', event => {
+      if (event.key === null || ['lastWatched', recentMediaKey].includes(event.key)) {
+        continueButton.disabled = !readLastWatched();
+        renderRecommendations();
+      }
+    });
 
     function showLaunch(text){
       launchText.textContent = text;
@@ -525,17 +549,29 @@
 
     function getRecentMedia() {
       try {
-        if (!localStorage.getItem(recentMediaKey)) {
-          const last = JSON.parse(localStorage.getItem('lastWatched') || 'null');
+        if (!siteStorage.getItem(recentMediaKey)) {
+          const last = readLastWatched();
           if (last?.type === 'standard' && ['movie', 'tv'].includes(last.selectedMediaType) && /^tt\d{7,10}$/i.test(last.mediaId)) {
-            localStorage.setItem(recentMediaKey, JSON.stringify([{ mediaId: last.mediaId.toLowerCase(), mediaType: last.selectedMediaType, title: '' }]));
+            siteStorage.setItem(recentMediaKey, JSON.stringify([{ mediaId: last.mediaId.toLowerCase(), mediaType: last.selectedMediaType, title: '' }]));
           }
         }
-        const items = JSON.parse(localStorage.getItem(recentMediaKey) || '[]');
-        return Array.isArray(items) ? items.filter(item =>
+        const items = JSON.parse(siteStorage.getItem(recentMediaKey) || '[]');
+        const seen = new Set();
+        const normalized = Array.isArray(items) ? items.filter(item =>
           item && ['movie', 'tv'].includes(item.mediaType) &&
-          /^tt\d{7,10}$/i.test(item.mediaId)
-        ).slice(0, maxRecentMedia) : [];
+          typeof item.mediaId === 'string' && /^tt\d{7,10}$/i.test(item.mediaId)
+        ).map(item => ({ ...item, mediaId: item.mediaId.toLowerCase(),
+          title: typeof item.title === 'string' ? item.title.slice(0, 120) : ''
+        })).filter(item => {
+          const key = item.mediaType + ':' + item.mediaId;
+          if (seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        }).slice(0, maxRecentMedia) : [];
+        if (JSON.stringify(items) !== JSON.stringify(normalized)) {
+          siteStorage.setItem(recentMediaKey, JSON.stringify(normalized));
+        }
+        return normalized;
       } catch { return []; }
     }
 
@@ -574,11 +610,11 @@
       const items = getRecentMedia().filter(item =>
         !(item.mediaId === mediaId && item.mediaType === mediaType)
       );
-      localStorage.setItem(recentMediaKey, JSON.stringify(items));
+      siteStorage.setItem(recentMediaKey, JSON.stringify(items));
       try {
-        const last = JSON.parse(localStorage.getItem('lastWatched') || 'null');
+        const last = JSON.parse(siteStorage.getItem('lastWatched') || 'null');
         if (last?.type === 'standard' && last.mediaId === mediaId && last.selectedMediaType === mediaType) {
-          localStorage.removeItem('lastWatched');
+          siteStorage.removeItem('lastWatched');
           continueButton.disabled = true;
         }
       } catch { /* Keep the saved list usable if older data is malformed. */ }
@@ -594,7 +630,7 @@
         !(item.mediaId === mediaId && item.mediaType === mediaType)
       );
       items.unshift({ mediaId, mediaType, title: existing?.title || '' });
-      localStorage.setItem(recentMediaKey, JSON.stringify(items.slice(0, maxRecentMedia)));
+      siteStorage.setItem(recentMediaKey, JSON.stringify(items.slice(0, maxRecentMedia)));
       renderRecommendations();
       if (!existing?.title) fetchMediaTitle(mediaId, mediaType);
     }
@@ -602,7 +638,7 @@
     async function fetchMediaTitle(mediaId, mediaType) {
       try {
         const kind = mediaType === 'tv' ? 'series' : 'movie';
-        const response = await fetch(`https://v3-cinemeta.strem.io/meta/${kind}/${mediaId}.json`);
+        const response = await fetch(`https://v3-cinemeta.strem.io/meta/${kind}/${mediaId}.json`, { signal: AbortSignal.timeout(8000) });
         if (!response.ok) return;
         const data = await response.json();
         const title = typeof data?.meta?.name === 'string' ? data.meta.name.trim() : '';
@@ -611,7 +647,7 @@
         const item = items.find(entry => entry.mediaId === mediaId && entry.mediaType === mediaType);
         if (!item) return;
         item.title = title.slice(0, 120);
-        localStorage.setItem(recentMediaKey, JSON.stringify(items));
+        siteStorage.setItem(recentMediaKey, JSON.stringify(items));
         if (selectedMediaType === mediaType) renderRecommendations();
       } catch { /* The IMDb ID remains available if title lookup fails. */ }
     }
@@ -634,7 +670,7 @@
       mediaStatus.textContent = '';
       const url = buildUrl(mediaId.toLowerCase(), selectedMediaType);
       if (!openPlayer(url)) return;
-      localStorage.setItem('lastWatched', JSON.stringify({
+      siteStorage.setItem('lastWatched', JSON.stringify({
         type: 'standard',
         mediaId: mediaId.toLowerCase(),
         selectedMediaType
@@ -644,14 +680,10 @@
     }
 
     function continueWatching() {
-      const data = localStorage.getItem('lastWatched');
-      if (!data) return alert("Nothing saved yet.");
-
-      let parsed;
-      try {
-        parsed = JSON.parse(data);
-      } catch {
-        return alert("Saved item could not be opened.");
+      const parsed = readLastWatched();
+      if (!parsed) {
+        continueButton.disabled = true;
+        return alert("No valid saved item to open yet.");
       }
       if (parsed.type === 'external') {
         loadExternalSite(parsed.url);
@@ -675,6 +707,8 @@
     }
 
     function loadExternalSite(url) {
+      url = window.siteHttpUrl(url);
+      if (!url) return alert('Please use a valid http or https address.');
       currentActiveTargetUrl = url;
       
       standardAppContent.style.display = 'none';
@@ -687,7 +721,7 @@
       iframeWorkspace.style.display = 'flex';
       resetBar.style.display = 'flex';
 
-      localStorage.setItem('lastWatched', JSON.stringify({
+      siteStorage.setItem('lastWatched', JSON.stringify({
         type: 'external',
         url: url
       }));
@@ -695,6 +729,8 @@
     }
 
     function openAboutBlankWindow(url) {
+      url = window.siteHttpUrl(url);
+      if (!url) return false;
       const win = window.open("about:blank", "_blank");
       if (!win) { alert("Popup blocked. Please allow popups for this site."); return false; }
       win.document.open();

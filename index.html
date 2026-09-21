@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script src="/site-storage.js"></script>
+  <script src="/local-profile.js"></script>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +11,7 @@
   <!-- Apply theme ASAP (site-wide) -->
   <script>
     (function () {
-      const theme = localStorage.getItem('theme');
+      const theme = siteStorage.getItem('theme');
       if (theme === 'dark') document.documentElement.classList.add('dark');
       else document.documentElement.classList.remove('dark');
     })();
@@ -223,7 +225,7 @@
   <div class="wrapper">
     <div class="brand">
       <h2 id="titleText">Login</h2>
-      <p>Theme sync: Settings → Dark mode applies everywhere.</p>
+      <p>Your profile is saved in this browser only. You can also enter without logging in.</p>
     </div>
 
     <div id="loginSection">
@@ -290,7 +292,7 @@
 
     // Prefill remembered username (optional)
     document.addEventListener("DOMContentLoaded", () => {
-      const remembered = localStorage.getItem("rememberedUsername");
+      const remembered = siteStorage.getItem("rememberedUsername");
       if (remembered) {
         document.getElementById("username").value = remembered;
         document.getElementById("rememberMe").checked = true;
@@ -298,7 +300,7 @@
     });
 
     // Login Handling
-    loginForm.addEventListener("submit", function(event) {
+    loginForm.addEventListener("submit", async function(event) {
       event.preventDefault();
 
       const username = document.getElementById("username").value.trim();
@@ -306,17 +308,17 @@
 
       // Remember username only (not password)
       if (document.getElementById("rememberMe").checked) {
-        localStorage.setItem("rememberedUsername", username);
+        siteStorage.setItem("rememberedUsername", username);
       } else {
-        localStorage.removeItem("rememberedUsername");
+        siteStorage.removeItem("rememberedUsername");
       }
 
-      const savedUser = localStorage.getItem("username");
-      const savedPass = localStorage.getItem("password");
-
-      const ok =
-        (username === "Leo" && password === "2024") ||
-        (username === savedUser && password === savedPass);
+      let ok;
+      try {
+        ok = await localProfile.verify(username, password);
+      } catch {
+        return alert("Your local profile could not be opened. You can still use Bypass Login.");
+      }
 
       if (ok) {
         window.location.href = "start27.html";
@@ -326,14 +328,24 @@
     });
 
     // Signup Handling
-    signupForm.addEventListener("submit", function(event) {
+    signupForm.addEventListener("submit", async function(event) {
       event.preventDefault();
 
       const newUsername = document.getElementById("newUsername").value.trim();
       const newPassword = document.getElementById("newPassword").value;
 
-      localStorage.setItem("username", newUsername);
-      localStorage.setItem("password", newPassword);
+      if (!newUsername || !newPassword) return alert("Enter a username and password.");
+      const submit = signupForm.querySelector('button[type="submit"]');
+      submit.disabled = true;
+      try {
+        await localProfile.ready;
+        await localProfile.create(newUsername, newPassword);
+      } catch {
+        return alert("Your local profile could not be saved. You can still use Bypass Login.");
+      } finally {
+        submit.disabled = false;
+      }
+      document.getElementById("newPassword").value = '';
 
       alert("Sign up successful! Please log in.");
 

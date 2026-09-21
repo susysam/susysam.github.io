@@ -15,9 +15,9 @@
   function getPreset(color) {
     if (presets[color]) return { ...presets[color], light: color === '#f6f7fb' };
     try {
-      const saved = JSON.parse(localStorage.getItem(customPresetsKey) || '[]');
+      const saved = JSON.parse(siteStorage.getItem(customPresetsKey) || '[]');
       if (!Array.isArray(saved)) return null;
-      const custom = saved.find(item => item && item.color === color);
+      const custom = saved.find(item => item && typeof item.color === 'string' && item.color.toLowerCase() === color);
       if (!custom || !/^#[0-9a-f]{6}$/i.test(custom.color)) return null;
       const red = parseInt(color.slice(1, 3), 16);
       const green = parseInt(color.slice(3, 5), 16);
@@ -62,7 +62,7 @@
   document.head.appendChild(style);
 
   window.applySiteAppearance = function () {
-    const saved = localStorage.getItem('backgroundUrl') || '';
+    const saved = siteStorage.getItem('backgroundUrl') || '';
     const preset = getPreset(saved.toLowerCase());
     paletteProperties.forEach(property => root.style.removeProperty(property));
 
@@ -96,15 +96,26 @@
       Object.entries(colors).forEach(([property, value]) => root.style.setProperty(property, value));
     } else {
       delete root.dataset.sitePreset;
-      root.classList.toggle('dark', localStorage.getItem('theme') === 'dark');
+      root.classList.toggle('dark', siteStorage.getItem('theme') === 'dark');
     }
 
-    root.classList.toggle('performance-mode', localStorage.getItem('performanceMode') === 'on');
+    // Background images are used on Home and previewed in Settings.
+    const applyImage = () => {
+      if (!document.body || !document.body.hasAttribute('data-home-background')) return;
+      const imageUrl = window.siteHttpUrl(saved);
+      document.body.style.backgroundImage = imageUrl ? 'url(' + JSON.stringify(imageUrl) + ')' : '';
+      document.body.style.backgroundSize = imageUrl ? 'cover' : '';
+      document.body.style.backgroundPosition = imageUrl ? 'center' : '';
+    };
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', applyImage, { once: true });
+    else applyImage();
+
+    root.classList.toggle('performance-mode', siteStorage.getItem('performanceMode') === 'on');
   };
 
   window.applySiteAppearance();
   window.addEventListener('storage', event => {
-    if (['theme', 'backgroundUrl', 'customBackgroundPresets', 'performanceMode'].includes(event.key)) {
+    if (event.key === null || ['theme', 'backgroundUrl', 'customBackgroundPresets', 'performanceMode'].includes(event.key)) {
       window.applySiteAppearance();
     }
   });

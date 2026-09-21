@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script src="/site-storage.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Games</title>
@@ -9,7 +10,7 @@
 
   <script>
     (function () {
-      const theme = localStorage.getItem('theme');
+      const theme = siteStorage.getItem('theme');
       if (theme === 'dark') document.documentElement.classList.add('dark');
       else document.documentElement.classList.remove('dark');
     })();
@@ -445,6 +446,8 @@
 
   <script>
     function openGame(url) {
+      url = window.siteHttpUrl(url);
+      if (!url) return alert('Please use a valid http or https game URL.');
       const win = window.open('about:blank', '_blank');
       if (!win) return alert('Popup blocked. Please allow popups for this site.');
 
@@ -482,7 +485,7 @@
 
     function saveCustomGames() {
       try {
-        localStorage.setItem(customGamesKey, JSON.stringify(customGames));
+        siteStorage.setItem(customGamesKey, JSON.stringify(customGames));
       } catch (error) {
         console.warn('Could not save custom games.', error);
       }
@@ -497,6 +500,7 @@
     function renderCustomGame(game) {
       const card = document.createElement('div');
       card.className = 'game-card';
+      card.dataset.customGame = 'true';
       card.dataset.name = game.name.toLowerCase();
       card.style.animationDelay = '0s';
 
@@ -552,8 +556,8 @@
       } catch {
         return alert('Please enter a valid game URL.');
       }
-      if (url.protocol !== 'https:' && url.protocol !== 'http:') {
-        return alert('Please enter an http or https game URL.');
+      if (!window.siteHttpUrl(url.href)) {
+        return alert('Please enter an http or https game URL without a username or password.');
       }
 
       const game = {
@@ -571,18 +575,32 @@
       filterGames();
     }
 
-    try {
-      const saved = JSON.parse(localStorage.getItem(customGamesKey) || '[]');
-      if (Array.isArray(saved)) {
-        customGames = saved.filter(game =>
-          game && typeof game.id === 'string' &&
-          typeof game.name === 'string' &&
-          typeof game.link === 'string'
-        );
-      }
-    } catch (error) {
-      console.warn('Could not load custom games.', error);
+    function loadCustomGames() {
+      const normalized = [];
+      const seen = new Set();
+      try {
+        const saved = JSON.parse(siteStorage.getItem(customGamesKey) || '[]');
+        if (Array.isArray(saved)) saved.forEach(game => {
+          if (!game || typeof game.name !== 'string' || !game.name.trim()) return;
+          const link = window.siteHttpUrl(game.link);
+          if (!link) return;
+          const id = typeof game.id === 'string' && game.id && !seen.has(game.id) ? game.id : crypto.randomUUID();
+          seen.add(id);
+          normalized.push({ id, name: game.name.trim(), link });
+        });
+      } catch { /* Ignore damaged saved entries. */ }
+      customGames = normalized;
+      if (JSON.stringify(normalized) !== siteStorage.getItem(customGamesKey)) saveCustomGames();
     }
+    window.addEventListener('storage', event => {
+      if (event.key !== null && event.key !== customGamesKey) return;
+      loadCustomGames();
+      document.querySelectorAll('[data-custom-game]').forEach(card => card.remove());
+      customGames.forEach(renderCustomGame);
+      updateGameCount();
+      filterGames();
+    });
+    loadCustomGames();
     customGames.forEach(renderCustomGame);
     updateGameCount();
     filterGames();

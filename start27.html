@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script src="/site-storage.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Home</title>
@@ -8,7 +9,7 @@
 
   <script>
     (function () {
-      const theme = localStorage.getItem('theme');
+      const theme = siteStorage.getItem('theme');
       if (theme === 'dark') document.documentElement.classList.add('dark');
       else document.documentElement.classList.remove('dark');
     })();
@@ -198,7 +199,7 @@
   <script src="/site-appearance.js"></script>
 </head>
 
-<body>
+<body data-home-background>
   <div class="navbar">
     <a href="games.html">Games</a>
     <a href="tabs.html">Tabs</a>
@@ -326,7 +327,7 @@
     }
 
     async function syncUtcFromApi() {
-      const res = await fetch("https://worldtimeapi.org/api/timezone/Etc/UTC", { cache: "no-store" });
+      const res = await fetch("https://worldtimeapi.org/api/timezone/Etc/UTC", { cache: "no-store", signal: AbortSignal.timeout(5000) });
       if (!res.ok) throw new Error("UTC sync failed");
       const data = await res.json();
       baseUtcMs = data.unixtime * 1000;
@@ -359,10 +360,7 @@
 
     startClock();
 
-    const storedBackgroundUrl = localStorage.getItem("backgroundUrl");
-    if (storedBackgroundUrl && !storedBackgroundUrl.startsWith("#")) {
-      document.body.style.backgroundImage = `url('${storedBackgroundUrl}')`;
-    }
+
   </script>
 </body>
 </html>

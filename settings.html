@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script src="/site-storage.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Settings</title>
@@ -384,7 +385,7 @@
   <script src="/site-appearance.js"></script>
 </head>
 
-<body>
+<body data-home-background>
   <header>
     <div class="header-inner">
       <div class="header-left-group">
@@ -554,7 +555,7 @@
 
     function readCustomPresets() {
       try {
-        const value = JSON.parse(localStorage.getItem(customPresetKey) || "[]");
+        const value = JSON.parse(siteStorage.getItem(customPresetKey) || "[]");
         return Array.isArray(value) ? value.filter(item =>
           item && typeof item.id === "string" &&
           typeof item.name === "string" &&
@@ -568,11 +569,11 @@
     let customPresets = readCustomPresets();
 
     function saveCustomPresets() {
-      localStorage.setItem(customPresetKey, JSON.stringify(customPresets));
+      siteStorage.setItem(customPresetKey, JSON.stringify(customPresets));
     }
 
     function refreshUI() {
-      const savedBackground = localStorage.getItem("backgroundUrl") || "";
+      const savedBackground = siteStorage.getItem("backgroundUrl") || "";
       const selected = savedBackground.toLowerCase();
       document.querySelectorAll(".preset-chip").forEach(chip => {
         const active = chip.dataset.val === selected;
@@ -584,14 +585,14 @@
         selected ? "Home image saved" : "Default";
       bgUrlInput.value = savedBackground && !savedBackground.startsWith("#") ? savedBackground : "";
       darkToggle.checked = document.documentElement.classList.contains("dark");
-      performanceToggle.checked = localStorage.getItem("performanceMode") === "on";
+      performanceToggle.checked = siteStorage.getItem("performanceMode") === "on";
     }
 
     function selectPreset(color) {
-      localStorage.setItem("backgroundUrl", color);
+      siteStorage.setItem("backgroundUrl", color);
       document.body.style.backgroundImage = "";
       window.applySiteAppearance();
-      localStorage.setItem("theme",
+      siteStorage.setItem("theme",
         document.documentElement.classList.contains("dark") ? "dark" : "light");
       refreshUI();
       toast("Color applied across the site");
@@ -620,9 +621,9 @@
           event.stopPropagation();
           customPresets = customPresets.filter(saved => saved.id !== item.id);
           saveCustomPresets();
-          if ((localStorage.getItem("backgroundUrl") || "").toLowerCase() === item.color.toLowerCase()) {
-            localStorage.setItem("backgroundUrl", "#f6f7fb");
-            localStorage.setItem("theme", "light");
+          if ((siteStorage.getItem("backgroundUrl") || "").toLowerCase() === item.color.toLowerCase()) {
+            siteStorage.setItem("backgroundUrl", "#f6f7fb");
+            siteStorage.setItem("theme", "light");
             window.applySiteAppearance();
           }
           renderCustomPresets();
@@ -669,10 +670,10 @@
     });
 
     darkToggle.addEventListener("change", () => {
-      if ((localStorage.getItem("backgroundUrl") || "").startsWith("#")) {
-        localStorage.removeItem("backgroundUrl");
+      if ((siteStorage.getItem("backgroundUrl") || "").startsWith("#")) {
+        siteStorage.removeItem("backgroundUrl");
       }
-      localStorage.setItem("theme", darkToggle.checked ? "dark" : "light");
+      siteStorage.setItem("theme", darkToggle.checked ? "dark" : "light");
       window.applySiteAppearance();
       refreshUI();
       toast("Theme saved");
@@ -688,7 +689,7 @@
     }
 
     function previewImage(url) {
-      document.body.style.backgroundImage = url ? 'url("' + url + '")' : "";
+      document.body.style.backgroundImage = url ? 'url(' + JSON.stringify(url) + ')' : "";
       document.body.style.backgroundSize = url ? "cover" : "";
       document.body.style.backgroundPosition = url ? "center" : "";
     }
@@ -696,7 +697,7 @@
     document.getElementById("saveBgBtn").addEventListener("click", () => {
       const url = parseImageUrl(bgUrlInput.value.trim());
       if (!url) return toast("Enter a valid image URL");
-      localStorage.setItem("backgroundUrl", url);
+      siteStorage.setItem("backgroundUrl", url);
       window.applySiteAppearance();
       previewImage(url);
       refreshUI();
@@ -709,8 +710,8 @@
       toast("Previewing image here");
     });
     document.getElementById("clearBgBtn").addEventListener("click", () => {
-      const saved = localStorage.getItem("backgroundUrl") || "";
-      if (saved && !saved.startsWith("#")) localStorage.removeItem("backgroundUrl");
+      const saved = siteStorage.getItem("backgroundUrl") || "";
+      if (saved && !saved.startsWith("#")) siteStorage.removeItem("backgroundUrl");
       previewImage("");
       window.applySiteAppearance();
       refreshUI();
@@ -718,7 +719,7 @@
     });
 
     performanceToggle.addEventListener("change", () => {
-      localStorage.setItem("performanceMode", performanceToggle.checked ? "on" : "off");
+      siteStorage.setItem("performanceMode", performanceToggle.checked ? "on" : "off");
       window.applySiteAppearance();
       toast(performanceToggle.checked ? "Performance mode on" : "Performance mode off");
     });
@@ -726,7 +727,7 @@
     document.getElementById("resetAllBtn").addEventListener("click", () => {
       if (!confirm("Reset appearance settings in this browser?")) return;
       ["theme", "backgroundUrl", customPresetKey, "performanceMode"].forEach(
-        key => localStorage.removeItem(key)
+        key => siteStorage.removeItem(key)
       );
       customPresets = [];
       previewImage("");
@@ -765,15 +766,15 @@
     });
 
     window.addEventListener("storage", event => {
-      if (event.key === customPresetKey) {
+      if (event.key === null || event.key === customPresetKey) {
         customPresets = readCustomPresets();
         renderCustomPresets();
       }
-      if (["theme", "backgroundUrl", "performanceMode"].includes(event.key)) refreshUI();
+      if (event.key === null || ["theme", "backgroundUrl", "performanceMode"].includes(event.key)) refreshUI();
     });
 
     renderCustomPresets();
-    const savedImage = localStorage.getItem("backgroundUrl") || "";
+    const savedImage = siteStorage.getItem("backgroundUrl") || "";
     if (savedImage && !savedImage.startsWith("#")) previewImage(savedImage);
     refreshUI();
   </script>

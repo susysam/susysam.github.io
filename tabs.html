@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script src="/site-storage.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Workspace Screen</title>
@@ -8,7 +9,7 @@
 
   <script>
     (function () {
-      const theme = localStorage.getItem('theme');
+      const theme = siteStorage.getItem('theme');
       document.documentElement.classList.toggle('dark', theme === 'dark');
     })();
   </script>
@@ -435,7 +436,7 @@
 
     function getValidUrl(rawInput) {
       const value = rawInput.trim();
-      if (!value) return null;
+      if (!value || /^(?!https?:)[a-z][a-z\d+.-]*:/i.test(value) && !/^[^/\s:]+:\d+(?:\/|$)/.test(value)) return null;
 
       try {
         const withProtocol = /^[a-zA-Z][a-zA-Z\d+.-]*:\/\//.test(value)
@@ -443,7 +444,7 @@
           : 'https://' + value;
         const url = new URL(withProtocol);
 
-        if (url.protocol !== 'http:' && url.protocol !== 'https:') return null;
+        if (!window.siteHttpUrl(url.href)) return null;
         return url.href;
       } catch (error) {
         return null;
@@ -533,6 +534,8 @@
       }
 
       hideLoader();
+      document.getElementById('errorModule').style.display = 'none';
+      document.getElementById('errorModule').setAttribute('aria-hidden', 'true');
       showStatus('Preview loaded. If it appears blank, open the site in a new tab.');
     }
 
