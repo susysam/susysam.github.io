@@ -1,33 +1,21 @@
-// Hide temporary direct-open links after fifteen seconds.
+// Provide a direct-open link that stays on screen permanently.
 window.startDirectLinkCountdown = function (link, hideElement, frame) {
   if (!link || !hideElement) return;
-  const timerWindow = link.ownerDocument.defaultView;
+  
   const label = link.dataset.directLinkLabel || link.textContent.trim();
   link.dataset.directLinkLabel = label;
-  const deadline = Date.now() + 15000;
-  let interval;
-
-  function stop() {
-    timerWindow.clearInterval(interval);
-    timerWindow.clearTimeout(timeout);
-    link.removeEventListener('click', hide);
-  }
+  link.textContent = label; // Just keep the label as is
 
   function hide() {
-    stop();
+    link.removeEventListener('click', hide);
     hideElement.style.display = 'none';
     if (frame) frame.style.height = '100%';
   }
 
-  function update() {
-    const remaining = Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
-    if (remaining === 0) hide();
-    else link.textContent = label + ' (' + remaining + 's)';
-  }
-
   link.addEventListener('click', hide, { once: true });
-  interval = timerWindow.setInterval(update, 250);
-  const timeout = timerWindow.setTimeout(hide, 15000);
-  update();
-  return stop;
+  
+  // Return an empty stop function since there is no timer to stop anymore
+  return function stop() {
+    link.removeEventListener('click', hide);
+  };
 };
