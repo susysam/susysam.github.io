@@ -425,8 +425,7 @@
 
         <input type="text" id="media-id" placeholder="Enter ID" aria-label="IMDb title ID" autocapitalize="off" autocomplete="off" spellcheck="false" onkeydown="if (event.key === 'Enter') playMedia()" />
         <p class="input-status" id="mediaStatus" role="alert" aria-live="polite"></p>
-        <select id="serverSelect" style="padding: 10px 12px; font-size: 14px; border-radius: 10px; border: 1px solid var(--border); width: 320px; max-width: calc(100vw - 60px); background: var(--inputBg); color: var(--text); outline: none; cursor: pointer; margin-bottom: 10px;"><option value="vidsrc.me">Server 1 (VidSrc)</option><option value="vidsrc.pm">Server 2 (VidSrc.pm)</option><option value="vidsrc.to">Server 3 (VidSrc.to)</option><option value="smashystream">Server 4 (SmashyStream)</option><option value="2embed">Server 5 (2Embed)</option></select>
-          <div class="media-actions">
+        <div class="media-actions">
           <button class="button" onclick="playMedia()">Play</button>
           <button class="button button-secondary" onclick="resetPageToDefault()">Back</button>
         </div>
@@ -654,14 +653,8 @@
     }
 
     function buildUrl(mediaId, mediaType) {
-        const server = document.getElementById("serverSelect").value;
-        const id = encodeURIComponent(mediaId);
-        if (server === "vidsrc.pm") return `https://vidsrc.pm/embed/${mediaType}?imdb=${id}`;
-        if (server === "vidsrc.to") return `https://vidsrc.to/embed/${mediaType}/${id}`;
-        if (server === "smashystream") return `https://embed.smashystream.com/playere.php?imdb=${id}`;
-        if (server === "2embed") return `https://www.2embed.cc/embed/${id}`;
-        return `https://vidsrc.me/embed/${mediaType}?imdb=${id}`;
-      }
+      return `https://vidsrc.me/embed/${mediaType}?imdb=${encodeURIComponent(mediaId)}`;
+    }
 
     function openPlayer(url) {
       return openAboutBlankWindow(url);
@@ -771,5 +764,6 @@
   </script>
 </body>
 </html>
+
 
 
