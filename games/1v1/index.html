@@ -284,6 +284,7 @@
       pointer-events: none;
       animation: floatUp 0.8s ease-out forwards;
       text-shadow: 0 2px 5px rgba(0,0,0,.9);
+      z-index: 40;
     }
     .dmg-number.body { color: #f1c40f; }
     .dmg-number.head { color: #e74c3c; font-size: 34px; }
@@ -316,24 +317,24 @@
       border: 1px solid var(--border);
       box-shadow: 0 10px 40px rgba(255, 140, 0, 0.2);
       border-radius: 20px;
-      padding: 36px 44px;
+      padding: 32px 40px;
       text-align: center;
-      max-width: 480px;
-      width: 90%;
+      max-width: 540px;
+      width: 92%;
     }
     .modal-title {
       font-family: 'Bangers', cursive;
       font-size: 46px;
       color: #fff;
       letter-spacing: 2px;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
     .modal-title span { color: var(--accent); }
     .modal-desc {
       color: rgba(220,220,255,.7);
       font-size: 14px;
-      margin-bottom: 24px;
-      line-height: 1.5;
+      margin-bottom: 18px;
+      line-height: 1.4;
     }
 
     .play-btn-large {
@@ -343,44 +344,92 @@
       font-family: 'Bangers', cursive;
       font-size: 28px;
       letter-spacing: 1.5px;
-      padding: 14px 48px;
+      padding: 13px 44px;
       border-radius: 50px;
       cursor: pointer;
       transition: all 0.2s;
       box-shadow: 0 6px 25px rgba(255,140,0,.45);
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       width: 100%;
     }
     .play-btn-large:hover {
-      transform: scale(1.04);
+      transform: scale(1.03);
       box-shadow: 0 8px 30px rgba(255,140,0,.7);
     }
 
+    /* Mode Selection Grid (4 Columns) */
     .mode-select-wrap {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 24px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
     }
     .mode-opt {
       background: rgba(255,255,255,.05);
       border: 1px solid rgba(255,255,255,.15);
-      padding: 12px 6px;
+      padding: 10px 4px;
       border-radius: 12px;
       cursor: pointer;
       transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
     .mode-opt:hover, .mode-opt.active {
       border-color: var(--accent);
       background: rgba(255,140,0,.2);
+      box-shadow: 0 0 12px rgba(255,140,0,.25);
     }
-    .mode-opt-title { font-weight: 800; font-size: 13px; color: #fff; }
-    .mode-opt-sub { font-size: 10px; color: rgba(255,255,255,.5); }
+    .mode-opt-title { font-weight: 800; font-size: 12px; color: #fff; }
+    .mode-opt-sub { font-size: 9.5px; color: rgba(255,255,255,.5); margin-top: 2px; }
+
+    /* Difficulty Selection Row */
+    .diff-container {
+      margin-bottom: 18px;
+    }
+    .diff-title {
+      font-size: 11px;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.55);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      text-align: left;
+    }
+    .diff-select-wrap {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    .diff-opt {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 8px 4px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 12px;
+      color: #bbb;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .diff-opt:hover {
+      background: rgba(255, 140, 0, 0.15);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    .diff-opt.active {
+      background: linear-gradient(135deg, rgba(255, 140, 0, 0.35), rgba(255, 85, 0, 0.35));
+      border-color: var(--accent);
+      color: #fff;
+      box-shadow: 0 0 12px rgba(255, 140, 0, 0.3);
+    }
 
     .keybinds-table {
       text-align: left;
-      font-size: 12px;
-      margin-top: 18px;
+      font-size: 11.5px;
+      margin-top: 14px;
       border-collapse: collapse;
       width: 100%;
       background: rgba(255,255,255,.03);
@@ -388,13 +437,13 @@
       overflow: hidden;
     }
     .keybinds-table td {
-      padding: 6px 12px;
+      padding: 5px 10px;
       border-bottom: 1px solid rgba(255,255,255,.05);
     }
     .keybinds-table td.key {
       font-weight: 800;
       color: var(--accent);
-      width: 45%;
+      width: 44%;
     }
 
     /* Instructions toast */
@@ -403,7 +452,7 @@
       top: 75px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(20, 20, 30, 0.9);
+      background: rgba(20, 20, 30, 0.92);
       border: 1px solid var(--accent);
       padding: 10px 24px;
       border-radius: 50px;
@@ -426,6 +475,78 @@
       font-size: 13px;
       color: var(--accent);
       display: none;
+      z-index: 30;
+      letter-spacing: 1px;
+    }
+
+    /* ─── INTERACTIVE TUTORIAL PANEL ─── */
+    #tutorialPanel {
+      position: absolute;
+      top: 72px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(18, 18, 28, 0.94);
+      border: 2px solid var(--accent);
+      box-shadow: 0 8px 30px rgba(255, 140, 0, 0.4);
+      border-radius: 16px;
+      padding: 14px 26px;
+      text-align: center;
+      max-width: 520px;
+      width: 90%;
+      z-index: 60;
+      backdrop-filter: blur(10px);
+      pointer-events: auto;
+      transition: all 0.25s ease;
+    }
+    #tutorialPanel.hidden { display: none; }
+
+    .tutorial-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+    .tutorial-badge {
+      background: var(--accent);
+      color: #fff;
+      font-family: 'Bangers', cursive;
+      font-size: 14px;
+      letter-spacing: 1px;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+    .tutorial-title {
+      font-family: 'Bangers', cursive;
+      font-size: 20px;
+      letter-spacing: 1.5px;
+      color: #fff;
+    }
+    .tutorial-instruction {
+      font-size: 14px;
+      font-weight: 700;
+      color: rgba(235, 235, 255, 0.95);
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+    .tutorial-progress-bar-wrap {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+    .tutorial-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--cyan));
+      width: 0%;
+      transition: width 0.2s ease;
+    }
+    .tutorial-progress-text {
+      font-size: 12px;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.65);
     }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -448,6 +569,20 @@
         <button class="hud-btn" onclick="toggleSettingsModal()">⚙ Settings</button>
         <button class="hud-btn" onclick="window.location.href='/games.html'">← Games</button>
       </div>
+    </div>
+
+    <!-- Floating Tutorial Panel -->
+    <div id="tutorialPanel" class="hidden">
+      <div class="tutorial-header">
+        <span class="tutorial-badge" id="tutStepBadge">STEP 1 OF 9</span>
+        <span class="tutorial-title" id="tutStepTitle">MOVEMENT</span>
+      </div>
+      <div class="tutorial-instruction" id="tutInstruction">Use WASD to move around. Press SPACE to jump.</div>
+      <div class="tutorial-progress-bar-wrap">
+        <div class="tutorial-progress-bar" id="tutProgressFill" style="width: 0%;"></div>
+      </div>
+      <div class="tutorial-progress-text" id="tutProgressText">Distance: 0.0 / 5.0 | Jump: Incomplete</div>
+      <button id="tutLobbyBtn" class="play-btn-large" style="display:none; margin: 12px auto 0; padding: 8px 24px; font-size: 18px; width: auto;" onclick="returnToLobby()">Return to Lobby</button>
     </div>
 
     <div id="crosshair">
@@ -530,6 +665,7 @@
       <div class="modal-title">1V1<span>.LOL</span></div>
       <div class="modal-desc">Build, edit, and eliminate your opponent in fast-paced arena duels.</div>
 
+      <!-- Mode Selector (4 Options) -->
       <div class="mode-select-wrap">
         <div class="mode-opt active" onclick="setGameMode('1v1', this)">
           <div class="mode-opt-title">1v1 Duel</div>
@@ -543,6 +679,21 @@
           <div class="mode-opt-title">Free Build</div>
           <div class="mode-opt-sub">Solo Sandbox</div>
         </div>
+        <div class="mode-opt" onclick="setGameMode('tutorial', this)">
+          <div class="mode-opt-title">Tutorial</div>
+          <div class="mode-opt-sub">Interactive Guide</div>
+        </div>
+      </div>
+
+      <!-- Bot Difficulty Selector -->
+      <div class="diff-container" id="diffContainer">
+        <div class="diff-title">Bot Difficulty</div>
+        <div class="diff-select-wrap">
+          <div class="diff-opt" onclick="setBotDifficulty('easy', this)">Easy</div>
+          <div class="diff-opt active" onclick="setBotDifficulty('medium', this)">Medium</div>
+          <div class="diff-opt" onclick="setBotDifficulty('hard', this)">Hard</div>
+          <div class="diff-opt" onclick="setBotDifficulty('cracked', this)">Cracked</div>
+        </div>
       </div>
 
       <button class="play-btn-large" onclick="startGame()">CLICK TO PLAY</button>
@@ -550,7 +701,8 @@
 
       <table class="keybinds-table">
         <tr><td class="key">WASD / Space</td><td>Move & Jump</td></tr>
-        <tr><td class="key">Left Click</td><td>Shoot / Place Structure</td></tr>
+        <tr><td class="key">Shift (Hold)</td><td>Sprint (Fast Movement)</td></tr>
+        <tr><td class="key">Left Click</td><td>Shoot / Place Structure / Auto AR</td></tr>
         <tr><td class="key">Right Click</td><td>Aim Down Sights (ADS)</td></tr>
         <tr><td class="key">1 / 2 / 3</td><td>Pickaxe / Shotgun / Assault Rifle</td></tr>
         <tr><td class="key">Q / X / C / V</td><td>Wall / Floor / Ramp / Cone</td></tr>
@@ -611,7 +763,6 @@
       playShotgun() {
         if (!this.enabled || !this.ctx) return;
         const now = this.ctx.currentTime;
-        // Punch oscillator
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
         osc.type = 'triangle';
@@ -624,8 +775,7 @@
         osc.start(now);
         osc.stop(now + 0.18);
 
-        // Noise blast
-        const bufferSize = this.ctx.sampleRate * 0.25;
+        const bufferSize = Math.floor(this.ctx.sampleRate * 0.25);
         const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
         const output = buffer.getChannelData(0);
         for (let i = 0; i < bufferSize; i++) output[i] = Math.random() * 2 - 1;
@@ -703,6 +853,22 @@
         osc.start(now);
         osc.stop(now + 0.14);
       }
+      playChime() {
+        if (!this.enabled || !this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc1 = this.ctx.createOscillator();
+        const osc2 = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc1.type = 'sine'; osc2.type = 'sine';
+        osc1.frequency.setValueAtTime(659.25, now); // E5
+        osc2.frequency.setValueAtTime(1046.5, now + 0.08); // C6
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+        osc1.connect(gain); osc2.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc1.start(now); osc1.stop(now + 0.15);
+        osc2.start(now + 0.08); osc2.stop(now + 0.35);
+      }
     }
     const audio = new SoundFX();
   </script>
@@ -715,6 +881,7 @@
     let isGrounded = true;
     let cameraYaw = 0, cameraPitch = 0;
     let mouseSensitivity = 0.0022;
+    let baseFOV = 75;
     let isAiming = false;
     let activeSlot = 2; // Default to shotgun
     let gameMode = '1v1';
@@ -727,6 +894,7 @@
     let shotgunAmmo = 5;
     let arAmmo = 30;
     let isReloading = false;
+    let reloadingSlot = null; // Bug 11 fix: remembers which weapon was reloading
     let lastShotTime = 0;
     let isMouseDown = false;
 
@@ -739,16 +907,86 @@
 
     // Building Systems
     const GRID_SIZE = 3.0;
-    const placedStructures = []; // { mesh, type, hp, maxHp, bbox }
+    const placedStructures = []; // { mesh, type, hp, maxHp }
     let hologramMesh = null;
     let currentHologramType = null;
     let turboBuildTimer = 0;
 
     // Materials
-    let woodMaterial, woodHitMaterial, holoValidMat, holoInvalidMat;
+    let woodMaterial, holoValidMat, holoInvalidMat;
 
-    // Opponent Bot
+    // Opponent Bot & Difficulties
     let bot = null;
+    let botVelocity = new THREE.Vector3();
+    let botIsGrounded = true;
+    let botJumpTimer = 0;
+    let botStrafeTimer = 0;
+    let botStrafeDir = 1;
+    let currentDifficulty = 'medium';
+
+    const BOT_DIFFICULTIES = {
+      easy: {
+        accuracy: 0.25,
+        fireClose: 1800,
+        fireFar: 2500,
+        speed: 2.0,
+        buildChance: 0.0,
+        buildRamp: false,
+        hp: 50,
+        shield: 0,
+        jumpStrafe: false
+      },
+      medium: {
+        accuracy: 0.45,
+        fireClose: 1200,
+        fireFar: 1800,
+        speed: 3.5,
+        buildChance: 0.30,
+        buildRamp: false,
+        hp: 100,
+        shield: 50,
+        jumpStrafe: false
+      },
+      hard: {
+        accuracy: 0.65,
+        fireClose: 600,
+        fireFar: 1000,
+        speed: 5.0,
+        buildChance: 0.55,
+        buildRamp: false,
+        hp: 100,
+        shield: 100,
+        jumpStrafe: false
+      },
+      cracked: {
+        accuracy: 0.85,
+        fireClose: 350,
+        fireFar: 600,
+        speed: 6.5,
+        buildChance: 0.80,
+        buildRamp: true,
+        hp: 100,
+        shield: 100,
+        jumpStrafe: true
+      }
+    };
+
+    // Tutorial Mode System
+    let tutorialActive = false;
+    let tutorialStep = 1;
+    const tutorialData = {
+      moveDist: 0,
+      hasJumped: false,
+      yawRotated: 0,
+      shotsFired: 0,
+      aimDuration: 0,
+      wallsPlaced: 0,
+      rampPlaced: false,
+      walkedOnRamp: false,
+      boxWallsPlaced: 0,
+      botEliminated: false
+    };
+    let tutorialMarkersGroup = null;
 
     // Setup Three.js
     function initThree() {
@@ -756,7 +994,7 @@
       scene.background = new THREE.Color(0x0e101a);
       scene.fog = new THREE.FogExp2(0x0e101a, 0.018);
 
-      camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 500);
+      camera = new THREE.PerspectiveCamera(baseFOV, window.innerWidth / window.innerHeight, 0.1, 500);
 
       renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
       renderer.setSize(window.innerWidth, window.innerHeight);
@@ -765,11 +1003,11 @@
       renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
       // Lights
-      const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444455, 0.7);
+      const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444455, 0.75);
       hemiLight.position.set(0, 100, 0);
       scene.add(hemiLight);
 
-      const dirLight = new THREE.DirectionalLight(0xffecd2, 0.85);
+      const dirLight = new THREE.DirectionalLight(0xffecd2, 0.9);
       dirLight.position.set(40, 70, 30);
       dirLight.castShadow = true;
       dirLight.shadow.mapSize.width = 1024;
@@ -788,11 +1026,13 @@
       // Materials
       initMaterials();
 
-      // Create Player
+      // Characters
       createPlayer();
-
-      // Create Bot
       createBot();
+
+      // Tutorial markers holder
+      tutorialMarkersGroup = new THREE.Group();
+      scene.add(tutorialMarkersGroup);
 
       // Event Listeners
       window.addEventListener('resize', onWindowResize);
@@ -803,7 +1043,6 @@
     }
 
     function initMaterials() {
-      // Wood structure material
       const woodTex = createWoodTexture();
       woodMaterial = new THREE.MeshStandardMaterial({
         map: woodTex,
@@ -811,7 +1050,6 @@
         metalness: 0.1
       });
 
-      // Hologram materials
       holoValidMat = new THREE.MeshBasicMaterial({
         color: 0x00e5ff,
         transparent: true,
@@ -837,7 +1075,6 @@
       ctx.fillRect(0, 0, 256, 256);
       ctx.strokeStyle = '#8d5a2d';
       ctx.lineWidth = 4;
-      // Draw wood plank lines
       for (let y = 0; y <= 256; y += 64) {
         ctx.beginPath();
         ctx.moveTo(0, y);
@@ -858,7 +1095,6 @@
     }
 
     function createArena() {
-      // Large Grid Arena Floor
       const size = 120;
       const floorGeo = new THREE.PlaneGeometry(size, size, 40, 40);
       floorGeo.rotateX(-Math.PI / 2);
@@ -889,7 +1125,7 @@
       floor.receiveShadow = true;
       scene.add(floor);
 
-      // Arena boundary walls (so players don't fall)
+      // Arena boundary walls (visual wireframe)
       const wallMat = new THREE.MeshBasicMaterial({
         color: 0x1a2133,
         transparent: true,
@@ -912,7 +1148,6 @@
       player = new THREE.Group();
       player.position.set(0, 0, 12);
 
-      // Low-poly stylized character (Cyan/Blue Theme)
       const bodyMat = new THREE.MeshStandardMaterial({ color: 0x0984e3, roughness: 0.4 });
       const skinMat = new THREE.MeshStandardMaterial({ color: 0xf6b93b, roughness: 0.6 });
       const pantsMat = new THREE.MeshStandardMaterial({ color: 0x2d3436, roughness: 0.7 });
@@ -929,7 +1164,7 @@
       head.castShadow = true;
       player.add(head);
 
-      // Head visor/band
+      // Visor
       const visor = new THREE.Mesh(new THREE.BoxGeometry(0.47, 0.12, 0.25), new THREE.MeshBasicMaterial({ color: 0x00e5ff }));
       visor.position.set(0, 1.9, 0.15);
       player.add(visor);
@@ -987,66 +1222,128 @@
       rLeg.position.set(0.2, 0.4, 0);
       bot.add(rLeg);
 
-      // Bot Gun
       const bGun = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.18, 0.8), new THREE.MeshStandardMaterial({ color: 0x111111 }));
       bGun.position.set(0.45, 1.2, 0.4);
       bot.add(bGun);
+      bot.gunHolder = bGun;
 
-      // Bot Health Billboard
+      // Dynamic Bot Billboard Canvas (Bug 12 fix)
       const hpCanvas = document.createElement('canvas');
-      hpCanvas.width = 128; hpCanvas.height = 32;
-      const hctx = hpCanvas.getContext('2d');
-      hctx.fillStyle = '#ff4757';
-      hctx.fillRect(0, 0, 128, 32);
-      hctx.fillStyle = '#fff';
-      hctx.font = 'bold 16px Nunito';
-      hctx.fillText('BOT 77', 35, 22);
+      hpCanvas.width = 160; hpCanvas.height = 40;
       const hpTex = new THREE.CanvasTexture(hpCanvas);
       const hpSprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: hpTex }));
-      hpSprite.position.y = 2.4;
-      hpSprite.scale.set(1.5, 0.38, 1);
+      hpSprite.position.y = 2.45;
+      hpSprite.scale.set(1.8, 0.45, 1);
       bot.add(hpSprite);
+
+      bot.hpCanvas = hpCanvas;
+      bot.hpTex = hpTex;
       bot.hpSprite = hpSprite;
 
-      bot.health = 100;
-      bot.shield = 100;
+      const diff = BOT_DIFFICULTIES[currentDifficulty];
+      bot.health = diff.hp;
+      bot.maxHealth = diff.hp;
+      bot.shield = diff.shield;
+      bot.maxShield = diff.shield;
       bot.lastActionTime = 0;
-      bot.state = 'idle';
 
+      updateBotBillboard();
       scene.add(bot);
+    }
+
+    // Bug 12 fix: Dynamic re-rendering of bot health and shield on canvas billboard
+    function updateBotBillboard() {
+      if (!bot || !bot.hpCanvas) return;
+      const c = bot.hpCanvas;
+      const ctx = c.getContext('2d');
+      ctx.clearRect(0, 0, c.width, c.height);
+
+      // Background rounded pill
+      ctx.fillStyle = 'rgba(14, 14, 24, 0.9)';
+      ctx.fillRect(0, 0, c.width, c.height);
+      ctx.strokeStyle = 'rgba(255, 71, 87, 0.5)';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(1, 1, c.width - 2, c.height - 2);
+
+      // Bot Name and Difficulty
+      const diffTag = (tutorialActive ? 'TUTORIAL' : currentDifficulty).toUpperCase();
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 12px Nunito';
+      ctx.textAlign = 'left';
+      ctx.fillText('BOT 77 [' + diffTag + ']', 8, 14);
+
+      // Health / Shield mini bars
+      const barX = 8;
+      const barW = c.width - 16;
+      const barH = 5;
+
+      const maxS = Math.max(1, bot.maxShield || 100);
+      const maxH = Math.max(1, bot.maxHealth || 100);
+      const shieldPct = Math.max(0, Math.min(1, bot.shield / maxS));
+      const hpPct = Math.max(0, Math.min(1, bot.health / maxH));
+
+      // Shield bar (blue)
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+      ctx.fillRect(barX, 18, barW, barH);
+      if (bot.shield > 0) {
+        ctx.fillStyle = '#3498db';
+        ctx.fillRect(barX, 18, barW * shieldPct, barH);
+      }
+
+      // Health bar (green/red)
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+      ctx.fillRect(barX, 26, barW, barH);
+      ctx.fillStyle = hpPct > 0.25 ? '#2ecc71' : '#e74c3c';
+      ctx.fillRect(barX, 26, barW * hpPct, barH);
+
+      bot.hpTex.needsUpdate = true;
+    }
+
+    // Modal check (Bug 13 fix)
+    function areModalsOpen() {
+      const lobby = document.getElementById('lobbyModal');
+      const endRound = document.getElementById('endRoundModal');
+      const settings = document.getElementById('settingsModal');
+      return (!lobby.classList.contains('hidden') ||
+              !endRound.classList.contains('hidden') ||
+              !settings.classList.contains('hidden'));
     }
 
     // Input & Pointer Lock
     function setupControls() {
       canvas.addEventListener('click', () => {
-        if (!isGameRunning) return;
+        if (!isGameRunning || areModalsOpen()) return;
         canvas.requestPointerLock();
       });
 
       document.addEventListener('pointerlockchange', () => {
-        const isLocked = document.pointerLockElement === canvas;
-        if (!isLocked && isGameRunning && roundActive) {
-          // Player unlocked mouse (esc pressed)
-        }
+        // Pointer lock changed
       });
 
       document.addEventListener('mousemove', (e) => {
-        if (document.pointerLockElement !== canvas) return;
+        if (document.pointerLockElement !== canvas || areModalsOpen()) return;
         const sens = mouseSensitivity * (isAiming ? 0.6 : 1.0);
         cameraYaw -= e.movementX * sens;
         cameraPitch -= e.movementY * sens;
-        // Clamp pitch (-80deg to +80deg)
         cameraPitch = Math.max(-Math.PI * 0.44, Math.min(Math.PI * 0.44, cameraPitch));
+
+        if (tutorialActive && tutorialStep === 2) {
+          tutorialData.yawRotated += Math.abs(e.movementX * sens);
+          updateTutorialUI();
+          if (tutorialData.yawRotated >= Math.PI) {
+            advanceTutorialStep(3);
+          }
+        }
       });
 
       document.addEventListener('mousedown', (e) => {
-        if (document.pointerLockElement !== canvas) return;
+        if (document.pointerLockElement !== canvas || areModalsOpen() || !roundActive) return;
         if (e.button === 0) {
           isMouseDown = true;
           handlePrimaryAction();
         } else if (e.button === 2) {
           isAiming = true;
-          camera.fov = 60;
+          camera.fov = Math.max(45, baseFOV - 15);
           camera.updateProjectionMatrix();
         }
       });
@@ -1055,7 +1352,8 @@
         if (e.button === 0) isMouseDown = false;
         if (e.button === 2) {
           isAiming = false;
-          camera.fov = 75;
+          // Bug 10 fix: restore user-selected baseFOV instead of hardcoded 75
+          camera.fov = baseFOV;
           camera.updateProjectionMatrix();
         }
       });
@@ -1063,13 +1361,14 @@
       document.addEventListener('contextmenu', e => e.preventDefault());
 
       document.addEventListener('keydown', (e) => {
+        if (areModalsOpen()) return;
         const code = e.code;
         if (code === 'KeyW') keys.w = true;
         if (code === 'KeyA') keys.a = true;
         if (code === 'KeyS') keys.s = true;
         if (code === 'KeyD') keys.d = true;
         if (code === 'Space') keys.space = true;
-        if (code === 'ShiftLeft') keys.shift = true;
+        if (code === 'ShiftLeft' || code === 'ShiftRight') keys.shift = true;
 
         // Weapon Selection
         if (code === 'Digit1') selectSlot(1);
@@ -1096,7 +1395,7 @@
         if (code === 'KeyS') keys.s = false;
         if (code === 'KeyD') keys.d = false;
         if (code === 'Space') keys.space = false;
-        if (code === 'ShiftLeft') keys.shift = false;
+        if (code === 'ShiftLeft' || code === 'ShiftRight') keys.shift = false;
       });
     }
 
@@ -1106,7 +1405,6 @@
         el.classList.toggle('active', parseInt(el.dataset.slot) === slotNum);
       });
 
-      // Remove existing hologram if entering weapon slot
       if (slotNum <= 3 && hologramMesh) {
         scene.remove(hologramMesh);
         hologramMesh = null;
@@ -1114,28 +1412,28 @@
       }
     }
 
-    // Building System
+    // ─── BUILDING SYSTEM ───
     function updateHologram() {
-      if (activeSlot < 4) return; // Weapon selected
+      if (activeSlot < 4 || areModalsOpen()) {
+        if (hologramMesh) {
+          scene.remove(hologramMesh);
+          hologramMesh = null;
+          currentHologramType = null;
+        }
+        return;
+      }
 
       const typeMap = { 4: 'wall', 5: 'floor', 6: 'ramp', 7: 'cone' };
       const buildType = typeMap[activeSlot];
 
-      // Raycast from camera center to find build location
-      const ray = new THREE.Raycaster();
-      ray.setFromCamera(new THREE.Vector2(0, 0), camera);
-
-      // Compute snap target 4 units in front of player
       const targetDist = 4.5;
       const forward = new THREE.Vector3(0, 0, -1).applyAxisAngle(new THREE.Vector3(0, 1, 0), cameraYaw);
       const lookPos = player.position.clone().add(forward.clone().multiplyScalar(targetDist));
 
-      // Grid snap position
       const gx = Math.round(lookPos.x / GRID_SIZE) * GRID_SIZE;
       const gy = Math.max(0, Math.floor((player.position.y + 0.5) / GRID_SIZE) * GRID_SIZE);
       const gz = Math.round(lookPos.z / GRID_SIZE) * GRID_SIZE;
 
-      // Determine wall direction (North/South vs East/West)
       const absX = Math.abs(forward.x);
       const absZ = Math.abs(forward.z);
       const isFacingZ = absZ > absX;
@@ -1164,7 +1462,7 @@
       } else if (buildType === 'ramp') {
         hologramMesh.position.y = gy;
         let rampYaw = 0;
-        if (isFacingZ) rampYaw = forward.z > 0 ? 0 : Math.PI;
+        if (isFacingZ) rampYaw = forward.z > 0 ? Math.PI : 0;
         else rampYaw = forward.x > 0 ? -Math.PI / 2 : Math.PI / 2;
         hologramMesh.rotation.set(0, rampYaw, 0);
       } else if (buildType === 'cone') {
@@ -1176,17 +1474,17 @@
     function createStructureMesh(type, mat) {
       const g = new THREE.Group();
       if (type === 'wall') {
-        const mesh = new THREE.Mesh(new THREE.BoxGeometry(GRID_SIZE, GRID_SIZE, 0.15), mat);
+        const mesh = new THREE.Mesh(new THREE.BoxGeometry(GRID_SIZE, GRID_SIZE, 0.2), mat);
         mesh.castShadow = true; mesh.receiveShadow = true;
         g.add(mesh);
       } else if (type === 'floor') {
-        const mesh = new THREE.Mesh(new THREE.BoxGeometry(GRID_SIZE, 0.15, GRID_SIZE), mat);
+        const mesh = new THREE.Mesh(new THREE.BoxGeometry(GRID_SIZE, 0.2, GRID_SIZE), mat);
         mesh.castShadow = true; mesh.receiveShadow = true;
         g.add(mesh);
       } else if (type === 'ramp') {
-        // Angled 45 deg plane
-        const rampLength = Math.sqrt(GRID_SIZE * GRID_SIZE + GRID_SIZE * GRID_SIZE);
-        const mesh = new THREE.Mesh(new THREE.BoxGeometry(GRID_SIZE, 0.15, rampLength), mat);
+        // Angled 45 deg ramp from local z = +GRID_SIZE/2 (y=0) to z = -GRID_SIZE/2 (y=GRID_SIZE)
+        const rampLength = GRID_SIZE * Math.SQRT2;
+        const mesh = new THREE.Mesh(new THREE.BoxGeometry(GRID_SIZE, 0.2, rampLength), mat);
         mesh.rotation.x = Math.PI / 4;
         mesh.position.set(0, GRID_SIZE / 2, 0);
         mesh.castShadow = true; mesh.receiveShadow = true;
@@ -1203,15 +1501,16 @@
     }
 
     function placeStructure() {
-      if (!hologramMesh) return;
+      if (!hologramMesh || areModalsOpen()) return;
       audio.init();
 
       const typeMap = { 4: 'wall', 5: 'floor', 6: 'ramp', 7: 'cone' };
       const bType = typeMap[activeSlot];
 
-      // Check if duplicate piece exists at same pos & rot
       const existing = placedStructures.find(s => 
-        s.mesh.position.distanceTo(hologramMesh.position) < 0.2 && s.type === bType
+        s.mesh.position.distanceTo(hologramMesh.position) < 0.2 &&
+        Math.abs(s.mesh.rotation.y - hologramMesh.rotation.y) < 0.1 &&
+        s.type === bType
       );
       if (existing) return;
 
@@ -1220,18 +1519,30 @@
       solidMesh.rotation.copy(hologramMesh.rotation);
       scene.add(solidMesh);
 
-      // Create bounding box for collision
-      const bbox = new THREE.Box3().setFromObject(solidMesh);
-
       placedStructures.push({
         mesh: solidMesh,
         type: bType,
         hp: 150,
-        maxHp: 150,
-        bbox: bbox
+        maxHp: 150
       });
 
       audio.playBuild();
+
+      // Tutorial tracking
+      if (tutorialActive) {
+        if (tutorialStep === 5 && bType === 'wall') {
+          tutorialData.wallsPlaced++;
+          updateTutorialUI();
+          if (tutorialData.wallsPlaced >= 2) advanceTutorialStep(6);
+        } else if (tutorialStep === 6 && bType === 'ramp') {
+          tutorialData.rampPlaced = true;
+          updateTutorialUI();
+        } else if (tutorialStep === 7 && bType === 'wall') {
+          tutorialData.boxWallsPlaced++;
+          updateTutorialUI();
+          if (tutorialData.boxWallsPlaced >= 4) advanceTutorialStep(8);
+        }
+      }
     }
 
     function resetAllBuilds() {
@@ -1241,8 +1552,9 @@
       showToast('Builds Cleared!');
     }
 
-    // Weapons & Combat
+    // ─── WEAPONS & COMBAT ───
     function handlePrimaryAction() {
+      if (areModalsOpen() || !isGameRunning || !roundActive) return;
       audio.init();
       const now = performance.now();
 
@@ -1252,7 +1564,7 @@
         return;
       }
 
-      // Pickaxe
+      // Pickaxe (Bug 1 fix: hitStructure is {structure, intersection})
       if (activeSlot === 1) {
         if (now - lastShotTime < 450) return;
         lastShotTime = now;
@@ -1266,16 +1578,22 @@
           reloadWeapon();
           return;
         }
-        if (now - lastShotTime < 820) return; // 1v1.lol pump delay
+        if (now - lastShotTime < 820) return;
         lastShotTime = now;
         shotgunAmmo--;
         document.getElementById('shotgunAmmo').textContent = shotgunAmmo + '/5';
         audio.playShotgun();
         fireShotgun();
+
+        if (tutorialActive && tutorialStep === 3) {
+          tutorialData.shotsFired++;
+          updateTutorialUI();
+          if (tutorialData.shotsFired >= 3) advanceTutorialStep(4);
+        }
         return;
       }
 
-      // Assault Rifle (AR)
+      // Assault Rifle (Bug 14 fix: called continuously on mouse hold)
       if (activeSlot === 3) {
         if (isReloading || arAmmo <= 0) {
           reloadWeapon();
@@ -1287,35 +1605,41 @@
         document.getElementById('arAmmo').textContent = arAmmo + '/30';
         audio.playAR();
         fireAR();
+
+        if (tutorialActive && tutorialStep === 3) {
+          tutorialData.shotsFired++;
+          updateTutorialUI();
+          if (tutorialData.shotsFired >= 3) advanceTutorialStep(4);
+        }
         return;
       }
     }
 
     function swingPickaxe() {
-      // Raycast forward 3.5 units
       const ray = new THREE.Raycaster();
       ray.setFromCamera(new THREE.Vector2(0, 0), camera);
-      ray.far = 3.5;
+      ray.far = 3.6;
 
-      const hitStructure = raycastStructures(ray);
-      if (hitStructure) {
-        hitStructure.hp -= 50;
-        showDamageNumber(50, hitStructure.mesh.position, 'build');
+      // Bug 1 fix: raycastStructures returns {structure, intersection}
+      const hitResult = raycastStructures(ray);
+      if (hitResult) {
+        hitResult.structure.hp -= 50;
+        showDamageNumber(50, hitResult.intersection.point, 'build');
         audio.playBreak();
-        if (hitStructure.hp <= 0) destroyStructure(hitStructure);
+        if (hitResult.structure.hp <= 0) destroyStructure(hitResult.structure);
         return;
       }
 
       // Check bot melee hit
-      if (bot && bot.position.distanceTo(player.position) < 3.2) {
-        applyBotDamage(20, false);
+      if (bot && bot.visible && roundActive && bot.position.distanceTo(player.position) < 3.2) {
+        applyBotDamage(25, false);
       }
     }
 
     function fireShotgun() {
       showMuzzleFlash();
       const pellets = 8;
-      const spread = isAiming ? 0.025 : 0.05;
+      const spread = isAiming ? 0.025 : 0.055;
 
       for (let i = 0; i < pellets; i++) {
         const rx = (Math.random() - 0.5) * spread;
@@ -1324,12 +1648,24 @@
         ray.setFromCamera(new THREE.Vector2(rx, ry), camera);
         ray.far = 40;
 
+        // Check tutorial dummy hits
+        if (tutorialActive && tutorialMarkersGroup) {
+          const dummyHits = ray.intersectObjects(tutorialMarkersGroup.children, true);
+          if (dummyHits.length > 0 && dummyHits[0].distance < 35) {
+            showHitmarker(false);
+            audio.playHit(false);
+            showDamageNumber(12, dummyHits[0].point, 'body');
+            createTracer(dummyHits[0].point);
+            continue;
+          }
+        }
+
         // Check bot hit
-        if (bot && roundActive) {
+        if (bot && bot.visible && roundActive) {
           const botHits = ray.intersectObjects(bot.children, true);
           if (botHits.length > 0 && botHits[0].distance < 35) {
             const isHead = botHits[0].point.y > (bot.position.y + 1.6);
-            const dmgPerPellet = isHead ? 21 : 11;
+            const dmgPerPellet = isHead ? 21 : 12;
             applyBotDamage(dmgPerPellet, isHead);
             createTracer(botHits[0].point);
             continue;
@@ -1351,7 +1687,7 @@
 
     function fireAR() {
       showMuzzleFlash();
-      const spread = isAiming ? 0.008 : 0.02;
+      const spread = isAiming ? 0.008 : 0.022;
       const rx = (Math.random() - 0.5) * spread;
       const ry = (Math.random() - 0.5) * spread;
 
@@ -1359,8 +1695,20 @@
       ray.setFromCamera(new THREE.Vector2(rx, ry), camera);
       ray.far = 100;
 
+      // Check tutorial dummy hits
+      if (tutorialActive && tutorialMarkersGroup) {
+        const dummyHits = ray.intersectObjects(tutorialMarkersGroup.children, true);
+        if (dummyHits.length > 0) {
+          showHitmarker(false);
+          audio.playHit(false);
+          showDamageNumber(30, dummyHits[0].point, 'body');
+          createTracer(dummyHits[0].point);
+          return;
+        }
+      }
+
       // Check bot
-      if (bot && roundActive) {
+      if (bot && bot.visible && roundActive) {
         const botHits = ray.intersectObjects(bot.children, true);
         if (botHits.length > 0) {
           const isHead = botHits[0].point.y > (bot.position.y + 1.6);
@@ -1387,7 +1735,8 @@
       let closest = null;
       let minDistance = Infinity;
 
-      for (const s of placedStructures) {
+      for (let i = 0; i < placedStructures.length; i++) {
+        const s = placedStructures[i];
         const hits = ray.intersectObject(s.mesh, true);
         if (hits.length > 0 && hits[0].distance < minDistance) {
           minDistance = hits[0].distance;
@@ -1419,54 +1768,81 @@
       flash.style.inset = '0';
       flash.style.background = 'rgba(255,255,255,0.08)';
       flash.style.pointerEvents = 'none';
+      flash.style.zIndex = '35';
       document.body.appendChild(flash);
       setTimeout(() => flash.remove(), 40);
     }
 
+    // Bug 11 fix: remembers which slot is being reloaded
     function reloadWeapon() {
       if (isReloading) return;
+      if (activeSlot !== 2 && activeSlot !== 3) return;
+
       isReloading = true;
+      reloadingSlot = activeSlot;
       document.getElementById('reloadIndicator').style.display = 'block';
+
       setTimeout(() => {
-        if (activeSlot === 2) {
+        if (reloadingSlot === 2) {
           shotgunAmmo = 5;
           document.getElementById('shotgunAmmo').textContent = '5/5';
-        } else if (activeSlot === 3) {
+        } else if (reloadingSlot === 3) {
           arAmmo = 30;
           document.getElementById('arAmmo').textContent = '30/30';
         }
         isReloading = false;
+        reloadingSlot = null;
         document.getElementById('reloadIndicator').style.display = 'none';
       }, 1400);
     }
 
-    // Damage & Hitmarkers
+    // ─── DAMAGE & HITMARKERS (BUGS 4 & 5 FIX: SHIELD OVERFLOW) ───
     function applyBotDamage(dmg, isHeadshot) {
+      if (!bot || !roundActive) return;
+
+      let remainingDmg = dmg;
       if (bot.shield > 0) {
-        bot.shield = Math.max(0, bot.shield - dmg);
-        showDamageNumber(dmg, bot.position, 'shield');
-      } else {
-        bot.health = Math.max(0, bot.health - dmg);
-        showDamageNumber(dmg, bot.position, isHeadshot ? 'head' : 'body');
+        const shieldAbsorb = Math.min(bot.shield, remainingDmg);
+        bot.shield -= shieldAbsorb;
+        remainingDmg -= shieldAbsorb;
+        showDamageNumber(shieldAbsorb, bot.position, 'shield');
+      }
+
+      if (remainingDmg > 0) {
+        bot.health = Math.max(0, bot.health - remainingDmg);
+        showDamageNumber(remainingDmg, bot.position, isHeadshot ? 'head' : 'body');
       }
 
       showHitmarker(isHeadshot);
       audio.playHit(isHeadshot);
+      updateBotBillboard();
 
-      // Bot reactive defense: places a wall!
+      // Bot defensive building reaction
       botPlaceDefensiveWall();
 
       if (bot.health <= 0) {
-        onRoundEnd(true);
+        if (tutorialActive && tutorialStep === 8) {
+          advanceTutorialStep(9);
+        } else {
+          onRoundEnd(true);
+        }
       }
     }
 
     function applyPlayerDamage(dmg) {
+      if (!roundActive) return;
+
+      let remainingDmg = dmg;
       if (playerShield > 0) {
-        playerShield = Math.max(0, playerShield - dmg);
-      } else {
-        playerHealth = Math.max(0, playerHealth - dmg);
+        const shieldAbsorb = Math.min(playerShield, remainingDmg);
+        playerShield -= shieldAbsorb;
+        remainingDmg -= shieldAbsorb;
       }
+
+      if (remainingDmg > 0) {
+        playerHealth = Math.max(0, playerHealth - remainingDmg);
+      }
+
       updateStatusBars();
       audio.playHit(false);
 
@@ -1476,10 +1852,10 @@
     }
 
     function updateStatusBars() {
-      document.getElementById('shieldFill').style.width = playerShield + '%';
-      document.getElementById('shieldText').textContent = 'SHIELD: ' + playerShield;
-      document.getElementById('healthFill').style.width = playerHealth + '%';
-      document.getElementById('healthText').textContent = 'HEALTH: ' + playerHealth;
+      document.getElementById('shieldFill').style.width = Math.max(0, playerShield) + '%';
+      document.getElementById('shieldText').textContent = 'SHIELD: ' + Math.max(0, playerShield);
+      document.getElementById('healthFill').style.width = Math.max(0, playerHealth) + '%';
+      document.getElementById('healthText').textContent = 'HEALTH: ' + Math.max(0, playerHealth);
     }
 
     function showHitmarker(isHeadshot) {
@@ -1494,8 +1870,9 @@
       num.className = 'dmg-number ' + type;
       num.textContent = dmg;
 
-      // Project worldPos to screen
       const screenPos = worldPos.clone().project(camera);
+      if (screenPos.z > 1.0) return; // Behind camera
+
       const x = (screenPos.x * 0.5 + 0.5) * window.innerWidth;
       const y = (-(screenPos.y * 0.5) + 0.5) * window.innerHeight;
 
@@ -1505,57 +1882,139 @@
       setTimeout(() => num.remove(), 800);
     }
 
-    // Bot AI Logic
+    // ─── BOT AI SYSTEM ───
     function updateBot(delta) {
       if (!bot || !roundActive || gameMode === 'freebuild') return;
+      if (tutorialActive && tutorialStep < 8) return;
 
+      const diff = BOT_DIFFICULTIES[currentDifficulty];
       const dist = bot.position.distanceTo(player.position);
-      const lookDir = player.position.clone().sub(bot.position).normalize();
+      const lookDir = player.position.clone().sub(bot.position);
+      lookDir.y = 0;
+      lookDir.normalize();
+
       bot.rotation.y = Math.atan2(lookDir.x, lookDir.z);
 
       const now = performance.now();
 
-      // Bot movement: advance towards player if far, strafe if close
-      if (dist > 8) {
-        bot.position.add(lookDir.clone().multiplyScalar(4.5 * delta));
+      // Bot movement
+      const moveSpeed = diff.speed;
+      if (dist > 7) {
+        bot.position.add(lookDir.clone().multiplyScalar(moveSpeed * delta));
       } else {
         // Circle strafe
-        const strafe = new THREE.Vector3(-lookDir.z, 0, lookDir.x);
-        bot.position.add(strafe.multiplyScalar(2.0 * delta));
+        if (diff.jumpStrafe) {
+          botStrafeTimer += delta;
+          if (botStrafeTimer > 1.1) {
+            botStrafeDir *= -1;
+            botStrafeTimer = 0;
+          }
+        }
+        const strafe = new THREE.Vector3(-lookDir.z, 0, lookDir.x).multiplyScalar(botStrafeDir);
+        bot.position.add(strafe.multiplyScalar(moveSpeed * delta));
       }
 
-      // Bot shooting loop
-      if (now - bot.lastActionTime > (dist < 8 ? 950 : 280)) {
+      // Cracked difficulty jumping
+      if (diff.jumpStrafe && botIsGrounded) {
+        botJumpTimer += delta;
+        if (botJumpTimer > 1.8 && Math.random() < 0.4) {
+          botVelocity.y = 8.5;
+          botIsGrounded = false;
+          botJumpTimer = 0;
+        }
+      }
+
+      // Bug 9 fix: Wall collision for bot
+      resolveWallCollisions(bot.position);
+
+      // Bug 6 fix: Boundary clamping for bot
+      clampToArena(bot.position);
+
+      // Bug 7 fix: Bot gravity and vertical collision
+      botVelocity.y -= 24 * delta;
+      bot.position.y += botVelocity.y * delta;
+      const botGroundHeight = getStructureGroundHeight(bot.position);
+      if (bot.position.y <= botGroundHeight) {
+        bot.position.y = botGroundHeight;
+        botVelocity.y = 0;
+        botIsGrounded = true;
+      } else if (bot.position.y > botGroundHeight + 0.15) {
+        botIsGrounded = false;
+      }
+
+      // Bug 2 fix: Bot shooting timing (faster close, slower far)
+      const shootDelay = (dist < 8 ? diff.fireClose : diff.fireFar);
+      if (now - bot.lastActionTime > shootDelay) {
         bot.lastActionTime = now;
         botFireWeapon(dist);
       }
     }
 
     function botFireWeapon(dist) {
-      // Bot has 60% accuracy
-      const hits = Math.random() < 0.6;
+      const diff = BOT_DIFFICULTIES[currentDifficulty];
+      const hits = Math.random() < diff.accuracy;
+
+      if (dist < 7) {
+        audio.playShotgun();
+      } else {
+        audio.playAR();
+      }
+
+      const botGunPos = bot.position.clone().add(new THREE.Vector3(0.4, 1.2, 0.4).applyAxisAngle(new THREE.Vector3(0, 1, 0), bot.rotation.y));
+
       if (hits) {
-        const dmg = dist < 7 ? Math.floor(Math.random() * 35 + 30) : 18;
+        const dmg = dist < 7 ? Math.floor(Math.random() * 30 + 35) : Math.floor(Math.random() * 12 + 18);
         applyPlayerDamage(dmg);
+
+        const targetPos = player.position.clone().add(new THREE.Vector3(0, 1.2, 0));
+        createBotTracer(botGunPos, targetPos);
+      } else {
+        // Miss shot tracer
+        const missOffset = new THREE.Vector3((Math.random() - 0.5) * 3, (Math.random() - 0.5) * 2, (Math.random() - 0.5) * 3);
+        const missTarget = player.position.clone().add(new THREE.Vector3(0, 1.2, 0)).add(missOffset);
+        createBotTracer(botGunPos, missTarget);
       }
     }
 
+    function createBotTracer(start, end) {
+      const geo = new THREE.BufferGeometry().setFromPoints([start, end]);
+      const mat = new THREE.LineBasicMaterial({ color: 0xff7675, linewidth: 2 });
+      const line = new THREE.Line(geo, mat);
+      scene.add(line);
+      setTimeout(() => scene.remove(line), 50);
+    }
+
     function botPlaceDefensiveWall() {
-      if (Math.random() > 0.6) return;
-      const wallPos = bot.position.clone().add(new THREE.Vector3(0, 0, 1.5).applyAxisAngle(new THREE.Vector3(0, 1, 0), bot.rotation.y));
+      const diff = BOT_DIFFICULTIES[currentDifficulty];
+      if (Math.random() > diff.buildChance) return;
+
+      const forwardOffset = new THREE.Vector3(0, 0, 1.8).applyAxisAngle(new THREE.Vector3(0, 1, 0), bot.rotation.y);
+      const wallPos = bot.position.clone().add(forwardOffset);
+      wallPos.y = Math.floor(bot.position.y / GRID_SIZE) * GRID_SIZE + GRID_SIZE / 2;
+
       const wall = createStructureMesh('wall', woodMaterial);
       wall.position.copy(wallPos);
       wall.rotation.y = bot.rotation.y;
       scene.add(wall);
-      placedStructures.push({ mesh: wall, type: 'wall', hp: 150, maxHp: 150, bbox: new THREE.Box3().setFromObject(wall) });
+      placedStructures.push({ mesh: wall, type: 'wall', hp: 150, maxHp: 150 });
+      audio.playBuild();
+
+      // Cracked bot builds ramp behind wall
+      if (diff.buildRamp) {
+        const rampPos = bot.position.clone();
+        rampPos.y = Math.floor(bot.position.y / GRID_SIZE) * GRID_SIZE;
+        const ramp = createStructureMesh('ramp', woodMaterial);
+        ramp.position.copy(rampPos);
+        ramp.rotation.y = bot.rotation.y;
+        scene.add(ramp);
+        placedStructures.push({ mesh: ramp, type: 'ramp', hp: 150, maxHp: 150 });
+      }
     }
 
-    // Player Physics & Movement Loop
+    // ─── PLAYER PHYSICS, COLLISION & MOVEMENT ───
     function updatePlayer(delta) {
-      // Rotation & Yaw
       player.rotation.y = cameraYaw;
 
-      // WASD direction vector relative to camera yaw
       const moveDir = new THREE.Vector3();
       if (keys.w) moveDir.z -= 1;
       if (keys.s) moveDir.z += 1;
@@ -1564,7 +2023,8 @@
       moveDir.normalize();
       moveDir.applyAxisAngle(new THREE.Vector3(0, 1, 0), cameraYaw);
 
-      const speed = keys.shift ? 3.5 : 7.2;
+      // Bug 3 fix: Shift = 9.0 (sprint fast), Normal = 6.5
+      const speed = keys.shift ? 9.0 : 6.5;
       playerVelocity.x = moveDir.x * speed;
       playerVelocity.z = moveDir.z * speed;
 
@@ -1575,52 +2035,82 @@
       if (keys.space && isGrounded) {
         playerVelocity.y = 8.8;
         isGrounded = false;
-      }
-
-      // Apply movement
-      player.position.x += playerVelocity.x * delta;
-      player.position.z += playerVelocity.z * delta;
-      player.position.y += playerVelocity.y * delta;
-
-      // Floor collision
-      let groundHeight = 0;
-
-      // Check collision with placed structures (floors and ramps)
-      placedStructures.forEach(s => {
-        if (s.type === 'floor' || s.type === 'ramp') {
-          const dx = Math.abs(player.position.x - s.mesh.position.x);
-          const dz = Math.abs(player.position.z - s.mesh.position.z);
-          if (dx < GRID_SIZE / 2 && dz < GRID_SIZE / 2) {
-            let surfaceY = s.mesh.position.y;
-            if (s.type === 'ramp') {
-              // Calculate ramp slope incline
-              surfaceY += (GRID_SIZE / 2);
-            }
-            if (player.position.y >= surfaceY - 0.2 && surfaceY > groundHeight) {
-              groundHeight = surfaceY;
-            }
+        if (tutorialActive && tutorialStep === 1) {
+          tutorialData.hasJumped = true;
+          updateTutorialUI();
+          if (tutorialData.moveDist >= 5.0 && tutorialData.hasJumped) {
+            advanceTutorialStep(2);
           }
         }
-      });
+      }
+
+      // Apply horizontal displacement
+      player.position.x += playerVelocity.x * delta;
+      player.position.z += playerVelocity.z * delta;
+
+      // Track distance moved for Tutorial Step 1
+      if (tutorialActive && tutorialStep === 1) {
+        const frameDist = Math.sqrt(playerVelocity.x * playerVelocity.x + playerVelocity.z * playerVelocity.z) * delta;
+        tutorialData.moveDist += frameDist;
+        updateTutorialUI();
+        if (tutorialData.moveDist >= 5.0 && tutorialData.hasJumped) {
+          advanceTutorialStep(2);
+        }
+      }
+
+      // Bug 9 fix: Wall collision for player
+      resolveWallCollisions(player.position);
+
+      // Bug 6 fix: Arena boundary clamping for player
+      clampToArena(player.position);
+
+      // Apply vertical movement
+      player.position.y += playerVelocity.y * delta;
+
+      // Bug 8 fix: Ground and Ramp slope collision interpolation
+      const groundHeight = getStructureGroundHeight(player.position);
 
       if (player.position.y <= groundHeight) {
         player.position.y = groundHeight;
         playerVelocity.y = 0;
         isGrounded = true;
+
+        if (tutorialActive && tutorialStep === 6 && tutorialData.rampPlaced && groundHeight > 0.8) {
+          tutorialData.walkedOnRamp = true;
+          updateTutorialUI();
+          advanceTutorialStep(7);
+        }
+      } else if (player.position.y > groundHeight + 0.15) {
+        isGrounded = false;
       }
 
-      // Turbo building continuous placement
-      if (isMouseDown && activeSlot >= 4) {
-        turboBuildTimer += delta;
-        if (turboBuildTimer > 0.14) {
-          turboBuildTimer = 0;
-          placeStructure();
+      // Tutorial Step 4: ADS timer
+      if (tutorialActive && tutorialStep === 4) {
+        if (isAiming) {
+          tutorialData.aimDuration += delta;
+          updateTutorialUI();
+          if (tutorialData.aimDuration >= 2.0) {
+            advanceTutorialStep(5);
+          }
         }
       }
 
-      // Third-person Camera Positioning
+      // Turbo building & Bug 14 fix: Continuous AR auto-fire on hold
+      if (isMouseDown && roundActive && !areModalsOpen()) {
+        if (activeSlot >= 4) {
+          turboBuildTimer += delta;
+          if (turboBuildTimer > 0.12) {
+            turboBuildTimer = 0;
+            placeStructure();
+          }
+        } else if (activeSlot === 3) {
+          handlePrimaryAction();
+        }
+      }
+
+      // Third-person Camera
       const camDist = isAiming ? 1.8 : 3.0;
-      const camHeight = keys.shift ? 1.2 : 1.6;
+      const camHeight = keys.shift ? 1.4 : 1.6;
       const shoulderOffset = new THREE.Vector3(0.55, camHeight, camDist);
       shoulderOffset.applyAxisAngle(new THREE.Vector3(1, 0, 0), cameraPitch);
       shoulderOffset.applyAxisAngle(new THREE.Vector3(0, 1, 0), cameraYaw);
@@ -1633,7 +2123,92 @@
       camera.lookAt(targetLook.add(lookForward));
     }
 
-    // Main Game Loop
+    // Bug 8 fix: Accurate Ramp and Structure Height Query
+    function getStructureGroundHeight(entityPos) {
+      let highest = 0;
+
+      for (let i = 0; i < placedStructures.length; i++) {
+        const s = placedStructures[i];
+        if (s.type === 'floor') {
+          const dx = Math.abs(entityPos.x - s.mesh.position.x);
+          const dz = Math.abs(entityPos.z - s.mesh.position.z);
+          if (dx <= GRID_SIZE / 2 + 0.15 && dz <= GRID_SIZE / 2 + 0.15) {
+            const surfaceY = s.mesh.position.y;
+            if (entityPos.y >= surfaceY - 0.4 && surfaceY > highest) {
+              highest = surfaceY;
+            }
+          }
+        } else if (s.type === 'ramp') {
+          // Accurate slope interpolation in ramp local coordinate space
+          const local = s.mesh.worldToLocal(entityPos.clone());
+          if (Math.abs(local.x) <= GRID_SIZE / 2 + 0.15 && Math.abs(local.z) <= GRID_SIZE / 2 + 0.15) {
+            // Ramp slopes up from local z = +GRID_SIZE/2 (y=0) to z = -GRID_SIZE/2 (y=GRID_SIZE)
+            const clampedZ = Math.max(-GRID_SIZE / 2, Math.min(GRID_SIZE / 2, local.z));
+            const localY = GRID_SIZE / 2 - clampedZ;
+            const surfaceY = s.mesh.position.y + localY;
+            if (entityPos.y >= surfaceY - 0.5 && surfaceY > highest) {
+              highest = surfaceY;
+            }
+          }
+        } else if (s.type === 'cone') {
+          const dx = Math.abs(entityPos.x - s.mesh.position.x);
+          const dz = Math.abs(entityPos.z - s.mesh.position.z);
+          if (dx <= GRID_SIZE / 2 && dz <= GRID_SIZE / 2) {
+            const distFromCenter = Math.sqrt(dx * dx + dz * dz);
+            const coneH = Math.max(0, (1 - distFromCenter / (GRID_SIZE * 0.7))) * (GRID_SIZE * 0.6);
+            const surfaceY = s.mesh.position.y + coneH;
+            if (entityPos.y >= surfaceY - 0.4 && surfaceY > highest) {
+              highest = surfaceY;
+            }
+          }
+        }
+      }
+
+      return highest;
+    }
+
+    // Bug 9 fix: Wall collision resolution
+    function resolveWallCollisions(entityPos) {
+      const radius = 0.45;
+      const height = 1.8;
+
+      for (let i = 0; i < placedStructures.length; i++) {
+        const s = placedStructures[i];
+        if (s.type !== 'wall') continue;
+
+        const wallBottom = s.mesh.position.y - GRID_SIZE / 2;
+        const wallTop = s.mesh.position.y + GRID_SIZE / 2;
+        if (entityPos.y + height < wallBottom || entityPos.y > wallTop) continue;
+
+        const local = s.mesh.worldToLocal(entityPos.clone());
+        const halfW = GRID_SIZE / 2;
+        const halfThick = 0.2;
+
+        if (Math.abs(local.x) < halfW + radius && Math.abs(local.z) < halfThick + radius) {
+          const overlapX = (halfW + radius) - Math.abs(local.x);
+          const overlapZ = (halfThick + radius) - Math.abs(local.z);
+
+          if (overlapZ < overlapX) {
+            local.z = Math.sign(local.z || 1) * (halfThick + radius);
+          } else {
+            local.x = Math.sign(local.x || 1) * (halfW + radius);
+          }
+
+          const resolved = s.mesh.localToWorld(local);
+          entityPos.x = resolved.x;
+          entityPos.z = resolved.z;
+        }
+      }
+    }
+
+    // Bug 6 fix: Position clamping to arena wireframe boundaries
+    function clampToArena(pos) {
+      const bound = 58.0;
+      pos.x = Math.max(-bound, Math.min(bound, pos.x));
+      pos.z = Math.max(-bound, Math.min(bound, pos.z));
+    }
+
+    // ─── MAIN ANIMATION LOOP ───
     let lastTime = performance.now();
     function animate() {
       requestAnimationFrame(animate);
@@ -1650,10 +2225,23 @@
       renderer.render(scene, camera);
     }
 
-    // Game State Flow
+    // ─── GAME STATE FLOW & MODES ───
     function setGameMode(mode, el) {
       gameMode = mode;
       document.querySelectorAll('.mode-opt').forEach(opt => opt.classList.remove('active'));
+      el.classList.add('active');
+
+      const diffBox = document.getElementById('diffContainer');
+      if (mode === 'freebuild' || mode === 'tutorial') {
+        diffBox.style.opacity = '0.5';
+      } else {
+        diffBox.style.opacity = '1.0';
+      }
+    }
+
+    function setBotDifficulty(diff, el) {
+      currentDifficulty = diff;
+      document.querySelectorAll('.diff-opt').forEach(opt => opt.classList.remove('active'));
       el.classList.add('active');
     }
 
@@ -1674,21 +2262,38 @@
       arAmmo = 30;
       document.getElementById('shotgunAmmo').textContent = '5/5';
       document.getElementById('arAmmo').textContent = '30/30';
+      isReloading = false;
+      reloadingSlot = null;
+      document.getElementById('reloadIndicator').style.display = 'none';
+
+      const diff = BOT_DIFFICULTIES[currentDifficulty];
+      bot.health = diff.hp;
+      bot.maxHealth = diff.hp;
+      bot.shield = diff.shield;
+      bot.maxShield = diff.shield;
+      botVelocity.set(0, 0, 0);
+      updateBotBillboard();
+
+      const tutPanel = document.getElementById('tutorialPanel');
+      const scoreBadge = document.getElementById('scoreBadge');
+
+      if (gameMode === 'tutorial') {
+        startTutorialMode();
+        return;
+      }
+
+      tutorialActive = false;
+      tutPanel.classList.add('hidden');
+      scoreBadge.style.display = 'flex';
 
       if (gameMode === '1v1') {
         player.position.set(0, 0, 14);
         bot.position.set(0, 0, -14);
-        bot.health = 100;
-        bot.shield = 100;
         bot.visible = true;
-
-        // Pre-build starting ramps
         buildStartingRamps();
       } else if (gameMode === 'boxfight') {
         player.position.set(0, 0, 3);
         bot.position.set(0, 0, -3);
-        bot.health = 100;
-        bot.shield = 100;
         bot.visible = true;
         buildBoxFightArena();
       } else if (gameMode === 'freebuild') {
@@ -1704,27 +2309,47 @@
     function buildStartingRamps() {
       const pRamp = createStructureMesh('ramp', woodMaterial);
       pRamp.position.set(0, 0, 12);
+      pRamp.rotation.y = 0; // Facing -Z towards bot
       scene.add(pRamp);
-      placedStructures.push({ mesh: pRamp, type: 'ramp', hp: 150, maxHp: 150, bbox: new THREE.Box3().setFromObject(pRamp) });
+      placedStructures.push({ mesh: pRamp, type: 'ramp', hp: 150, maxHp: 150 });
 
       const bRamp = createStructureMesh('ramp', woodMaterial);
       bRamp.position.set(0, 0, -12);
-      bRamp.rotation.y = Math.PI;
+      bRamp.rotation.y = Math.PI; // Facing +Z towards player
       scene.add(bRamp);
-      placedStructures.push({ mesh: bRamp, type: 'ramp', hp: 150, maxHp: 150, bbox: new THREE.Box3().setFromObject(bRamp) });
+      placedStructures.push({ mesh: bRamp, type: 'ramp', hp: 150, maxHp: 150 });
     }
 
     function buildBoxFightArena() {
-      // 3x3 enclosed box
+      // 3x3 enclosed arena with floors, roofs, and walls
       for (let x = -3; x <= 3; x += 3) {
         for (let z = -3; z <= 3; z += 3) {
           const fl = createStructureMesh('floor', woodMaterial);
           fl.position.set(x, 0, z); scene.add(fl);
           placedStructures.push({ mesh: fl, type: 'floor', hp: 150, maxHp: 150 });
+
           const rf = createStructureMesh('floor', woodMaterial);
           rf.position.set(x, 3, z); scene.add(rf);
           placedStructures.push({ mesh: rf, type: 'floor', hp: 150, maxHp: 150 });
         }
+      }
+      // Perimeter enclosure walls
+      for (let i = -3; i <= 3; i += 3) {
+        const wN = createStructureMesh('wall', woodMaterial);
+        wN.position.set(i, 1.5, -4.5); scene.add(wN);
+        placedStructures.push({ mesh: wN, type: 'wall', hp: 150, maxHp: 150 });
+
+        const wS = createStructureMesh('wall', woodMaterial);
+        wS.position.set(i, 1.5, 4.5); scene.add(wS);
+        placedStructures.push({ mesh: wS, type: 'wall', hp: 150, maxHp: 150 });
+
+        const wW = createStructureMesh('wall', woodMaterial);
+        wW.position.set(-4.5, 1.5, i); wW.rotation.y = Math.PI / 2; scene.add(wW);
+        placedStructures.push({ mesh: wW, type: 'wall', hp: 150, maxHp: 150 });
+
+        const wE = createStructureMesh('wall', woodMaterial);
+        wE.position.set(4.5, 1.5, i); wE.rotation.y = Math.PI / 2; scene.add(wE);
+        placedStructures.push({ mesh: wE, type: 'wall', hp: 150, maxHp: 150 });
       }
     }
 
@@ -1739,7 +2364,7 @@
         playerWinsCount++;
         document.getElementById('playerWins').textContent = playerWinsCount;
         title.innerHTML = 'VICTORY<span>!</span>';
-        desc.textContent = 'You outplayed and eliminated Bot 77.';
+        desc.textContent = 'You eliminated Bot 77 on ' + currentDifficulty.toUpperCase() + ' difficulty.';
       } else {
         botWinsCount++;
         document.getElementById('botWins').textContent = botWinsCount;
@@ -1758,9 +2383,14 @@
 
     function returnToLobby() {
       document.getElementById('endRoundModal').classList.add('hidden');
+      document.getElementById('tutorialPanel').classList.add('hidden');
       document.getElementById('lobbyModal').classList.remove('hidden');
+      document.getElementById('scoreBadge').style.display = 'flex';
       isGameRunning = false;
       roundActive = false;
+      tutorialActive = false;
+      clearTutorialMarkers();
+      document.exitPointerLock();
     }
 
     function showToast(msg) {
@@ -1770,7 +2400,160 @@
       setTimeout(() => toast.style.display = 'none', 2000);
     }
 
-    // Settings
+    // ─── INTERACTIVE TUTORIAL MODE ───
+    function startTutorialMode() {
+      tutorialActive = true;
+      tutorialStep = 1;
+      tutorialData.moveDist = 0;
+      tutorialData.hasJumped = false;
+      tutorialData.yawRotated = 0;
+      tutorialData.shotsFired = 0;
+      tutorialData.aimDuration = 0;
+      tutorialData.wallsPlaced = 0;
+      tutorialData.rampPlaced = false;
+      tutorialData.walkedOnRamp = false;
+      tutorialData.boxWallsPlaced = 0;
+      tutorialData.botEliminated = false;
+
+      player.position.set(0, 0, 0);
+      bot.visible = false;
+      roundActive = true;
+
+      document.getElementById('scoreBadge').style.display = 'none';
+      document.getElementById('tutorialPanel').classList.remove('hidden');
+      document.getElementById('tutLobbyBtn').style.display = 'none';
+
+      setupTutorialStepWorld(1);
+      updateTutorialUI();
+    }
+
+    function updateTutorialUI() {
+      if (!tutorialActive) return;
+
+      const badge = document.getElementById('tutStepBadge');
+      const title = document.getElementById('tutStepTitle');
+      const inst = document.getElementById('tutInstruction');
+      const fill = document.getElementById('tutProgressFill');
+      const text = document.getElementById('tutProgressText');
+      const lobbyBtn = document.getElementById('tutLobbyBtn');
+
+      badge.textContent = `STEP ${tutorialStep} OF 9`;
+
+      if (tutorialStep === 1) {
+        title.textContent = 'MOVEMENT BASICS';
+        inst.textContent = 'Use WASD to move around. Press SPACE to jump.';
+        const d = Math.min(5.0, tutorialData.moveDist);
+        const j = tutorialData.hasJumped;
+        const pct = (d / 5.0 * 50) + (j ? 50 : 0);
+        fill.style.width = pct + '%';
+        text.textContent = `Distance: ${d.toFixed(1)} / 5.0m | Jump: ${j ? 'Completed ✓' : 'Press SPACE'}`;
+      } else if (tutorialStep === 2) {
+        title.textContent = 'CAMERA CONTROL';
+        inst.textContent = 'Move your mouse to look around and explore the arena.';
+        const deg = Math.min(180, Math.floor((tutorialData.yawRotated / Math.PI) * 180));
+        fill.style.width = (deg / 180 * 100) + '%';
+        text.textContent = `Camera Rotated: ${deg}° / 180°`;
+      } else if (tutorialStep === 3) {
+        title.textContent = 'WEAPONS PRACTICE';
+        inst.textContent = 'Press 2 for Shotgun, 3 for AR. Left-click to shoot!';
+        const s = Math.min(3, tutorialData.shotsFired);
+        fill.style.width = (s / 3 * 100) + '%';
+        text.textContent = `Shots Fired: ${s} / 3`;
+      } else if (tutorialStep === 4) {
+        title.textContent = 'AIM DOWN SIGHTS (ADS)';
+        inst.textContent = 'Hold Right-Click to Aim Down Sights for improved accuracy.';
+        const a = Math.min(2.0, tutorialData.aimDuration);
+        fill.style.width = (a / 2.0 * 100) + '%';
+        text.textContent = `Aiming: ${a.toFixed(1)}s / 2.0s`;
+      } else if (tutorialStep === 5) {
+        title.textContent = 'BUILDING WALLS';
+        inst.textContent = 'Press Q to select Wall. Left-click to place it.';
+        const w = Math.min(2, tutorialData.wallsPlaced);
+        fill.style.width = (w / 2 * 100) + '%';
+        text.textContent = `Walls Placed: ${w} / 2`;
+      } else if (tutorialStep === 6) {
+        title.textContent = 'BUILDING RAMPS';
+        inst.textContent = 'Press C to select Ramp. Place it and walk up!';
+        const p = tutorialData.rampPlaced ? (tutorialData.walkedOnRamp ? 100 : 50) : 0;
+        fill.style.width = p + '%';
+        text.textContent = !tutorialData.rampPlaced ? 'Place a Ramp (Press C)' : 'Now walk up to the top of your ramp!';
+      } else if (tutorialStep === 7) {
+        title.textContent = 'DEFENSIVE BOX FIGHT';
+        inst.textContent = 'Try building a 1x1 box: Place 4 walls around you!';
+        const b = Math.min(4, tutorialData.boxWallsPlaced);
+        fill.style.width = (b / 4 * 100) + '%';
+        text.textContent = `Box Walls Placed: ${b} / 4`;
+      } else if (tutorialStep === 8) {
+        title.textContent = 'COMBAT PRACTICE';
+        inst.textContent = 'A practice bot has spawned. Eliminate it!';
+        const hpPct = Math.max(0, bot.health / 50);
+        fill.style.width = ((1 - hpPct) * 100) + '%';
+        text.textContent = `Practice Bot HP: ${bot.health} / 50`;
+      } else if (tutorialStep === 9) {
+        title.textContent = 'TUTORIAL COMPLETE!';
+        inst.textContent = "You're ready! Return to the lobby and try a real 1v1 match.";
+        fill.style.width = '100%';
+        text.textContent = 'Mastered all mechanics! ★★★';
+        lobbyBtn.style.display = 'inline-block';
+      }
+    }
+
+    function advanceTutorialStep(nextStep) {
+      tutorialStep = nextStep;
+      audio.playChime();
+      setupTutorialStepWorld(nextStep);
+      updateTutorialUI();
+    }
+
+    function clearTutorialMarkers() {
+      if (!tutorialMarkersGroup) return;
+      while (tutorialMarkersGroup.children.length > 0) {
+        tutorialMarkersGroup.remove(tutorialMarkersGroup.children[0]);
+      }
+    }
+
+    function setupTutorialStepWorld(step) {
+      clearTutorialMarkers();
+
+      if (step === 3) {
+        // Target dummies for weapons practice
+        const dummyGeo = new THREE.CylinderGeometry(0.5, 0.5, 1.6, 12);
+        const dummyMat = new THREE.MeshStandardMaterial({ color: 0xe67e22, roughness: 0.5 });
+        const targetMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+
+        const positions = [{ x: 0, z: -10 }, { x: -6, z: -8 }, { x: 6, z: -8 }];
+        positions.forEach(pos => {
+          const dummy = new THREE.Mesh(dummyGeo, dummyMat);
+          dummy.position.set(pos.x, 0.8, pos.z);
+          const ring = new THREE.Mesh(new THREE.TorusGeometry(0.35, 0.08, 8, 16), targetMat);
+          ring.position.set(0, 0.3, 0.51);
+          dummy.add(ring);
+          tutorialMarkersGroup.add(dummy);
+        });
+      } else if (step === 6) {
+        // Floating checkpoint marker for ramp walk
+        const ringGeo = new THREE.TorusGeometry(0.8, 0.1, 8, 24);
+        const ringMat = new THREE.MeshBasicMaterial({ color: 0x00e5ff });
+        const ring = new THREE.Mesh(ringGeo, ringMat);
+        ring.position.set(0, 3.2, -4.5);
+        ring.rotation.x = Math.PI / 2;
+        tutorialMarkersGroup.add(ring);
+      } else if (step === 8) {
+        // Spawn Easy Practice Bot
+        bot.visible = true;
+        bot.position.set(0, 0, -10);
+        bot.rotation.y = Math.PI;
+        bot.health = 50;
+        bot.maxHealth = 50;
+        bot.shield = 0;
+        bot.maxShield = 0;
+        botVelocity.set(0, 0, 0);
+        updateBotBillboard();
+        showToast('Practice Bot Spawned!');
+      }
+    }
+
+    // ─── SETTINGS & RESIZE ───
     function toggleSettingsModal() {
       const m = document.getElementById('settingsModal');
       const isHidden = m.classList.toggle('hidden');
@@ -1783,10 +2566,14 @@
       document.getElementById('sensVal').textContent = val;
     }
 
+    // Bug 10 fix: update baseFOV variable and apply immediately if not aiming
     function updateFOV(val) {
-      camera.fov = parseInt(val);
-      camera.updateProjectionMatrix();
-      document.getElementById('fovVal').textContent = val;
+      baseFOV = parseInt(val);
+      document.getElementById('fovVal').textContent = baseFOV;
+      if (!isAiming) {
+        camera.fov = baseFOV;
+        camera.updateProjectionMatrix();
+      }
     }
 
     document.getElementById('audioToggle').addEventListener('change', (e) => {
