@@ -264,16 +264,37 @@
     .materials-box {
       background: var(--card-bg);
       border: 1px solid var(--border);
-      padding: 12px 18px;
+      padding: 10px 14px;
       border-radius: 12px;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       font-weight: 800;
-      font-size: 15px;
+      font-size: 14px;
     }
-    .mat-wood { color: #deb887; display: flex; align-items: center; gap: 6px; }
-    .mat-val { font-size: 18px; color: #fff; }
+    .mat-tier {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      padding: 4px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      pointer-events: auto;
+      transition: all 0.15s;
+      opacity: 0.55;
+    }
+    .mat-tier:hover { opacity: 0.85; }
+    .mat-tier.active {
+      border-color: var(--accent);
+      background: rgba(255,140,0,.15);
+      opacity: 1;
+    }
+    .mat-tier-icon { font-size: 16px; }
+    .mat-tier-val { font-size: 14px; color: #fff; }
+    .mat-tier-label { font-size: 8.5px; color: rgba(255,255,255,.55); letter-spacing: .5px; }
+    .mat-wood .mat-tier-icon { filter: hue-rotate(0deg); }
 
     /* Damage numbers */
     .dmg-number {
@@ -647,14 +668,29 @@
           <span class="slot-icon">🔺</span>
           <span class="slot-name">Cone</span>
         </div>
+        <div class="hotbar-slot" data-slot="8" onclick="selectSlot(8)">
+          <span class="slot-key">E</span>
+          <span class="slot-icon">✂️</span>
+          <span class="slot-name">Edit</span>
+        </div>
       </div>
 
-      <div class="materials-box">
-        <div class="mat-wood">
-          <span>🪵</span>
-          <span class="mat-val">∞</span>
+      <div class="materials-box" id="materialsBox">
+        <div class="mat-tier active" id="matTierWood" onclick="setMaterialTier('wood')">
+          <span class="mat-tier-icon">🪵</span>
+          <span class="mat-tier-val" id="matValWood">200</span>
+          <span class="mat-tier-label">WOOD</span>
         </div>
-        <span style="font-size: 11px; color: rgba(255,255,255,.5);">WOOD</span>
+        <div class="mat-tier" id="matTierBrick" onclick="setMaterialTier('brick')">
+          <span class="mat-tier-icon">🧱</span>
+          <span class="mat-tier-val" id="matValBrick">150</span>
+          <span class="mat-tier-label">BRICK</span>
+        </div>
+        <div class="mat-tier" id="matTierMetal" onclick="setMaterialTier('metal')">
+          <span class="mat-tier-icon">⚙️</span>
+          <span class="mat-tier-val" id="matValMetal">100</span>
+          <span class="mat-tier-label">METAL</span>
+        </div>
       </div>
     </div>
   </div>
@@ -706,6 +742,8 @@
         <tr><td class="key">Right Click</td><td>Aim Down Sights (ADS)</td></tr>
         <tr><td class="key">1 / 2 / 3</td><td>Pickaxe / Shotgun / Assault Rifle</td></tr>
         <tr><td class="key">Q / X / C / V</td><td>Wall / Floor / Ramp / Cone</td></tr>
+        <tr><td class="key">Z</td><td>Cycle Material (Wood / Brick / Metal)</td></tr>
+        <tr><td class="key">E</td><td>Edit Mode — Click a wall segment to open it, Right-Click to restore</td></tr>
         <tr><td class="key">R</td><td>Reload Weapon / Reset Builds</td></tr>
         <tr><td class="key">Esc</td><td>Unlock Mouse / Pause</td></tr>
       </table>
@@ -907,10 +945,20 @@
 
     // Building Systems
     const GRID_SIZE = 3.0;
-    const placedStructures = []; // { mesh, type, hp, maxHp }
+    const placedStructures = []; // { mesh, type, hp, maxHp, tier, editCells }
     let hologramMesh = null;
     let currentHologramType = null;
     let turboBuildTimer = 0;
+
+    // Materials (tiered resource system)
+    let materials = { wood: 200, brick: 150, metal: 100 };
+    let currentMaterialTier = 'wood';
+    const MATERIAL_INFO = {
+      wood:  { cost: 10, hp: 150, color: 0xb37d4e },
+      brick: { cost: 15, hp: 250, color: 0xb03a2e },
+      metal: { cost: 25, hp: 400, color: 0x8a94a3 }
+    };
+    let tierMaterials = {}; // 'wood' | 'brick' | 'metal' -> THREE.Material
 
     // Materials
     let woodMaterial, holoValidMat, holoInvalidMat;
@@ -1037,6 +1085,7 @@
       // Event Listeners
       window.addEventListener('resize', onWindowResize);
       setupControls();
+      updateMaterialsUI();
 
       // Animation loop
       requestAnimationFrame(animate);
@@ -1049,6 +1098,22 @@
         roughness: 0.8,
         metalness: 0.1
       });
+
+      const brickTex = createBrickTexture();
+      const brickMaterial = new THREE.MeshStandardMaterial({
+        map: brickTex,
+        roughness: 0.85,
+        metalness: 0.05
+      });
+
+      const metalTex = createMetalTexture();
+      const metalMaterial = new THREE.MeshStandardMaterial({
+        map: metalTex,
+        roughness: 0.35,
+        metalness: 0.75
+      });
+
+      tierMaterials = { wood: woodMaterial, brick: brickMaterial, metal: metalMaterial };
 
       holoValidMat = new THREE.MeshBasicMaterial({
         color: 0x00e5ff,
@@ -1087,6 +1152,52 @@
         ctx.moveTo(x, 0);
         ctx.lineTo(x, 256);
         ctx.stroke();
+      }
+      const tex = new THREE.CanvasTexture(c);
+      tex.wrapS = THREE.RepeatWrapping;
+      tex.wrapT = THREE.RepeatWrapping;
+      return tex;
+    }
+
+    function createBrickTexture() {
+      const c = document.createElement('canvas');
+      c.width = 256; c.height = 256;
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = '#8c3a2b';
+      ctx.fillRect(0, 0, 256, 256);
+      ctx.strokeStyle = '#5a241a';
+      ctx.lineWidth = 4;
+      const rowH = 32;
+      for (let row = 0, y = 0; y <= 256; y += rowH, row++) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(256, y); ctx.stroke();
+        const offset = (row % 2 === 0) ? 0 : 32;
+        for (let x = offset - 64; x <= 256; x += 64) {
+          ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, y + rowH); ctx.stroke();
+        }
+      }
+      const tex = new THREE.CanvasTexture(c);
+      tex.wrapS = THREE.RepeatWrapping;
+      tex.wrapT = THREE.RepeatWrapping;
+      return tex;
+    }
+
+    function createMetalTexture() {
+      const c = document.createElement('canvas');
+      c.width = 256; c.height = 256;
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = '#8a94a3';
+      ctx.fillRect(0, 0, 256, 256);
+      ctx.strokeStyle = 'rgba(255,255,255,0.25)';
+      ctx.lineWidth = 2;
+      for (let i = 0; i <= 256; i += 42) {
+        ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, 256); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(256, i); ctx.stroke();
+      }
+      ctx.fillStyle = 'rgba(0,0,0,0.25)';
+      for (let i = 21; i <= 256; i += 42) {
+        for (let j = 21; j <= 256; j += 42) {
+          ctx.beginPath(); ctx.arc(i, j, 3, 0, Math.PI * 2); ctx.fill();
+        }
       }
       const tex = new THREE.CanvasTexture(c);
       tex.wrapS = THREE.RepeatWrapping;
@@ -1342,9 +1453,13 @@
           isMouseDown = true;
           handlePrimaryAction();
         } else if (e.button === 2) {
-          isAiming = true;
-          camera.fov = Math.max(45, baseFOV - 15);
-          camera.updateProjectionMatrix();
+          if (activeSlot === 8) {
+            handleEditRestore();
+          } else {
+            isAiming = true;
+            camera.fov = Math.max(45, baseFOV - 15);
+            camera.updateProjectionMatrix();
+          }
         }
       });
 
@@ -1380,6 +1495,10 @@
         if (code === 'KeyX') selectSlot(5); // Floor
         if (code === 'KeyC') selectSlot(6); // Ramp
         if (code === 'KeyV') selectSlot(7); // Cone
+        if (code === 'KeyE') selectSlot(8); // Edit
+
+        // Material cycling
+        if (code === 'KeyZ') cycleMaterialTier();
 
         // Reload / Reset
         if (code === 'KeyR') {
@@ -1405,16 +1524,38 @@
         el.classList.toggle('active', parseInt(el.dataset.slot) === slotNum);
       });
 
-      if (slotNum <= 3 && hologramMesh) {
+      if ((slotNum <= 3 || slotNum === 8) && hologramMesh) {
         scene.remove(hologramMesh);
         hologramMesh = null;
         currentHologramType = null;
       }
     }
 
+    // ─── MATERIALS SYSTEM ───
+    function setMaterialTier(tier) {
+      currentMaterialTier = tier;
+      updateMaterialsUI();
+    }
+
+    function cycleMaterialTier() {
+      const order = ['wood', 'brick', 'metal'];
+      const idx = order.indexOf(currentMaterialTier);
+      currentMaterialTier = order[(idx + 1) % order.length];
+      updateMaterialsUI();
+    }
+
+    function updateMaterialsUI() {
+      document.getElementById('matValWood').textContent = materials.wood;
+      document.getElementById('matValBrick').textContent = materials.brick;
+      document.getElementById('matValMetal').textContent = materials.metal;
+      document.getElementById('matTierWood').classList.toggle('active', currentMaterialTier === 'wood');
+      document.getElementById('matTierBrick').classList.toggle('active', currentMaterialTier === 'brick');
+      document.getElementById('matTierMetal').classList.toggle('active', currentMaterialTier === 'metal');
+    }
+
     // ─── BUILDING SYSTEM ───
     function updateHologram() {
-      if (activeSlot < 4 || areModalsOpen()) {
+      if (activeSlot < 4 || activeSlot === 8 || areModalsOpen()) {
         if (hologramMesh) {
           scene.remove(hologramMesh);
           hologramMesh = null;
@@ -1445,6 +1586,9 @@
         scene.add(hologramMesh);
       }
 
+      const canAfford = materials[currentMaterialTier] >= MATERIAL_INFO[currentMaterialTier].cost;
+      setGroupMaterial(hologramMesh, canAfford ? holoValidMat : holoInvalidMat);
+
       hologramMesh.position.set(gx, gy, gz);
 
       if (buildType === 'wall') {
@@ -1469,6 +1613,10 @@
         hologramMesh.position.y = gy;
         hologramMesh.rotation.set(0, 0, 0);
       }
+    }
+
+    function setGroupMaterial(group, mat) {
+      group.traverse(obj => { if (obj.isMesh) obj.material = mat; });
     }
 
     function createStructureMesh(type, mat) {
@@ -1500,8 +1648,38 @@
       return g;
     }
 
+    // Builds a wall as a 3x3 grid of segments, skipping any cell ids present in editCells (e.g. "1_1")
+    function createWallSegmentedMesh(mat, editCells) {
+      const g = new THREE.Group();
+      const cell = GRID_SIZE / 3;
+      for (let row = 0; row < 3; row++) {
+        for (let col = 0; col < 3; col++) {
+          const key = row + '_' + col;
+          if (editCells && editCells.has(key)) continue;
+          const seg = new THREE.Mesh(new THREE.BoxGeometry(cell * 0.98, cell * 0.98, 0.2), mat);
+          seg.position.set(
+            -GRID_SIZE / 2 + cell / 2 + col * cell,
+            -GRID_SIZE / 2 + cell / 2 + row * cell,
+            0
+          );
+          seg.castShadow = true; seg.receiveShadow = true;
+          seg.userData.row = row; seg.userData.col = col;
+          g.add(seg);
+        }
+      }
+      return g;
+    }
+
     function placeStructure() {
       if (!hologramMesh || areModalsOpen()) return;
+
+      const tier = currentMaterialTier;
+      const info = MATERIAL_INFO[tier];
+      if (materials[tier] < info.cost) {
+        showToast('Not enough ' + tier.toUpperCase() + '!');
+        return;
+      }
+
       audio.init();
 
       const typeMap = { 4: 'wall', 5: 'floor', 6: 'ramp', 7: 'cone' };
@@ -1514,16 +1692,24 @@
       );
       if (existing) return;
 
-      const solidMesh = createStructureMesh(bType, woodMaterial);
+      const tierMat = tierMaterials[tier];
+      const solidMesh = bType === 'wall'
+        ? createWallSegmentedMesh(tierMat, null)
+        : createStructureMesh(bType, tierMat);
       solidMesh.position.copy(hologramMesh.position);
       solidMesh.rotation.copy(hologramMesh.rotation);
       scene.add(solidMesh);
 
+      materials[tier] -= info.cost;
+      updateMaterialsUI();
+
       placedStructures.push({
         mesh: solidMesh,
         type: bType,
-        hp: 150,
-        maxHp: 150
+        hp: info.hp,
+        maxHp: info.hp,
+        tier: tier,
+        editCells: bType === 'wall' ? new Set() : null
       });
 
       audio.playBuild();
@@ -1552,11 +1738,89 @@
       showToast('Builds Cleared!');
     }
 
+    // ─── EDITING SYSTEM (open/close 1x1 cells in a 3x3 wall grid) ───
+    function handleEditAction() {
+      const ray = new THREE.Raycaster();
+      ray.setFromCamera(new THREE.Vector2(0, 0), camera);
+      ray.far = 5.0;
+
+      let closest = null, minDist = Infinity;
+      for (let i = 0; i < placedStructures.length; i++) {
+        const s = placedStructures[i];
+        if (s.type !== 'wall') continue;
+        const hits = ray.intersectObject(s.mesh, true);
+        if (hits.length > 0 && hits[0].distance < minDist) {
+          minDist = hits[0].distance;
+          closest = { structure: s, hit: hits[0] };
+        }
+      }
+      if (!closest) return;
+
+      const { structure, hit } = closest;
+      const row = hit.object.userData.row;
+      const col = hit.object.userData.col;
+      if (row === undefined || col === undefined) return;
+
+      const key = row + '_' + col;
+      structure.editCells.add(key);
+      rebuildWallSegments(structure);
+      audio.playBuild();
+      showDamageNumber('OPEN', hit.point, 'build');
+    }
+
+    function handleEditRestore() {
+      const ray = new THREE.Raycaster();
+      ray.setFromCamera(new THREE.Vector2(0, 0), camera);
+      ray.far = 6.0;
+
+      let closest = null, minDist = Infinity;
+      for (let i = 0; i < placedStructures.length; i++) {
+        const s = placedStructures[i];
+        if (s.type !== 'wall' || s.editCells.size === 0) continue;
+        const hits = ray.intersectObject(s.mesh, true);
+        if (hits.length > 0 && hits[0].distance < minDist) {
+          minDist = hits[0].distance;
+          closest = s;
+        }
+      }
+      if (!closest) return;
+      closest.editCells.clear();
+      rebuildWallSegments(closest);
+      audio.playChime();
+      showToast('Wall Restored!');
+    }
+
+    function rebuildWallSegments(structure) {
+      const tierMat = tierMaterials[structure.tier];
+      const newMesh = createWallSegmentedMesh(tierMat, structure.editCells);
+      newMesh.position.copy(structure.mesh.position);
+      newMesh.rotation.copy(structure.mesh.rotation);
+      scene.remove(structure.mesh);
+      scene.add(newMesh);
+      structure.mesh = newMesh;
+    }
+
+    function isWallCellOpen(s, localX, localYFromBottom) {
+      if (!s.editCells || s.editCells.size === 0) return false;
+      const cell = GRID_SIZE / 3;
+      let col = Math.floor((localX + GRID_SIZE / 2) / cell);
+      let row = Math.floor(localYFromBottom / cell);
+      col = Math.max(0, Math.min(2, col));
+      row = Math.max(0, Math.min(2, row));
+      return s.editCells.has(row + '_' + col);
+    }
+
     // ─── WEAPONS & COMBAT ───
     function handlePrimaryAction() {
       if (areModalsOpen() || !isGameRunning || !roundActive) return;
       audio.init();
       const now = performance.now();
+
+      // Edit mode
+      if (activeSlot === 8) {
+        handleEditAction();
+        return;
+      }
 
       // Building mode
       if (activeSlot >= 4) {
@@ -1992,11 +2256,11 @@
       const wallPos = bot.position.clone().add(forwardOffset);
       wallPos.y = Math.floor(bot.position.y / GRID_SIZE) * GRID_SIZE + GRID_SIZE / 2;
 
-      const wall = createStructureMesh('wall', woodMaterial);
+      const wall = createWallSegmentedMesh(woodMaterial, null);
       wall.position.copy(wallPos);
       wall.rotation.y = bot.rotation.y;
       scene.add(wall);
-      placedStructures.push({ mesh: wall, type: 'wall', hp: 150, maxHp: 150 });
+      placedStructures.push({ mesh: wall, type: 'wall', hp: 150, maxHp: 150, tier: 'wood', editCells: new Set() });
       audio.playBuild();
 
       // Cracked bot builds ramp behind wall
@@ -2007,7 +2271,7 @@
         ramp.position.copy(rampPos);
         ramp.rotation.y = bot.rotation.y;
         scene.add(ramp);
-        placedStructures.push({ mesh: ramp, type: 'ramp', hp: 150, maxHp: 150 });
+        placedStructures.push({ mesh: ramp, type: 'ramp', hp: 150, maxHp: 150, tier: 'wood', editCells: null });
       }
     }
 
@@ -2097,7 +2361,7 @@
 
       // Turbo building & Bug 14 fix: Continuous AR auto-fire on hold
       if (isMouseDown && roundActive && !areModalsOpen()) {
-        if (activeSlot >= 4) {
+        if (activeSlot >= 4 && activeSlot !== 8) {
           turboBuildTimer += delta;
           if (turboBuildTimer > 0.12) {
             turboBuildTimer = 0;
@@ -2167,7 +2431,7 @@
       return highest;
     }
 
-    // Bug 9 fix: Wall collision resolution
+    // Bug 9 fix: Wall collision resolution (now cell-aware: open edit cells let you pass through)
     function resolveWallCollisions(entityPos) {
       const radius = 0.45;
       const height = 1.8;
@@ -2185,6 +2449,10 @@
         const halfThick = 0.2;
 
         if (Math.abs(local.x) < halfW + radius && Math.abs(local.z) < halfThick + radius) {
+          // Skip collision if the entity is lined up with an opened edit cell (window/door)
+          const localYFromBottom = entityPos.y - wallBottom;
+          if (isWallCellOpen(s, local.x, localYFromBottom)) continue;
+
           const overlapX = (halfW + radius) - Math.abs(local.x);
           const overlapZ = (halfThick + radius) - Math.abs(local.z);
 
@@ -2266,6 +2534,15 @@
       reloadingSlot = null;
       document.getElementById('reloadIndicator').style.display = 'none';
 
+      // Materials reset per round; freebuild/tutorial get generous amounts to encourage experimentation
+      if (gameMode === 'freebuild' || gameMode === 'tutorial') {
+        materials = { wood: 999, brick: 999, metal: 999 };
+      } else {
+        materials = { wood: 200, brick: 150, metal: 100 };
+      }
+      currentMaterialTier = 'wood';
+      updateMaterialsUI();
+
       const diff = BOT_DIFFICULTIES[currentDifficulty];
       bot.health = diff.hp;
       bot.maxHealth = diff.hp;
@@ -2311,13 +2588,13 @@
       pRamp.position.set(0, 0, 12);
       pRamp.rotation.y = 0; // Facing -Z towards bot
       scene.add(pRamp);
-      placedStructures.push({ mesh: pRamp, type: 'ramp', hp: 150, maxHp: 150 });
+      placedStructures.push({ mesh: pRamp, type: 'ramp', hp: 150, maxHp: 150, tier: 'wood', editCells: null });
 
       const bRamp = createStructureMesh('ramp', woodMaterial);
       bRamp.position.set(0, 0, -12);
       bRamp.rotation.y = Math.PI; // Facing +Z towards player
       scene.add(bRamp);
-      placedStructures.push({ mesh: bRamp, type: 'ramp', hp: 150, maxHp: 150 });
+      placedStructures.push({ mesh: bRamp, type: 'ramp', hp: 150, maxHp: 150, tier: 'wood', editCells: null });
     }
 
     function buildBoxFightArena() {
@@ -2326,30 +2603,30 @@
         for (let z = -3; z <= 3; z += 3) {
           const fl = createStructureMesh('floor', woodMaterial);
           fl.position.set(x, 0, z); scene.add(fl);
-          placedStructures.push({ mesh: fl, type: 'floor', hp: 150, maxHp: 150 });
+          placedStructures.push({ mesh: fl, type: 'floor', hp: 150, maxHp: 150, tier: 'wood', editCells: null });
 
           const rf = createStructureMesh('floor', woodMaterial);
           rf.position.set(x, 3, z); scene.add(rf);
-          placedStructures.push({ mesh: rf, type: 'floor', hp: 150, maxHp: 150 });
+          placedStructures.push({ mesh: rf, type: 'floor', hp: 150, maxHp: 150, tier: 'wood', editCells: null });
         }
       }
       // Perimeter enclosure walls
       for (let i = -3; i <= 3; i += 3) {
-        const wN = createStructureMesh('wall', woodMaterial);
+        const wN = createWallSegmentedMesh(woodMaterial, null);
         wN.position.set(i, 1.5, -4.5); scene.add(wN);
-        placedStructures.push({ mesh: wN, type: 'wall', hp: 150, maxHp: 150 });
+        placedStructures.push({ mesh: wN, type: 'wall', hp: 150, maxHp: 150, tier: 'wood', editCells: new Set() });
 
-        const wS = createStructureMesh('wall', woodMaterial);
+        const wS = createWallSegmentedMesh(woodMaterial, null);
         wS.position.set(i, 1.5, 4.5); scene.add(wS);
-        placedStructures.push({ mesh: wS, type: 'wall', hp: 150, maxHp: 150 });
+        placedStructures.push({ mesh: wS, type: 'wall', hp: 150, maxHp: 150, tier: 'wood', editCells: new Set() });
 
-        const wW = createStructureMesh('wall', woodMaterial);
+        const wW = createWallSegmentedMesh(woodMaterial, null);
         wW.position.set(-4.5, 1.5, i); wW.rotation.y = Math.PI / 2; scene.add(wW);
-        placedStructures.push({ mesh: wW, type: 'wall', hp: 150, maxHp: 150 });
+        placedStructures.push({ mesh: wW, type: 'wall', hp: 150, maxHp: 150, tier: 'wood', editCells: new Set() });
 
-        const wE = createStructureMesh('wall', woodMaterial);
+        const wE = createWallSegmentedMesh(woodMaterial, null);
         wE.position.set(4.5, 1.5, i); wE.rotation.y = Math.PI / 2; scene.add(wE);
-        placedStructures.push({ mesh: wE, type: 'wall', hp: 150, maxHp: 150 });
+        placedStructures.push({ mesh: wE, type: 'wall', hp: 150, maxHp: 150, tier: 'wood', editCells: new Set() });
       }
     }
 
@@ -2478,8 +2755,8 @@
         fill.style.width = p + '%';
         text.textContent = !tutorialData.rampPlaced ? 'Place a Ramp (Press C)' : 'Now walk up to the top of your ramp!';
       } else if (tutorialStep === 7) {
-        title.textContent = 'DEFENSIVE BOX FIGHT';
-        inst.textContent = 'Try building a 1x1 box: Place 4 walls around you!';
+        title.textContent = 'DEFENSIVE BOX FIGHT & EDITING';
+        inst.textContent = 'Build a 1x1 box: Place 4 walls around you! Then try E to edit a window.';
         const b = Math.min(4, tutorialData.boxWallsPlaced);
         fill.style.width = (b / 4 * 100) + '%';
         text.textContent = `Box Walls Placed: ${b} / 4`;
