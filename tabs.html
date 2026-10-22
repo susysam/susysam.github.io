@@ -21,6 +21,7 @@
       --muted: rgba(20, 22, 26, .65);
       --border: rgba(0, 0, 0, .14);
       --card: rgba(255, 255, 255, .82);
+      --card-inner: rgba(255, 255, 255, .65);
       --overlay: rgba(255, 255, 255, 0);
       --accent: #6c0ba9;
       --accent-hover: #4f0672;
@@ -33,6 +34,8 @@
       --preview: #7c3aed;
       --preview-hover: #6d28d9;
       --danger: #ff5733;
+      --danger-hover: #e04522;
+      --success: #059669;
       --laptop-shell: #dcdde1;
       --laptop-bezel: #1e272e;
     }
@@ -42,7 +45,8 @@
       --text: #f2f4f8;
       --muted: rgba(242, 244, 248, .68);
       --border: rgba(255, 255, 255, .14);
-      --card: rgba(25, 28, 36, .72);
+      --card: rgba(25, 28, 36, .78);
+      --card-inner: rgba(18, 20, 26, .55);
       --overlay: rgba(0, 0, 0, .45);
       --laptop-shell: #2f3640;
       --laptop-bezel: #0f1418;
@@ -107,7 +111,8 @@
       color: #fff;
       font-weight: 700;
       cursor: pointer;
-      transition: background-color .2s ease, transform .1s ease;
+      transition: background-color .2s ease, transform .1s ease, box-shadow .2s ease;
+      text-decoration: none;
     }
 
     .home-button {
@@ -116,12 +121,12 @@
       padding: 10px 22px;
       border-radius: 10px;
       background: var(--accent);
-      text-decoration: none;
       font-size: 15px;
     }
 
     .home-button:hover {
       background: var(--accent-hover);
+      box-shadow: 0 4px 14px rgba(108, 11, 169, .35);
     }
 
     .home-button:active,
@@ -132,25 +137,27 @@
 
     .search-bar {
       width: 100%;
-      max-width: 550px;
-      margin-bottom: 12px;
-      padding: 12px 16px;
+      max-width: 580px;
+      margin-bottom: 14px;
+      padding: 13px 18px;
       border: 1px solid var(--border);
       border-radius: 12px;
       outline: none;
       background: var(--card);
       color: var(--text);
       font-size: 15px;
-      transition: border-color .2s ease;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, .04);
+      transition: border-color .2s ease, box-shadow .2s ease;
     }
 
     .search-bar:focus {
       border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(108, 11, 169, .18);
     }
 
     .action-buttons {
       width: 100%;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
@@ -160,14 +167,14 @@
     .action-button {
       min-height: 42px;
       padding: 10px 18px;
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 14px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, .08);
     }
 
     .action-button.normal {
       background: var(--normal);
     }
-
     .action-button.normal:hover {
       background: var(--normal-hover);
     }
@@ -175,7 +182,6 @@
     .action-button.blank {
       background: var(--blank);
     }
-
     .action-button.blank:hover {
       background: var(--blank-hover);
     }
@@ -183,32 +189,266 @@
     .action-button.secret {
       background: var(--secret);
     }
-
     .action-button.secret:hover {
       background: var(--secret-hover);
     }
 
     .action-button.preview {
-      min-height: 36px;
+      min-height: 38px;
       align-self: center;
-      padding: 8px 14px;
+      padding: 9px 16px;
       background: var(--preview);
       font-size: 13px;
     }
-
     .action-button.preview:hover {
       background: var(--preview-hover);
     }
 
     .status-message {
       min-height: 20px;
-      margin: -13px 0 18px;
+      margin: -10px 0 16px;
       color: var(--danger);
       font-size: 14px;
       font-weight: 700;
       text-align: center;
     }
 
+    /* ─── SAVED / RECOMMENDED LINKS SECTION ─── */
+    .saved-links-section {
+      width: 100%;
+      max-width: 580px;
+      margin-bottom: 25px;
+      padding: 20px 22px;
+      border-radius: 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, .06);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .saved-links-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+    }
+
+    .saved-links-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: .2px;
+    }
+
+    .saved-links-count {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 11px;
+      border-radius: 20px;
+      background: rgba(108, 11, 169, 0.12);
+      color: var(--accent);
+      border: 1px solid rgba(108, 11, 169, 0.25);
+    }
+    :root.dark .saved-links-count {
+      background: rgba(198, 160, 246, 0.16);
+      color: #d1b3ff;
+      border-color: rgba(198, 160, 246, 0.35);
+    }
+
+    .saved-links-form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .saved-form-inputs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .saved-input {
+      flex: 1;
+      min-width: 170px;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      outline: none;
+      background: var(--card-inner);
+      color: var(--text);
+      font-size: 14px;
+      transition: border-color .2s ease, box-shadow .2s ease;
+    }
+    .saved-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(108, 11, 169, .15);
+    }
+
+    .saved-form-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .saved-save-btn {
+      padding: 10px 22px;
+      border: 0;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 800;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background-color .2s ease, transform .1s ease, opacity .2s ease;
+      white-space: nowrap;
+    }
+    .saved-save-btn:hover:not(:disabled) {
+      background: var(--accent-hover);
+    }
+    .saved-save-btn:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+    }
+    .saved-save-btn:active:not(:disabled) {
+      transform: translateY(1px);
+    }
+
+    .saved-links-list {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .saved-link-row {
+      display: flex;
+      gap: 8px;
+      align-items: stretch;
+      animation: fadeInRow .22s ease-out;
+    }
+
+    @keyframes fadeInRow {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .saved-link-card {
+      flex: 1;
+      min-width: 0;
+      padding: 11px 14px;
+      text-align: left;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--card-inner);
+      color: var(--text);
+      cursor: pointer;
+      transition: border-color .2s ease, background-color .2s ease, transform .1s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      outline: none;
+    }
+    .saved-link-card:hover {
+      border-color: var(--accent);
+      background: rgba(108, 11, 169, 0.08);
+    }
+    .saved-link-card:active {
+      transform: translateY(1px);
+    }
+
+    .saved-link-card strong {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
+    }
+
+    .saved-link-card small {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
+    }
+
+    .saved-link-action-btn {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--card-inner);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      transition: all .2s ease;
+      outline: none;
+      user-select: none;
+    }
+
+    .saved-copy-btn {
+      color: var(--text);
+      min-width: 74px;
+      padding: 0 10px;
+      gap: 5px;
+    }
+    .saved-copy-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(108, 11, 169, 0.08);
+    }
+    .saved-copy-btn.copied {
+      border-color: var(--success);
+      color: var(--success);
+      background: rgba(5, 150, 105, 0.12);
+    }
+
+    .saved-delete-btn {
+      width: 42px;
+      color: var(--danger);
+      font-size: 17px;
+      font-weight: 800;
+    }
+    .saved-delete-btn:hover {
+      background: var(--danger);
+      color: #fff;
+      border-color: var(--danger);
+    }
+    .saved-delete-btn:active {
+      transform: scale(.95);
+    }
+
+    .saved-empty-hint {
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+      padding: 16px;
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      line-height: 1.4;
+    }
+
+    .saved-status-msg {
+      font-size: 12px;
+      min-height: 16px;
+      font-weight: 700;
+      color: var(--danger);
+    }
+
+    /* ─── LAPTOP HARDWARE PREVIEW ─── */
     .laptop-hardware {
       width: 100%;
       display: none;
@@ -361,6 +601,13 @@
         padding: 10px 10px 14px;
         border-radius: 10px 10px 0 0;
       }
+
+      .saved-form-inputs {
+        flex-direction: column;
+      }
+      .saved-input {
+        width: 100%;
+      }
     }
   </style>
   <script src="/site-appearance.js"></script>
@@ -368,7 +615,7 @@
 </head>
 <body>
   <main class="app-container">
-    <a class="home-button" href="https://susysam.github.io/start27.html">Home</a>
+    <a class="home-button" href="start27.html">Home</a>
 
     <label for="searchInput" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">Website URL</label>
     <input
@@ -389,6 +636,43 @@
 
     <p class="status-message" id="statusMessage" role="alert" aria-live="polite"></p>
 
+    <!-- ─── SAVED / RECOMMENDED LINKS SECTION ─── -->
+    <section class="saved-links-section" aria-label="Saved Links">
+      <div class="saved-links-header">
+        <h2 class="saved-links-title">
+          <span>Saved Links</span>
+        </h2>
+        <span class="saved-links-count" id="savedLinksCount">0 / 6 saved</span>
+      </div>
+
+      <div class="saved-links-form">
+        <div class="saved-form-inputs">
+          <input
+            type="text"
+            id="savedLinkTitle"
+            class="saved-input"
+            placeholder="Link title (e.g. YouTube)"
+            maxlength="50"
+            onkeydown="if (event.key === 'Enter') handleSaveLink()"
+          />
+          <input
+            type="url"
+            id="savedLinkUrl"
+            class="saved-input"
+            placeholder="Paste link here (e.g. https://...)"
+            onkeydown="if (event.key === 'Enter') handleSaveLink()"
+          />
+        </div>
+        <div class="saved-form-bottom">
+          <span class="saved-status-msg" id="savedStatusMsg" role="alert" aria-live="polite"></span>
+          <button class="saved-save-btn" id="saveLinkBtn" type="button" onclick="handleSaveLink()">+ Save Link</button>
+        </div>
+      </div>
+
+      <div class="saved-links-list" id="savedLinksList"></div>
+    </section>
+
+    <!-- ─── LAPTOP HARDWARE PREVIEW ─── -->
     <section class="laptop-hardware" id="laptopRig" aria-label="Website preview">
       <div class="laptop-screen-frame">
         <div class="laptop-display-content">
@@ -426,15 +710,21 @@
     let previewRequestId = 0;
     let stopPreviewFallbackTimer = null;
 
+    // Saved links configuration
+    const SAVED_LINKS_KEY = 'tabs_saved_links';
+    const MAX_SAVED_LINKS = 6;
+
     window.addEventListener('DOMContentLoaded', () => {
       const input = document.getElementById('searchInput');
       const frame = document.getElementById('monitorIframe');
 
       input.focus();
       frame.addEventListener('load', handlePreviewLoad);
+      renderSavedLinks();
     });
 
     function getValidUrl(rawInput) {
+      if (typeof rawInput !== 'string') return null;
       const value = rawInput.trim();
       if (!value || /^(?!https?:)[a-z][a-z\d+.-]*:/i.test(value) && !/^[^/\s:]+:\d+(?:\/|$)/.test(value)) return null;
 
@@ -594,7 +884,7 @@
         const directLink = blankDocument.createElement('a');
         directLink.href = url;
         directLink.textContent = 'Open directly if the preview is blank';
-        directLink.style.cssText = 'height:40px;display:flex;align-items:center;justify-content:center;background:#15151f;color:#9fd7ff;font:14px Arial,sans-serif';
+        directLink.style.cssText = 'height:40px;display:flex;align-items:center;justify-content:center;background:#15151f;color:#9fd7ff;font:14px Arial,sans-serif;text-decoration:none';
         blankDocument.body.appendChild(directLink);
 
         const siteFrame = blankDocument.createElement('iframe');
@@ -607,7 +897,7 @@
         siteFrame.style.border = '0';
         siteFrame.style.display = 'block';
         blankDocument.body.appendChild(siteFrame);
-        startDirectLinkCountdown(directLink, directLink, siteFrame);
+        startDirectLinkCountdown(directLink, directLink, siteFrame, 7);
       } catch (error) {
         blankWindow.location.replace(url);
       }
@@ -616,6 +906,220 @@
     function showStatus(message) {
       document.getElementById('statusMessage').textContent = message;
     }
+
+    // ─── SAVED / RECOMMENDED LINKS LOGIC ───
+    function getSavedLinks() {
+      try {
+        const raw = siteStorage.getItem(SAVED_LINKS_KEY);
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) {
+          return parsed.filter(item => item && typeof item.url === 'string' && item.url.trim());
+        }
+      } catch (e) {
+        console.warn('Failed to parse saved links:', e);
+      }
+      return [];
+    }
+
+    function saveLinksToStorage(links) {
+      try {
+        siteStorage.setItem(SAVED_LINKS_KEY, JSON.stringify(links.slice(0, MAX_SAVED_LINKS)));
+      } catch (e) {
+        console.warn('Failed to save links:', e);
+      }
+      renderSavedLinks();
+    }
+
+    function deriveFriendlyTitle(urlStr) {
+      try {
+        const u = new URL(urlStr);
+        let host = u.hostname.replace(/^www\./, '');
+        const parts = host.split('.');
+        if (parts.length > 1) {
+          const mainPart = parts[0];
+          return mainPart.charAt(0).toUpperCase() + mainPart.slice(1);
+        }
+        return host;
+      } catch {
+        return 'Link';
+      }
+    }
+
+    function handleSaveLink() {
+      const titleInput = document.getElementById('savedLinkTitle');
+      const urlInput = document.getElementById('savedLinkUrl');
+      const statusEl = document.getElementById('savedStatusMsg');
+
+      const currentLinks = getSavedLinks();
+      if (currentLinks.length >= MAX_SAVED_LINKS) {
+        statusEl.textContent = 'Maximum 6 saved links reached. Delete one first.';
+        return;
+      }
+
+      const rawUrl = urlInput.value.trim();
+      if (!rawUrl) {
+        statusEl.textContent = 'Please enter or paste a valid link.';
+        urlInput.focus();
+        return;
+      }
+
+      const validUrl = getValidUrl(rawUrl);
+      if (!validUrl) {
+        statusEl.textContent = 'Invalid link format. Use an http or https address.';
+        urlInput.focus();
+        return;
+      }
+
+      let title = titleInput.value.trim();
+      if (!title) {
+        title = deriveFriendlyTitle(validUrl);
+      }
+
+      const newEntry = {
+        id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random()),
+        title: title.slice(0, 50),
+        url: validUrl
+      };
+
+      currentLinks.unshift(newEntry);
+      saveLinksToStorage(currentLinks);
+
+      titleInput.value = '';
+      urlInput.value = '';
+      statusEl.textContent = '';
+      titleInput.focus();
+    }
+
+    function removeSavedLink(id) {
+      const current = getSavedLinks();
+      const updated = current.filter(item => item.id !== id);
+      saveLinksToStorage(updated);
+      document.getElementById('savedStatusMsg').textContent = '';
+    }
+
+    async function copySavedLink(url, btnElement) {
+      let copiedOk = false;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        try {
+          await navigator.clipboard.writeText(url);
+          copiedOk = true;
+        } catch {}
+      }
+
+      if (!copiedOk) {
+        const ta = document.createElement('textarea');
+        ta.value = url;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          copiedOk = document.execCommand('copy');
+        } catch {}
+        document.body.removeChild(ta);
+      }
+
+      const originalHtml = btnElement.innerHTML;
+      btnElement.classList.add('copied');
+      btnElement.innerHTML = '✓ Copied';
+      setTimeout(() => {
+        btnElement.classList.remove('copied');
+        btnElement.innerHTML = originalHtml;
+      }, 1500);
+    }
+
+    function openSavedLink(url) {
+      document.getElementById('searchInput').value = url;
+      openInAboutBlank(url);
+    }
+
+    function renderSavedLinks() {
+      const listEl = document.getElementById('savedLinksList');
+      const countEl = document.getElementById('savedLinksCount');
+      const saveBtn = document.getElementById('saveLinkBtn');
+      const statusEl = document.getElementById('savedStatusMsg');
+
+      const links = getSavedLinks();
+      countEl.textContent = `${links.length} / ${MAX_SAVED_LINKS} saved`;
+
+      if (links.length >= MAX_SAVED_LINKS) {
+        saveBtn.disabled = true;
+      } else {
+        saveBtn.disabled = false;
+        if (statusEl.textContent.includes('Maximum 6')) {
+          statusEl.textContent = '';
+        }
+      }
+
+      listEl.innerHTML = '';
+
+      if (links.length === 0) {
+        const empty = document.createElement('div');
+        empty.className = 'saved-empty-hint';
+        empty.textContent = 'No saved links yet. Paste a link above to keep up to 6 quick links here.';
+        listEl.appendChild(empty);
+        return;
+      }
+
+      links.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'saved-link-row';
+
+        // Main clickable link card
+        const card = document.createElement('button');
+        card.type = 'button';
+        card.className = 'saved-link-card';
+        card.title = `Open ${item.title} (${item.url})`;
+        card.onclick = () => openSavedLink(item.url);
+
+        const titleEl = document.createElement('strong');
+        titleEl.textContent = item.title;
+
+        const urlEl = document.createElement('small');
+        urlEl.textContent = item.url;
+
+        card.appendChild(titleEl);
+        card.appendChild(urlEl);
+
+        // Copy button
+        const copyBtn = document.createElement('button');
+        copyBtn.type = 'button';
+        copyBtn.className = 'saved-link-action-btn saved-copy-btn';
+        copyBtn.title = 'Copy link URL';
+        copyBtn.setAttribute('aria-label', `Copy link URL for ${item.title}`);
+        copyBtn.innerHTML = '📋 Copy';
+        copyBtn.onclick = (e) => {
+          e.stopPropagation();
+          copySavedLink(item.url, copyBtn);
+        };
+
+        // Delete button
+        const delBtn = document.createElement('button');
+        delBtn.type = 'button';
+        delBtn.className = 'saved-link-action-btn saved-delete-btn';
+        delBtn.title = 'Delete link';
+        delBtn.setAttribute('aria-label', `Delete ${item.title}`);
+        delBtn.innerHTML = '✕';
+        delBtn.onclick = (e) => {
+          e.stopPropagation();
+          removeSavedLink(item.id);
+        };
+
+        row.appendChild(card);
+        row.appendChild(copyBtn);
+        row.appendChild(delBtn);
+
+        listEl.appendChild(row);
+      });
+    }
+
+    // Sync across tabs
+    window.addEventListener('storage', (e) => {
+      if (e.key === null || e.key === SAVED_LINKS_KEY) {
+        renderSavedLinks();
+      }
+    });
 
   </script>
 </body>
