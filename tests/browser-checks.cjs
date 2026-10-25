@@ -77,12 +77,14 @@ function check(value, message) { assert(value, message); checks++; }
   await page.getByRole('link', {name:'Continue to site'}).click();
   await page.getByRole('button',{name:'Log out',exact:true}).waitFor();
   check(await page.locator('.navbar').innerText().then(text=>/Movie \+ TV\s+Log out/.test(text)), 'logout next to Movie + TV');
+  check(await page.locator('[data-account-logout]').evaluate(el=>getComputedStyle(el).backgroundColor) !== await page.locator('.navbar a').first().evaluate(el=>getComputedStyle(el).backgroundColor), 'logout color differs from navigation');
   check(await page.locator('[data-timezone-select]').count() === 0, 'Home clock is display-only');
   check(await page.locator('#time-sub').innerText().then(text=>/Eastern/.test(text)), 'Home displays timezone');
   check(await page.locator('.window-dots').count() === 0, 'decorative dots removed');
   await page.screenshot({path:path.join(artifacts,'home-desktop.png'),fullPage:true});
   await page.goto(base+'/settings.html#account');
-  await page.getByRole('link',{name:'Account & Cloud Saving'}).waitFor();
+  await page.locator('#settings-account:not([hidden])').waitFor();
+  check(await page.locator('.settings-sidebar [data-category="account"]').count() === 0, 'account section omitted only from sidebar');
   check(await page.locator('[data-account-form]').count() === 0, 'Settings has no second sign-in form');
   check(await page.locator('#settings-account').isVisible(), 'account deep link works when signed in');
   await page.getByRole('link',{name:'Your Data',exact:true}).click();
@@ -108,6 +110,7 @@ function check(value, message) { assert(value, message); checks++; }
   await page.getByRole('button',{name:'Log out',exact:true}).click();
   await page.getByRole('link',{name:'Log in',exact:true}).waitFor();
   check(await page.getByRole('button',{name:'Log out',exact:true}).isHidden(), 'logout updates UI');
+  check(await page.locator('[data-sync-detail]').innerText() === 'Your data stays on this device, not in the cloud.', 'signed-out Home describes device storage');
   check(await page.evaluate(()=>localStorage.getItem('timeZone')) === 'America/Los_Angeles', 'logout retains device preferences');
   await page.goto(base+'/settings.html#account');
   check(await page.getByRole('link',{name:'Account & Cloud Saving'}).count() === 0, 'signed-out account category hidden');

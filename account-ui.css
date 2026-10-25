@@ -79,4 +79,6 @@
 }
 .account-entry-button:hover, .home-page .navbar .account-entry-button:hover,
 .data-status-grid .account-entry-button:hover { background: #06616b; color: white; }
+.home-page .navbar [data-account-logout] { background: #a63846; color: white; }
+.home-page .navbar [data-account-logout]:hover { background: #822937; }
 .account-entry-button:focus-visible, .settings-links a:focus-visible { outline: 3px solid #a35ce0; outline-offset: 3px; }

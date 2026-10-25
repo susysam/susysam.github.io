@@ -1,12 +1,15 @@
 // Presentation only: Firebase/SyncController remain the source of truth.
 export function syncPresentation(state, online = true) {
+  if (!state.user && !['loading', 'error'].includes(state.phase)) {
+    return { tone: 'bad', label: 'Not Synced', detail: 'Your data stays on this device, not in the cloud.' };
+  }
   if (!online) return { tone: 'bad', label: 'Not Synced', detail: 'Offline. Cloud saving will retry when you reconnect.' };
   if (state.user && state.phase === 'synced') return { tone: 'good', label: 'Synced', detail: state.message && state.message !== 'Synced' ? state.message : 'Cloud data is up to date.' };
   if (state.phase === 'loading' || (state.user && ['pending', 'saving'].includes(state.phase))) {
     return { tone: 'pending', label: 'Syncing…', detail: state.message || 'Checking cloud saving…' };
   }
   return { tone: 'bad', label: 'Not Synced', detail: state.user ? state.message :
-    (state.phase === 'error' ? state.message : 'Sign in to enable cloud saving. Device storage is separate.') };
+    (state.phase === 'error' ? state.message : 'Your data stays on this device, not in the cloud.') };
 }
 
 export function renderStatus(element, { tone, label, detail = '' }) {

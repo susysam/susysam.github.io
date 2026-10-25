@@ -33,7 +33,7 @@ window.addEventListener('site-account-rendered', () => {
   updateCurrent();
 });
 function updateCurrent() {
-  const visible = sections.filter(section => !section.hidden);
+  const visible = sections.filter(section => !section.hidden && links.some(link => link.dataset.category === section.dataset.settingsPanel));
   const current = visible.filter(section => section.getBoundingClientRect().top <= 130).at(-1) || visible[0];
   if (current) markCurrent(current.dataset.settingsPanel);
 }

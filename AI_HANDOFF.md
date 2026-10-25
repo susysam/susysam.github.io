@@ -1,3 +1,9 @@
+# Current status — read this first
+
+October 25, 2026: the follow-up UI is authorized for GitHub publication in this release. Leo already deployed the matching Firebase Hosting site and reports publishing the updated Firestore rules. Read PUBLICATION-STATUS.md and the current Git log for release evidence. No need to repeat setup. Run git status before editing; preserve subsequent work. Earlier notes about pending publication/rules are historical. Future changes require fresh user instructions to publish.
+
+The follow-up changes are documented in LOCAL-UPDATE.md: clearer device-only saving copy, distinct logout styling, and removal of only the Account sidebar link while keeping the account section and direct link. Automatic device/cloud saving remains in place. Checks: 28 unit/build tests, 7 backup regressions, 68 simulated browser checks.
+
 # SUSYSAM development handoff
 
 Updated October 25, 2026. Owner: Leo / `susysam`. Primary site/repository: https://susysam.github.io / https://github.com/susysam/susysam.github.io. See PUBLICATION-STATUS.md for the current release result.

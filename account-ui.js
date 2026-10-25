@@ -93,6 +93,9 @@ function bindStatus() {
   let notice;
   function render(state) {
     const presentation = syncPresentation(state, navigator.onLine);
+    if (!state.user && !['loading', 'error'].includes(state.phase) && !window.siteStorage.status.persistent) {
+      presentation.detail = 'Device saving is unavailable. Changes may only last while this page is open.';
+    }
     document.querySelectorAll('[data-auth-only]').forEach(element => { element.hidden = !state.user; });
     document.querySelectorAll('[data-login-link]').forEach(element => { element.hidden = !!state.user; });
     document.querySelectorAll('[data-cloud-indicator]').forEach(element => renderStatus(element, presentation));
@@ -117,6 +120,7 @@ function bindStatus() {
   }
   window.siteCloud.subscribe(render);
   ['online', 'offline'].forEach(event => window.addEventListener(event, () => render(window.siteCloud.state)));
+  window.addEventListener('site-storage-status', () => render(window.siteCloud.state));
   document.querySelectorAll('[data-account-logout]').forEach(button => button.addEventListener('click', async () => {
     if (['loading', 'pending', 'saving', 'error', 'conflict'].includes(window.siteCloud.state.phase) &&
         !confirm('Some device data may not be synced. Log out and keep it on this device?')) return;
