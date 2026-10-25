@@ -420,13 +420,16 @@
   <link rel="stylesheet" href="/account-ui.css">
   <script type="module" src="/firebase-config.js"></script>
   <script type="module" src="/account-ui.js"></script>
+<link rel="stylesheet" href="/settings-layout.css">
+  <script type="module" src="/settings-navigation.js"></script>
+  <script type="module" src="/site-clock.js"></script>
 </head>
 
 <body data-home-background>
   <header>
     <div class="header-inner">
       <div class="header-left-group">
-        <button id="homeButton" class="site-home-button" type="button">← Home</button>
+        <button id="homeButton" class="site-home-button" type="button">Home</button>
         <div class="title">
           <h1>Settings</h1>
           <p id="subtitle">Personalize your site</p>
@@ -439,13 +442,31 @@
     </div>
   </header>
 
-  <main>
-    <div class="grid">
-      <section class="card" id="account">
-        <div class="card-head"><h2>Account &amp; cloud saving</h2></div>
-        <div class="card-body"><div data-account-panel></div></div>
-      </section>
-      <section class="card">
+<main class="settings-layout"><nav class="settings-sidebar" aria-label="Settings categories"><div class="settings-links"><a id="category-general" href="#general" data-category="general">General</a>
+<a id="category-appearance" href="#appearance" data-category="appearance">Appearance</a>
+<a id="category-time" href="#time" data-category="time">Time &amp; Display</a>
+<a id="category-data" href="#data" data-category="data">Your Data</a>
+<a id="category-account" href="#account" data-category="account" data-auth-only hidden>Account &amp; Cloud Saving</a></div></nav><div class="settings-content"><div id="settings-general" data-settings-panel="general" class="settings-category" role="region" aria-labelledby="category-general" tabindex="-1">      <section class="card">
+        <div class="card-head">
+          <div>
+            <h2>Performance mode</h2>
+            <div class="sub">Reduce visual effects</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="left">
+              <p class="label">Performance mode</p>
+              <p class="hint">Turns off site animations, blur, and shadows. It cannot change a game's own FPS.</p>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="performanceToggle" aria-label="Performance mode">
+              <span class="switch" aria-hidden="true"></span>
+            </label>
+          </div>
+        </div>
+      </section></div>
+<div id="settings-appearance" data-settings-panel="appearance" class="settings-category" role="region" aria-labelledby="category-appearance" tabindex="-1">      <section class="card">
         <div class="card-head">
           <div>
             <h2>Appearance</h2>
@@ -511,9 +532,7 @@
           </form>
           <p class="mini">Your custom colors are saved on this device and sync when signed in. Use × on a custom color to remove it.</p>
         </div>
-      </section>
-
-      <section class="card">
+      </section>      <section class="card">
         <div class="card-head">
           <div>
             <h2>Home background image</h2>
@@ -522,6 +541,7 @@
         </div>
         <div class="card-body">
           <p class="hint">Paste a direct image URL. This replaces the selected color preset.</p>
+          <label for="bgUrlInput" class="account-field">Background image URL</label>
           <input class="text-input image-url-input" id="bgUrlInput" type="url" placeholder="https://example.com/background.jpg">
           <div class="btns">
             <button id="saveBgBtn" type="button">Save Image</button>
@@ -530,13 +550,33 @@
           </div>
           <p class="mini" id="bgStatus">Current: <span id="bgCurrent">Default</span></p>
         </div>
-      </section>
-
-      <section class="card">
+      </section>      <section class="card">
+        <div class="card-head"><h2>Reset</h2></div>
+        <div class="card-body">
+          <div class="row">
+            <div class="left">
+              <p class="label">Reset appearance settings</p>
+              <p class="hint">Clears colors, image, custom presets, and performance mode in this browser.</p>
+            </div>
+            <button class="btn-danger" id="resetAllBtn" type="button">Reset</button>
+          </div>
+        </div>
+      </section></div>
+<div id="settings-time" data-settings-panel="time" class="settings-category" role="region" aria-labelledby="category-time" tabindex="-1"><section class="card"><div class="card-head"><h2>Time &amp; display</h2></div><div class="card-body">
+  <label class="account-field" for="settingsTimezone">Clock timezone</label>
+  <select class="timezone-select" id="settingsTimezone" data-timezone-select></select>
+  <p class="hint">The home clock follows this timezone, including daylight saving changes.</p>
+  <p class="account-note" data-timezone-feedback role="status"></p>
+</div></section></div>
+<div id="settings-data" data-settings-panel="data" class="settings-category" role="region" aria-labelledby="category-data" tabindex="-1">      <section class="card">
         <div class="card-head"><h2>Your data</h2></div>
         <div class="card-body">
           <p class="hint">Backups include settings, saved links, games, and viewing history. Passwords and account credentials are excluded. Signed-in data syncs after you resolve any differences.</p>
-          <p class="sync-indicator" data-backup-sync-status role="status">Checking account…</p>
+          <div class="data-status-grid">
+            <div><h3>Cloud saving</h3><p data-cloud-indicator role="status">Checking cloud saving…</p><p class="account-note" data-sync-detail></p></div>
+            <div><h3>Device storage</h3><p data-device-status role="status">Checking device storage…</p></div>
+            <div><h3>Account status</h3><p data-account-status role="status">Checking account…</p><a class="account-entry-button" href="/index.html" data-login-link>Log in or create an account</a></div>
+          </div>
           <div class="btns backup-actions">
             <button id="exportDataBtn" type="button">Export backup</button>
             <div class="backup-import">
@@ -552,47 +592,15 @@
           <p class="mini">Import replaces the categories in the backup. While signed in, Delete all clears device and synced site data but keeps your account. While signed out, it clears only this device. Downloads and external sites are unaffected. Cloud saving supports up to 900 KB; file backups support 2 MB.</p>
           <p id="dataStatus" role="status" aria-live="polite"></p>
         </div>
-      </section>
-
-      <section class="card">
-        <div class="card-head"><h2>Reset</h2></div>
-        <div class="card-body">
-          <div class="row">
-            <div class="left">
-              <p class="label">Reset appearance settings</p>
-              <p class="hint">Clears colors, image, custom presets, and performance mode in this browser.</p>
-            </div>
-            <button class="btn-danger" id="resetAllBtn" type="button">Reset</button>
-          </div>
-        </div>
-      </section>
-
-      <section class="card">
-        <div class="card-head">
-          <div>
-            <h2>Performance mode</h2>
-            <div class="sub">Reduce visual effects</div>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="left">
-              <p class="label">Performance mode</p>
-              <p class="hint">Turns off site animations, blur, and shadows. It cannot change a game's own FPS.</p>
-            </div>
-            <label class="toggle">
-              <input type="checkbox" id="performanceToggle" aria-label="Performance mode">
-              <span class="switch" aria-hidden="true"></span>
-            </label>
-          </div>
-        </div>
-      </section>
-    </div>
-  </main>
+      </section></div>
+<div id="settings-account" data-settings-panel="account" class="settings-category" role="region" aria-labelledby="category-account" tabindex="-1" data-account-category data-auth-only hidden>      <section class="card">
+        <div class="card-head"><h2>Account &amp; cloud saving</h2></div>
+        <div class="card-body"><div data-account-panel="manage"></div></div>
+      </section></div></div></main>
 
   <footer>
     <div>
-      &copy; 2026 <a href="https://susysam.github.io/start27.html" target="_blank" rel="noreferrer">SUSYSAM</a>
+      &copy; 2026 <a href="/start27.html">SUSYSAM</a>
     </div>
   </footer>
 

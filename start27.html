@@ -201,36 +201,33 @@
   <link rel="stylesheet" href="/account-ui.css">
   <script type="module" src="/firebase-config.js"></script>
   <script type="module" src="/account-ui.js"></script>
+  <script type="module" src="/site-clock.js"></script>
 </head>
 
-<body data-home-background>
-  <div class="navbar">
+<body data-home-background class="home-page">
+  <nav class="navbar" aria-label="Main navigation">
     <a href="games.html">Games</a>
     <a href="tabs.html">Tabs</a>
     <a href="settings.html">Settings</a>
-    <a href="movie+tv.html">Movie+TV</a>
-  </div>
+    <a href="movie+tv.html">Movie + TV</a>
+    <button type="button" data-account-logout data-auth-only hidden>Log out</button>
+    <a class="account-entry-button" href="/index.html" data-login-link>Log in</a>
+  </nav>
+  <p data-logout-feedback role="alert"></p>
+  <main class="home-content">
 
   <p id="placeholder"></p>
 
-  <div class="time-window" role="group" aria-label="Time window (Eastern Time)">
-    <div class="time-titlebar">
-      <div class="left">
-        <div class="window-dots" aria-hidden="true">
-          <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-        </div>
-        <div class="time-title">Current Time</div>
-      </div>
-      <div class="tz-badge" id="tzBadge" title="Eastern Time Zone">EST</div>
-    </div>
+  <div class="time-window" role="group" aria-label="Current time">
+    <div class="time-titlebar"><h1 class="time-title">Current Time</h1></div>
     <div class="time-body">
       <p id="time">--:--:--</p>
-      <div id="time-sub">Eastern Time (America/New_York)</div>
+      <div id="time-sub"></div>
     </div>
   </div>
 
-  <div class="button-container">
-  </div>
+  </main>
+  <footer class="page-sync-footer"><p data-cloud-indicator role="status">Checking cloud saving…</p><p class="account-note" data-sync-detail></p></footer>
 
   <script>
     const options = [
@@ -242,127 +239,7 @@
     }
     document.getElementById("placeholder").textContent = getRandomOption();
 
-    // ---------------- Time (Intl first, API fallback) ----------------
-    const TIME_ZONE = "America/New_York";
-    const timeEl = document.getElementById("time");
-    const tzBadge = document.getElementById("tzBadge");
-
-    function formatViaIntl(dateObj) {
-      return new Intl.DateTimeFormat("en-US", {
-        timeZone: TIME_ZONE,
-        hour: "numeric",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: true
-      }).format(dateObj);
-    }
-
-    // DST rules (US) fallback conversion from UTC -> ET (EDT/EST)
-    function isDSTInNewYork(dateUtc) {
-      const year = dateUtc.getUTCFullYear();
-
-      function nthSundayOfMonthUTC(year, monthIndex, nth, hourUTC) {
-        const first = new Date(Date.UTC(year, monthIndex, 1, hourUTC, 0, 0));
-        const firstDay = first.getUTCDay();
-        const daysUntilSunday = (7 - firstDay) % 7;
-        const day = 1 + daysUntilSunday + (nth - 1) * 7;
-        return new Date(Date.UTC(year, monthIndex, day, hourUTC, 0, 0));
-      }
-
-      const dstStartUtc = nthSundayOfMonthUTC(year, 2, 2, 7);  // March 2nd Sunday 07:00 UTC
-      const dstEndUtc   = nthSundayOfMonthUTC(year,10, 1, 6);  // Nov   1st Sunday 06:00 UTC
-      return dateUtc >= dstStartUtc && dateUtc < dstEndUtc;
-    }
-
-    function formatEasternFromUtcMs(utcMs) {
-      const dUtc = new Date(utcMs);
-      const dst = isDSTInNewYork(dUtc);
-      
-      // Update badge visuals contextually
-      tzBadge.textContent = dst ? "EDT" : "EST";
-
-      const offsetHours = dst ? -4 : -5;
-      const easternMs = utcMs + offsetHours * 60 * 60 * 1000;
-      const d = new Date(easternMs);
-
-      let h = d.getUTCHours();
-      const m = String(d.getUTCMinutes()).padStart(2, "0");
-      const s = String(d.getUTCSeconds()).padStart(2, "0");
-      const ampm = h >= 12 ? "PM" : "AM";
-      h = h % 12;
-      h = h ? h : 12;
-
-      return `${h}:${m}:${s} ${ampm}`;
-    }
-
-    function intlLooksBroken() {
-      try {
-        const now = new Date();
-        const ny = formatViaIntl(now);
-        return !ny || typeof ny !== "string";
-      } catch {
-        return true;
-      }
-    }
-
-    let baseUtcMs = null;
-    let basePerfMs = null;
-    let tickTimer = null;
-    let usingApiFallback = false;
-
-    function tick() {
-      if (usingApiFallback) {
-        const elapsed = performance.now() - basePerfMs;
-        const nowUtcMs = baseUtcMs + elapsed;
-        timeEl.textContent = formatEasternFromUtcMs(nowUtcMs);
-      } else {
-        const now = new Date();
-        timeEl.textContent = formatViaIntl(now);
-        // Dynamic badge update for regular system execution path
-        try {
-          const parts = new Intl.DateTimeFormat("en-US", {
-            timeZone: TIME_ZONE,
-            timeZoneName: "short"
-          }).formatToParts(now);
-          const tzPart = parts.find(p => p.type === "timeZoneName");
-          if (tzPart) tzBadge.textContent = tzPart.value;
-        } catch {}
-      }
-    }
-
-    async function syncUtcFromApi() {
-      const res = await fetch("https://worldtimeapi.org/api/timezone/Etc/UTC", { cache: "no-store", signal: AbortSignal.timeout(5000) });
-      if (!res.ok) throw new Error("UTC sync failed");
-      const data = await res.json();
-      baseUtcMs = data.unixtime * 1000;
-      basePerfMs = performance.now();
-    }
-
-    async function startClock() {
-      usingApiFallback = intlLooksBroken();
-
-      if (usingApiFallback) {
-        try {
-          await syncUtcFromApi();
-        } catch (e) {
-          baseUtcMs = Date.now();
-          basePerfMs = performance.now();
-          console.warn("Time API blocked; using local fallback.", e);
-        }
-      }
-
-      if (tickTimer) clearInterval(tickTimer);
-      tick();
-      tickTimer = setInterval(tick, 1000);
-
-      if (usingApiFallback) {
-        setInterval(async () => {
-          try { await syncUtcFromApi(); } catch {}
-        }, 10 * 60 * 1000);
-      }
-    }
-
-    startClock();
+    // The shared clock module uses IANA timezone rules from Intl.
 
 
   </script>

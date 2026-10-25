@@ -1,0 +1,39 @@
+.settings-layout { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 24px; align-items: start; padding: 28px 24px 40px; }
+.settings-sidebar { position: sticky; top: 100px; max-height: calc(100dvh - 124px); overflow-y: auto; padding: 4px; scrollbar-width: thin; }
+.settings-sidebar .settings-links { position: relative; display: flex; flex-direction: column; gap: 6px; }
+.settings-sidebar [data-category] { width: 100%; text-align: left; padding: 13px 14px; color: var(--text); background: transparent; border: 1px solid transparent; font-weight: 600; box-sizing: border-box; border-radius: 12px; text-decoration: none; font-size: 14px; }
+.settings-sidebar [data-category]:hover { background: var(--card); }
+.settings-sidebar [data-category][aria-current="location"] { background: #6c0ba9; color: white; }
+
+.settings-content, .settings-category { min-width: 0; }
+.settings-content { display: grid; gap: 28px; }
+.settings-category { display: grid; gap: 20px; scroll-margin-top: 110px; }
+.settings-category:focus-visible { outline: 2px solid #a35ce0; outline-offset: 5px; border-radius: 16px; }
+.settings-category .card-head { padding: 20px 22px 16px; }
+.settings-category .card-head h2 { font-size: 18px; line-height: 1.4; }
+.settings-category .card-body { padding: 20px 22px; }
+.settings-category .card-body > :first-child { margin-top: 0; }
+.settings-category .card-body > :last-child { margin-bottom: 0; }
+.data-status-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 22px 0; }
+.data-status-grid > div { padding: 16px; background: var(--inputBg, rgba(128,128,128,.06)); border: 1px solid var(--border); border-radius: 12px; min-width: 0; }
+.data-status-grid > div:last-child { grid-column: 1 / -1; }
+.data-status-grid h3 { font-size: 13px; margin: 0 0 10px; }
+.data-status-grid p { margin: 0 0 6px; }
+.data-status-grid a { display: block; margin-top: 8px; font-size: 12px; color: var(--text); text-underline-offset: 3px; }
+.btn-danger { background: #b42332; }
+.toggle { position: relative; }
+.toggle input { display: block; position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; z-index: 1; cursor: pointer; }
+.toggle input:focus-visible + .switch { outline: 3px solid #a35ce0; outline-offset: 4px; }
+.preset-chip:focus-visible { outline: 3px solid #a35ce0; outline-offset: 3px; }
+.settings-category .mini, .settings-category .hint, .settings-category .sub { font-size: 13px; line-height: 1.6; }
+.backup-import { flex: 1 1 260px; }
+.backup-file-name { flex: 1 1 130px; }
+@media (max-width: 700px) {
+  .settings-layout { grid-template-columns: minmax(0, 1fr); gap: 16px; padding: 16px 12px 28px; }
+  .settings-sidebar { position: static; max-height: none; padding: 4px; }
+  .settings-sidebar .settings-links { flex-direction: row; overflow-x: auto; padding: 4px 2px 10px; scrollbar-width: thin; }
+  .settings-sidebar [data-category] { width: auto; flex-shrink: 0; white-space: nowrap; }
+
+  .settings-category .card-body, .settings-category .card-head { padding: 18px; }
+  .data-status-grid { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+}

@@ -1,6 +1,7 @@
+import { validTimeZone } from './time-preferences.js';
 // Only application data is synced. Local login hashes and Firebase tokens are excluded.
 export const DATA_KEYS = Object.freeze(['theme', 'backgroundUrl', 'customBackgroundPresets',
-  'performanceMode', 'customGames', 'tabs_saved_links', 'lastWatched', 'recentImdbMedia']);
+  'performanceMode', 'customGames', 'tabs_saved_links', 'lastWatched', 'recentImdbMedia', 'timeZone']);
 export const MAX_BACKUP_BYTES = 2 * 1024 * 1024;
 // Leave room below Firestore's 1 MiB document limit for field names and metadata.
 export const MAX_CLOUD_BYTES = 900000;
@@ -13,6 +14,7 @@ export function validateData(data) {
     if (!DATA_KEYS.includes(key) || typeof value !== 'string') throw new Error('Unsupported saved data.');
     if (key === 'theme' && !['dark', 'light'].includes(value)) throw new Error('Invalid theme.');
     if (key === 'performanceMode' && !['on', 'off'].includes(value)) throw new Error('Invalid performance mode.');
+    if (key === 'timeZone' && !validTimeZone(value)) throw new Error('Invalid timezone.');
     if (key === 'backgroundUrl' && value && !/^#[0-9a-f]{6}$/i.test(value)) {
       const url = new URL(value);
       if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password) throw new Error('Invalid background URL.');
@@ -33,7 +35,7 @@ export function validateData(data) {
 export function validateCloudData(data) {
   validateData(data);
   if (new TextEncoder().encode(canonical(data)).byteLength > MAX_CLOUD_BYTES) {
-    throw new Error('Saved on this device only: data is too large for cloud sync (900 KB limit). File backups still support 2 MB.');
+    throw new Error('Data is too large for cloud sync (900 KB limit). File backups still support 2 MB. Check device storage status before leaving.');
   }
   return data;
 }
@@ -96,7 +98,7 @@ export class SyncController {
     this.ready = false;
     this.pending = null;
     this.remote = null;
-    this.status('local', 'Not signed in · Saved on this device');
+    this.status('local', 'Sign in to enable cloud saving.');
   }
   conflict(remote, message = 'Cloud and device data differ. Choose a copy before syncing.') {
     this.remote = remote;
@@ -135,7 +137,7 @@ export class SyncController {
   changed() {
     if (!this.uid || !this.ready) return;
     clearTimeout(this.timer);
-    this.status('pending', 'Saved on this device · Sync pending');
+    this.status('pending', 'Cloud changes pending…');
     this.timer = setTimeout(() => { void this.save(); }, 2000);
   }
   async save() {

@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
+  <title>Welcome to susysam</title>
 
   <!-- Apply theme ASAP (site-wide) -->
   <script>
@@ -225,17 +225,17 @@
   <script type="module" src="/account-ui.js"></script>
 </head>
 
-<body>
-  <div class="wrapper">
+<body class="welcome-page">
+  <main class="wrapper">
     <div class="brand">
-      <h2>Welcome to SUSYSAM</h2>
-      <p>Keep your data on this device or sign in to save it across devices.</p>
+      <h1 class="welcome-heading">Welcome to susysam</h1>
     </div>
     <div data-account-panel></div>
     <div class="divider"></div>
-    <a class="site-home-button" href="/start27.html">Continue to site</a>
-    <p class="account-note" style="margin-top:12px">The site is public. Signing in protects your cloud data; using the site without signing in saves data only on this device.</p>
+    <a class="site-home-button continue-button" href="/start27.html">Continue to site</a>
+    <p class="account-note" style="margin-top:12px">Sign in to save to the cloud. Without an account, data stays on this device.</p>
     <noscript>JavaScript is needed for accounts and saved settings. You can still follow the link above.</noscript>
-  </div>
+  </main>
+  <footer class="page-sync-footer"><p data-cloud-indicator role="status">Checking cloud saving…</p><p class="account-note" data-sync-detail></p></footer>
 </body>
 </html>

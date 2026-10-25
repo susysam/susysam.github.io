@@ -222,12 +222,14 @@
 
     .card-thumb {
       width: 100%;
-      height: 140px;
+      height: 160px;
       object-fit: cover;
+      object-position: center;
       display: block;
       transition: transform 0.3s ease;
     }
-    .game-card:hover .card-thumb { transform: scale(1.06); }
+    .game-card[data-name="a1r"] .card-thumb { object-fit: contain; }
+    .game-card:hover .card-thumb { transform: none; }
 
     .card-thumb-wrap {
       overflow: hidden;
@@ -381,7 +383,7 @@
 <body>
 
   <header>
-    <a class="site-home-button" href="/start27.html">← Home</a>
+    <a class="site-home-button" href="/start27.html">Home</a>
     <span class="header-title">GAMES</span>
     <div class="header-right">
       <span class="game-count" id="gameCount">2 games</span>

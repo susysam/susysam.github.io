@@ -1,6 +1,6 @@
 (function () {
   const keys = ['theme', 'backgroundUrl', 'customBackgroundPresets', 'performanceMode',
-    'customGames', 'tabs_saved_links', 'lastWatched', 'recentImdbMedia'];
+    'customGames', 'tabs_saved_links', 'lastWatched', 'recentImdbMedia', 'timeZone'];
   const profileKeys = ['localProfile', 'username', 'password', 'rememberedUsername'];
   const status = document.getElementById('dataStatus');
   const report = message => { status.textContent = message; };
@@ -17,6 +17,11 @@
       }
       if (key === 'theme' && !['dark', 'light'].includes(item)) throw new Error('Invalid theme.');
       if (key === 'performanceMode' && !['on', 'off'].includes(item)) throw new Error('Invalid performance mode.');
+      if (key === 'timeZone') {
+        if (!item || item.length > 100) throw new Error('Invalid timezone.');
+        try { new Intl.DateTimeFormat('en-US', { timeZone: item }); }
+        catch { throw new Error('Invalid timezone.'); }
+      }
       if (key === 'backgroundUrl' && item && !/^#[0-9a-f]{6}$/i.test(item) && !siteHttpUrl(item)) {
         throw new Error('Invalid background URL.');
       }

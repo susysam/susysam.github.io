@@ -50,7 +50,7 @@
 
         <script>
             function Go() {
-                let url = 'https://susysam.github.io/start27.html';
+                let url = new URL('/start27.html', location.href).href;
                 maskedWindow = window.open();
 
                 const doc = maskedWindow.document;

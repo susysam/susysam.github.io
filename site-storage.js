@@ -1,6 +1,18 @@
 // Keep the page usable when browser storage is blocked or full.
 (function () {
   const fallback = new Map();
+  let persistent = false;
+  function statusChanged(ok) {
+    persistent = ok && fallback.size === 0;
+    window.dispatchEvent(new Event('site-storage-status'));
+  }
+  // Probe a unique temporary key without changing application data.
+  try {
+    const probe = '__susysam_probe_' + crypto.randomUUID();
+    localStorage.setItem(probe, probe);
+    persistent = localStorage.getItem(probe) === probe;
+    localStorage.removeItem(probe);
+  } catch { persistent = false; }
   let noticeQueued = false;
   function notify() {
     if (noticeQueued) return;
@@ -9,25 +21,26 @@
       const notice = document.createElement('p');
       notice.setAttribute('role', 'status');
       notice.textContent = 'Browser storage is unavailable. Some changes will only last while this page is open.';
-      notice.style.cssText = 'position:fixed;bottom:8px;left:8px;right:8px;z-index:9999;margin:0;padding:12px;border-radius:8px;background:#29202c;color:#fff;font:14px Arial,sans-serif;text-align:center';
+      notice.style.cssText = 'position:relative;box-sizing:border-box;max-width:600px;width:calc(100% - 32px);margin:16px auto;padding:12px;border-radius:8px;background:#29202c;color:#fff;font:14px/1.5 Arial,sans-serif;text-align:center';
       document.body.appendChild(notice);
     };
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', show, { once: true });
     else show();
   }
   window.siteStorage = {
+    get status() { return { persistent }; },
     getItem(key) {
       if (fallback.has(key)) return fallback.get(key);
       try { return localStorage.getItem(key); }
-      catch { notify(); return null; }
+      catch { statusChanged(false); notify(); return null; }
     },
     setItem(key, value) {
-      try { localStorage.setItem(key, String(value)); fallback.delete(key); return true; }
-      catch { fallback.set(key, String(value)); notify(); return false; }
+      try { localStorage.setItem(key, String(value)); fallback.delete(key); statusChanged(true); return true; }
+      catch { fallback.set(key, String(value)); statusChanged(false); notify(); return false; }
     },
     removeItem(key) {
-      try { localStorage.removeItem(key); fallback.delete(key); return true; }
-      catch { fallback.set(key, null); notify(); return false; }
+      try { localStorage.removeItem(key); fallback.delete(key); statusChanged(persistent); return true; }
+      catch { fallback.set(key, null); statusChanged(false); notify(); return false; }
     }
   };
   window.siteHttpUrl = function (value) {

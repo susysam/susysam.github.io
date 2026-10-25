@@ -17,7 +17,7 @@ service cloud.firestore {
         && doc.updatedAt == request.time
         && data is map
         && data.keys().hasOnly(['theme', 'backgroundUrl', 'customBackgroundPresets',
-          'performanceMode', 'customGames', 'tabs_saved_links', 'lastWatched', 'recentImdbMedia'])
+          'performanceMode', 'customGames', 'tabs_saved_links', 'lastWatched', 'recentImdbMedia', 'timeZone'])
         && optionalString(data, 'theme')
         && optionalString(data, 'backgroundUrl')
         && optionalString(data, 'customBackgroundPresets')
@@ -25,7 +25,8 @@ service cloud.firestore {
         && optionalString(data, 'customGames')
         && optionalString(data, 'tabs_saved_links')
         && optionalString(data, 'lastWatched')
-        && optionalString(data, 'recentImdbMedia');
+        && optionalString(data, 'recentImdbMedia')
+        && (!('timeZone' in data) || (data.timeZone is string && data.timeZone.size() > 0 && data.timeZone.size() <= 100));
     }
     match /users/{uid}/data/settings {
       allow get: if owns(uid);

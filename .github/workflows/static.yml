@@ -33,11 +33,21 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check site and prepare public files
+        run: |
+          node tests/check-scripts.cjs
+          node --test tests/*.test.mjs
+          node tests/verify-changes.cjs
+          node scripts/build-site.mjs
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
-          path: '.'
+          # Use the same public-file allowlist as the prepared Firebase deployment.
+          path: 'dist'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

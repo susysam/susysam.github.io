@@ -2,12 +2,16 @@
 
 This site uses Firebase Authentication and Firestore for account-based saving. Email/password sign-in and Cloud Firestore are enabled. The configuration and verification steps below are kept for future setup and troubleshooting.
 
+## Current local update
+
+The redesigned welcome page is now the primary sign-in flow. Settings only shows account management while authenticated; logout is on Home. The optional `timeZone` field requires publishing the updated rules before the new preference can sync. This update has not been deployed. See `FIREBASE-HOSTING.md` for preparation and `IMPLEMENTATION-REPORT.md` for current tests and limits. The checks below describe the previously tested account baseline unless stated otherwise.
+
 ## Finish the Firebase setup
 
 1. Open [Firestore Rules for this project](https://console.firebase.google.com/project/susysam-2ae6e/firestore/rules).
 2. Replace the editor contents with the complete contents of **firestore.rules** in this folder, then publish the rules. The exact text is also included below. These rules are intended for this site's database; if you add another app later, review its access separately.
 3. Keep the project on the **Spark** plan. This implementation uses email/password Authentication and Firestore; it does not require paid hosting, Cloud Functions, or Cloud Storage. Do not enable billing for this setup. Free quotas still apply; the app keeps local changes if cloud requests fail.
-4. Open the local preview's Settings page and create your account with your own email and a unique password. Enter the password yourself; do not paste it into chat. Old browser-only usernames and passwords are not Firebase accounts.
+4. Open the local preview's welcome page (`/index.html`) and create your account with your own email and a unique password. Enter the password yourself; do not paste it into chat. Old browser-only usernames and passwords are not Firebase accounts.
 5. Wait for **Synced**. If you see a rules/permission error, check the rules were published to the `susysam-2ae6e` project's default Firestore database, then select Retry connection.
 6. If Firebase reports an unauthorized domain, add the exact hostname in Authentication > Settings > Authorized domains: `susysam.github.io` for the public site, and `127.0.0.1` or `localhost` for whichever local preview you use. Do not enter a port or a full URL.
 
@@ -31,7 +35,7 @@ The login protects account data through Firebase rules. It does not make this pu
 - File imports and exports are limited to **2 MB**. Firestore documents have a **1 MiB** service limit, so cloud data has a conservative **900 KB** limit including serialized application data. Larger data remains local and produces a visible error.
 - Local edits sync after two seconds of inactivity. Wait for **Synced** before closing or navigating away if you need the latest cloud copy. An interrupted save keeps local data; reopening may require choosing between copies.
 - The app checks the cloud at sign-in/page load, on reconnection and on focus after 30 seconds. It does not continuously stream remote changes. Transactions detect concurrent changes before overwriting them.
-- The data map preserves the existing local storage string values for theme, background, presets, performance mode, games, saved links and viewing history. Metadata adds a schema version, revision and server timestamp around that map.
+- The data map preserves the existing local storage string values for theme, background, presets, performance mode, games, saved links, viewing history and timezone. Metadata adds a schema version, revision and server timestamp around that map.
 - Delete history and backup imports participate in sync when it is active. If sync is paused by a conflict or error, those changes stay local until you resolve it.
 - Delete all keeps the Firebase login account. It does not delete downloaded backups, external sites' data or files on other devices.
 
@@ -78,7 +82,7 @@ service cloud.firestore {
         && doc.updatedAt == request.time
         && data is map
         && data.keys().hasOnly(['theme', 'backgroundUrl', 'customBackgroundPresets',
-          'performanceMode', 'customGames', 'tabs_saved_links', 'lastWatched', 'recentImdbMedia'])
+          'performanceMode', 'customGames', 'tabs_saved_links', 'lastWatched', 'recentImdbMedia', 'timeZone'])
         && optionalString(data, 'theme')
         && optionalString(data, 'backgroundUrl')
         && optionalString(data, 'customBackgroundPresets')
@@ -86,7 +90,8 @@ service cloud.firestore {
         && optionalString(data, 'customGames')
         && optionalString(data, 'tabs_saved_links')
         && optionalString(data, 'lastWatched')
-        && optionalString(data, 'recentImdbMedia');
+        && optionalString(data, 'recentImdbMedia')
+        && (!('timeZone' in data) || (data.timeZone is string && data.timeZone.size() > 0 && data.timeZone.size() <= 100));
     }
     match /users/{uid}/data/settings {
       allow get: if owns(uid);
