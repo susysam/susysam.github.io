@@ -1,0 +1,41 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function owns(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+    function optionalString(data, key) {
+      return !(key in data) || (data[key] is string && data[key].size() <= 900000);
+    }
+    function validSettings() {
+      let doc = request.resource.data;
+      let data = doc.data;
+      return doc.keys().hasAll(['schemaVersion', 'data', 'revision', 'updatedAt'])
+        && doc.keys().hasOnly(['schemaVersion', 'data', 'revision', 'updatedAt'])
+        && doc.schemaVersion == 1
+        && doc.revision is string && doc.revision.size() == 36
+        && doc.updatedAt == request.time
+        && data is map
+        && data.keys().hasOnly(['theme', 'backgroundUrl', 'customBackgroundPresets',
+          'performanceMode', 'customGames', 'tabs_saved_links', 'lastWatched', 'recentImdbMedia'])
+        && optionalString(data, 'theme')
+        && optionalString(data, 'backgroundUrl')
+        && optionalString(data, 'customBackgroundPresets')
+        && optionalString(data, 'performanceMode')
+        && optionalString(data, 'customGames')
+        && optionalString(data, 'tabs_saved_links')
+        && optionalString(data, 'lastWatched')
+        && optionalString(data, 'recentImdbMedia');
+    }
+    match /users/{uid}/data/settings {
+      allow get: if owns(uid);
+      allow create, update: if owns(uid) && validSettings();
+      // The app clears the data map instead of deleting its revision marker.
+      // Old devices must resolve a conflict before restoring old content.
+      allow list, delete: if false;
+    }
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

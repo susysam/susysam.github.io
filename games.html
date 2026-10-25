@@ -373,13 +373,15 @@
   </style>
   <script src="/site-appearance.js"></script>
   <script src="/direct-link-timer.js"></script>
+  <link rel="stylesheet" href="/site-navigation.css">
+  <link rel="stylesheet" href="/account-ui.css">
+  <script type="module" src="/firebase-config.js"></script>
+  <script type="module" src="/account-ui.js"></script>
 </head>
 <body>
 
   <header>
-    <button class="back-button" onclick="window.location.href='https://susysam.github.io/start27.html'">
-      ← Home
-    </button>
+    <a class="site-home-button" href="/start27.html">← Home</a>
     <span class="header-title">GAMES</span>
     <div class="header-right">
       <span class="game-count" id="gameCount">2 games</span>
@@ -411,7 +413,7 @@
       </div>
       <div class="card-body">
         <span class="card-title">A1R</span>
-        <button class="play-btn" onclick="openGame('https://freeleo27.github.io/')">▶ Play</button>
+        <button class="play-btn" onclick="openGame('https://freeleo27.github.io/games.html')">▶ Play</button>
       </div>
     </div>
 
@@ -448,7 +450,7 @@
       if (!win) return alert('Popup blocked. Please allow popups for this site.');
 
       win.document.open();
-      win.document.write('<!doctype html><html><head><title>Game</title><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{margin:0;height:100%;background:#000;color:#fff;font-family:Arial,sans-serif}nav{height:40px;display:flex;align-items:center;justify-content:center;background:#15151f}a{color:#ffab43}iframe{border:0;width:100%;height:calc(100% - 40px);display:block}</style></head><body><nav><a id="directLink">Open game directly if the preview is blank</a></nav><iframe id="gameFrame" allowfullscreen sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-pointer-lock allow-top-navigation"></iframe></body></html>');
+      win.document.write('<!doctype html><html><head><title>Game</title><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{margin:0;height:100%;background:#000;color:#fff;font-family:Arial,sans-serif}nav{height:40px;display:flex;align-items:center;justify-content:center;background:#15151f}a{color:#ffab43}iframe{border:0;width:100%;height:calc(100% - 40px);display:block}</style></head><body><nav><a id="directLink">Open game directly if the preview is blank</a></nav><iframe id="gameFrame" allowfullscreen sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-pointer-lock"></iframe></body></html>');
       win.document.close();
       const directLink = win.document.getElementById('directLink');
       const gameFrame = win.document.getElementById('gameFrame');

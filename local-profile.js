@@ -20,6 +20,7 @@
     const salt = hex(crypto.getRandomValues(new Uint8Array(16)));
     const profile = { username, salt, hash: await digest(password, salt) };
     const persisted = siteStorage.setItem(key, JSON.stringify(profile));
+    if (!persisted) throw new Error('Profile could not be saved persistently.');
     if (persisted) {
       siteStorage.removeItem('password');
       siteStorage.removeItem('username');

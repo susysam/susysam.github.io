@@ -219,158 +219,23 @@
     .bypass-btn:active{ transform: translateY(1px); }
   </style>
   <script src="/site-appearance.js"></script>
+  <link rel="stylesheet" href="/site-navigation.css">
+  <link rel="stylesheet" href="/account-ui.css">
+  <script type="module" src="/firebase-config.js"></script>
+  <script type="module" src="/account-ui.js"></script>
 </head>
 
 <body>
   <div class="wrapper">
     <div class="brand">
-      <h2 id="titleText">Login</h2>
-      <p>Your profile is saved in this browser only. You can also enter without logging in.</p>
+      <h2>Welcome to SUSYSAM</h2>
+      <p>Keep your data on this device or sign in to save it across devices.</p>
     </div>
-
-    <div id="loginSection">
-      <form id="loginForm" autocomplete="on">
-        <div class="input-group">
-          <input type="text" id="username" placeholder=" " required autocomplete="username">
-          <label for="username">Username</label>
-        </div>
-
-        <div class="input-group">
-          <input type="password" id="password" placeholder=" " required autocomplete="current-password">
-          <label for="password">Password</label>
-        </div>
-
-        <div class="row">
-          <label class="remember">
-            <input type="checkbox" id="rememberMe">
-            Remember username
-          </label>
-        </div>
-
-        <button class="btn" type="submit">Login</button>
-
-        <div class="toggle-btn">
-          <button type="button" id="showSignup">Sign Up</button>
-        </div>
-      </form>
-    </div>
-
-    <div id="signupSection" style="display: none;">
-      <form id="signupForm" autocomplete="on">
-        <div class="input-group">
-          <input type="text" id="newUsername" placeholder=" " required autocomplete="username">
-          <label for="newUsername">New Username</label>
-        </div>
-
-        <div class="input-group">
-          <input type="password" id="newPassword" placeholder=" " required autocomplete="new-password">
-          <label for="newPassword">New Password</label>
-        </div>
-
-        <button class="btn" type="submit">Sign Up</button>
-
-        <div class="toggle-btn">
-          <button type="button" id="showLogin">Back to Login</button>
-        </div>
-      </form>
-    </div>
-
+    <div data-account-panel></div>
     <div class="divider"></div>
-
-    <button class="bypass-btn" id="bypassButton" type="button">Bypass Login Instantly</button>
+    <a class="site-home-button" href="/start27.html">Continue to site</a>
+    <p class="account-note" style="margin-top:12px">The site is public. Signing in protects your cloud data; using the site without signing in saves data only on this device.</p>
+    <noscript>JavaScript is needed for accounts and saved settings. You can still follow the link above.</noscript>
   </div>
-
-  <script>
-    const loginForm = document.getElementById("loginForm");
-    const signupForm = document.getElementById("signupForm");
-    const loginSection = document.getElementById("loginSection");
-    const signupSection = document.getElementById("signupSection");
-    const showSignupBtn = document.getElementById("showSignup");
-    const showLoginBtn = document.getElementById("showLogin");
-    const bypassButton = document.getElementById("bypassButton");
-    const titleText = document.getElementById("titleText");
-
-    // Prefill remembered username (optional)
-    document.addEventListener("DOMContentLoaded", () => {
-      const remembered = siteStorage.getItem("rememberedUsername");
-      if (remembered) {
-        document.getElementById("username").value = remembered;
-        document.getElementById("rememberMe").checked = true;
-      }
-    });
-
-    // Login Handling
-    loginForm.addEventListener("submit", async function(event) {
-      event.preventDefault();
-
-      const username = document.getElementById("username").value.trim();
-      const password = document.getElementById("password").value;
-
-      // Remember username only (not password)
-      if (document.getElementById("rememberMe").checked) {
-        siteStorage.setItem("rememberedUsername", username);
-      } else {
-        siteStorage.removeItem("rememberedUsername");
-      }
-
-      let ok;
-      try {
-        ok = await localProfile.verify(username, password);
-      } catch {
-        return alert("Your local profile could not be opened. You can still use Bypass Login.");
-      }
-
-      if (ok) {
-        window.location.href = "start27.html";
-      } else {
-        alert("Invalid credentials.");
-      }
-    });
-
-    // Signup Handling
-    signupForm.addEventListener("submit", async function(event) {
-      event.preventDefault();
-
-      const newUsername = document.getElementById("newUsername").value.trim();
-      const newPassword = document.getElementById("newPassword").value;
-
-      if (!newUsername || !newPassword) return alert("Enter a username and password.");
-      const submit = signupForm.querySelector('button[type="submit"]');
-      submit.disabled = true;
-      try {
-        await localProfile.ready;
-        await localProfile.create(newUsername, newPassword);
-      } catch {
-        return alert("Your local profile could not be saved. You can still use Bypass Login.");
-      } finally {
-        submit.disabled = false;
-      }
-      document.getElementById("newPassword").value = '';
-
-      alert("Sign up successful! Please log in.");
-
-      signupSection.style.display = "none";
-      loginSection.style.display = "block";
-      titleText.textContent = "Login";
-    });
-
-    // Toggle Signup/Login
-    showSignupBtn.addEventListener("click", function() {
-      loginSection.style.display = "none";
-      signupSection.style.display = "block";
-      titleText.textContent = "Sign Up";
-    });
-
-    showLoginBtn.addEventListener("click", function() {
-      signupSection.style.display = "none";
-      loginSection.style.display = "block";
-      titleText.textContent = "Login";
-    });
-
-    // Bypass Button Handling
-    bypassButton.addEventListener("click", function() {
-      window.location.href = "https://susysam.github.io/start27.html";
-    });
-  </script>
 </body>
 </html>
