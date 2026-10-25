@@ -1,9 +1,9 @@
 export const DEFAULT_TIME_ZONE = 'America/New_York';
 export const TIME_ZONES = Object.freeze([
-  ['America/New_York', 'Eastern Time'], ['America/Chicago', 'Central Time'],
-  ['America/Denver', 'Mountain Time'], ['America/Los_Angeles', 'Pacific Time'],
-  ['UTC', 'UTC'], ['Europe/London', 'London'], ['Europe/Paris', 'Paris'],
-  ['Asia/Kolkata', 'India'], ['Asia/Tokyo', 'Tokyo'], ['Australia/Sydney', 'Sydney']
+  ['America/New_York', 'Eastern Time (EST)'], ['America/Chicago', 'Central Time (CST)'],
+  ['America/Denver', 'Mountain Time (MST)'], ['America/Los_Angeles', 'Pacific Time (PST)'],
+  ['UTC', 'UTC'], ['Europe/London', 'London (GMT)'], ['Europe/Paris', 'Paris (CET)'],
+  ['Asia/Kolkata', 'India (IST)'], ['Asia/Tokyo', 'Tokyo (JST)'], ['Australia/Sydney', 'Sydney (AEST)']
 ]);
 export function validTimeZone(value) {
   if (typeof value !== 'string' || !value || value.length > 100) return false;

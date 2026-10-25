@@ -110,13 +110,15 @@ function check(value, message) { assert(value, message); checks++; }
   await page.getByRole('button',{name:'Log out',exact:true}).click();
   await page.getByRole('link',{name:'Log in',exact:true}).waitFor();
   check(await page.getByRole('button',{name:'Log out',exact:true}).isHidden(), 'logout updates UI');
-  check(await page.locator('[data-sync-detail]').innerText() === 'Your data stays on this device, not in the cloud.', 'signed-out Home describes device storage');
+  check(await page.locator('.page-sync-footer [data-sync-detail]').count() === 0, 'signed-out Home omits sync detail subtitle');
   check(await page.evaluate(()=>localStorage.getItem('timeZone')) === 'America/Los_Angeles', 'logout retains device preferences');
   await page.goto(base+'/settings.html#account');
   check(await page.getByRole('link',{name:'Account & Cloud Saving'}).count() === 0, 'signed-out account category hidden');
   await page.getByRole('link',{name:'Your Data',exact:true}).click();
   check(await page.locator('[data-login-link]').count() === 1, 'one Settings account entry');
+  check(await page.locator('[data-sync-detail]').innerText() === 'Your data stays on this device, not in the cloud.', 'signed-out Settings describes device storage');
   check(await page.locator('.settings-category:not([hidden])').count() === 4, 'all public sections visible while signed out');
+  await page.screenshot({path:path.join(artifacts,'settings-data-signed-out.png'),fullPage:true});
   check(await page.getByRole('button',{name:'Export backup',exact:true}).isVisible(), 'local data controls stay accessible');
   const downloadPromise = page.waitForEvent('download');
   await page.getByRole('button',{name:'Export backup',exact:true}).click();

@@ -575,7 +575,7 @@
           <div class="data-status-grid">
             <div><h3>Cloud saving</h3><p data-cloud-indicator role="status">Checking cloud saving…</p><p class="account-note" data-sync-detail></p></div>
             <div><h3>Device storage</h3><p data-device-status role="status">Checking device storage…</p></div>
-            <div><h3>Account status</h3><p data-account-status role="status">Checking account…</p><a class="account-entry-button" href="/index.html" data-login-link>Log in or create an account</a></div>
+            <div><h3>Account status</h3><div class="account-status-content"><p data-account-status role="status">Checking account…</p><a class="account-entry-button" href="/index.html" data-login-link>Log in or create an account</a></div></div>
           </div>
           <div class="btns backup-actions">
             <button id="exportDataBtn" type="button">Export backup</button>
@@ -585,7 +585,7 @@
               <input id="importDataFile" type="file" accept="application/json,.json" aria-label="Choose JSON backup" hidden>
             </div>
           </div>
-          <div class="btns">
+          <div class="btns danger-actions">
             <button id="deleteHistoryBtn" class="btn-danger" type="button">Delete viewing history</button>
             <button id="deleteAllDataBtn" class="btn-danger" type="button">Delete all site data</button>
           </div>

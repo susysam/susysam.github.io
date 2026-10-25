@@ -19,8 +19,10 @@ function tick() {
     const current = formatClock(new Date(), zone);
     time.textContent = current.time;
     const selected = selectors[0]?.selectedOptions[0];
-    if (selected) selected.textContent = (TIME_ZONES.find(([value]) => value === zone)?.[1] || zone) + ' · ' + current.abbreviation;
-    document.getElementById('time-sub').textContent = (TIME_ZONES.find(([value]) => value === zone)?.[1] || zone.replaceAll('_', ' ')) + ' · ' + current.abbreviation;
+    const zoneName = TIME_ZONES.find(([value]) => value === zone)?.[1] || zone.replaceAll('_', ' ');
+    const subText = zoneName.includes(current.abbreviation) ? zoneName : `${zoneName} · ${current.abbreviation}`;
+    if (selected) selected.textContent = subText;
+    document.getElementById('time-sub').textContent = subText;
   } catch {
     time.textContent = 'Clock unavailable';
     document.getElementById('time-sub').textContent = 'This browser does not support timezone formatting.';
