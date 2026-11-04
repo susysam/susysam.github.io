@@ -19,6 +19,10 @@ function harness(initial = {}, failValue) {
  h=harness({theme:'light',lastWatched:'{}',recentImdbMedia:'[]'});h.controls.get('deleteHistoryBtn').click();assert.equal(h.store.get('lastWatched'),undefined);assert.equal(h.store.get('theme'),'light');
  h=harness({theme:'dark'});await h.load({format:'susysam-backup',version:1,data:{timeZone:'UTC'}});assert.equal(h.store.get('timeZone'),'UTC');assert.equal(h.store.get('theme'),'dark');assert(h.reloaded());
  h=harness({timeZone:'UTC'});await h.load({format:'susysam-backup',version:1,data:{timeZone:'Invented/Zone'}});assert.equal(h.store.get('timeZone'),'UTC');assert(!h.reloaded());
+ const savedVideos=JSON.stringify([{id:'dQw4w9WgXcQ',title:'Favorite'}]);
+ h=harness();await h.load({format:'susysam-backup',version:1,data:{youtube_saved_videos:savedVideos}});assert.equal(h.store.get('youtube_saved_videos'),savedVideos);assert(h.reloaded());
+ await h.controls.get('deleteAllDataBtn').click();assert.equal(h.store.get('youtube_saved_videos'),undefined);
+ h=harness();await h.load({format:'susysam-backup',version:1,data:{youtube_saved_videos:'[{"id":"bad","title":"Invalid"}]'}});assert(!h.reloaded());
  const crypto=require('crypto').webcrypto; const data=new Map();
  const ctx={crypto,TextEncoder,Uint8Array,window:{},siteStorage:{getItem:k=>data.get(k)??null,setItem:()=>false,removeItem:()=>true}};
  vm.runInNewContext(fs.readFileSync('local-profile.js','utf8'),ctx);await ctx.window.localProfile.ready;

@@ -53,28 +53,14 @@
       z-index: 10;
     }
 
-    .home-btn {
-      padding: 8px 16px;
-      background: rgba(14,165,233,0.15);
-      color: var(--accent);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 600;
-      transition: background 0.2s;
-    }
-    .home-btn:hover { background: rgba(14,165,233,0.28); }
-
     .page-title {
       font-size: 20px;
       font-weight: 700;
       color: var(--text);
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
     }
-    .yt-icon { color: #ff0000; }
     .site-settings-gear { margin-left:auto; }
 
     /* ── Main content ───────────────────────────── */
@@ -116,6 +102,7 @@
 
     .url-input {
       flex: 1;
+      min-width: 180px;
       padding: 11px 14px;
       background: var(--input-bg);
       border: 1px solid var(--border);
@@ -146,12 +133,33 @@
     .load-btn:hover { opacity: 0.85; }
     .load-btn:active { opacity: 0.7; }
 
+    .save-row { display:flex;flex-wrap:wrap;gap:10px;margin-top:12px; }
+    .name-input { flex:1;min-width:180px;padding:11px 14px;background:var(--input-bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font:14px Arial,sans-serif; }
+    .name-input::placeholder { color:var(--muted); }
+    .name-input:focus-visible { outline:2px solid var(--accent);outline-offset:2px; }
+    .save-btn { padding:11px 18px;border:1px solid var(--border);border-radius:8px;background:rgba(14,165,233,.18);color:var(--text);font-weight:700;cursor:pointer; }
+    .save-btn:hover:not(:disabled) { background:rgba(14,165,233,.3); }
+    .save-btn:disabled { opacity:.5;cursor:not-allowed; }
+
     .error-msg {
       margin-top: 10px;
       font-size: 13px;
       color: #f87171;
       min-height: 18px;
     }
+    .error-msg[data-tone="success"] { color:#76e3ae; }
+
+    .saved-videos { width:100%;max-width:860px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 20px; }
+    .saved-header { display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px; }
+    .saved-header h2 { margin:0;font-size:18px; }
+    .saved-count { color:var(--muted);font-size:13px;white-space:nowrap; }
+    .saved-list { display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px; }
+    .saved-item { display:flex;align-items:center;gap:8px;min-width:0;border:1px solid var(--border);border-radius:10px;background:var(--input-bg);padding:8px; }
+    .saved-play { flex:1;min-width:0;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:8px;border:0;background:transparent;color:var(--text);font:700 14px Arial,sans-serif;cursor:pointer; }
+    .saved-play:hover { color:#7dd3fc; }
+    .saved-remove { flex:none;width:32px;height:32px;border:1px solid var(--border);border-radius:8px;background:transparent;color:#fca5a5;cursor:pointer;font-size:18px; }
+    .saved-remove:hover { background:rgba(248,113,113,.13); }
+    .saved-empty { margin:0;color:var(--muted);font-size:13px;line-height:1.5; }
 
     /* ── Video container ────────────────────────── */
     .video-wrap {
@@ -204,10 +212,8 @@
 <body>
 
   <header>
-    <a class="home-btn" href="/start27.html">&#8592; Home</a>
-    <span class="page-title">
-      <span class="yt-icon">&#9654;</span> YouTube
-    </span>
+    <a class="site-home-button" href="/start27.html">Home</a>
+    <span class="page-title">YouTube</span>
     <a href="/settings.html" class="site-settings-gear" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 2h4l.5 2.2c.6.2 1.2.4 1.7.7l1.9-1.2 2.8 2.8-1.2 1.9c.3.5.5 1.1.7 1.7L22 10v4l-2.2.5c-.2.6-.4 1.2-.7 1.7l1.2 1.9-2.8 2.8-1.9-1.2c-.5.3-1.1.5-1.7.7L14 22h-4l-.5-2.2c-.6-.2-1.2-.4-1.7-.7l-1.9 1.2-2.8-2.8 1.2-1.9c-.3-.5-.5-1.1-.7-1.7L2 14v-4l2.2-.5c.2-.6.4-1.2.7-1.7L3.7 5.9l2.8-2.8 1.9 1.2c.5-.3 1.1-.5 1.7-.7L10 2Z"/><circle cx="12" cy="12" r="3"/></svg></a>
   </header>
 
@@ -223,10 +229,19 @@
           autocomplete="off"
           spellcheck="false"
         >
-        <button class="load-btn" onclick="loadVideo()">&#9654; Load</button>
+        <button class="load-btn" type="button" onclick="loadVideo()">Load video</button>
+      </div>
+      <div class="save-row">
+        <input id="videoTitle" class="name-input" type="text" maxlength="60" aria-label="Video name (optional)" placeholder="Video name (optional)">
+        <button id="saveVideoBtn" class="save-btn" type="button" onclick="saveVideo()">Save video</button>
       </div>
       <p class="error-msg" id="errorMsg" role="alert" aria-live="polite"></p>
     </div>
+
+    <section class="saved-videos" aria-label="Saved videos">
+      <div class="saved-header"><h2>Saved videos</h2><span class="saved-count" id="savedCount">0 / 6 saved</span></div>
+      <div class="saved-list" id="savedList"></div>
+    </section>
 
     <div class="video-wrap" id="videoWrap">
       <p class="video-label" id="videoLabel"></p>
@@ -246,6 +261,90 @@
   <footer>&#169; 2026 SUSYSAM</footer>
 
   <script>
+    const SAVED_VIDEOS_KEY = 'youtube_saved_videos';
+    const MAX_SAVED_VIDEOS = 6;
+
+    function savedVideos() {
+      try {
+        const items = JSON.parse(siteStorage.getItem(SAVED_VIDEOS_KEY) || '[]');
+        if (!Array.isArray(items)) return [];
+        const seen = new Set();
+        return items.filter(item => {
+          if (!item || !/^[A-Za-z0-9_-]{11}$/.test(item.id) ||
+              typeof item.title !== 'string' || !item.title.trim() || seen.has(item.id)) return false;
+          seen.add(item.id);
+          return true;
+        }).slice(0, MAX_SAVED_VIDEOS);
+      } catch { return []; }
+    }
+
+    function renderSavedVideos() {
+      const items = savedVideos();
+      const list = document.getElementById('savedList');
+      document.getElementById('savedCount').textContent = `${items.length} / ${MAX_SAVED_VIDEOS} saved`;
+      document.getElementById('saveVideoBtn').disabled = items.length >= MAX_SAVED_VIDEOS;
+      list.replaceChildren();
+      if (!items.length) {
+        const hint = document.createElement('p');
+        hint.className = 'saved-empty';
+        hint.textContent = 'No saved videos yet. Paste a link above to keep up to six here.';
+        list.append(hint);
+        return;
+      }
+      for (const item of items) {
+        const row = document.createElement('div');
+        row.className = 'saved-item';
+        const play = document.createElement('button');
+        play.type = 'button';
+        play.className = 'saved-play';
+        play.textContent = item.title;
+        play.title = item.title;
+        play.setAttribute('aria-label', `Play ${item.title}`);
+        play.addEventListener('click', () => {
+          document.getElementById('urlInput').value = 'https://www.youtube.com/watch?v=' + item.id;
+          loadVideo();
+        });
+        const remove = document.createElement('button');
+        remove.type = 'button';
+        remove.className = 'saved-remove';
+        remove.textContent = '×';
+        remove.setAttribute('aria-label', `Remove ${item.title}`);
+        remove.addEventListener('click', () => removeSavedVideo(item.id));
+        row.append(play, remove);
+        list.append(row);
+      }
+    }
+
+    function showMessage(message, success = false) {
+      const feedback = document.getElementById('errorMsg');
+      feedback.textContent = message;
+      feedback.dataset.tone = success ? 'success' : 'error';
+    }
+
+    function saveVideo() {
+      const id = extractVideoId(document.getElementById('urlInput').value);
+      if (!id) return showMessage('Paste a valid YouTube video link before saving.');
+      const items = savedVideos();
+      if (items.some(item => item.id === id)) return showMessage('This video is already saved.');
+      if (items.length >= MAX_SAVED_VIDEOS) return showMessage('Six videos saved. Remove one to add another.');
+      const enteredTitle = document.getElementById('videoTitle').value.trim();
+      const title = enteredTitle.slice(0, 60) || `Video ${items.length + 1}`;
+      const persistent = siteStorage.setItem(SAVED_VIDEOS_KEY, JSON.stringify([{ id, title }, ...items]));
+      renderSavedVideos();
+      loadVideo();
+      showMessage(persistent ? 'Video saved.' : 'Video is only available during this session. Check browser storage settings.', persistent);
+      document.getElementById('videoTitle').value = '';
+    }
+
+    function removeSavedVideo(id) {
+      if (!siteStorage.setItem(SAVED_VIDEOS_KEY, JSON.stringify(savedVideos().filter(item => item.id !== id)))) {
+        showMessage('Could not permanently update saved videos. Check browser storage settings.');
+      } else {
+        showMessage('Video removed.', true);
+      }
+      renderSavedVideos();
+    }
+
     function extractVideoId(value) {
       try {
         const url = new URL(value.trim());
@@ -298,6 +397,10 @@
     document.getElementById('urlInput').addEventListener('keydown', function (e) {
       if (e.key === 'Enter') loadVideo();
     });
+    window.addEventListener('storage', event => {
+      if (event.key === null || event.key === SAVED_VIDEOS_KEY) renderSavedVideos();
+    });
+    renderSavedVideos();
   </script>
 
 </body>

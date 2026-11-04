@@ -43,6 +43,13 @@ test('only approved app data is selected; credentials never enter sync', () => {
   assert.throws(() => validateData({ backgroundUrl: 'javascript:alert(1)' }));
   assert.throws(() => validateData({ backgroundUrl: 'https://user:pass@example.com/' }));
 });
+test('saved YouTube videos are synced only as a bounded, valid list', () => {
+  const videos = JSON.stringify([{ id: 'dQw4w9WgXcQ', title: 'Favorite' }]);
+  assert.deepEqual(readLocal(storage({ youtube_saved_videos: videos })), { youtube_saved_videos: videos });
+  assert.doesNotThrow(() => validateCloudData({ youtube_saved_videos: videos }));
+  assert.throws(() => validateData({ youtube_saved_videos: JSON.stringify([{ id: 'bad', title: 'Invalid' }]) }), /Invalid saved videos/);
+  assert.throws(() => validateData({ youtube_saved_videos: JSON.stringify(Array.from({ length: 7 }, (_, i) => ({ id: String(i).padStart(11, '0'), title: 'Video' }))) }), /Invalid saved videos/);
+});
 test('cloud limit counts UTF-8 bytes and is stricter than file-backup limit', () => {
   const data = { customGames: JSON.stringify([{ name: '😀'.repeat(230000), link: 'https://example.com' }]) };
   assert(new TextEncoder().encode(data.customGames).length > MAX_CLOUD_BYTES);

@@ -1,7 +1,7 @@
 import { validTimeZone } from './time-preferences.js';
 // Only application data is synced. Local login hashes and Firebase tokens are excluded.
 export const DATA_KEYS = Object.freeze(['theme', 'backgroundUrl', 'customBackgroundPresets',
-  'performanceMode', 'customGames', 'tabs_saved_links', 'lastWatched', 'recentImdbMedia', 'timeZone']);
+  'performanceMode', 'customGames', 'tabs_saved_links', 'youtube_saved_videos', 'lastWatched', 'recentImdbMedia', 'timeZone']);
 export const MAX_BACKUP_BYTES = 2 * 1024 * 1024;
 // Leave room below Firestore's 1 MiB document limit for field names and metadata.
 export const MAX_CLOUD_BYTES = 900000;
@@ -21,6 +21,17 @@ export function validateData(data) {
     }
     if (['customBackgroundPresets', 'customGames', 'tabs_saved_links', 'recentImdbMedia'].includes(key)) {
       if (!Array.isArray(JSON.parse(value))) throw new Error('Invalid saved list.');
+    }
+    if (key === 'youtube_saved_videos') {
+      const videos = JSON.parse(value);
+      if (!Array.isArray(videos) || videos.length > 6 ||
+          videos.some(video => !video || typeof video !== 'object' || Array.isArray(video) ||
+            Object.keys(video).some(field => !['id', 'title'].includes(field)) ||
+            typeof video.id !== 'string' || !/^[A-Za-z0-9_-]{11}$/.test(video.id) ||
+            typeof video.title !== 'string' || !video.title.trim() || video.title.length > 60) ||
+          new Set(videos.map(video => video.id)).size !== videos.length) {
+        throw new Error('Invalid saved videos.');
+      }
     }
     if (key === 'lastWatched') {
       const item = JSON.parse(value);

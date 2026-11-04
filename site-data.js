@@ -1,6 +1,6 @@
 (function () {
   const keys = ['theme', 'backgroundUrl', 'customBackgroundPresets', 'performanceMode',
-    'customGames', 'tabs_saved_links', 'lastWatched', 'recentImdbMedia', 'timeZone'];
+    'customGames', 'tabs_saved_links', 'youtube_saved_videos', 'lastWatched', 'recentImdbMedia', 'timeZone'];
   const profileKeys = ['localProfile', 'username', 'password', 'rememberedUsername'];
   const status = document.getElementById('dataStatus');
   const report = message => { status.textContent = message; };
@@ -27,6 +27,17 @@
       }
       if (['customBackgroundPresets', 'customGames', 'tabs_saved_links', 'recentImdbMedia'].includes(key) &&
           !Array.isArray(JSON.parse(item))) throw new Error('Invalid list in backup.');
+      if (key === 'youtube_saved_videos') {
+        const videos = JSON.parse(item);
+        if (!Array.isArray(videos) || videos.length > 6 ||
+            videos.some(video => !video || typeof video !== 'object' || Array.isArray(video) ||
+              Object.keys(video).some(field => !['id', 'title'].includes(field)) ||
+              typeof video.id !== 'string' || !/^[A-Za-z0-9_-]{11}$/.test(video.id) ||
+              typeof video.title !== 'string' || !video.title.trim() || video.title.length > 60) ||
+            new Set(videos.map(video => video.id)).size !== videos.length) {
+          throw new Error('Invalid saved videos in backup.');
+        }
+      }
       if (key === 'lastWatched') {
         const media = JSON.parse(item);
         if (media !== null && (typeof media !== 'object' || Array.isArray(media))) throw new Error('Invalid history.');

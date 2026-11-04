@@ -17,13 +17,14 @@ service cloud.firestore {
         && doc.updatedAt == request.time
         && data is map
         && data.keys().hasOnly(['theme', 'backgroundUrl', 'customBackgroundPresets',
-          'performanceMode', 'customGames', 'tabs_saved_links', 'lastWatched', 'recentImdbMedia', 'timeZone'])
+          'performanceMode', 'customGames', 'tabs_saved_links', 'youtube_saved_videos', 'lastWatched', 'recentImdbMedia', 'timeZone'])
         && optionalString(data, 'theme')
         && optionalString(data, 'backgroundUrl')
         && optionalString(data, 'customBackgroundPresets')
         && optionalString(data, 'performanceMode')
         && optionalString(data, 'customGames')
         && optionalString(data, 'tabs_saved_links')
+        && optionalString(data, 'youtube_saved_videos')
         && optionalString(data, 'lastWatched')
         && optionalString(data, 'recentImdbMedia')
         && (!('timeZone' in data) || (data.timeZone is string && data.timeZone.size() > 0 && data.timeZone.size() <= 100));

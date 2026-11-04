@@ -386,8 +386,8 @@
     }
     .apps-container { display:flex;flex-wrap:wrap;gap:18px;padding:0 28px 24px; }
     .app-card {
-      background: linear-gradient(135deg, #0d2b45 0%, #0a1a2e 100%);
-      border: 1px solid rgba(14,165,233,0.25);
+      background: #fff;
+      border: 1px solid rgba(255,255,255,0.24);
       border-radius: 12px;
       overflow: hidden;
       width: 180px;
@@ -398,19 +398,28 @@
     }
     .app-card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 10px 30px rgba(14,165,233,0.25);
+      box-shadow: 0 10px 30px rgba(255,0,51,0.18);
     }
     .app-thumb-wrap {
       height: 100px;
-      background: linear-gradient(135deg, #0369a1 0%, #0ea5e9 100%);
+      background: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
+      gap: 6px;
     }
-    .app-thumb-icon {
-      font-size: 42px;
-      color: #fff;
-      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
+    .youtube-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #111;
+      font: 800 24px/1 Arial, sans-serif;
+      letter-spacing: -1.2px;
+    }
+    .youtube-logo svg {
+      width: 44px;
+      height: 32px;
+      flex: none;
     }
     .app-body {
       padding: 10px 12px 12px;
@@ -418,17 +427,12 @@
       flex-direction: column;
       gap: 8px;
     }
-    .app-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: #e0f2fe;
-    }
     .open-app-btn {
       display: inline-block;
       text-align: center;
       padding: 7px 0;
       border-radius: 6px;
-      background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%);
+      background: #d90028;
       color: #fff;
       text-decoration: none;
       font-size: 13px;
@@ -508,10 +512,9 @@
   <div class="apps-container" id="appsContainer">
     <div class="app-card" data-name="youtube">
       <div class="app-thumb-wrap">
-        <span class="app-thumb-icon">▶</span>
+        <span class="youtube-logo"><svg viewBox="0 0 44 32" role="img" aria-label="YouTube logo"><rect x="1" y="3" width="42" height="26" rx="8" fill="#ff0033"/><path d="M18 10l11 6-11 6z" fill="#fff"/></svg><span>YouTube</span></span>
       </div>
       <div class="app-body">
-        <span class="app-title">YouTube</span>
         <a class="open-app-btn" href="/youtube/">Open</a>
       </div>
     </div>
