@@ -82,3 +82,7 @@
 .home-page .navbar [data-account-logout] { background: #a63846; color: white; }
 .home-page .navbar [data-account-logout]:hover { background: #822937; }
 .account-entry-button:focus-visible, .settings-links a:focus-visible { outline: 3px solid #a35ce0; outline-offset: 3px; }
+
+.home-page .navbar .site-settings-gear { background:rgba(108,11,169,.13);color:#6c0ba9;padding:8px; }
+.home-page .navbar .site-settings-gear:hover { background:rgba(108,11,169,.22);color:#6c0ba9; }
+:root.dark .home-page .navbar .site-settings-gear { color:#d9a9ff; }

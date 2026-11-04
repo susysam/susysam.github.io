@@ -4,7 +4,7 @@
   <script src="/site-storage.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Games</title>
+  <title>Games/Apps</title>
   <link rel="icon" href="https://em-content.zobj.net/source/google/387/video-game_1f3ae.png" type="image/png"/>
   <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 
@@ -372,6 +372,76 @@
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: rgba(255,140,0,.3); border-radius: 10px; }
     ::-webkit-scrollbar-thumb:hover { background: rgba(255,140,0,.55); }
+
+    /* ── Apps section ─────────────────────────────── */
+    .section-label {
+      text-align: left;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      margin: 32px 0 10px;
+      padding-left: 28px;
+    }
+    .apps-container { display:flex;flex-wrap:wrap;gap:18px;padding:0 28px 24px; }
+    .app-card {
+      background: linear-gradient(135deg, #0d2b45 0%, #0a1a2e 100%);
+      border: 1px solid rgba(14,165,233,0.25);
+      border-radius: 12px;
+      overflow: hidden;
+      width: 180px;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s, box-shadow 0.2s;
+      animation: cardIn 0.35s ease both;
+    }
+    .app-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(14,165,233,0.25);
+    }
+    .app-thumb-wrap {
+      height: 100px;
+      background: linear-gradient(135deg, #0369a1 0%, #0ea5e9 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .app-thumb-icon {
+      font-size: 42px;
+      color: #fff;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
+    }
+    .app-body {
+      padding: 10px 12px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .app-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #e0f2fe;
+    }
+    .open-app-btn {
+      display: inline-block;
+      text-align: center;
+      padding: 7px 0;
+      border-radius: 6px;
+      background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%);
+      color: #fff;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      transition: opacity 0.2s;
+    }
+    .open-app-btn:hover { opacity: 0.85; }
+    @media (max-width: 600px) {
+      header { padding: 12px 14px; gap: 8px; }
+      .header-title { font-size: 24px; letter-spacing: 1px; }
+      .game-count { display: none; }
+      .section-label { padding-left: 14px; }
+    }
   </style>
   <script src="/site-appearance.js"></script>
   <script src="/direct-link-timer.js"></script>
@@ -384,16 +454,18 @@
 
   <header>
     <a class="site-home-button" href="/start27.html">Home</a>
-    <span class="header-title">GAMES</span>
+    <span class="header-title">GAMES/APPS</span>
     <div class="header-right">
       <span class="game-count" id="gameCount">2 games</span>
+      <a href="/settings.html" class="site-settings-gear" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 2h4l.5 2.2c.6.2 1.2.4 1.7.7l1.9-1.2 2.8 2.8-1.2 1.9c.3.5.5 1.1.7 1.7L22 10v4l-2.2.5c-.2.6-.4 1.2-.7 1.7l1.2 1.9-2.8 2.8-1.9-1.2c-.5.3-1.1.5-1.7.7L14 22h-4l-.5-2.2c-.6-.2-1.2-.4-1.7-.7l-1.9 1.2-2.8-2.8 1.2-1.9c-.3-.5-.5-1.1-.7-1.7L2 14v-4l2.2-.5c.2-.6.4-1.2.7-1.7L3.7 5.9l2.8-2.8 1.9 1.2c.5-.3 1.1-.5 1.7-.7L10 2Z"/><circle cx="12" cy="12" r="3"/></svg></a>
     </div>
   </header>
 
   <div class="search-wrap">
-    <input type="text" class="search-input" id="searchInput" placeholder="Search games…" oninput="filterGames()">
+    <input type="text" class="search-input" id="searchInput" placeholder="Search games &amp; apps…" oninput="filterGames()">
   </div>
 
+  <h2 class="section-label" id="gamesHeading">Games</h2>
   <div class="games-container" id="gamesContainer">
 
     <div class="game-card" data-name="minecraft">
@@ -427,9 +499,23 @@
 
 
 
-    <div class="no-results" id="noResults">No games found 😔</div>
+    <div class="no-results" id="noResults">No games or apps found.</div>
   </div>
 
+
+  <!-- Apps section -->
+  <h2 class="section-label" id="appsHeading">Apps</h2>
+  <div class="apps-container" id="appsContainer">
+    <div class="app-card" data-name="youtube">
+      <div class="app-thumb-wrap">
+        <span class="app-thumb-icon">▶</span>
+      </div>
+      <div class="app-body">
+        <span class="app-title">YouTube</span>
+        <a class="open-app-btn" href="/youtube/">Open</a>
+      </div>
+    </div>
+  </div>
   <!-- Add custom game -->
   <div class="add-section">
     <div class="add-card">
@@ -462,15 +548,17 @@
     }
 
     function filterGames() {
-      const q = document.getElementById('searchInput').value.toLowerCase();
-      const cards = document.querySelectorAll('.game-card[data-name]');
-      let visible = 0;
-      cards.forEach(card => {
+      const q = document.getElementById('searchInput').value.trim().toLowerCase();
+      let games = 0, apps = 0;
+      document.querySelectorAll('.game-card[data-name], .app-card[data-name]').forEach(card => {
         const match = card.dataset.name.includes(q);
         card.style.display = match ? '' : 'none';
-        if (match) visible++;
+        if (match && card.classList.contains('game-card')) games++;
+        if (match && card.classList.contains('app-card')) apps++;
       });
-      document.getElementById('noResults').style.display = visible === 0 ? 'block' : 'none';
+      document.getElementById('gamesHeading').hidden = games === 0;
+      document.getElementById('appsHeading').hidden = apps === 0;
+      document.getElementById('noResults').style.display = games + apps === 0 ? 'block' : 'none';
     }
 
     function toggleAdd() {

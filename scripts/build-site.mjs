@@ -6,7 +6,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const output = path.join(root, 'dist');
 // Explicit allowlist: never publish docs, rules, tests, credentials or repository metadata.
 export const publicFiles = [
-  'index.html', 'start27.html', 'settings.html', 'games.html', 'movie+tv.html',
+  'index.html', 'start27.html', 'settings.html', 'games.html', 'youtube.html', 'youtube/index.html', 'movie+tv.html',
   'tabs.html', 'search.html', 'about.html', '404.html', 'games/index.html',
   'site-storage.js', 'site-appearance.js', 'site-navigation.css', 'site-data.js',
   'local-profile.js', 'direct-link-timer.js', 'account-errors.js', 'account-ui.js',

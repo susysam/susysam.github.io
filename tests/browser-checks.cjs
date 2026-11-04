@@ -32,7 +32,8 @@ function check(value, message) { assert(value, message); checks++; }
   fs.mkdirSync(artifacts, { recursive: true });
   server = http.createServer((req, res) => {
     const url = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
-    const target = path.resolve(root, '.' + (url === '/' ? '/index.html' : url));
+    const route = url === '/' ? '/index.html' : (url.endsWith('/') ? url + 'index.html' : url);
+    const target = path.resolve(root, '.' + route);
     if (!target.startsWith(root + path.sep)) { res.writeHead(403).end(); return; }
     try { const data=fs.readFileSync(target); res.writeHead(200, { 'Content-Type': mime[path.extname(target)] || 'text/plain' }); res.end(data); }
     catch { res.writeHead(404).end(); }
@@ -132,15 +133,30 @@ function check(value, message) { assert(value, message); checks++; }
   check(await page.getByRole('button',{name:'Cinecat',exact:true}).isVisible(), 'original secret destination retained in Extras');
   check(await page.getByRole('button',{name:'Cinecat',exact:true}).getAttribute('onclick').then(text=>text.includes('https://zstream.mov/')), 'Extras destination preserved');
   await page.goto(base+'/games.html');
+  check(await page.getByRole('heading',{name:'Games',exact:true}).isVisible(), 'games row labeled');
+  check(await page.getByRole('heading',{name:'Apps',exact:true}).isVisible(), 'apps row labeled');
+  await page.locator('#searchInput').fill('youtube');
+  check(await page.locator('.app-card').isVisible(), 'app search finds YouTube');
+  check(await page.locator('#gamesHeading').isHidden(), 'empty games row hides for app search');
+  await page.getByRole('link',{name:'Open',exact:true}).click();
+  check(new URL(page.url()).pathname === '/youtube/', 'YouTube app has its own route');
+  check(await page.getByRole('link',{name:'Settings',exact:true}).isVisible(), 'YouTube settings gear accessible');
+  await page.locator('#urlInput').fill('https://youtu.be/dQw4w9WgXcQ');
+  await page.getByRole('button',{name:/Load/}).click();
+  check(await page.locator('#videoFrame').getAttribute('src') === 'https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ', 'valid link embeds only its video ID');
+  await page.locator('#urlInput').fill('https://attacker.example/embed/dQw4w9WgXcQ');
+  await page.getByRole('button',{name:/Load/}).click();
+  check(await page.locator('#videoFrame').getAttribute('src') === null, 'untrusted video host rejected and old embed cleared');
+  await page.goto(base+'/games.html');
   check(await page.locator('.card-thumb').first().evaluate(el=>getComputedStyle(el).objectFit) === 'cover', 'full-width game artwork');
   for (const width of [1365, 768, 390, 320]) {
     await page.setViewportSize({width,height:900});
-    for (const route of ['/index.html','/start27.html','/settings.html#appearance','/settings.html#data','/games.html','/movie+tv.html']) {
+    for (const route of ['/index.html','/start27.html','/settings.html#appearance','/settings.html#data','/games.html','/youtube/','/movie+tv.html']) {
       await page.goto(base+route); await page.locator('body').waitFor();
       if (route.includes('settings')) await page.locator('[data-category][aria-current="location"]').waitFor();
       check(await page.evaluate(()=>document.documentElement.scrollWidth <= innerWidth + 1), 'no horizontal overflow '+width+' '+route);
       if (width===390 && ['/index.html','/settings.html#data'].includes(route)) await page.screenshot({path:path.join(artifacts, route.includes('settings')?'settings-data-mobile.png':'welcome-mobile.png'),fullPage:true});
-      if ((width===1365 && ['/games.html','/movie+tv.html','/settings.html#appearance'].includes(route)) || (width===768 && route==='/settings.html#appearance')) {
+      if ((width===1365 && ['/games.html','/youtube/','/movie+tv.html','/settings.html#appearance'].includes(route)) || (width===768 && route==='/settings.html#appearance')) {
         await page.screenshot({path:path.join(artifacts,route.replace(/[^a-z]/g,'-')+'-'+width+'.png'),fullPage:true});
       }
     }

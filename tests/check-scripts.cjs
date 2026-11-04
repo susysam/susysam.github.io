@@ -13,7 +13,8 @@ for (const file of fs.readdirSync('.')) {
       if (!match[2].trim() || /\btype=["']module/.test(match[1])) continue;
       new vm.Script(match[2], {filename:file}); scripts++;
     }
-    if ((html.match(/src="\/firebase-config.js"/g) || []).length !== 1) {
+    const redirectOnly = file === 'youtube.html' && html.includes('url=/youtube/');
+    if (!redirectOnly && (html.match(/src="\/firebase-config.js"/g) || []).length !== 1) {
       throw new Error('Expected one Firebase module on page: ' + file);
     }
   }
