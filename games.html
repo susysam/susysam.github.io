@@ -168,6 +168,7 @@
     }
 
     .game-card {
+      position: relative;
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 16px;
@@ -177,8 +178,6 @@
       cursor: pointer;
       animation: fadeUp .4s ease both;
     }
-
-    .game-card { position: relative; }
 
     .remove-btn {
       position: absolute;
@@ -373,7 +372,7 @@
     ::-webkit-scrollbar-thumb { background: rgba(255,140,0,.3); border-radius: 10px; }
     ::-webkit-scrollbar-thumb:hover { background: rgba(255,140,0,.55); }
 
-    /* ── Apps section ─────────────────────────────── */
+    /* ── Apps section (Upgraded Dark YouTube Theme) ─────────────── */
     .section-label {
       text-align: left;
       font-size: 15px;
@@ -384,67 +383,117 @@
       margin: 32px 0 10px;
       padding-left: 28px;
     }
-    .apps-container { display:flex;flex-wrap:wrap;gap:18px;padding:0 28px 24px; }
+    .apps-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+      padding: 0 28px 28px;
+    }
     .app-card {
-      background: #fff;
-      border: 1px solid rgba(255,255,255,0.24);
-      border-radius: 12px;
+      background: var(--card);
+      border: 1px solid rgba(255, 0, 51, 0.28);
+      border-radius: 16px;
       overflow: hidden;
-      width: 180px;
       display: flex;
       flex-direction: column;
-      transition: transform 0.2s, box-shadow 0.2s;
-      animation: cardIn 0.35s ease both;
+      box-shadow: 0 8px 32px rgba(255, 0, 51, 0.14);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+      animation: fadeUp 0.4s ease both;
     }
     .app-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 10px 30px rgba(255,0,51,0.18);
+      transform: translateY(-6px) scale(1.02);
+      border-color: rgba(255, 0, 51, 0.75);
+      background: var(--card-hover);
+      box-shadow: 0 16px 48px rgba(255, 0, 51, 0.32);
     }
     .app-thumb-wrap {
-      height: 100px;
-      background: #fff;
+      height: 150px;
+      position: relative;
+      background:
+        radial-gradient(circle at 50% 45%, rgba(255, 0, 51, 0.22) 0%, rgba(20, 10, 18, 0.92) 72%),
+        linear-gradient(135deg, #1a0b12 0%, #0d0d14 100%);
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
+      overflow: hidden;
+    }
+    .app-thumb-wrap::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 55%, rgba(13,13,20,.88) 100%);
+      pointer-events: none;
     }
     .youtube-logo {
+      position: relative;
+      z-index: 1;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      color: #111;
-      font: 800 24px/1 Arial, sans-serif;
-      letter-spacing: -1.2px;
+      gap: 9px;
+      color: #ffffff;
+      font: 800 24px/1 'Nunito', Arial, sans-serif;
+      letter-spacing: -0.5px;
+      text-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
+      transition: transform 0.25s ease;
+    }
+    .app-card:hover .youtube-logo {
+      transform: scale(1.06);
     }
     .youtube-logo svg {
-      width: 44px;
-      height: 32px;
+      width: 48px;
+      height: 34px;
       flex: none;
+      filter: drop-shadow(0 4px 14px rgba(255, 0, 51, 0.55));
     }
     .app-body {
-      padding: 10px 12px 12px;
+      padding: 12px 14px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .app-meta {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 2px;
+    }
+    .app-subtitle {
+      font-size: 11px;
+      font-weight: 700;
+      color: rgba(255, 130, 150, 0.75);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
     .open-app-btn {
-      display: inline-block;
-      text-align: center;
-      padding: 7px 0;
-      border-radius: 6px;
-      background: #d90028;
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 7px 16px;
+      border-radius: 50px;
+      background: linear-gradient(135deg, #ff0033, #cc0029);
       color: #fff;
       text-decoration: none;
       font-size: 13px;
-      font-weight: 600;
-      transition: opacity 0.2s;
+      font-weight: 800;
+      letter-spacing: .3px;
+      box-shadow: 0 3px 12px rgba(255, 0, 51, 0.38);
+      transition: all 0.2s ease;
     }
-    .open-app-btn:hover { opacity: 0.85; }
+    .open-app-btn:hover {
+      transform: scale(1.08);
+      box-shadow: 0 5px 18px rgba(255, 0, 51, 0.6);
+    }
+    .open-app-btn:active {
+      transform: scale(0.97);
+    }
+
     @media (max-width: 600px) {
       header { padding: 12px 14px; gap: 8px; }
       .header-title { font-size: 24px; letter-spacing: 1px; }
       .game-count { display: none; }
       .section-label { padding-left: 14px; }
+      .games-container, .apps-container { padding-left: 14px; padding-right: 14px; }
     }
   </style>
   <script src="/site-appearance.js"></script>
@@ -482,9 +531,6 @@
       </div>
     </div>
 
-
-
-
     <div class="game-card" data-name="a1r">
       <div class="card-thumb-wrap">
         <img class="card-thumb" src="/images/A1R.png" alt="A1R" onerror="this.src='https://placehold.co/400x200/1a1a2e/ff8c00?text=🎮'">
@@ -495,30 +541,32 @@
       </div>
     </div>
 
-
-
-
-
-
-
-
-
     <div class="no-results" id="noResults">No games or apps found.</div>
   </div>
-
 
   <!-- Apps section -->
   <h2 class="section-label" id="appsHeading">Apps</h2>
   <div class="apps-container" id="appsContainer">
     <div class="app-card" data-name="youtube">
       <div class="app-thumb-wrap">
-        <span class="youtube-logo"><svg viewBox="0 0 44 32" role="img" aria-label="YouTube logo"><rect x="1" y="3" width="42" height="26" rx="8" fill="#ff0033"/><path d="M18 10l11 6-11 6z" fill="#fff"/></svg><span>YouTube</span></span>
+        <span class="youtube-logo">
+          <svg viewBox="0 0 44 32" role="img" aria-label="YouTube logo">
+            <rect x="1" y="3" width="42" height="26" rx="8" fill="#ff0033"/>
+            <path d="M18 10l11 6-11 6z" fill="#fff"/>
+          </svg>
+          <span>YouTube</span>
+        </span>
       </div>
       <div class="app-body">
-        <a class="open-app-btn" href="/youtube/">Open</a>
+        <div class="app-meta">
+          <span class="card-title">YouTube</span>
+          <span class="app-subtitle">Video Player</span>
+        </div>
+        <a class="open-app-btn" href="/youtube/">▶ Open</a>
       </div>
     </div>
   </div>
+
   <!-- Add custom game -->
   <div class="add-section">
     <div class="add-card">
