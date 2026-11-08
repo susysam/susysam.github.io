@@ -40,6 +40,10 @@
       flex-direction: column;
     }
 
+    body.fs-lock {
+      overflow: hidden;
+    }
+
     /* ── Header ─────────────────────────────────── */
     header {
       display: flex;
@@ -171,10 +175,53 @@
     }
     .video-wrap.visible { display: flex; }
 
+    .video-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .video-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
     .video-label {
+      margin: 0;
       font-size: 13px;
       color: var(--muted);
       text-align: left;
+    }
+
+    .fullscreen-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: rgba(14,165,233,.18);
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .fullscreen-btn:hover {
+      background: rgba(14,165,233,.3);
+    }
+    .fullscreen-btn:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    .fullscreen-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+      flex-shrink: 0;
     }
 
     .video-frame-wrap {
@@ -186,6 +233,61 @@
       box-shadow: var(--shadow);
       border: 1px solid var(--border);
       background: #000;
+    }
+
+    /* Separate fullscreen blocks so strict CSS parsers never drop the rule */
+    .video-frame-wrap:fullscreen {
+      padding-bottom: 0;
+      width: 100vw;
+      height: 100vh;
+      border-radius: 0;
+      border: none;
+    }
+
+    .video-frame-wrap:-webkit-full-screen {
+      padding-bottom: 0;
+      width: 100vw;
+      height: 100vh;
+      border-radius: 0;
+      border: none;
+    }
+
+    /* Fallback fullscreen for iOS Safari / browsers without div Fullscreen API */
+    .video-frame-wrap.is-fallback-fullscreen {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      padding-bottom: 0;
+      border-radius: 0;
+      border: none;
+      z-index: 9999;
+    }
+
+    .fs-exit-floating {
+      display: none;
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 10;
+      padding: 8px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 8px;
+      background: rgba(10, 22, 40, 0.85);
+      color: #e0f2fe;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+    }
+    .fs-exit-floating:hover {
+      background: rgba(14, 165, 233, 0.4);
+    }
+
+    .video-frame-wrap.is-fallback-fullscreen .fs-exit-floating {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .video-frame-wrap iframe {
@@ -244,9 +346,20 @@
     </section>
 
     <div class="video-wrap" id="videoWrap">
-      <p class="video-label" id="videoLabel"></p>
-      <a id="openYoutube" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" style="color:#7dd3fc">Open directly on YouTube if this video does not allow embedding</a>
-      <div class="video-frame-wrap">
+      <div class="video-toolbar">
+        <div class="video-meta">
+          <p class="video-label" id="videoLabel"></p>
+          <a id="openYoutube" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" style="color:#7dd3fc; font-size: 13px;">Open directly on YouTube if this video does not allow embedding</a>
+        </div>
+        <button id="fullscreenBtn" class="fullscreen-btn" type="button" onclick="toggleFullscreen()" aria-label="Toggle fullscreen" aria-pressed="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path id="fullscreenIconPath" d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+          </svg>
+          <span id="fullscreenBtnText">Fullscreen</span>
+        </button>
+      </div>
+      <div class="video-frame-wrap" id="videoFrameWrap">
+        <button type="button" class="fs-exit-floating" onclick="exitVideoFullscreen()" aria-label="Exit fullscreen">✕ Exit Fullscreen</button>
         <iframe
           id="videoFrame"
           title="YouTube video player"
@@ -263,6 +376,8 @@
   <script>
     const SAVED_VIDEOS_KEY = 'youtube_saved_videos';
     const MAX_SAVED_VIDEOS = 6;
+    const EXPAND_ICON_PATH = 'M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z';
+    const SHRINK_ICON_PATH = 'M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z';
 
     function savedVideos() {
       try {
@@ -359,6 +474,72 @@
       } catch { return null; }
     }
 
+    function isVideoFullscreen() {
+      const frameWrap = document.getElementById('videoFrameWrap');
+      const nativeFs = document.fullscreenElement || document.webkitFullscreenElement;
+      return Boolean(nativeFs || (frameWrap && frameWrap.classList.contains('is-fallback-fullscreen')));
+    }
+
+    function updateFullscreenButton() {
+      const active = isVideoFullscreen();
+      const btn = document.getElementById('fullscreenBtn');
+      const btnText = document.getElementById('fullscreenBtnText');
+      const iconPath = document.getElementById('fullscreenIconPath');
+      if (btn) btn.setAttribute('aria-pressed', String(active));
+      if (btnText) btnText.textContent = active ? 'Exit Fullscreen' : 'Fullscreen';
+      if (iconPath) iconPath.setAttribute('d', active ? SHRINK_ICON_PATH : EXPAND_ICON_PATH);
+    }
+
+    function enterFallbackFullscreen() {
+      const frameWrap = document.getElementById('videoFrameWrap');
+      if (!frameWrap) return;
+      frameWrap.classList.add('is-fallback-fullscreen');
+      document.body.classList.add('fs-lock');
+      updateFullscreenButton();
+    }
+
+    function exitVideoFullscreen() {
+      const frameWrap = document.getElementById('videoFrameWrap');
+      if (frameWrap && frameWrap.classList.contains('is-fallback-fullscreen')) {
+        frameWrap.classList.remove('is-fallback-fullscreen');
+        document.body.classList.remove('fs-lock');
+      }
+      const nativeFs = document.fullscreenElement || document.webkitFullscreenElement;
+      if (nativeFs) {
+        if (document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        }
+      }
+      updateFullscreenButton();
+    }
+
+    function toggleFullscreen() {
+      const frameWrap = document.getElementById('videoFrameWrap');
+      const videoWrap = document.getElementById('videoWrap');
+      if (!frameWrap || !videoWrap || !videoWrap.classList.contains('visible')) return;
+
+      if (isVideoFullscreen()) {
+        exitVideoFullscreen();
+        return;
+      }
+
+      if (frameWrap.requestFullscreen) {
+        frameWrap.requestFullscreen().catch(() => {
+          enterFallbackFullscreen();
+        });
+      } else if (frameWrap.webkitRequestFullscreen) {
+        try {
+          frameWrap.webkitRequestFullscreen();
+        } catch {
+          enterFallbackFullscreen();
+        }
+      } else {
+        enterFallbackFullscreen();
+      }
+    }
+
     function loadVideo() {
       const input = document.getElementById('urlInput');
       const errorMsg = document.getElementById('errorMsg');
@@ -370,6 +551,7 @@
       const raw = input.value.trim();
 
       if (!raw) {
+        exitVideoFullscreen();
         errorMsg.textContent = 'Please paste a YouTube link first.';
         videoFrame.removeAttribute('src');
         videoWrap.classList.remove('visible');
@@ -379,6 +561,7 @@
       const videoId = extractVideoId(raw);
 
       if (!videoId) {
+        exitVideoFullscreen();
         errorMsg.textContent = 'Could not find a YouTube video ID in that link. Try copying the full URL from your browser.';
         videoFrame.removeAttribute('src');
         videoWrap.classList.remove('visible');
@@ -392,6 +575,15 @@
       videoWrap.classList.add('visible');
       videoWrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
+
+    document.addEventListener('fullscreenchange', updateFullscreenButton);
+    document.addEventListener('webkitfullscreenchange', updateFullscreenButton);
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && isVideoFullscreen()) {
+        exitVideoFullscreen();
+      }
+    });
 
     // Allow pressing Enter in the input field to load
     document.getElementById('urlInput').addEventListener('keydown', function (e) {
