@@ -9,9 +9,11 @@
 
   <script>
     (function () {
-      const theme = siteStorage.getItem('theme');
-      if (theme === 'dark') document.documentElement.classList.add('dark');
-      else document.documentElement.classList.remove('dark');
+      try {
+        const theme = window.siteStorage ? siteStorage.getItem('theme') : localStorage.getItem('theme');
+        if (theme === 'dark') document.documentElement.classList.add('dark');
+        else document.documentElement.classList.remove('dark');
+      } catch {}
     })();
   </script>
 
@@ -83,24 +85,69 @@
       top: 20px;
       right: 20px;
       display: flex;
+      align-items: center;
       gap: 10px;
       flex-wrap: wrap;
       justify-content: flex-end;
       max-width: calc(100vw - 40px);
     }
 
-    .navbar a {
+    .navbar a.nav-feature-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       padding: 10px 20px;
       font-size: 16px;
+      font-weight: 700;
       background-color: var(--accent);
       color: white;
       text-decoration: none;
-      border-radius: 5px;
-      transition: background-color 0.3s;
+      border-radius: 10px;
+      transition: background-color 0.25s ease, transform 0.15s ease, box-shadow 0.2s ease;
       cursor: pointer;
       user-select: none;
     }
-    .navbar a:hover { background-color: var(--accent2); }
+    .navbar a.nav-feature-link:hover {
+      background-color: var(--accent2);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(108, 11, 169, 0.35);
+    }
+
+    /* Icon Mode Styling (On = Images, Off = Words) */
+    .navbar.icons-on a.nav-feature-link {
+      padding: 8px;
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+    }
+
+    .nav-link-icon {
+      width: 30px;
+      height: 30px;
+      object-fit: contain;
+      display: none;
+    }
+
+    .navbar.icons-on .nav-link-icon {
+      display: block;
+    }
+
+    .navbar.icons-on .nav-link-text {
+      display: none;
+    }
+
+    /* Fallback if an icon image fails to load */
+    .navbar.icons-on a.nav-feature-link.img-fallback {
+      width: auto;
+      height: auto;
+      padding: 10px 20px;
+    }
+    .navbar.icons-on a.nav-feature-link.img-fallback .nav-link-icon {
+      display: none;
+    }
+    .navbar.icons-on a.nav-feature-link.img-fallback .nav-link-text {
+      display: inline;
+    }
 
     #placeholder {
       font-size: 20px;
@@ -132,37 +179,13 @@
       border-bottom: 1px solid var(--border);
     }
 
-    .time-titlebar .left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-width: 0;
-    }
-
-    .window-dots { display: flex; gap: 7px; }
-    .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: rgba(0,0,0,0.18);
-    }
-    :root.dark .dot{ background: rgba(255,255,255,0.18); }
-
     .time-title {
       font-size: 13px;
       color: var(--muted);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-    }
-
-    .tz-badge {
-      font-size: 12px;
-      padding: 4px 8px;
-      border-radius: 999px;
-      background: rgba(108, 11, 169, 0.12);
-      color: var(--accent2);
-      border: 1px solid rgba(108, 11, 169, 0.22);
+      margin: 0;
     }
 
     .time-body { padding: 18px 16px 20px; }
@@ -180,21 +203,6 @@
       font-size: 13px;
       color: var(--muted);
     }
-
-    .button-container { margin-top: 24px; }
-
-    .button {
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: var(--accent);
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    .button:hover { background-color: var(--accent2); }
-
   </style>
   <script src="/site-appearance.js"></script>
   <link rel="stylesheet" href="/site-navigation.css">
@@ -205,10 +213,19 @@
 </head>
 
 <body data-home-background class="home-page">
-  <nav class="navbar" aria-label="Main navigation">
-    <a href="games.html">Games/Apps</a>
-    <a href="tabs.html">Tabs</a>
-    <a href="movie+tv.html">Movie + TV</a>
+  <nav class="navbar icons-on" id="mainNavbar" aria-label="Main navigation">
+    <a href="games.html" class="nav-feature-link" title="Games + Apps" aria-label="Games + Apps">
+      <img class="nav-link-icon" src="images/games.png" alt="Games + Apps" onerror="this.parentElement.classList.add('img-fallback')">
+      <span class="nav-link-text">Games + Apps</span>
+    </a>
+    <a href="tabs.html" class="nav-feature-link" title="Tabs" aria-label="Tabs">
+      <img class="nav-link-icon" src="images/tab.png" alt="Tabs" onerror="this.parentElement.classList.add('img-fallback')">
+      <span class="nav-link-text">Tabs</span>
+    </a>
+    <a href="movie+tv.html" class="nav-feature-link" title="Movie + TV" aria-label="Movie + TV">
+      <img class="nav-link-icon" src="images/movies.png" alt="Movie + TV" onerror="this.parentElement.classList.add('img-fallback')">
+      <span class="nav-link-text">Movie + TV</span>
+    </a>
     <a href="/settings.html" class="site-settings-gear" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 2h4l.5 2.2c.6.2 1.2.4 1.7.7l1.9-1.2 2.8 2.8-1.2 1.9c.3.5.5 1.1.7 1.7L22 10v4l-2.2.5c-.2.6-.4 1.2-.7 1.7l1.2 1.9-2.8 2.8-1.9-1.2c-.5.3-1.1.5-1.7.7L14 22h-4l-.5-2.2c-.6-.2-1.2-.4-1.7-.7l-1.9 1.2-2.8-2.8 1.2-1.9c-.3-.5-.5-1.1-.7-1.7L2 14v-4l2.2-.5c.2-.6.4-1.2.7-1.7L3.7 5.9l2.8-2.8 1.9 1.2c.5-.3 1.1-.5 1.7-.7L10 2Z"/><circle cx="12" cy="12" r="3"/></svg></a>
     <button type="button" data-account-logout data-auth-only hidden>Log out</button>
     <a class="account-entry-button" href="/index.html" data-login-link>Log in</a>
@@ -216,15 +233,15 @@
   <p data-logout-feedback role="alert"></p>
   <main class="home-content">
 
-  <p id="placeholder"></p>
+    <p id="placeholder"></p>
 
-  <div class="time-window" role="group" aria-label="Current time">
-    <div class="time-titlebar"><h1 class="time-title">Current Time</h1></div>
-    <div class="time-body">
-      <p id="time">--:--:--</p>
-      <div id="time-sub"></div>
+    <div class="time-window" role="group" aria-label="Current time">
+      <div class="time-titlebar"><h1 class="time-title">Current Time</h1></div>
+      <div class="time-body">
+        <p id="time">--:--:--</p>
+        <div id="time-sub"></div>
+      </div>
     </div>
-  </div>
 
   </main>
   <footer class="page-sync-footer"><p data-cloud-indicator role="status">Checking cloud saving…</p></footer>
@@ -239,9 +256,31 @@
     }
     document.getElementById("placeholder").textContent = getRandomOption();
 
-    // The shared clock module uses IANA timezone rules from Intl.
+    // Navigation Icons setting: On ("on" or default) = Images, Off ("off") = Words
+    function applyNavIconsPreference() {
+      const nav = document.getElementById("mainNavbar");
+      if (!nav) return;
+      const mode = (window.siteStorage ? siteStorage.getItem("navIcons") : localStorage.getItem("navIcons")) || "on";
+      nav.classList.toggle("icons-on", mode !== "off");
+    }
 
+    applyNavIconsPreference();
 
+    window.addEventListener("storage", (e) => {
+      if (e.key === null || e.key === "navIcons") {
+        applyNavIconsPreference();
+      }
+    });
+
+    // Cloud indicator fallback stabilizer so it never hangs indefinitely
+    setTimeout(() => {
+      const indicator = document.querySelector("[data-cloud-indicator]");
+      if (indicator && indicator.textContent.includes("Checking cloud saving")) {
+        indicator.textContent = navigator.onLine
+          ? "Local storage active · Sign in to sync with cloud"
+          : "Offline · Saving to this device";
+      }
+    }, 3500);
   </script>
 </body>
 </html>
