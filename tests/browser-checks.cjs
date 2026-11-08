@@ -77,7 +77,12 @@ function check(value, message) { assert(value, message); checks++; }
   check(await page.locator('[data-cloud-indicator]').getAttribute('data-tone') === 'good', 'confirmed sync green');
   await page.getByRole('link', {name:'Continue to site'}).click();
   await page.getByRole('button',{name:'Log out',exact:true}).waitFor();
-  check(await page.locator('.navbar').innerText().then(text=>/Movie \+ TV\s+Log out/.test(text)), 'logout next to Movie + TV');
+  check(await page.locator('.navbar').evaluate(nav=>{
+    const movie=nav.querySelector('a[href="movie+tv.html"]');
+    const gear=nav.querySelector('a.site-settings-gear');
+    const logout=nav.querySelector('[data-account-logout]');
+    return movie?.nextElementSibling===gear && gear?.nextElementSibling===logout;
+  }), 'logout follows Movie + TV and the settings gear');
   check(await page.locator('[data-account-logout]').evaluate(el=>getComputedStyle(el).backgroundColor) !== await page.locator('.navbar a').first().evaluate(el=>getComputedStyle(el).backgroundColor), 'logout color differs from navigation');
   check(await page.locator('[data-timezone-select]').count() === 0, 'Home clock is display-only');
   check(await page.locator('#time-sub').innerText().then(text=>/Eastern/.test(text)), 'Home displays timezone');
@@ -142,7 +147,7 @@ function check(value, message) { assert(value, message); checks++; }
   await page.locator('#searchInput').fill('youtube');
   check(await page.locator('.app-card').isVisible(), 'app search finds YouTube');
   check(await page.locator('#gamesHeading').isHidden(), 'empty games row hides for app search');
-  await page.getByRole('link',{name:'Open',exact:true}).click();
+  await page.locator('.app-card[data-name="youtube"] .open-app-btn').click();
   check(new URL(page.url()).pathname === '/youtube/', 'YouTube app has its own route');
   check(await page.getByRole('link',{name:'Settings',exact:true}).isVisible(), 'YouTube settings gear accessible');
   check(await page.locator('.page-title').innerText() === 'YouTube', 'YouTube title has no red play icon');

@@ -1,51 +1,6 @@
 import { friendlyError } from './account-errors.js';
 import { syncPresentation, renderStatus } from './sync-presentation.js';
 
-const AUTO_SYNC_KEY = 'autoCloudSync';
-let autoResolveLock = false;
-let lastAutoResolveTime = 0;
-
-function isAutoSyncEnabled() {
-  try {
-    return (window.siteStorage?.getItem(AUTO_SYNC_KEY) || 'on') !== 'off';
-  } catch {
-    return true;
-  }
-}
-
-async function autoResolveCloudState(state, force = false) {
-  if (!window.siteCloud || !state || !state.user || !navigator.onLine) return false;
-  if (autoResolveLock) return false;
-
-  const now = Date.now();
-  if (!force && now - lastAutoResolveTime < 1500) return false;
-
-  if (state.phase === 'conflict' && (force || isAutoSyncEnabled())) {
-    autoResolveLock = true;
-    lastAutoResolveTime = now;
-    try {
-      await window.siteCloud.useDevice();
-      return true;
-    } catch (err) {
-      console.warn('Auto cloud sync failed, will retry:', err);
-    } finally {
-      autoResolveLock = false;
-    }
-  } else if (state.phase === 'error' && force) {
-    autoResolveLock = true;
-    lastAutoResolveTime = now;
-    try {
-      await window.siteCloud.retry();
-      return true;
-    } catch (err) {
-      console.warn('Cloud retry failed:', err);
-    } finally {
-      autoResolveLock = false;
-    }
-  }
-  return false;
-}
-
 const panels = [...document.querySelectorAll('[data-account-panel]')];
 panels.forEach((panel, index) => {
   const primary = panel.dataset.accountPanel !== 'manage';
@@ -70,7 +25,7 @@ panels.forEach((panel, index) => {
       ${primary ? '' : '<p class="account-note">Your settings, links, games, viewing history, and timezone automatically sync with this account.</p>'}
     </div>
     <div data-sync-conflict class="account-conflict" hidden>
-      <p>Both copies are kept until you choose. Export a device backup in <a href="/settings.html#data">Your data</a> first if you want to keep both. “Use cloud data” replaces this device's copy; “Use this device's data” replaces the cloud copy and enables auto-sync.</p>
+      <p>Both copies are kept until you choose. Export a device backup in <a href="/settings.html#data">Your data</a> first if you want to keep both. “Use cloud data” replaces this device's copy; “Use this device's data” replaces the cloud copy.</p>
       <div class="account-actions">
         <button class="site-home-button" data-use-cloud type="button">Use cloud data</button>
         <button class="site-home-button" data-use-device type="button">Use this device's data</button>
@@ -89,7 +44,7 @@ panels.forEach((panel, index) => {
     field('[data-signed-in]').hidden = !state.user;
     if (primary) field('[data-signed-out]').hidden = !!state.user;
     field('[data-account-email]').textContent = state.user?.email || '';
-    field('[data-sync-conflict]').hidden = !state.user || state.phase !== 'conflict' || isAutoSyncEnabled();
+    field('[data-sync-conflict]').hidden = !state.user || state.phase !== 'conflict';
     field('[data-sync-retry]').hidden = state.phase !== 'error';
     panel.querySelectorAll('button').forEach(button => { button.disabled = busy; });
     panel.setAttribute('aria-busy', String(busy));
@@ -99,9 +54,6 @@ panels.forEach((panel, index) => {
       field('[data-account-submit]').textContent = busy ? 'Please wait…' : signup ? 'Create account' : 'Log in';
     }
 
-    if (state.user && state.phase === 'conflict' && isAutoSyncEnabled()) {
-      void autoResolveCloudState(state, false);
-    }
   }
 
   async function perform(action) {
@@ -151,11 +103,9 @@ panels.forEach((panel, index) => {
   }
 
   field('[data-use-cloud]').addEventListener('click', () => {
-    window.siteStorage?.setItem(AUTO_SYNC_KEY, 'on');
     void perform(() => window.siteCloud.useCloud());
   });
   field('[data-use-device]').addEventListener('click', () => {
-    window.siteStorage?.setItem(AUTO_SYNC_KEY, 'on');
     void perform(() => window.siteCloud.useDevice());
   });
   field('[data-sync-retry]').addEventListener('click', () => {
@@ -173,11 +123,6 @@ function bindStatus() {
   let notice;
 
   function render(state) {
-    // Automatically push local changes when conflict occurs and auto-sync is on
-    if (state.user && state.phase === 'conflict' && isAutoSyncEnabled()) {
-      void autoResolveCloudState(state, false);
-    }
-
     const presentation = syncPresentation(state, navigator.onLine);
     if (!state.user && !['loading', 'error'].includes(state.phase) && !window.siteStorage.status.persistent) {
       presentation.detail = 'Device saving is unavailable. Changes may only last while this page is open.';
@@ -189,7 +134,7 @@ function bindStatus() {
       renderStatus(element, presentation);
       if (state.user && ['conflict', 'error'].includes(state.phase)) {
         element.style.cursor = 'pointer';
-        element.title = 'Click to sync your device data to the cloud now';
+        element.title = state.phase === 'conflict' ? 'Choose which copy to keep' : 'Retry cloud connection';
       } else {
         element.style.cursor = '';
         element.title = '';
@@ -202,8 +147,7 @@ function bindStatus() {
       detail: state.user?.email || ''
     }));
 
-    // Suppress the nag banner when auto-sync is handling conflicts
-    const showErrorBanner = state.phase === 'error' || (state.phase === 'conflict' && !isAutoSyncEnabled());
+    const showErrorBanner = ['conflict', 'error'].includes(state.phase);
     const visiblePanel = panels.some(panel => !panel.closest('[hidden]'));
 
     if (!showErrorBanner || visiblePanel) {
@@ -218,16 +162,12 @@ function bindStatus() {
 
     if (notice) {
       const syncNowBtn = document.createElement('a');
-      syncNowBtn.href = '#sync';
-      syncNowBtn.textContent = state.user ? 'Sync now' : 'Open sign in';
+      syncNowBtn.href = state.phase === 'conflict' || !state.user ? '/index.html' : '#sync';
+      syncNowBtn.textContent = state.phase === 'conflict' ? 'Choose a copy' : state.user ? 'Retry connection' : 'Open sign in';
       syncNowBtn.addEventListener('click', (e) => {
-        if (!state.user) {
-          location.href = '/index.html';
-          return;
-        }
+        if (state.phase === 'conflict' || !state.user) return;
         e.preventDefault();
-        window.siteStorage?.setItem(AUTO_SYNC_KEY, 'on');
-        void autoResolveCloudState(window.siteCloud.state, true);
+        void window.siteCloud.retry();
       });
       notice.replaceChildren(document.createTextNode('Cloud sync paused. '), syncNowBtn);
     }
@@ -238,34 +178,19 @@ function bindStatus() {
   window.siteCloud.subscribe(render);
   ['online', 'offline'].forEach(event => window.addEventListener(event, () => {
     render(window.siteCloud.state);
-    if (event === 'online' && window.siteCloud.state) {
-      void autoResolveCloudState(window.siteCloud.state, true);
-    }
   }));
 
   window.addEventListener('site-storage-status', () => render(window.siteCloud.state));
 
-  // Whenever any setting/game/link is saved locally, auto-resolve any resulting conflict immediately
-  window.addEventListener('site-storage-write', () => {
-    setTimeout(() => {
-      if (window.siteCloud?.state) {
-        void autoResolveCloudState(window.siteCloud.state, false);
-      }
-    }, 120);
-  });
-
-  // Allow clicking any [data-cloud-indicator] to force-sync immediately
+  // A conflict needs a deliberate choice; clicking the indicator opens that choice.
   document.addEventListener('click', (event) => {
     const indicator = event.target.closest('[data-cloud-indicator]');
     if (!indicator || !window.siteCloud?.state?.user) return;
-    window.siteStorage?.setItem(AUTO_SYNC_KEY, 'on');
-    void autoResolveCloudState(window.siteCloud.state, true);
+    if (window.siteCloud.state.phase === 'conflict') location.href = '/index.html';
+    else if (window.siteCloud.state.phase === 'error') void window.siteCloud.retry();
   });
 
   document.querySelectorAll('[data-account-logout]').forEach(button => button.addEventListener('click', async () => {
-    if (window.siteCloud?.state?.phase === 'conflict' && isAutoSyncEnabled()) {
-      try { await window.siteCloud.useDevice(); } catch {}
-    }
     if (['loading', 'pending', 'saving', 'error', 'conflict'].includes(window.siteCloud.state.phase) &&
         !confirm('Some device data may not be synced. Log out and keep it on this device?')) return;
     button.disabled = true;

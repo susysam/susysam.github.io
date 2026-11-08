@@ -12,7 +12,7 @@ export const publicFiles = [
   'local-profile.js', 'direct-link-timer.js', 'account-errors.js', 'account-ui.js',
   'account-ui.css', 'cloud-sync-core.js', 'firebase-config.js', 'sync-presentation.js',
   'time-preferences.js', 'site-clock.js', 'settings-navigation.js', 'settings-layout.css',
-  'images/mc.png', 'images/A1R.png'
+  'images/mc.png', 'images/A1R.png', 'images/games.png', 'images/tab.png', 'images/movies.png'
 ];
 for (const name of publicFiles) {
   const source = path.join(root, name);

@@ -50,9 +50,12 @@ function storageHarness(blocked = false) {
     setItem: (key, value) => { if (fail) throw Error('full'); values.set(key, value); },
     removeItem: key => { if (fail) throw Error('blocked'); values.delete(key); }
   };
-  const window = { dispatchEvent: event => notices.push(event.type) };
+  const window = { dispatchEvent: event => notices.push(event.type), addEventListener() {} };
+  class CustomEvent extends Event {
+    constructor(type, options) { super(type); this.detail = options?.detail; }
+  }
   vm.runInNewContext(fs.readFileSync('site-storage.js', 'utf8'), {
-    window, localStorage, crypto: webcrypto, Event, URL,
+    window, localStorage, crypto: webcrypto, Event, CustomEvent, URL,
     document: { readyState: 'loading', addEventListener() {} }
   });
   return { storage: window.siteStorage, values, notices, fail: value => { fail = value; } };
