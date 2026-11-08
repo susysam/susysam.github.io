@@ -4,15 +4,17 @@
   <script src="/site-storage.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Games/Apps</title>
+  <title>Games + Apps</title>
   <link rel="icon" href="https://em-content.zobj.net/source/google/387/video-game_1f3ae.png" type="image/png"/>
   <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 
   <script>
     (function () {
-      const theme = siteStorage.getItem('theme');
-      if (theme === 'dark') document.documentElement.classList.add('dark');
-      else document.documentElement.classList.remove('dark');
+      try {
+        const theme = window.siteStorage ? siteStorage.getItem('theme') : localStorage.getItem('theme');
+        if (theme === 'dark') document.documentElement.classList.add('dark');
+        else document.documentElement.classList.remove('dark');
+      } catch {}
     })();
   </script>
 
@@ -79,28 +81,6 @@
       z-index: 100;
     }
 
-    .back-button {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      background: rgba(255,140,0,.12);
-      border: 1px solid var(--border);
-      padding: 9px 18px;
-      font-size: 14px;
-      font-family: 'Nunito', sans-serif;
-      font-weight: 700;
-      border-radius: 50px;
-      cursor: pointer;
-      color: var(--accent);
-      transition: all 0.2s ease;
-      text-decoration: none;
-    }
-    .back-button:hover {
-      background: rgba(255,140,0,.22);
-      border-color: var(--accent);
-      transform: translateX(-2px);
-    }
-
     .header-title {
       font-family: 'Bangers', cursive;
       font-size: 32px;
@@ -122,7 +102,7 @@
     .game-count {
       font-size: 13px;
       color: var(--muted);
-      font-weight: 600;
+      font-weight: 700;
       background: var(--tag);
       border: 1px solid var(--border);
       padding: 5px 12px;
@@ -183,7 +163,7 @@
       position: absolute;
       top: 10px;
       right: 10px;
-      z-index: 2;
+      z-index: 3;
       width: 30px;
       height: 30px;
       border: 1px solid var(--border);
@@ -193,8 +173,9 @@
       font-size: 20px;
       line-height: 1;
       cursor: pointer;
+      transition: background 0.2s ease, transform 0.15s ease;
     }
-    .remove-btn:hover { background: var(--accent2); }
+    .remove-btn:hover { background: var(--accent2); transform: scale(1.08); }
 
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(18px); }
@@ -208,38 +189,50 @@
       background: var(--card-hover);
     }
 
-    .game-card:nth-child(1)  { animation-delay: .03s; }
-    .game-card:nth-child(2)  { animation-delay: .06s; }
-    .game-card:nth-child(3)  { animation-delay: .09s; }
-    .game-card:nth-child(4)  { animation-delay: .12s; }
-    .game-card:nth-child(5)  { animation-delay: .15s; }
-    .game-card:nth-child(6)  { animation-delay: .18s; }
-    .game-card:nth-child(7)  { animation-delay: .21s; }
-    .game-card:nth-child(8)  { animation-delay: .24s; }
-    .game-card:nth-child(9)  { animation-delay: .27s; }
-    .game-card:nth-child(10) { animation-delay: .30s; }
-
-    .card-thumb {
-      width: 100%;
-      height: 160px;
-      object-fit: cover;
-      object-position: center;
-      display: block;
-      transition: transform 0.3s ease;
-    }
-    .game-card[data-name="a1r"] .card-thumb { object-fit: contain; }
-    .game-card:hover .card-thumb { transform: none; }
-
     .card-thumb-wrap {
       overflow: hidden;
       position: relative;
+      height: 160px;
+      background: radial-gradient(circle at 50% 45%, rgba(255, 140, 0, 0.14), rgba(13, 13, 20, 0.95));
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .card-thumb-wrap::after {
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(to bottom, transparent 50%, rgba(13,13,20,.85) 100%);
+      background: linear-gradient(to bottom, transparent 55%, rgba(13,13,20,.85) 100%);
       pointer-events: none;
+    }
+
+    .card-thumb {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+
+    /* Improved fit & styling for A1R */
+    .game-card[data-name="a1r"] .card-thumb-wrap {
+      background:
+        radial-gradient(circle at 50% 42%, rgba(255, 140, 0, 0.24) 0%, rgba(24, 18, 36, 0.92) 68%),
+        linear-gradient(135deg, #161324 0%, #0d0d14 100%);
+      padding: 16px 22px;
+    }
+    .game-card[data-name="a1r"] .card-thumb {
+      object-fit: contain;
+      max-height: 128px;
+      width: auto;
+      max-width: 100%;
+      margin: 0 auto;
+      filter: drop-shadow(0 6px 16px rgba(255, 140, 0, 0.35));
+      transition: transform 0.3s ease;
+    }
+    .game-card[data-name="a1r"]:hover .card-thumb {
+      transform: scale(1.06);
     }
 
     .card-body {
@@ -255,6 +248,9 @@
       font-size: 14px;
       color: var(--text);
       line-height: 1.3;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .play-btn {
@@ -278,21 +274,165 @@
     }
     .play-btn:active { transform: scale(.97); }
 
-    /* ── Add custom game ── */
+    /* ── Apps section ─────────────── */
+    .section-label {
+      text-align: left;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      margin: 32px 0 10px;
+      padding-left: 28px;
+    }
+    .apps-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+      padding: 0 28px 28px;
+    }
+    .app-card {
+      position: relative;
+      background: var(--card);
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 8px 32px rgba(14, 165, 233, 0.14);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+      animation: fadeUp 0.4s ease both;
+    }
+    .app-card:hover {
+      transform: translateY(-6px) scale(1.02);
+      border-color: rgba(56, 189, 248, 0.75);
+      background: var(--card-hover);
+      box-shadow: 0 16px 48px rgba(14, 165, 233, 0.28);
+    }
+    .app-card[data-name="youtube"] {
+      border-color: rgba(255, 0, 51, 0.28);
+      box-shadow: 0 8px 32px rgba(255, 0, 51, 0.14);
+    }
+    .app-card[data-name="youtube"]:hover {
+      border-color: rgba(255, 0, 51, 0.75);
+      box-shadow: 0 16px 48px rgba(255, 0, 51, 0.32);
+    }
+    .app-thumb-wrap {
+      height: 160px;
+      position: relative;
+      background:
+        radial-gradient(circle at 50% 45%, rgba(56, 189, 248, 0.20) 0%, rgba(14, 18, 30, 0.94) 72%),
+        linear-gradient(135deg, #0f172a 0%, #0d0d14 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .app-card[data-name="youtube"] .app-thumb-wrap {
+      background:
+        radial-gradient(circle at 50% 45%, rgba(255, 0, 51, 0.22) 0%, rgba(20, 10, 18, 0.92) 72%),
+        linear-gradient(135deg, #1a0b12 0%, #0d0d14 100%);
+    }
+    .app-thumb-wrap::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 55%, rgba(13,13,20,.88) 100%);
+      pointer-events: none;
+    }
+    .youtube-logo {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: #ffffff;
+      font: 800 24px/1 'Nunito', Arial, sans-serif;
+      letter-spacing: -0.5px;
+      text-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
+      transition: transform 0.25s ease;
+    }
+    .app-card:hover .youtube-logo {
+      transform: scale(1.06);
+    }
+    .youtube-logo svg {
+      width: 48px;
+      height: 34px;
+      flex: none;
+      filter: drop-shadow(0 4px 14px rgba(255, 0, 51, 0.55));
+    }
+    .app-body {
+      padding: 12px 14px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .app-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+    .app-subtitle {
+      font-size: 11px;
+      font-weight: 700;
+      color: rgba(148, 210, 255, 0.75);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .app-card[data-name="youtube"] .app-subtitle {
+      color: rgba(255, 130, 150, 0.75);
+    }
+    .open-app-btn {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 7px 16px;
+      border: 0;
+      border-radius: 50px;
+      background: linear-gradient(135deg, #0ea5e9, #2563eb);
+      color: #fff;
+      text-decoration: none;
+      font-family: 'Nunito', sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .3px;
+      cursor: pointer;
+      box-shadow: 0 3px 12px rgba(14, 165, 233, 0.38);
+      transition: all 0.2s ease;
+    }
+    .open-app-btn:hover {
+      transform: scale(1.08);
+      box-shadow: 0 5px 18px rgba(14, 165, 233, 0.6);
+    }
+    .app-card[data-name="youtube"] .open-app-btn {
+      background: linear-gradient(135deg, #ff0033, #cc0029);
+      box-shadow: 0 3px 12px rgba(255, 0, 51, 0.38);
+    }
+    .app-card[data-name="youtube"] .open-app-btn:hover {
+      box-shadow: 0 5px 18px rgba(255, 0, 51, 0.6);
+    }
+    .open-app-btn:active {
+      transform: scale(0.97);
+    }
+
+    /* ── Add custom application ── */
     .add-section {
-      padding: 0 28px 40px;
+      padding: 8px 28px 48px;
       display: flex;
       justify-content: center;
     }
 
     .add-card {
       width: 100%;
-      max-width: 460px;
+      max-width: 480px;
       background: var(--card);
       border: 1px dashed var(--border);
       border-radius: 16px;
       padding: 20px 24px;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
     .add-card:focus-within { border-color: var(--accent); border-style: solid; }
 
@@ -356,6 +496,73 @@
     }
     .add-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(255,120,0,.45); }
 
+    /* Category Choice Prompt ("Is this an App or a Game?") */
+    .type-choice-box {
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      text-align: center;
+      animation: fadeUp 0.25s ease both;
+    }
+    .type-choice-box.open {
+      display: flex;
+    }
+    .type-choice-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text);
+    }
+    .type-choice-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: -6px;
+    }
+    .type-choice-btns {
+      display: flex;
+      gap: 10px;
+    }
+    .type-btn {
+      flex: 1;
+      padding: 11px 14px;
+      border: none;
+      border-radius: 10px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      color: #fff;
+      cursor: pointer;
+      transition: transform 0.15s ease, opacity 0.2s ease;
+    }
+    .type-btn:hover { transform: translateY(-2px); }
+    .type-btn.is-game {
+      background: linear-gradient(135deg, #ff8c00, #ff5500);
+      box-shadow: 0 4px 14px rgba(255, 140, 0, 0.35);
+    }
+    .type-btn.is-app {
+      background: linear-gradient(135deg, #0ea5e9, #2563eb);
+      box-shadow: 0 4px 14px rgba(14, 165, 233, 0.35);
+    }
+    .type-cancel-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .type-cancel-btn:hover {
+      color: var(--text);
+      border-color: var(--text);
+    }
+
     /* ── No results ── */
     .no-results {
       display: none;
@@ -371,122 +578,6 @@
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: rgba(255,140,0,.3); border-radius: 10px; }
     ::-webkit-scrollbar-thumb:hover { background: rgba(255,140,0,.55); }
-
-    /* ── Apps section (Upgraded Dark YouTube Theme) ─────────────── */
-    .section-label {
-      text-align: left;
-      font-size: 15px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.45);
-      margin: 32px 0 10px;
-      padding-left: 28px;
-    }
-    .apps-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 20px;
-      padding: 0 28px 28px;
-    }
-    .app-card {
-      background: var(--card);
-      border: 1px solid rgba(255, 0, 51, 0.28);
-      border-radius: 16px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 8px 32px rgba(255, 0, 51, 0.14);
-      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease;
-      animation: fadeUp 0.4s ease both;
-    }
-    .app-card:hover {
-      transform: translateY(-6px) scale(1.02);
-      border-color: rgba(255, 0, 51, 0.75);
-      background: var(--card-hover);
-      box-shadow: 0 16px 48px rgba(255, 0, 51, 0.32);
-    }
-    .app-thumb-wrap {
-      height: 150px;
-      position: relative;
-      background:
-        radial-gradient(circle at 50% 45%, rgba(255, 0, 51, 0.22) 0%, rgba(20, 10, 18, 0.92) 72%),
-        linear-gradient(135deg, #1a0b12 0%, #0d0d14 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-    .app-thumb-wrap::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to bottom, transparent 55%, rgba(13,13,20,.88) 100%);
-      pointer-events: none;
-    }
-    .youtube-logo {
-      position: relative;
-      z-index: 1;
-      display: inline-flex;
-      align-items: center;
-      gap: 9px;
-      color: #ffffff;
-      font: 800 24px/1 'Nunito', Arial, sans-serif;
-      letter-spacing: -0.5px;
-      text-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
-      transition: transform 0.25s ease;
-    }
-    .app-card:hover .youtube-logo {
-      transform: scale(1.06);
-    }
-    .youtube-logo svg {
-      width: 48px;
-      height: 34px;
-      flex: none;
-      filter: drop-shadow(0 4px 14px rgba(255, 0, 51, 0.55));
-    }
-    .app-body {
-      padding: 12px 14px 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
-    .app-meta {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-    .app-subtitle {
-      font-size: 11px;
-      font-weight: 700;
-      color: rgba(255, 130, 150, 0.75);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .open-app-btn {
-      flex-shrink: 0;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 7px 16px;
-      border-radius: 50px;
-      background: linear-gradient(135deg, #ff0033, #cc0029);
-      color: #fff;
-      text-decoration: none;
-      font-size: 13px;
-      font-weight: 800;
-      letter-spacing: .3px;
-      box-shadow: 0 3px 12px rgba(255, 0, 51, 0.38);
-      transition: all 0.2s ease;
-    }
-    .open-app-btn:hover {
-      transform: scale(1.08);
-      box-shadow: 0 5px 18px rgba(255, 0, 51, 0.6);
-    }
-    .open-app-btn:active {
-      transform: scale(0.97);
-    }
 
     @media (max-width: 600px) {
       header { padding: 12px 14px; gap: 8px; }
@@ -507,9 +598,9 @@
 
   <header>
     <a class="site-home-button" href="/start27.html">Home</a>
-    <span class="header-title">GAMES/APPS</span>
+    <span class="header-title">GAMES + APPS</span>
     <div class="header-right">
-      <span class="game-count" id="gameCount">2 games</span>
+      <span class="game-count" id="gameCount">3 applications</span>
       <a href="/settings.html" class="site-settings-gear" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 2h4l.5 2.2c.6.2 1.2.4 1.7.7l1.9-1.2 2.8 2.8-1.2 1.9c.3.5.5 1.1.7 1.7L22 10v4l-2.2.5c-.2.6-.4 1.2-.7 1.7l1.2 1.9-2.8 2.8-1.9-1.2c-.5.3-1.1.5-1.7.7L14 22h-4l-.5-2.2c-.6-.2-1.2-.4-1.7-.7l-1.9 1.2-2.8-2.8 1.2-1.9c-.3-.5-.5-1.1-.7-1.7L2 14v-4l2.2-.5c.2-.6.4-1.2.7-1.7L3.7 5.9l2.8-2.8 1.9 1.2c.5-.3 1.1-.5 1.7-.7L10 2Z"/><circle cx="12" cy="12" r="3"/></svg></a>
     </div>
   </header>
@@ -523,25 +614,25 @@
 
     <div class="game-card" data-name="minecraft">
       <div class="card-thumb-wrap">
-        <img class="card-thumb" src="/images/mc.png" alt="Minecraft" onerror="this.src='https://placehold.co/400x200/1a1a2e/ff8c00?text=🎮'">
+        <img class="card-thumb" src="/images/mc.png" alt="Minecraft" onerror="this.onerror=null;this.src=window.GAME_PLACEHOLDER_SVG;">
       </div>
       <div class="card-body">
         <span class="card-title">Minecraft</span>
-        <button class="play-btn" onclick="openGame('https://xlegends.github.io/server-gxmehub/')">▶ Play</button>
+        <button class="play-btn" type="button" onclick="openGame('https://xlegends.github.io/server-gxmehub/')">▶ Play</button>
       </div>
     </div>
 
     <div class="game-card" data-name="a1r">
       <div class="card-thumb-wrap">
-        <img class="card-thumb" src="/images/A1R.png" alt="A1R" onerror="this.src='https://placehold.co/400x200/1a1a2e/ff8c00?text=🎮'">
+        <img class="card-thumb" src="/images/A1R.png" alt="A1R" onerror="this.onerror=null;this.src=window.GAME_PLACEHOLDER_SVG;">
       </div>
       <div class="card-body">
         <span class="card-title">A1R</span>
-        <button class="play-btn" onclick="openGame('https://freeleo27.github.io/games.html')">▶ Play</button>
+        <button class="play-btn" type="button" onclick="openGame('https://freeleo27.github.io/games.html')">▶ Play</button>
       </div>
     </div>
 
-    <div class="no-results" id="noResults">No games or apps found.</div>
+    <div class="no-results" id="noResults">No games or applications found.</div>
   </div>
 
   <!-- Apps section -->
@@ -567,35 +658,102 @@
     </div>
   </div>
 
-  <!-- Add custom game -->
+  <!-- Add custom application -->
   <div class="add-section">
     <div class="add-card">
-      <button class="add-toggle" id="addToggle" onclick="toggleAdd()">
-        <span id="addIcon">＋</span> Custom Game
+      <button class="add-toggle" id="addToggle" type="button" onclick="toggleAdd()">
+        <span id="addIcon">＋</span> Add Custom Application
       </button>
       <div class="add-inputs" id="addInputs">
-        <input type="text" id="gameName" placeholder="Game name…">
-        <input type="text" id="gameLink" placeholder="Game URL…">
-        <button class="add-submit" onclick="addGame()">Add Game</button>
+        <input type="text" id="gameName" placeholder="Application name…" maxlength="60">
+        <input type="url" id="gameLink" placeholder="Application URL (https://…)">
+        <button class="add-submit" type="button" onclick="promptApplicationType()">Add Application</button>
+      </div>
+      <div class="type-choice-box" id="typeChoiceBox" role="region" aria-label="Choose application category">
+        <div class="type-choice-title">Is this an App or a Game?</div>
+        <div class="type-choice-sub" id="pendingAppNamePreview"></div>
+        <div class="type-choice-btns">
+          <button type="button" class="type-btn is-game" onclick="confirmAddApplication('game')">🎮 Game</button>
+          <button type="button" class="type-btn is-app" onclick="confirmAddApplication('app')">📱 App</button>
+        </div>
+        <button type="button" class="type-cancel-btn" onclick="cancelTypePrompt()">Back</button>
       </div>
     </div>
   </div>
 
   <script>
+    // Self-contained SVG Placeholders for Games and Apps
+    window.GAME_PLACEHOLDER_SVG = "data:image/svg+xml;utf8," + encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 220">' +
+      '<defs>' +
+      '<radialGradient id="g" cx="50%" cy="45%" r="65%">' +
+      '<stop offset="0%" stop-color="#2b1810"/>' +
+      '<stop offset="100%" stop-color="#0d0d14"/>' +
+      '</radialGradient>' +
+      '<linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">' +
+      '<stop offset="0%" stop-color="#ff8c00"/>' +
+      '<stop offset="100%" stop-color="#ff3300"/>' +
+      '</linearGradient>' +
+      '</defs>' +
+      '<rect width="400" height="220" fill="url(#g)"/>' +
+      '<circle cx="200" cy="105" r="54" fill="rgba(255,140,0,0.10)" stroke="rgba(255,140,0,0.28)" stroke-width="1.5"/>' +
+      '<path d="M166 88h68c13 0 23 11 21 24l-4 22c-2 9-11 14-19 10l-14-8h-36l-14 8c-8 4-17-1-19-10l-4-22c-2-13 8-24 21-24z" fill="none" stroke="url(#accent)" stroke-width="4" stroke-linejoin="round"/>' +
+      '<path d="M178 106h14M185 99v14" stroke="#ff8c00" stroke-width="4" stroke-linecap="round"/>' +
+      '<circle cx="216" cy="102" r="3.5" fill="#ff8c00"/>' +
+      '<circle cx="225" cy="110" r="3.5" fill="#ff5500"/>' +
+      '</svg>'
+    );
+
+    window.APP_PLACEHOLDER_SVG = "data:image/svg+xml;utf8," + encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 220">' +
+      '<defs>' +
+      '<radialGradient id="ag" cx="50%" cy="45%" r="65%">' +
+      '<stop offset="0%" stop-color="#0f2537"/>' +
+      '<stop offset="100%" stop-color="#0d0d14"/>' +
+      '</radialGradient>' +
+      '<linearGradient id="ab" x1="0%" y1="0%" x2="100%" y2="100%">' +
+      '<stop offset="0%" stop-color="#38bdf8"/>' +
+      '<stop offset="100%" stop-color="#2563eb"/>' +
+      '</linearGradient>' +
+      '</defs>' +
+      '<rect width="400" height="220" fill="url(#ag)"/>' +
+      '<circle cx="200" cy="105" r="54" fill="rgba(56,189,248,0.10)" stroke="rgba(56,189,248,0.28)" stroke-width="1.5"/>' +
+      '<rect x="174" y="79" width="22" height="22" rx="5" fill="none" stroke="url(#ab)" stroke-width="3.5"/>' +
+      '<rect x="204" y="79" width="22" height="22" rx="5" fill="none" stroke="url(#ab)" stroke-width="3.5"/>' +
+      '<rect x="174" y="109" width="22" height="22" rx="5" fill="none" stroke="url(#ab)" stroke-width="3.5"/>' +
+      '<rect x="204" y="109" width="22" height="22" rx="5" fill="none" stroke="#38bdf8" stroke-width="3.5"/>' +
+      '</svg>'
+    );
+
+    function validateHttpUrl(rawUrl) {
+      if (typeof window.siteHttpUrl === 'function') {
+        return window.siteHttpUrl(rawUrl);
+      }
+      try {
+        const parsed = new URL(rawUrl);
+        if ((parsed.protocol === 'http:' || parsed.protocol === 'https:') && !parsed.username && !parsed.password) {
+          return parsed.href;
+        }
+      } catch {}
+      return null;
+    }
+
     function openGame(url) {
-      url = window.siteHttpUrl(url);
-      if (!url) return alert('Please use a valid http or https game URL.');
+      url = validateHttpUrl(url);
+      if (!url) return alert('Please use a valid http or https URL.');
       const win = window.open('about:blank', '_blank');
       if (!win) return alert('Popup blocked. Please allow popups for this site.');
 
       win.document.open();
-      win.document.write('<!doctype html><html><head><title>Game</title><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{margin:0;height:100%;background:#000;color:#fff;font-family:Arial,sans-serif}nav{height:40px;display:flex;align-items:center;justify-content:center;background:#15151f}a{color:#ffab43}iframe{border:0;width:100%;height:calc(100% - 40px);display:block}</style></head><body><nav><a id="directLink">Open game directly if the preview is blank</a></nav><iframe id="gameFrame" allowfullscreen sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-pointer-lock"></iframe></body></html>');
+      win.document.write('<!doctype html><html><head><title>Application</title><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{margin:0;height:100%;background:#000;color:#fff;font-family:Arial,sans-serif}nav{height:40px;display:flex;align-items:center;justify-content:center;background:#15151f}a{color:#ffab43}iframe{border:0;width:100%;height:calc(100% - 40px);display:block}</style></head><body><nav><a id="directLink">Open directly if the preview is blank</a></nav><iframe id="gameFrame" allowfullscreen sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-pointer-lock"></iframe></body></html>');
       win.document.close();
       const directLink = win.document.getElementById('directLink');
       const gameFrame = win.document.getElementById('gameFrame');
       directLink.href = url;
       gameFrame.src = url;
-      startDirectLinkCountdown(directLink, directLink.parentElement, gameFrame);
+      if (typeof startDirectLinkCountdown === 'function') {
+        try { startDirectLinkCountdown(directLink, directLink.parentElement, gameFrame); } catch {}
+      }
     }
 
     function filterGames() {
@@ -612,11 +770,48 @@
       document.getElementById('noResults').style.display = games + apps === 0 ? 'block' : 'none';
     }
 
+    let pendingApplication = null;
+
     function toggleAdd() {
       const inputs = document.getElementById('addInputs');
+      const choiceBox = document.getElementById('typeChoiceBox');
       const icon = document.getElementById('addIcon');
-      const open = inputs.classList.toggle('open');
-      icon.textContent = open ? '✕' : '＋';
+      const isCurrentlyOpen = inputs.classList.contains('open') || choiceBox.classList.contains('open');
+
+      if (isCurrentlyOpen) {
+        inputs.classList.remove('open');
+        choiceBox.classList.remove('open');
+        pendingApplication = null;
+        icon.textContent = '＋';
+      } else {
+        inputs.classList.add('open');
+        choiceBox.classList.remove('open');
+        icon.textContent = '✕';
+      }
+    }
+
+    function promptApplicationType() {
+      const nameInput = document.getElementById('gameName');
+      const linkInput = document.getElementById('gameLink');
+      const name = nameInput.value.trim();
+      const rawLink = linkInput.value.trim();
+      if (!name || !rawLink) return alert('Please enter both a name and a link.');
+
+      const withProto = /^[a-zA-Z][a-zA-Z\d+.-]*:\/\//.test(rawLink) ? rawLink : 'https://' + rawLink;
+      const validHref = validateHttpUrl(withProto);
+      if (!validHref) {
+        return alert('Please enter a valid http or https URL without a username or password.');
+      }
+
+      pendingApplication = { name, link: validHref };
+      document.getElementById('pendingAppNamePreview').textContent = `"${name}"`;
+      document.getElementById('addInputs').classList.remove('open');
+      document.getElementById('typeChoiceBox').classList.add('open');
+    }
+
+    function cancelTypePrompt() {
+      document.getElementById('typeChoiceBox').classList.remove('open');
+      document.getElementById('addInputs').classList.add('open');
     }
 
     const customGamesKey = 'customGames';
@@ -625,52 +820,75 @@
     function saveCustomGames() {
       try {
         siteStorage.setItem(customGamesKey, JSON.stringify(customGames));
+        window.dispatchEvent(new CustomEvent('site-storage-updated', { detail: { key: customGamesKey } }));
       } catch (error) {
-        console.warn('Could not save custom games.', error);
+        console.warn('Could not save custom applications.', error);
       }
     }
 
     function updateGameCount() {
-      const total = document.querySelectorAll('.game-card[data-name]').length;
+      const total = document.querySelectorAll('.game-card[data-name], .app-card[data-name]').length;
       document.getElementById('gameCount').textContent =
-        total + ' game' + (total === 1 ? '' : 's');
+        total + ' application' + (total === 1 ? '' : 's');
     }
 
-    function renderCustomGame(game) {
+    function renderCustomGame(item) {
+      const category = item.category === 'app' ? 'app' : 'game';
       const card = document.createElement('div');
-      card.className = 'game-card';
+      card.className = category === 'app' ? 'app-card' : 'game-card';
       card.dataset.customGame = 'true';
-      card.dataset.name = game.name.toLowerCase();
+      card.dataset.name = item.name.toLowerCase();
       card.style.animationDelay = '0s';
 
       const thumbWrap = document.createElement('div');
-      thumbWrap.className = 'card-thumb-wrap';
+      thumbWrap.className = category === 'app' ? 'app-thumb-wrap' : 'card-thumb-wrap';
       const thumb = document.createElement('img');
       thumb.className = 'card-thumb';
-      thumb.src = 'https://placehold.co/400x200/1a1a2e/ff8c00?text=🎮';
-      thumb.alt = game.name;
+      thumb.src = category === 'app' ? window.APP_PLACEHOLDER_SVG : window.GAME_PLACEHOLDER_SVG;
+      thumb.alt = item.name;
       thumbWrap.appendChild(thumb);
 
       const body = document.createElement('div');
-      body.className = 'card-body';
-      const title = document.createElement('span');
-      title.className = 'card-title';
-      title.textContent = game.name;
-      const play = document.createElement('button');
-      play.className = 'play-btn';
-      play.type = 'button';
-      play.textContent = '▶ Play';
-      play.addEventListener('click', () => openGame(game.link));
-      body.append(title, play);
+      body.className = category === 'app' ? 'app-body' : 'card-body';
+
+      if (category === 'app') {
+        const meta = document.createElement('div');
+        meta.className = 'app-meta';
+        const title = document.createElement('span');
+        title.className = 'card-title';
+        title.textContent = item.name;
+        const sub = document.createElement('span');
+        sub.className = 'app-subtitle';
+        sub.textContent = 'Web Application';
+        meta.append(title, sub);
+
+        const openBtn = document.createElement('button');
+        openBtn.className = 'open-app-btn';
+        openBtn.type = 'button';
+        openBtn.textContent = '▶ Open';
+        openBtn.addEventListener('click', () => openGame(item.link));
+        body.append(meta, openBtn);
+      } else {
+        const title = document.createElement('span');
+        title.className = 'card-title';
+        title.textContent = item.name;
+        const play = document.createElement('button');
+        play.className = 'play-btn';
+        play.type = 'button';
+        play.textContent = '▶ Play';
+        play.addEventListener('click', () => openGame(item.link));
+        body.append(title, play);
+      }
 
       const remove = document.createElement('button');
       remove.className = 'remove-btn';
       remove.type = 'button';
       remove.textContent = '×';
-      remove.title = 'Remove ' + game.name;
-      remove.setAttribute('aria-label', 'Remove ' + game.name);
-      remove.addEventListener('click', () => {
-        customGames = customGames.filter(item => item.id !== game.id);
+      remove.title = 'Remove ' + item.name;
+      remove.setAttribute('aria-label', 'Remove ' + item.name);
+      remove.addEventListener('click', (e) => {
+        e.stopPropagation();
+        customGames = customGames.filter(saved => saved.id !== item.id);
         saveCustomGames();
         card.remove();
         updateGameCount();
@@ -678,38 +896,33 @@
       });
 
       card.append(thumbWrap, body, remove);
-      document.getElementById('gamesContainer')
-        .insertBefore(card, document.getElementById('noResults'));
+
+      if (category === 'app') {
+        document.getElementById('appsContainer').appendChild(card);
+      } else {
+        document.getElementById('gamesContainer')
+          .insertBefore(card, document.getElementById('noResults'));
+      }
     }
 
-    function addGame() {
-      const nameInput = document.getElementById('gameName');
-      const linkInput = document.getElementById('gameLink');
-      const name = nameInput.value.trim();
-      const link = linkInput.value.trim();
-      if (!name || !link) return alert('Please enter both a name and a link.');
-
-      let url;
-      try {
-        url = new URL(link);
-      } catch {
-        return alert('Please enter a valid game URL.');
-      }
-      if (!window.siteHttpUrl(url.href)) {
-        return alert('Please enter an http or https game URL without a username or password.');
-      }
-
-      const game = {
-        id: crypto.randomUUID(),
-        name,
-        link: url.href
+    function confirmAddApplication(category) {
+      if (!pendingApplication) return;
+      const entry = {
+        id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random()),
+        name: pendingApplication.name,
+        link: pendingApplication.link,
+        category: category === 'app' ? 'app' : 'game'
       };
-      customGames.push(game);
+      customGames.push(entry);
       saveCustomGames();
-      renderCustomGame(game);
-      nameInput.value = '';
-      linkInput.value = '';
-      toggleAdd();
+      renderCustomGame(entry);
+
+      document.getElementById('gameName').value = '';
+      document.getElementById('gameLink').value = '';
+      pendingApplication = null;
+      document.getElementById('typeChoiceBox').classList.remove('open');
+      document.getElementById('addIcon').textContent = '＋';
+
       updateGameCount();
       filterGames();
     }
@@ -719,18 +932,22 @@
       const seen = new Set();
       try {
         const saved = JSON.parse(siteStorage.getItem(customGamesKey) || '[]');
-        if (Array.isArray(saved)) saved.forEach(game => {
-          if (!game || typeof game.name !== 'string' || !game.name.trim()) return;
-          const link = window.siteHttpUrl(game.link);
+        if (Array.isArray(saved)) saved.forEach(item => {
+          if (!item || typeof item.name !== 'string' || !item.name.trim()) return;
+          const link = validateHttpUrl(item.link);
           if (!link) return;
-          const id = typeof game.id === 'string' && game.id && !seen.has(game.id) ? game.id : crypto.randomUUID();
+          const id = typeof item.id === 'string' && item.id && !seen.has(item.id)
+            ? item.id
+            : (crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random()));
           seen.add(id);
-          normalized.push({ id, name: game.name.trim(), link });
+          const category = item.category === 'app' ? 'app' : 'game';
+          normalized.push({ id, name: item.name.trim(), link, category });
         });
       } catch { /* Ignore damaged saved entries. */ }
       customGames = normalized;
       if (JSON.stringify(normalized) !== siteStorage.getItem(customGamesKey)) saveCustomGames();
     }
+
     window.addEventListener('storage', event => {
       if (event.key !== null && event.key !== customGamesKey) return;
       loadCustomGames();
@@ -739,6 +956,7 @@
       updateGameCount();
       filterGames();
     });
+
     loadCustomGames();
     customGames.forEach(renderCustomGame);
     updateGameCount();
