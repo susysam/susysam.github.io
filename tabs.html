@@ -9,8 +9,10 @@
 
   <script>
     (function () {
-      const theme = siteStorage.getItem('theme');
-      document.documentElement.classList.toggle('dark', theme === 'dark');
+      try {
+        const theme = window.siteStorage ? siteStorage.getItem('theme') : localStorage.getItem('theme');
+        document.documentElement.classList.toggle('dark', theme === 'dark');
+      } catch {}
     })();
   </script>
 
@@ -86,20 +88,25 @@
       z-index: 1;
     }
 
+    /* Safe visibility even when Performance Mode disables CSS animations */
     .app-container {
       width: 100%;
       max-width: 900px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: ui-reveal .65s cubic-bezier(.16, 1, .3, 1) forwards;
+      opacity: 1;
+      transform: translateY(0);
+      animation: ui-reveal .45s cubic-bezier(.16, 1, .3, 1);
     }
 
     .app-container .site-home-nav { width: 100%; }
 
     @keyframes ui-reveal {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
       to {
         opacity: 1;
         transform: translateY(0);
@@ -174,26 +181,14 @@
       box-shadow: 0 3px 10px rgba(0, 0, 0, .08);
     }
 
-    .action-button.normal {
-      background: var(--normal);
-    }
-    .action-button.normal:hover {
-      background: var(--normal-hover);
-    }
+    .action-button.normal { background: var(--normal); }
+    .action-button.normal:hover { background: var(--normal-hover); }
 
-    .action-button.blank {
-      background: var(--blank);
-    }
-    .action-button.blank:hover {
-      background: var(--blank-hover);
-    }
+    .action-button.blank { background: var(--blank); }
+    .action-button.blank:hover { background: var(--blank-hover); }
 
-    .action-button.secret {
-      background: var(--secret);
-    }
-    .action-button.secret:hover {
-      background: var(--secret-hover);
-    }
+    .action-button.secret { background: var(--secret); }
+    .action-button.secret:hover { background: var(--secret-hover); }
 
     .action-button.preview {
       min-height: 38px;
@@ -202,9 +197,7 @@
       background: var(--preview);
       font-size: 13px;
     }
-    .action-button.preview:hover {
-      background: var(--preview-hover);
-    }
+    .action-button.preview:hover { background: var(--preview-hover); }
 
     .status-message {
       min-height: 20px;
@@ -313,16 +306,9 @@
       transition: background-color .2s ease, transform .1s ease, opacity .2s ease;
       white-space: nowrap;
     }
-    .saved-save-btn:hover:not(:disabled) {
-      background: var(--accent-hover);
-    }
-    .saved-save-btn:disabled {
-      opacity: .45;
-      cursor: not-allowed;
-    }
-    .saved-save-btn:active:not(:disabled) {
-      transform: translateY(1px);
-    }
+    .saved-save-btn:hover:not(:disabled) { background: var(--accent-hover); }
+    .saved-save-btn:disabled { opacity: .45; cursor: not-allowed; }
+    .saved-save-btn:active:not(:disabled) { transform: translateY(1px); }
 
     .saved-links-list {
       display: flex;
@@ -362,9 +348,7 @@
       border-color: var(--accent);
       background: rgba(108, 11, 169, 0.08);
     }
-    .saved-link-card:active {
-      transform: translateY(1px);
-    }
+    .saved-link-card:active { transform: translateY(1px); }
 
     .saved-link-card strong {
       font-size: 14px;
@@ -429,9 +413,7 @@
       color: #fff;
       border-color: var(--danger);
     }
-    .saved-delete-btn:active {
-      transform: scale(.95);
-    }
+    .saved-delete-btn:active { transform: scale(.95); }
 
     .saved-empty-hint {
       text-align: center;
@@ -456,15 +438,10 @@
       display: none;
       flex-direction: column;
       align-items: center;
-      opacity: 0;
-      transform: scale(.96);
-      transition: opacity .4s ease, transform .4s ease;
     }
 
     .laptop-hardware.visible {
       display: flex;
-      opacity: 1;
-      transform: scale(1);
     }
 
     .preview-fallback { margin-top: 18px; color: var(--muted); font-size: 14px; text-align: center; }
@@ -508,13 +485,13 @@
 
     .loader-screen-overlay {
       z-index: 5;
-      background: #141519;
+      background: rgba(20, 21, 25, 0.85);
     }
 
     .loading-spinner {
       width: 40px;
       height: 40px;
-      border: 4px solid rgba(255, 255, 255, .1);
+      border: 4px solid rgba(255, 255, 255, .15);
       border-top-color: var(--accent);
       border-radius: 50%;
       animation: spin .8s linear infinite;
@@ -562,9 +539,7 @@
       font-size: 14px;
     }
 
-    .error-action-btn:hover {
-      background: #ff3333;
-    }
+    .error-action-btn:hover { background: #ff3333; }
     .retry-btn { margin-left: 8px; background: #475569; }
     .retry-btn:hover { background: #334155; }
 
@@ -591,25 +566,14 @@
     }
 
     @media (max-width: 650px) {
-      .action-buttons {
-        flex-direction: column;
-      }
-
-      .action-button {
-        width: 100%;
-      }
-
+      .action-buttons { flex-direction: column; }
+      .action-button { width: 100%; }
       .laptop-screen-frame {
         padding: 10px 10px 14px;
         border-radius: 10px 10px 0 0;
       }
-
-      .saved-form-inputs {
-        flex-direction: column;
-      }
-      .saved-input {
-        width: 100%;
-      }
+      .saved-form-inputs { flex-direction: column; }
+      .saved-input { width: 100%; }
     }
   </style>
   <script src="/site-appearance.js"></script>
@@ -689,7 +653,8 @@
             title="Website preview"
             class="virtual-iframe"
             id="monitorIframe"
-            sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+            allow="fullscreen; autoplay; encrypted-media; picture-in-picture"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-modals"
           ></iframe>
 
           <div class="loader-screen-overlay" id="loaderModule" aria-hidden="true">
@@ -699,7 +664,7 @@
           <div class="error-screen-overlay" id="errorModule" aria-hidden="true">
             <div class="error-card">
               <div class="error-title">Preview unavailable</div>
-              <p class="error-copy">This site may block embedded previews. You can still open it in a regular tab.</p>
+              <p class="error-copy">This site may block embedded previews. You can still open it in a regular tab or About:Blank.</p>
               <button class="error-action-btn" id="errorFallbackBtn" type="button">Open Tab</button>
               <button class="error-action-btn retry-btn" id="errorRetryBtn" type="button" onclick="retryPreview()">Retry Preview</button>
             </div>
@@ -722,29 +687,40 @@
     const SAVED_LINKS_KEY = 'tabs_saved_links';
     const MAX_SAVED_LINKS = 6;
 
+    function validateHttpUrl(rawUrl) {
+      if (typeof window.siteHttpUrl === 'function') {
+        try { return window.siteHttpUrl(rawUrl); } catch {}
+      }
+      try {
+        const parsed = new URL(rawUrl);
+        if ((parsed.protocol === 'http:' || parsed.protocol === 'https:') && !parsed.username && !parsed.password) {
+          return parsed.href;
+        }
+      } catch {}
+      return null;
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
       const input = document.getElementById('searchInput');
       const frame = document.getElementById('monitorIframe');
 
-      input.focus();
-      frame.addEventListener('load', handlePreviewLoad);
+      if (input) input.focus();
+      if (frame) frame.addEventListener('load', handlePreviewLoad);
       renderSavedLinks();
     });
 
     function getValidUrl(rawInput) {
       if (typeof rawInput !== 'string') return null;
       const value = rawInput.trim();
-      if (!value || /^(?!https?:)[a-z][a-z\d+.-]*:/i.test(value) && !/^[^/\s:]+:\d+(?:\/|$)/.test(value)) return null;
+      if (!value || (/^(?!https?:)[a-z][a-z\d+.-]*:/i.test(value) && !/^[^/\s:]+:\d+(?:\/|$)/.test(value))) return null;
 
       try {
         const withProtocol = /^[a-zA-Z][a-zA-Z\d+.-]*:\/\//.test(value)
           ? value
           : 'https://' + value;
         const url = new URL(withProtocol);
-
-        if (!window.siteHttpUrl(url.href)) return null;
-        return url.href;
-      } catch (error) {
+        return validateHttpUrl(url.href);
+      } catch {
         return null;
       }
     }
@@ -754,7 +730,7 @@
       const url = getValidUrl(input.value);
 
       if (!url) {
-        showStatus('Please enter a valid website address.');
+        showStatus('Please enter a valid website address (e.g., wikipedia.org).');
         input.focus();
         return null;
       }
@@ -771,13 +747,17 @@
       const loaderLayer = document.getElementById('loaderModule');
       const errorLayer = document.getElementById('errorModule');
       const frame = document.getElementById('monitorIframe');
+      const fallbackLink = document.getElementById('previewFallbackLink');
 
       fallbackGlobalUrl = verifiedUrl;
-      const fallbackLink = document.getElementById("previewFallbackLink");
-      if (stopPreviewFallbackTimer) stopPreviewFallbackTimer();
+      if (typeof stopPreviewFallbackTimer === 'function') {
+        try { stopPreviewFallbackTimer(); } catch {}
+        stopPreviewFallbackTimer = null;
+      }
+
       fallbackLink.href = verifiedUrl;
       fallbackLink.parentElement.style.display = '';
-      stopPreviewFallbackTimer = startDirectLinkCountdown(fallbackLink, fallbackLink.parentElement);
+
       previewRequestId += 1;
       frame.dataset.requestId = String(previewRequestId);
       frame.dataset.loaded = 'false';
@@ -789,7 +769,16 @@
       loaderLayer.setAttribute('aria-hidden', 'false');
       showStatus('Loading preview…');
 
+      // Set iframe src BEFORE starting any optional timer so preview always loads
       frame.src = verifiedUrl;
+
+      if (typeof startDirectLinkCountdown === 'function') {
+        try {
+          stopPreviewFallbackTimer = startDirectLinkCountdown(fallbackLink, fallbackLink.parentElement, frame);
+        } catch {}
+      }
+
+      laptopRig.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
       if (loadTimer) clearTimeout(loadTimer);
       const activeRequestId = previewRequestId;
@@ -800,30 +789,22 @@
         ) {
           triggerErrorPanel();
         }
-      }, 12000);
+      }, 10000);
     }
 
     function openInputNormally() {
       const verifiedUrl = getInputUrl();
       if (!verifiedUrl) return;
 
-      const newWindow = window.open(verifiedUrl, '_blank');
+      const newWindow = window.open(verifiedUrl, '_blank', 'noopener,noreferrer');
       if (!newWindow) {
         showStatus('Your browser blocked the new tab. Please allow pop-ups for this site.');
-        return;
-      }
-
-      try {
-        newWindow.opener = null;
-      } catch (error) {
-        // The tab is already open; some browsers block access after navigation.
       }
     }
 
     function handlePreviewLoad() {
       const frame = document.getElementById('monitorIframe');
-
-      if (!frame.dataset.requestId) return;
+      if (!frame || !frame.dataset.requestId) return;
       frame.dataset.loaded = 'true';
 
       if (loadTimer) {
@@ -834,7 +815,7 @@
       hideLoader();
       document.getElementById('errorModule').style.display = 'none';
       document.getElementById('errorModule').setAttribute('aria-hidden', 'true');
-      showStatus('Preview loaded. If it appears blank, open the site in a new tab.');
+      showStatus('Preview loaded. If the site blocks embeds and appears blank, use About:Blank or Open Site.');
     }
 
     function hideLoader() {
@@ -879,34 +860,29 @@
       }
 
       try {
-        const blankDocument = blankWindow.document;
-        blankDocument.title = 'Workspace';
-        blankDocument.documentElement.style.width = '100%';
-        blankDocument.documentElement.style.height = '100%';
-        blankDocument.body.style.width = '100%';
-        blankDocument.body.style.height = '100%';
-        blankDocument.body.style.margin = '0';
-        blankDocument.body.style.overflow = 'hidden';
-        blankDocument.body.style.background = '#111';
+        blankWindow.document.open();
+        blankWindow.document.write(
+          '<!doctype html><html><head><title>Workspace</title><meta name="viewport" content="width=device-width,initial-scale=1">' +
+          '<style>html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#111;font-family:Arial,sans-serif}' +
+          'nav{height:40px;display:flex;align-items:center;justify-content:center;background:#15151f}' +
+          'a{color:#9fd7ff;font-size:14px;text-decoration:none}' +
+          'iframe{width:100%;height:calc(100% - 40px);border:0;display:block;background:#fff}</style>' +
+          '</head><body>' +
+          '<nav><a id="directLink" target="_blank" rel="noopener noreferrer">Open directly if the preview is blank</a></nav>' +
+          '<iframe id="siteFrame" title="Opened website" allowfullscreen allow="fullscreen; autoplay; encrypted-media; picture-in-picture"></iframe>' +
+          '</body></html>'
+        );
+        blankWindow.document.close();
 
-        const directLink = blankDocument.createElement('a');
+        const directLink = blankWindow.document.getElementById('directLink');
+        const siteFrame = blankWindow.document.getElementById('siteFrame');
         directLink.href = url;
-        directLink.textContent = 'Open directly if the preview is blank';
-        directLink.style.cssText = 'height:40px;display:flex;align-items:center;justify-content:center;background:#15151f;color:#9fd7ff;font:14px Arial,sans-serif;text-decoration:none';
-        blankDocument.body.appendChild(directLink);
-
-        const siteFrame = blankDocument.createElement('iframe');
         siteFrame.src = url;
-        siteFrame.title = 'Opened website';
-        siteFrame.allow = 'fullscreen';
-        siteFrame.referrerPolicy = 'no-referrer';
-        siteFrame.style.width = '100%';
-        siteFrame.style.height = 'calc(100% - 40px)';
-        siteFrame.style.border = '0';
-        siteFrame.style.display = 'block';
-        blankDocument.body.appendChild(siteFrame);
-        startDirectLinkCountdown(directLink, directLink, siteFrame, 7);
-      } catch (error) {
+
+        if (typeof startDirectLinkCountdown === 'function') {
+          try { startDirectLinkCountdown(directLink, directLink.parentElement, siteFrame, 7); } catch {}
+        }
+      } catch {
         blankWindow.location.replace(url);
       }
     }
@@ -933,6 +909,7 @@
     function saveLinksToStorage(links) {
       try {
         siteStorage.setItem(SAVED_LINKS_KEY, JSON.stringify(links.slice(0, MAX_SAVED_LINKS)));
+        window.dispatchEvent(new CustomEvent('site-storage-updated', { detail: { key: SAVED_LINKS_KEY } }));
       } catch (e) {
         console.warn('Failed to save links:', e);
       }
@@ -1074,7 +1051,6 @@
         const row = document.createElement('div');
         row.className = 'saved-link-row';
 
-        // Main clickable link card
         const card = document.createElement('button');
         card.type = 'button';
         card.className = 'saved-link-card';
@@ -1090,7 +1066,6 @@
         card.appendChild(titleEl);
         card.appendChild(urlEl);
 
-        // Copy button
         const copyBtn = document.createElement('button');
         copyBtn.type = 'button';
         copyBtn.className = 'saved-link-action-btn saved-copy-btn';
@@ -1102,7 +1077,6 @@
           copySavedLink(item.url, copyBtn);
         };
 
-        // Delete button
         const delBtn = document.createElement('button');
         delBtn.type = 'button';
         delBtn.className = 'saved-link-action-btn saved-delete-btn';
@@ -1122,13 +1096,11 @@
       });
     }
 
-    // Sync across tabs
     window.addEventListener('storage', (e) => {
       if (e.key === null || e.key === SAVED_LINKS_KEY) {
         renderSavedLinks();
       }
     });
-
   </script>
 </body>
 </html>
