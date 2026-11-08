@@ -1,5 +1,14 @@
 // Presentation only: Firebase/SyncController remain the source of truth.
 export function syncPresentation(state, online = true) {
+  if (state.user && state.mode === 'device' && state.phase === 'error') {
+    return { tone: 'bad', label: 'Saving choice needs attention', detail: state.message };
+  }
+  if (state.user && state.mode === 'device' && state.phase !== 'loading') {
+    return { tone: 'good', label: 'Saved on this device', detail: 'Cloud Sync is off for this account.' };
+  }
+  if (state.user && state.phase === 'choice') {
+    return { tone: 'bad', label: 'Choose where to save', detail: 'Select Cloud Sync or Device storage in Your data.' };
+  }
   if (!state.user && !['loading', 'error'].includes(state.phase)) {
     return { tone: 'bad', label: 'Not Synced', detail: 'Your data stays on this device, not in the cloud.' };
   }

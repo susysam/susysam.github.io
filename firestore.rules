@@ -11,8 +11,9 @@ service cloud.firestore {
       let doc = request.resource.data;
       let data = doc.data;
       return doc.keys().hasAll(['schemaVersion', 'data', 'revision', 'updatedAt'])
-        && doc.keys().hasOnly(['schemaVersion', 'data', 'revision', 'updatedAt'])
+        && doc.keys().hasOnly(['schemaVersion', 'mode', 'data', 'revision', 'updatedAt'])
         && doc.schemaVersion == 1
+        && (!('mode' in doc) || doc.mode in ['cloud', 'device'])
         && doc.revision is string && doc.revision.size() == 36
         && doc.updatedAt == request.time
         && data is map
@@ -31,7 +32,10 @@ service cloud.firestore {
     }
     match /users/{uid}/data/settings {
       allow get: if owns(uid);
-      allow create, update: if owns(uid) && validSettings();
+      allow create: if owns(uid) && validSettings();
+      // Old pages can still write legacy documents, but cannot erase a chosen mode.
+      allow update: if owns(uid) && validSettings()
+        && (!('mode' in resource.data) || ('mode' in request.resource.data));
       // The app clears the data map instead of deleting its revision marker.
       // Old devices must resolve a conflict before restoring old content.
       allow list, delete: if false;

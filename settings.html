@@ -550,7 +550,7 @@
               <button type="submit">Add Color</button>
             </div>
           </form>
-          <p class="mini">Your custom colors are saved on this device and sync when signed in. Use × on a custom color to remove it.</p>
+          <p class="mini">Your custom colors are saved on this device and sync when Cloud Sync is on. Use × on a custom color to remove it.</p>
         </div>
       </section>      <section class="card">
         <div class="card-head">
@@ -591,10 +591,28 @@
 <div id="settings-data" data-settings-panel="data" class="settings-category" role="region" aria-labelledby="category-data" tabindex="-1">      <section class="card">
         <div class="card-head"><h2>Your data</h2></div>
         <div class="card-body">
-          <p class="hint">Backups include settings, saved links, games, and viewing history. Passwords and account credentials are excluded. Signed-in data syncs after you resolve any differences.</p>
+          <p class="hint">Backups include settings, saved links, games, and viewing history. Passwords and account credentials are excluded.</p>
+          <div class="storage-choice" data-storage-choice hidden>
+            <h3>Where should your data be saved?</h3>
+            <p data-storage-choice-message>Please select Cloud Sync or Device storage.</p>
+            <div class="storage-choice-actions">
+              <button class="site-home-button" type="button" data-select-cloud>Cloud Sync</button>
+              <button class="site-home-button" type="button" data-select-device>Device storage</button>
+            </div>
+            <p class="account-note">Cloud Sync updates your account when you make changes. Device storage keeps site data on this device. Your choice follows your account. Changing modes keeps the old cloud copy until you delete it.</p>
+            <p class="account-feedback" data-storage-choice-feedback role="alert"></p>
+          </div>
+          <div class="account-conflict" data-data-conflict hidden>
+            <p>Your device and cloud copies differ. Export a backup before choosing. Using cloud replaces this device's data; using this device replaces the cloud copy.</p>
+            <div class="storage-choice-actions">
+              <button class="site-home-button" type="button" data-data-use-cloud>Use cloud data</button>
+              <button class="site-home-button" type="button" data-data-use-device>Use this device's data</button>
+            </div>
+            <p class="account-feedback" data-data-conflict-feedback role="alert"></p>
+          </div>
           <div class="data-status-grid">
-            <div><h3>Cloud saving</h3><p data-cloud-indicator role="status">Checking cloud saving…</p><p class="account-note" data-sync-detail></p></div>
-            <div><h3>Device storage</h3><p data-device-status role="status">Checking device storage…</p></div>
+            <div data-cloud-status-card><h3>Cloud saving</h3><p data-cloud-indicator role="status">Checking cloud saving…</p><p class="account-note" data-sync-detail></p></div>
+            <div data-device-status-card><h3>Device storage</h3><p data-device-status role="status">Checking device storage…</p></div>
             <div><h3>Account status</h3><div class="account-status-content"><p data-account-status role="status">Checking account…</p><a class="account-entry-button" href="/index.html" data-login-link>Log in or create an account</a></div></div>
           </div>
           <div class="btns backup-actions">
@@ -609,7 +627,7 @@
             <button id="deleteHistoryBtn" class="btn-danger" type="button">Delete viewing history</button>
             <button id="deleteAllDataBtn" class="btn-danger" type="button">Delete all site data</button>
           </div>
-          <p class="mini">Import replaces the categories in the backup. While signed in, Delete all clears device and synced site data but keeps your account. While signed out, it clears only this device. Downloads and external sites are unaffected. Cloud saving supports up to 900 KB; file backups support 2 MB.</p>
+          <p class="mini">Import replaces the categories in the backup. While signed in, Delete all clears device and cloud site data but keeps your account and saving choice. While signed out, it clears only this device. Downloads and external sites are unaffected. Cloud saving supports up to 900 KB; file backups support 2 MB.</p>
           <p id="dataStatus" role="status" aria-live="polite"></p>
         </div>
       </section></div>

@@ -22,7 +22,7 @@ panels.forEach((panel, index) => {
     </div>` : ''}
     <div data-signed-in hidden>
       <p>Logged in as <span class="account-email" data-account-email></span></p>
-      ${primary ? '' : '<p class="account-note">Your settings, links, games, viewing history, and timezone automatically sync with this account.</p>'}
+      ${primary ? '' : '<p class="account-note" data-account-mode-note></p>'}
     </div>
     <div data-sync-conflict class="account-conflict" hidden>
       <p>Both copies are kept until you choose. Export a device backup in <a href="/settings.html#data">Your data</a> first if you want to keep both. “Use cloud data” replaces this device's copy; “Use this device's data” replaces the cloud copy.</p>
@@ -44,6 +44,9 @@ panels.forEach((panel, index) => {
     field('[data-signed-in]').hidden = !state.user;
     if (primary) field('[data-signed-out]').hidden = !!state.user;
     field('[data-account-email]').textContent = state.user?.email || '';
+    if (!primary) field('[data-account-mode-note]').textContent = state.mode === 'cloud'
+      ? 'Cloud Sync saves changes to your account automatically.'
+      : state.mode === 'device' ? 'Your site data stays on this device.' : 'Choose a saving mode in Your data.';
     field('[data-sync-conflict]').hidden = !state.user || state.phase !== 'conflict';
     field('[data-sync-retry]').hidden = state.phase !== 'error';
     panel.querySelectorAll('button').forEach(button => { button.disabled = busy; });
@@ -122,6 +125,36 @@ panels.forEach((panel, index) => {
 function bindStatus() {
   let notice;
 
+  const choice = document.querySelector('[data-storage-choice]');
+  const conflict = document.querySelector('[data-data-conflict]');
+  const choiceFeedback = document.querySelector('[data-storage-choice-feedback]');
+  const conflictFeedback = document.querySelector('[data-data-conflict-feedback]');
+  let modeBusy = false;
+  async function changeMode(mode) {
+    if (modeBusy) return;
+    modeBusy = true;
+    choiceFeedback.textContent = '';
+    choice?.querySelectorAll('button').forEach(button => { button.disabled = true; });
+    try { await window.siteCloud[mode === 'cloud' ? 'selectCloud' : 'selectDevice'](); }
+    catch (error) { choiceFeedback.textContent = friendlyError(error); }
+    finally {
+      modeBusy = false;
+      choice?.querySelectorAll('button').forEach(button => { button.disabled = false; });
+    }
+  }
+  choice?.querySelector('[data-select-cloud]').addEventListener('click', () => void changeMode('cloud'));
+  choice?.querySelector('[data-select-device]').addEventListener('click', () => void changeMode('device'));
+  conflict?.querySelector('[data-data-use-cloud]').addEventListener('click', async () => {
+    conflictFeedback.textContent = '';
+    try { await window.siteCloud.useCloud(); }
+    catch (error) { conflictFeedback.textContent = friendlyError(error); }
+  });
+  conflict?.querySelector('[data-data-use-device]').addEventListener('click', async () => {
+    conflictFeedback.textContent = '';
+    try { await window.siteCloud.useDevice(); }
+    catch (error) { conflictFeedback.textContent = friendlyError(error); }
+  });
+
   function render(state) {
     const presentation = syncPresentation(state, navigator.onLine);
     if (!state.user && !['loading', 'error'].includes(state.phase) && !window.siteStorage.status.persistent) {
@@ -130,7 +163,22 @@ function bindStatus() {
 
     document.querySelectorAll('[data-auth-only]').forEach(element => { element.hidden = !state.user; });
     document.querySelectorAll('[data-login-link]').forEach(element => { element.hidden = !!state.user; });
+    document.querySelectorAll('[data-cloud-status-card]').forEach(element => {
+      element.hidden = !!state.user && state.mode === 'device';
+    });
+    document.querySelectorAll('[data-device-status-card]').forEach(element => {
+      element.hidden = !!state.user && state.mode === 'cloud';
+    });
+    document.querySelectorAll('.data-status-grid').forEach(element => {
+      element.toggleAttribute('data-single-mode', !!state.user && ['cloud', 'device'].includes(state.mode));
+    });
     document.querySelectorAll('[data-cloud-indicator]').forEach(element => {
+      const inSettings = !!element.closest('[data-settings-panel="data"]');
+      const hide = !!state.user && state.mode === 'cloud' && !inSettings;
+      const footer = element.closest('.page-sync-footer');
+      if (footer) footer.hidden = hide;
+      else element.hidden = hide;
+      if (hide) return;
       renderStatus(element, presentation);
       if (state.user && ['conflict', 'error'].includes(state.phase)) {
         element.style.cursor = 'pointer';
@@ -141,13 +189,29 @@ function bindStatus() {
       }
     });
     document.querySelectorAll('[data-sync-detail]').forEach(element => { element.textContent = presentation.detail; });
+    if (choice) {
+      choice.hidden = !state.user;
+      choice.dataset.needsChoice = String(!!state.user && state.mode === null);
+      choice.querySelector('[data-storage-choice-message]').textContent = state.phase === 'error'
+        ? state.message : state.phase === 'choice'
+        ? 'Please select if you want to save your info in the cloud or on this device.'
+        : state.mode === 'cloud' ? 'Cloud Sync is on. Changes save to your account automatically.'
+        : state.mode === 'device' ? 'Device storage is on. Site data stays on this device.'
+        : 'Checking your saving choice…';
+      choice.querySelector('[data-select-cloud]').setAttribute('aria-pressed', String(state.mode === 'cloud'));
+      choice.querySelector('[data-select-device]').setAttribute('aria-pressed', String(state.mode === 'device'));
+    }
+    document.querySelectorAll('[data-category="data"]').forEach(link => {
+      link.classList.toggle('needs-choice', !!state.user && state.mode === null);
+    });
+    if (conflict) conflict.hidden = !state.user || state.phase !== 'conflict';
     document.querySelectorAll('[data-account-status]').forEach(element => renderStatus(element, {
       tone: state.user ? 'good' : 'bad',
       label: state.user ? 'Signed in' : 'Not signed in',
       detail: state.user?.email || ''
     }));
 
-    const showErrorBanner = ['conflict', 'error'].includes(state.phase);
+    const showErrorBanner = !state.user && ['conflict', 'error'].includes(state.phase);
     const visiblePanel = panels.some(panel => !panel.closest('[hidden]'));
 
     if (!showErrorBanner || visiblePanel) {

@@ -9,20 +9,22 @@ const artifacts = path.join(root, 'test-results');
 const mime = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.png': 'image/png' };
 const mock = `
 const listeners = new Set();
-const state = {phase: 'local', user: null, available: true, message: 'Sign in to enable cloud saving.'};
+const state = {phase: 'local', mode: null, user: null, available: true, message: 'Sign in to enable cloud saving.'};
 function emit(update) {Object.assign(state, update); listeners.forEach(fn=>fn({...state}));}
 window.__testCloud = {emit};
 window.siteCloud = {
  get state(){return {...state}}, subscribe(fn){listeners.add(fn);fn({...state});return ()=>listeners.delete(fn)},
- async login(email,password){await new Promise(r=>setTimeout(r,100));if(password==='bad-password'){const e=new Error();e.code='auth/invalid-credential';throw e}sessionStorage.setItem('test-user',email);emit({user:{email,uid:'test-only'},phase:'synced',message:'Synced'})},
+ async login(email,password){await new Promise(r=>setTimeout(r,100));if(password==='bad-password'){const e=new Error();e.code='auth/invalid-credential';throw e}sessionStorage.setItem('test-user',email);emit({user:{email,uid:'test-only'},mode:'cloud',phase:'synced',message:'Synced'})},
  async signup(email,password){return this.login(email,password)},
  async resetPassword(email){window.__resetRequested=email},
- async logout(){sessionStorage.removeItem('test-user');emit({user:null,phase:'local',message:'Sign in to enable cloud saving.'})},
+ async logout(){sessionStorage.removeItem('test-user');emit({user:null,mode:null,phase:'local',message:'Sign in to enable cloud saving.'})},
  async retry(){emit({phase:'synced',message:'Synced'})},
  async useCloud(){emit({phase:'synced',message:'Synced'})}, async useDevice(){emit({phase:'synced',message:'Synced'})},
+ async selectCloud(){emit({mode:'cloud',phase:'synced',message:'Synced'})},
+ async selectDevice(){emit({mode:'device',phase:'device',message:'Saved on this device'})},
  async syncNow(){}, async beforeDeleteAll(){}
 };
-const email=sessionStorage.getItem('test-user');if(email)emit({user:{email,uid:'test-only'},phase:'synced',message:'Synced'});
+const email=sessionStorage.getItem('test-user');if(email)emit({user:{email,uid:'test-only'},mode:'cloud',phase:'synced',message:'Synced'});
 window.dispatchEvent(new Event('site-cloud-ready'));
 `;
 let browser, server;
@@ -70,11 +72,11 @@ function check(value, message) { assert(value, message); checks++; }
   check(await page.locator('[data-signed-out]').isHidden(), 'form hides after auth event');
   for (const phase of ['pending','saving','error','conflict']) {
     await page.evaluate(phase=>window.__testCloud.emit({phase,message:'Test '+phase}), phase);
-    check(await page.locator('[data-cloud-indicator]').getAttribute('data-tone') !== 'good', phase+' not green');
+    check(await page.locator('[data-cloud-indicator]').isHidden(), phase+' has no cloud prompt');
   }
   check(await page.getByRole('button',{name:'Use cloud data',exact:true}).isVisible(), 'conflict controls retained');
   await page.getByRole('button',{name:'Use cloud data',exact:true}).click();
-  check(await page.locator('[data-cloud-indicator]').getAttribute('data-tone') === 'good', 'confirmed sync green');
+  check(await page.locator('[data-cloud-indicator]').isHidden(), 'confirmed cloud account has no prompt');
   await page.getByRole('link', {name:'Continue to site'}).click();
   await page.getByRole('button',{name:'Log out',exact:true}).waitFor();
   check(await page.locator('.navbar').evaluate(nav=>{
@@ -83,6 +85,8 @@ function check(value, message) { assert(value, message); checks++; }
     const logout=nav.querySelector('[data-account-logout]');
     return movie?.nextElementSibling===gear && gear?.nextElementSibling===logout;
   }), 'logout follows Movie + TV and the settings gear');
+  check(await page.locator('.nav-link-icon').first().evaluate(img=>img.getBoundingClientRect().width >= 90), 'navigation artwork is enlarged within its button');
+  check(await page.locator('.page-sync-footer').isHidden(), 'cloud account has no home sync message');
   check(await page.locator('[data-account-logout]').evaluate(el=>getComputedStyle(el).backgroundColor) !== await page.locator('.navbar a').first().evaluate(el=>getComputedStyle(el).backgroundColor), 'logout color differs from navigation');
   check(await page.locator('[data-timezone-select]').count() === 0, 'Home clock is display-only');
   check(await page.locator('#time-sub').innerText().then(text=>/Eastern/.test(text)), 'Home displays timezone');
@@ -94,6 +98,15 @@ function check(value, message) { assert(value, message); checks++; }
   check(await page.locator('[data-account-form]').count() === 0, 'Settings has no second sign-in form');
   check(await page.locator('#settings-account').isVisible(), 'account deep link works when signed in');
   await page.getByRole('link',{name:'Your Data',exact:true}).click();
+  check(await page.locator('[data-device-status-card]').isHidden(), 'cloud mode shows only its active storage card');
+  check(await page.locator('[data-storage-choice]').isVisible(), 'signed-in saving choice available');
+  check(await page.locator('[data-select-cloud]').getAttribute('aria-pressed') === 'true', 'cloud mode selected');
+  await page.evaluate(()=>window.__testCloud.emit({mode:null,phase:'choice',message:'Choose a saving mode'}));
+  check(await page.locator('[data-storage-choice]').getAttribute('data-needs-choice') === 'true', 'new account sees highlighted choice');
+  await page.getByRole('button',{name:'Device storage',exact:true}).click();
+  check(await page.locator('[data-select-device]').getAttribute('aria-pressed') === 'true', 'device mode selected');
+  check(await page.locator('[data-cloud-status-card]').isHidden(), 'device mode shows only its active storage card');
+  await page.getByRole('button',{name:'Cloud Sync',exact:true}).click();
   check(await page.locator('[data-device-status]').getAttribute('data-tone') === 'good', 'device storage probe succeeded');
   check(await page.locator('[data-account-status]').innerText().then(text=>text.includes('Signed in')), 'separate account status');
   await page.screenshot({path:path.join(artifacts,'settings-data-desktop.png'),fullPage:true});
@@ -113,6 +126,7 @@ function check(value, message) { assert(value, message); checks++; }
   await page.goto(base+'/start27.html');
   await page.reload();
   check(await page.locator('#time-sub').innerText().then(text=>/Pacific/.test(text)), 'Settings timezone survives Home refresh');
+  check(await page.evaluate(()=>window.siteCloud.state.phase) === 'synced', 'mock account remains synced before logout');
   await page.getByRole('button',{name:'Log out',exact:true}).click();
   await page.getByRole('link',{name:'Log in',exact:true}).waitFor();
   check(await page.getByRole('button',{name:'Log out',exact:true}).isHidden(), 'logout updates UI');

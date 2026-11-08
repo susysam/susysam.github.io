@@ -97,19 +97,22 @@ export class SyncController {
     this.remote = null;
     this.base = null;
     this.phase = 'local';
+    this.mode = null;
   }
   status(phase, message) {
     this.phase = phase;
-    this.adapter.status({ phase, message, signedIn: !!this.uid });
+    this.adapter.status({ phase, message, signedIn: !!this.uid, mode: this.mode });
   }
-  disconnect() {
+  disconnect(silent = false) {
     clearTimeout(this.timer);
     this.generation++;
     this.uid = null;
     this.ready = false;
     this.pending = null;
     this.remote = null;
-    this.status('local', 'Sign in to enable cloud saving.');
+    this.base = null;
+    this.mode = null;
+    if (!silent) this.status('local', 'Sign in to enable cloud saving.');
   }
   conflict(remote, message = 'Cloud and device data differ. Choose a copy before syncing.') {
     this.remote = remote;
@@ -122,7 +125,7 @@ export class SyncController {
     this.status('error', this.adapter.errorMessage?.(error) || error.message || 'Cloud unavailable. Your device data is kept.');
   }
   async connect(uid) {
-    this.disconnect();
+    this.disconnect(true);
     this.uid = uid;
     const generation = this.generation;
     this.status('loading', 'Checking cloud data…');
@@ -133,27 +136,48 @@ export class SyncController {
       const local = this.adapter.readLocal();
       const owner = this.adapter.getOwner();
       this.base = remote?.revision ?? null;
+      // Existing documents predate the mode field and have always been cloud accounts.
+      this.mode = remote ? (remote.mode || 'cloud') : null;
+      if (!this.mode) return this.status('choice', 'Choose where this account saves its data.');
+      if (this.mode === 'device') {
+        this.adapter.setOwner(uid);
+        return this.status('device', 'Saved on this device');
+      }
       if (owner && owner !== uid && Object.keys(local).length) {
         return this.conflict(remote, 'This device has data from another account. Choose a copy before linking it to this account.');
       }
+      const lastSynced = this.adapter.getLastSynced?.(uid);
+      if (remote && !sameData(remote.data, local) &&
+          (!Object.keys(local).length || (lastSynced && sameData(lastSynced, local)))) {
+        this.adapter.writeLocal(remote.data);
+        this.adapter.setLastSynced?.(uid, remote.data);
+        this.adapter.setDeletionMarker?.(uid, !Object.keys(remote.data).length);
+        this.adapter.setOwner(uid);
+        this.ready = true;
+        return this.status('synced', 'Synced');
+      }
+      if (remote && lastSynced && owner === uid && !this.adapter.getDeletionMarker?.(uid) &&
+          sameData(lastSynced, remote.data) && !sameData(remote.data, local)) {
+        this.ready = true;
+        await this.save();
+        return;
+      }
       if (remote && !sameData(remote.data, local)) return this.conflict(remote);
       this.ready = true;
-      if (!remote) await this.save();
-      else {
-        this.adapter.setOwner(uid);
-        this.status('synced', 'Synced');
-      }
+      this.adapter.setOwner(uid);
+      this.adapter.setLastSynced?.(uid, local);
+      this.status('synced', 'Synced');
     } catch (error) { if (generation === this.generation) this.fail(error); }
   }
   changed() {
-    if (!this.uid || !this.ready) return;
+    if (!this.uid || this.mode !== 'cloud' || !this.ready) return;
     clearTimeout(this.timer);
     this.status('pending', 'Cloud changes pending…');
     this.timer = setTimeout(() => { void this.save(); }, 2000);
   }
   async save() {
     clearTimeout(this.timer);
-    if (!this.uid || !this.ready) return;
+    if (!this.uid || this.mode !== 'cloud' || !this.ready) return;
     if (this.pending) {
       const generation = this.generation;
       // The original save reports failures. A second caller must not leak a rejection
@@ -175,11 +199,19 @@ export class SyncController {
       if (generation !== this.generation) return;
       this.base = remote.revision;
       this.adapter.setOwner(uid);
+      this.adapter.setLastSynced?.(uid, data);
+      this.adapter.setDeletionMarker?.(uid, false);
       if (sameData(data, this.adapter.readLocal())) this.status('synced', 'Synced');
       else this.changed();
     } catch (error) {
       if (generation !== this.generation) return;
-      if (error instanceof CloudConflict) this.conflict(error.remote);
+      if (error instanceof CloudConflict && error.remote && error.remote.mode !== 'device' &&
+          sameData(error.remote.data, this.adapter.readLocal())) {
+        this.base = error.remote.revision;
+        this.adapter.setLastSynced?.(uid, error.remote.data);
+        this.adapter.setDeletionMarker?.(uid, false);
+        this.status('synced', 'Synced');
+      } else if (error instanceof CloudConflict) this.conflict(error.remote);
       else this.fail(error);
     } finally { if (this.pending === task) this.pending = null; }
   }
@@ -198,9 +230,16 @@ export class SyncController {
       const data = validateCloudData(remote?.data ?? {});
       this.adapter.writeLocal(data);
       this.adapter.setOwner(uid);
+      this.adapter.setLastSynced?.(uid, data);
+      this.adapter.setDeletionMarker?.(uid, !Object.keys(data).length);
       this.ready = true;
       if (!remote) await this.save();
-      else this.status('synced', 'Synced · Cloud copy applied');
+      else if (remote.mode === 'device') {
+        const updated = await this.adapter.writeMode(uid, 'cloud', remote.revision);
+        if (generation !== this.generation) return;
+        this.base = updated.revision;
+        this.status('synced', 'Synced');
+      } else this.status('synced', 'Synced · Cloud copy applied');
     } catch (error) { if (generation === this.generation) this.fail(error); }
   }
   async chooseLocal() {
@@ -208,8 +247,54 @@ export class SyncController {
     this.ready = true;
     await this.save();
   }
+  async selectMode(mode) {
+    if (!this.uid || !['cloud', 'device'].includes(mode)) return;
+    if (this.mode === mode) return;
+    const uid = this.uid;
+    const generation = this.generation;
+    clearTimeout(this.timer);
+    this.ready = false;
+    if (this.pending) { try { await this.pending; } catch {} }
+    if (generation !== this.generation) return;
+    this.status('loading', 'Updating your saving choice…');
+    try {
+      const remote = await this.adapter.readCloud(uid);
+      if (generation !== this.generation) return;
+      if (mode === 'cloud' && remote && !sameData(remote.data, this.adapter.readLocal())) {
+        this.mode = 'cloud';
+        return this.conflict(remote, 'Choose which copy to keep before enabling cloud saving.');
+      }
+      const updated = await this.adapter.writeMode(uid, mode, remote?.revision ?? null);
+      if (generation !== this.generation) return;
+      this.mode = mode;
+      this.base = updated.revision;
+      this.adapter.setOwner(uid);
+      if (mode === 'cloud') {
+        this.ready = true;
+        if (!sameData(updated.data, this.adapter.readLocal())) await this.save();
+        else {
+          this.adapter.setLastSynced?.(uid, updated.data);
+          this.adapter.setDeletionMarker?.(uid, false);
+          this.status('synced', 'Synced');
+        }
+      } else this.status('device', 'Saved on this device');
+    } catch (error) {
+      if (generation !== this.generation) return;
+      if (error instanceof CloudConflict) {
+        this.mode = error.remote?.mode || null;
+        this.base = error.remote?.revision ?? null;
+        this.status('error', 'Saving choice changed on another device. Retry connection.');
+      }
+      else this.fail(error);
+    }
+  }
   async clearCloudAndDevice() {
     if (!this.uid) return;
+    if (this.mode === null) {
+      this.adapter.writeLocal({});
+      this.status('choice', 'Choose where this account saves its data.');
+      return;
+    }
     const uid = this.uid;
     const generation = this.generation;
     clearTimeout(this.timer);
@@ -219,13 +304,15 @@ export class SyncController {
     this.status('saving', 'Deleting synced site data…');
     try {
       // An empty versioned document prevents stale devices from silently restoring deleted data.
-      const remote = await this.adapter.writeCloud(uid, {}, undefined);
+      const remote = await this.adapter.clearCloud(uid, this.mode);
       if (generation !== this.generation) throw new Error('Account changed. Please try again.');
       this.adapter.writeLocal({});
       this.base = remote.revision;
-      this.ready = true;
+      this.ready = this.mode === 'cloud';
       this.adapter.setOwner(uid);
-      this.status('synced', 'Site data deleted · Your account is kept');
+      this.adapter.setLastSynced?.(uid, {});
+      this.adapter.setDeletionMarker?.(uid, true);
+      this.status(this.mode === 'device' ? 'device' : 'synced', 'Site data deleted · Your account is kept');
     } catch (error) {
       if (generation === this.generation) this.fail(error);
       throw error;

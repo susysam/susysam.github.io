@@ -15,7 +15,16 @@
 .settings-category .card-body > :first-child { margin-top: 0; }
 .settings-category .card-body > :last-child { margin-bottom: 0; }
 .data-status-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 22px 0; }
+.storage-choice { margin: 20px 0 4px; padding: 18px 20px; border: 1px solid var(--border); border-radius: 14px; background: var(--inputBg, rgba(128,128,128,.06)); }
+.storage-choice[data-needs-choice="true"] { border: 2px solid #e35a69; background: rgba(180,35,50,.13); }
+.storage-choice h3 { margin: 0 0 8px; font-size: 16px; }
+.storage-choice p { margin: 0 0 12px; line-height: 1.5; }
+.storage-choice-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 14px 0; }
+.storage-choice-actions button[aria-pressed="true"] { outline: 2px solid #a35ce0; outline-offset: 2px; }
+.storage-choice .account-feedback:empty, [data-data-conflict-feedback]:empty { display: none; }
+.settings-sidebar [data-category="data"].needs-choice { border-color: #e35a69; color: #ff8190; }
 .data-status-grid > div { padding: 18px 20px; background: var(--inputBg, rgba(128,128,128,.06)); border: 1px solid var(--border); border-radius: 12px; min-width: 0; }
+.data-status-grid[data-single-mode] > div:not(:last-child):not([hidden]) { grid-column: 1 / -1; }
 .data-status-grid > div:last-child { grid-column: 1 / -1; }
 .data-status-grid h3 { font-size: 13px; margin: 0 0 10px; }
 .data-status-grid p { margin: 0 0 6px; }

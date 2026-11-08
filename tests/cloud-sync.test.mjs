@@ -13,14 +13,27 @@ function setup(local = {}, remote = null, owner = null) {
   const device = storage(local);
   let cloud = remote;
   let writes = 0;
+  const synced = new Map();
+  const deleted = new Map();
   const states = [];
   const adapter = {
     readLocal: () => readLocal(device), writeLocal: data => replaceLocal(device, data),
     getOwner: () => owner, setOwner: uid => { owner = uid; },
+    getLastSynced: uid => synced.get(uid), setLastSynced: (uid, data) => synced.set(uid, structuredClone(data)),
+    getDeletionMarker: uid => deleted.get(uid) || false, setDeletionMarker: (uid, value) => deleted.set(uid, value),
     readCloud: async () => structuredClone(cloud),
     writeCloud: async (uid, data, expected) => {
       if (expected !== undefined && (cloud?.revision ?? null) !== expected) throw new CloudConflict(structuredClone(cloud));
-      cloud = { data: structuredClone(data), revision: 'revision-' + (++writes) };
+      cloud = { data: structuredClone(data), revision: 'revision-' + (++writes), mode: 'cloud' };
+      return structuredClone(cloud);
+    },
+    writeMode: async (uid, mode, expected) => {
+      if ((cloud?.revision ?? null) !== expected) throw new CloudConflict(structuredClone(cloud));
+      cloud = { data: structuredClone(cloud?.data ?? {}), revision: 'revision-' + (++writes), mode };
+      return structuredClone(cloud);
+    },
+    clearCloud: async (uid, mode) => {
+      cloud = { data: {}, revision: 'revision-' + (++writes), mode: cloud?.mode || mode };
       return structuredClone(cloud);
     },
     status: state => states.push(state)
@@ -65,12 +78,71 @@ test('applying cloud data rolls back on storage failure without touching credent
   assert.equal(device.getItem('backgroundUrl'), '#ffffff');
   assert.equal(device.getItem('localProfile'), 'keep');
 });
-test('first sign-in creates a cloud copy of local app data', async () => {
+test('first sign-in asks for a saving mode before any upload', async () => {
   const h = setup({ theme: 'dark', localProfile: 'private' });
   await h.controller.connect('alice');
+  assert.equal(h.controller.phase, 'choice');
+  assert.equal(h.cloud(), null);
+  await h.controller.selectMode('cloud');
   assert.deepEqual(h.cloud().data, { theme: 'dark' });
-  assert.equal(h.writes(), 1);
+  assert.equal(h.cloud().mode, 'cloud');
   assert.equal(h.controller.phase, 'synced');
+  h.controller.disconnect();
+});
+
+test('device mode follows the account but never uploads later site changes', async () => {
+  const h = setup({ theme: 'dark' });
+  await h.controller.connect('alice');
+  await h.controller.selectMode('device');
+  assert.equal(h.cloud().mode, 'device');
+  assert.deepEqual(h.cloud().data, {});
+  const writes = h.writes();
+  h.device.setItem('theme', 'light');
+  h.controller.changed();
+  await h.controller.save();
+  assert.equal(h.writes(), writes);
+  assert.equal(h.controller.phase, 'device');
+  await h.controller.connect('alice');
+  assert.equal(h.controller.mode, 'device');
+  assert.equal(h.device.getItem('theme'), 'light');
+  h.controller.disconnect();
+});
+
+test('legacy cloud account stays cloud and pulls later remote changes when local is unchanged', async () => {
+  const h = setup({ theme: 'dark' }, { data: { theme: 'dark' }, revision: 'old' });
+  await h.controller.connect('alice');
+  assert.equal(h.controller.mode, 'cloud');
+  h.setCloud({ data: { theme: 'light' }, revision: 'new', mode: 'cloud' });
+  await h.controller.connect('alice');
+  assert.equal(h.controller.phase, 'synced');
+  assert.equal(h.device.getItem('theme'), 'light');
+  h.controller.disconnect();
+});
+
+test('cloud account automatically uploads device edits when the remote copy has not changed', async () => {
+  const h = setup({ theme: 'dark' }, { data: { theme: 'dark' }, revision: 'old' });
+  await h.controller.connect('alice');
+  h.device.setItem('theme', 'light');
+  await h.controller.connect('alice');
+  assert.equal(h.controller.phase, 'synced');
+  assert.equal(h.cloud().data.theme, 'light');
+  h.controller.disconnect();
+});
+
+test('switching cloud to device keeps the old cloud data as an inactive copy', async () => {
+  const h = setup({ theme: 'dark' }, { data: { theme: 'dark' }, revision: 'old' });
+  await h.controller.connect('alice');
+  await h.controller.selectMode('device');
+  assert.equal(h.cloud().mode, 'device');
+  assert.equal(h.cloud().data.theme, 'dark');
+  h.device.setItem('theme', 'light');
+  await h.controller.selectMode('cloud');
+  assert.equal(h.controller.phase, 'conflict');
+  assert.equal(h.cloud().mode, 'device');
+  await h.controller.chooseCloud();
+  assert.equal(h.controller.phase, 'synced');
+  assert.equal(h.cloud().mode, 'cloud');
+  assert.equal(h.device.getItem('theme'), 'dark');
   h.controller.disconnect();
 });
 test('different copies pause until the user explicitly selects cloud', async () => {
@@ -124,16 +196,18 @@ test('device edits made while loading a selected cloud copy are preserved', asyn
   h.controller.disconnect();
 });
 test('offline writes retain local data and do not claim to be synced', async () => {
-  const h = setup({ theme: 'dark' });
+  const h = setup({ theme: 'dark' }, { data: { theme: 'dark' }, revision: 'old' });
   h.adapter.writeCloud = async () => { throw new Error('Offline'); };
   await h.controller.connect('alice');
+  h.device.setItem('theme', 'light');
+  await h.controller.save();
   assert.equal(h.controller.phase, 'error');
-  assert.equal(h.device.getItem('theme'), 'dark');
-  assert.equal(h.cloud(), null);
+  assert.equal(h.device.getItem('theme'), 'light');
+  assert.equal(h.cloud().data.theme, 'dark');
   h.controller.disconnect();
 });
 test('switching accounts never automatically uploads the previous account data', async () => {
-  const h = setup({ theme: 'dark' }, null, 'alice');
+  const h = setup({ theme: 'dark' }, { data: { theme: 'light' }, revision: 'old' }, 'alice');
   await h.controller.connect('bob');
   assert.equal(h.controller.phase, 'conflict');
   assert.equal(h.writes(), 0);
@@ -175,7 +249,7 @@ test('delete all clears both copies and leaves a marker that blocks stale restor
 test('failed cloud deletion does not clear the local copy', async () => {
   const h = setup({ theme: 'dark' }, { data: { theme: 'dark' }, revision: 'old' });
   await h.controller.connect('alice');
-  h.adapter.writeCloud = async () => { throw new Error('Offline'); };
+  h.adapter.clearCloud = async () => { throw new Error('Offline'); };
   await assert.rejects(h.controller.clearCloudAndDevice(), /Offline/);
   assert.equal(h.device.getItem('theme'), 'dark');
   h.controller.disconnect();
@@ -196,11 +270,13 @@ test('a second save waits for current edits and does not leak an offline rejecti
 });
 
 test('a synchronous adapter failure keeps local data and reports an error', async () => {
-  const h = setup({ theme: 'dark' });
+  const h = setup({ theme: 'dark' }, { data: { theme: 'dark' }, revision: 'old' });
   h.adapter.writeCloud = () => { throw new Error('Unavailable'); };
   await h.controller.connect('alice');
+  h.device.setItem('theme', 'light');
+  await h.controller.save();
   assert.equal(h.controller.phase, 'error');
-  assert.equal(h.device.getItem('theme'), 'dark');
+  assert.equal(h.device.getItem('theme'), 'light');
   h.controller.disconnect();
 });
 

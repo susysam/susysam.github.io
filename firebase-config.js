@@ -1,6 +1,6 @@
 import { friendlyError } from './account-errors.js';
 export { friendlyError } from './account-errors.js';
-import { DATA_KEYS, SyncController, CloudConflict, readLocal, replaceLocal, validateCloudData } from './cloud-sync-core.js';
+import { DATA_KEYS, SyncController, CloudConflict, readLocal, replaceLocal, validateCloudData, canonical } from './cloud-sync-core.js';
 
 // Firebase web configuration is public. Firestore Security Rules enforce access.
 export const firebaseConfig = {
@@ -15,6 +15,8 @@ export const firebaseConfig = {
 export let app, auth, firestore;
 let authApi, dbApi, controller, suppressChanges = false;
 const ownerKey = 'susysamCloudOwner';
+const lastSyncedKey = uid => `susysamLastSynced:${uid}`;
+const deletedKey = uid => `susysamCloudDeleted:${uid}`;
 const state = { phase: 'loading', message: 'Connecting to account service…', user: null, available: false };
 const listeners = new Set();
 const notify = () => listeners.forEach(listener => listener({ ...state }));
@@ -23,7 +25,8 @@ function unpack(snapshot) {
   if (!snapshot.exists()) return null;
   const value = snapshot.data();
   if (value.schemaVersion !== 1 || typeof value.revision !== 'string') throw new Error('Cloud data has an unsupported format. Export your device data before changing the cloud setup.');
-  return { data: validateCloudData(value.data), revision: value.revision };
+  if (value.mode !== undefined && !['cloud', 'device'].includes(value.mode)) throw new Error('Cloud saving mode has an unsupported format.');
+  return { data: validateCloudData(value.data), revision: value.revision, mode: value.mode || 'cloud' };
 }
 
 function assertUser(uid) {
@@ -56,9 +59,14 @@ window.siteCloud = {
   },
   async useCloud() { await controller?.chooseCloud(); },
   async useDevice() { await controller?.chooseLocal(); },
+  async selectCloud() { await controller?.selectMode('cloud'); },
+  async selectDevice() { await controller?.selectMode('device'); },
   async syncNow() { await controller?.save(); },
   async beforeDeleteAll() {
     if (state.phase === 'loading' && !state.available) throw new Error('Wait for the account check to finish before deleting all data.');
+    if (state.user && controller.mode === null && state.phase !== 'choice') {
+      throw new Error('The account saving mode is not ready. Retry the connection before deleting all data.');
+    }
     if (state.user) await controller.clearCloudAndDevice();
   }
 };
@@ -92,6 +100,24 @@ async function initialize() {
       },
       getOwner: () => window.siteStorage.getItem(ownerKey),
       setOwner: uid => window.siteStorage.setItem(ownerKey, uid),
+      getLastSynced(uid) {
+        try {
+          const saved = localStorage.getItem(lastSyncedKey(uid));
+          return saved ? validateCloudData(JSON.parse(saved)) : null;
+        } catch { return null; }
+      },
+      setLastSynced(uid, data) {
+        try { localStorage.setItem(lastSyncedKey(uid), canonical(data)); }
+        catch { /* Sync still works; ambiguous future differences will ask before replacing data. */ }
+      },
+      getDeletionMarker(uid) {
+        try { return localStorage.getItem(deletedKey(uid)) === 'true'; }
+        catch { return false; }
+      },
+      setDeletionMarker(uid, deleted) {
+        try { localStorage.setItem(deletedKey(uid), String(deleted)); }
+        catch { /* A missing marker causes a conflict instead of an automatic overwrite. */ }
+      },
       async readCloud(uid) {
         assertUser(uid);
         return unpack(await dbApi.getDocFromServer(dbApi.doc(firestore, 'users', uid, 'data', 'settings')));
@@ -105,9 +131,36 @@ async function initialize() {
           const current = unpack(await transaction.get(reference));
           assertUser(uid);
           if (expectedRevision !== undefined && (current?.revision ?? null) !== expectedRevision) throw new CloudConflict(current);
-          transaction.set(reference, { schemaVersion: 1, data, revision, updatedAt: dbApi.serverTimestamp() });
+          transaction.set(reference, { schemaVersion: 1, mode: 'cloud', data, revision, updatedAt: dbApi.serverTimestamp() });
         }, { maxAttempts: 3 });
-        return { data, revision };
+        return { data, revision, mode: 'cloud' };
+      },
+      async writeMode(uid, mode, expectedRevision) {
+        assertUser(uid);
+        const reference = dbApi.doc(firestore, 'users', uid, 'data', 'settings');
+        const revision = crypto.randomUUID();
+        let data;
+        await dbApi.runTransaction(firestore, async transaction => {
+          const current = unpack(await transaction.get(reference));
+          assertUser(uid);
+          if ((current?.revision ?? null) !== expectedRevision) throw new CloudConflict(current);
+          data = current?.data ?? {};
+          transaction.set(reference, { schemaVersion: 1, mode, data, revision, updatedAt: dbApi.serverTimestamp() });
+        }, { maxAttempts: 3 });
+        return { data, revision, mode };
+      },
+      async clearCloud(uid, mode) {
+        assertUser(uid);
+        const reference = dbApi.doc(firestore, 'users', uid, 'data', 'settings');
+        const revision = crypto.randomUUID();
+        let effectiveMode = mode || 'cloud';
+        await dbApi.runTransaction(firestore, async transaction => {
+          const current = unpack(await transaction.get(reference));
+          assertUser(uid);
+          effectiveMode = current?.mode || effectiveMode;
+          transaction.set(reference, { schemaVersion: 1, mode: effectiveMode, data: {}, revision, updatedAt: dbApi.serverTimestamp() });
+        }, { maxAttempts: 3 });
+        return { data: {}, revision, mode: effectiveMode };
       },
       errorMessage: friendlyError,
       status(update) { Object.assign(state, update); notify(); }
@@ -125,10 +178,10 @@ async function initialize() {
     window.addEventListener('storage', event => {
       if (event.key === null || DATA_KEYS.includes(event.key)) controller.changed();
     });
-    window.addEventListener('online', () => { if (auth.currentUser && !controller.pending) void controller.connect(auth.currentUser.uid); });
+    window.addEventListener('online', () => { if (auth.currentUser && !controller.pending && !controller.timer) void controller.connect(auth.currentUser.uid); });
     let lastFocusCheck = Date.now();
     window.addEventListener('focus', () => {
-      if (auth.currentUser && !controller.pending && Date.now() - lastFocusCheck > 30000) {
+      if (auth.currentUser && !controller.pending && !controller.timer && Date.now() - lastFocusCheck > 30000) {
         lastFocusCheck = Date.now();
         void controller.connect(auth.currentUser.uid);
       }

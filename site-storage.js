@@ -122,15 +122,17 @@
       }
       .navbar.icons-on a.nav-feature-link {
         padding: 8px !important;
-        width: 46px !important;
-        height: 46px !important;
-        min-width: 46px !important;
+        width: 60px !important;
+        height: 60px !important;
+        min-width: 60px !important;
         border-radius: 12px !important;
+        overflow: hidden;
       }
       .navbar .nav-link-icon {
-        width: 28px;
-        height: 28px;
+        width: 46px;
+        height: 46px;
         object-fit: contain;
+        transform: scale(2.1);
         display: none !important;
         pointer-events: none;
       }

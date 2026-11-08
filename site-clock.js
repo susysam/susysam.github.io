@@ -34,7 +34,7 @@ selectors.forEach(select => select.addEventListener('change', () => {
   const saved = window.siteStorage.setItem('timeZone', zone);
   tick();
   document.querySelectorAll('[data-timezone-feedback]').forEach(element => {
-    element.textContent = saved ? 'Timezone saved on this device. Cloud saving follows your sync status.' :
+    element.textContent = saved ? 'Timezone saved.' :
       'Timezone changed for this page. Device storage is unavailable.';
   });
 }));

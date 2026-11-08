@@ -1,0 +1,47 @@
+SUSYSAM site handoff for Gemini Argon 4
+=======================================
+
+What went wrong with the red GitHub Actions runs
+--------------------------------------------------
+The GitHub Pages workflow builds a dist/ folder from an explicit file list in
+scripts/build-site.mjs. Several recent edits were made directly on GitHub, but
+the build list did not include images/games.png, images/tab.png, or
+images/movies.png. The validation step failed before deployment, so the
+newer commits existed in the repository but did not reach the public Pages
+site. A presentation test also used an older site-storage mock and failed.
+This explains why changes could appear locally or in GitHub source while the
+live site stayed behind. The Firebase Hosting deployment is a separate mirror;
+updating one host does not automatically update the other.
+
+What was fixed
+--------------
+Commit 1b1f2d9 added the three image files to the build list, updated the
+outdated test mock, and restored manual choice when local and cloud data
+differ. The new GitHub Pages run passed and both public hosts were checked.
+Older failed Actions runs stay red in history; they cannot be retroactively
+changed. Check the newest run for current deployment status.
+One more piece was missed: start27.html contained a MutationObserver that
+clicked "Use this device's data" whenever the status looked bad. That could
+overwrite a newer cloud copy without the person's consent. It was removed;
+automatic uploads now run only while Cloud Sync is the selected mode and the
+copies are not in conflict.
+
+Current saving model
+--------------------
+Each signed-in account chooses one active mode: Cloud Sync or Device storage.
+The choice is saved with the account in Firestore. In Device storage mode,
+only the choice is stored online; site data remains on each device. Existing
+Firestore documents without a mode are treated as Cloud Sync accounts.
+Cloud Sync uploads changes automatically. When two genuinely different copies
+exist, a person must choose one so data is not silently lost. Switching to
+Device storage leaves the old cloud data inactive until deliberately deleted.
+Changing back to Cloud Sync may ask which copy to keep.
+
+If you edit or deploy this later
+-------------------------------
+Run the script check, unit tests, browser checks, change verification, and
+site build before publishing. Keep scripts/build-site.mjs updated whenever
+new public assets are added. Publish firestore.rules before shipping web code
+that writes new Firestore fields. Push the verified commit to main for GitHub
+Pages; deploy Firebase Hosting separately if that mirror is still wanted.
+Never replace a differing cloud or device copy without a deliberate choice.

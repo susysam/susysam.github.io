@@ -124,16 +124,18 @@
     /* ── Icon Mode (On = Images, Off = Words) ── */
     .navbar.icons-on a.nav-feature-link {
       padding: 8px !important;
-      width: 46px !important;
-      height: 46px !important;
-      min-width: 46px !important;
+      width: 60px !important;
+      height: 60px !important;
+      min-width: 60px !important;
       border-radius: 12px !important;
+      overflow: hidden;
     }
 
     .nav-link-icon {
-      width: 28px;
-      height: 28px;
+      width: 46px;
+      height: 46px;
       object-fit: contain;
+      transform: scale(2.1);
       display: none !important;
       pointer-events: none;
     }
@@ -269,11 +271,11 @@
     </div>
   </main>
 
-  <footer class="page-sync-footer" id="syncFooter" title="Click to sync your device data to the cloud">
+  <footer class="page-sync-footer" id="syncFooter">
     <p data-cloud-indicator role="status">Checking cloud saving…</p>
   </footer>
 
-  <!-- Hidden account management mount so start27.html can auto-resolve "Cloud saving needs attention" directly -->
+  <!-- Account controls stay available to the shared account UI. -->
   <div data-account-panel="manage" id="hiddenAccountPanel" hidden style="display:none !important;"></div>
 
   <script>
@@ -335,40 +337,6 @@
       }
     });
 
-    // Auto-resolve "Cloud saving needs attention" by pushing this device's data
-    function tryAutoResolveCloudConflict(force = false) {
-      const autoSyncEnabled = getSetting("autoCloudSync", "on") !== "off";
-      if (!autoSyncEnabled && !force) return false;
-
-      const buttons = document.querySelectorAll('[data-account-panel="manage"] button, button');
-      for (const btn of buttons) {
-        const text = (btn.textContent || "").toLowerCase();
-        if (text.includes("this device") && !btn.disabled) {
-          btn.click();
-          return true;
-        }
-      }
-      return false;
-    }
-
-    // Watch for "Cloud saving needs attention" or conflict buttons appearing
-    const syncObserver = new MutationObserver(() => {
-      const indicator = document.querySelector("[data-cloud-indicator]");
-      const text = indicator ? (indicator.textContent || "").toLowerCase() : "";
-      if (text.includes("needs attention") || text.includes("not synced") || text.includes("differ")) {
-        tryAutoResolveCloudConflict(false);
-      }
-    });
-    syncObserver.observe(document.body, { childList: true, subtree: true, characterData: true });
-
-    // Also allow clicking the bottom sync bar/button to immediately force-sync device data
-    document.getElementById("syncFooter").addEventListener("click", (e) => {
-      const resolved = tryAutoResolveCloudConflict(true);
-      if (resolved) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-    }, true);
   </script>
 </body>
 </html>
