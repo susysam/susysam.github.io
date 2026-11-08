@@ -14,7 +14,7 @@
       --card: rgba(255,255,255,.75);
       --border: rgba(0,0,0,.10);
       --shadow: 0 18px 45px rgba(0,0,0,.12);
-      --accent: #6C0BA9; 
+      --accent: #6C0BA9;
       --accent2: #4F0672;
       --good: #14b86a;
       --warn: #ffb020;
@@ -198,6 +198,7 @@
       gap: 6px;
       transition: all 0.2s ease;
       text-align: left;
+      position: relative;
     }
     .preset-chip:hover {
       transform: translateY(-2px);
@@ -226,7 +227,6 @@
     .section-label { padding-top: 18px; }
     .section-label .label, .custom-preset-form label { font-size: 14px; font-weight: 700; }
     .section-label .hint, .card-body > .hint { color: var(--muted); font-size: 12px; margin-top: 4px; }
-    .preset-chip { position: relative; }
     .preset-chip.custom { padding-right: 36px; }
     .preset-remove {
       position: absolute;
@@ -312,6 +312,14 @@
     .toggle input:checked + .switch::after{
       left: 26px;
       background: #fff;
+    }
+
+    .toggle-state-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      min-width: 54px;
+      text-align: right;
     }
 
     .text-input{
@@ -420,7 +428,7 @@
   <link rel="stylesheet" href="/account-ui.css">
   <script type="module" src="/firebase-config.js"></script>
   <script type="module" src="/account-ui.js"></script>
-<link rel="stylesheet" href="/settings-layout.css">
+  <link rel="stylesheet" href="/settings-layout.css">
   <script type="module" src="/settings-navigation.js"></script>
   <script type="module" src="/site-clock.js"></script>
 </head>
@@ -446,14 +454,26 @@
 <a id="category-appearance" href="#appearance" data-category="appearance">Appearance</a>
 <a id="category-time" href="#time" data-category="time">Time &amp; Display</a>
 <a id="category-data" href="#data" data-category="data">Your Data</a>
-</div></nav><div class="settings-content"><div id="settings-general" data-settings-panel="general" class="settings-category" role="region" aria-labelledby="category-general" tabindex="-1">      <section class="card">
+</div></nav><div class="settings-content"><div id="settings-general" data-settings-panel="general" class="settings-category" role="region" aria-labelledby="category-general" tabindex="-1">
+      <section class="card">
         <div class="card-head">
           <div>
-            <h2>Performance mode</h2>
-            <div class="sub">Reduce visual effects</div>
+            <h2>Navigation &amp; Performance</h2>
+            <div class="sub">Customize buttons and visual effects</div>
           </div>
         </div>
         <div class="card-body">
+          <div class="row">
+            <div class="left">
+              <p class="label">Home navigation style</p>
+              <p class="hint">On = Images (icons for Games + Apps, Tabs, and Movie + TV). Off = Words.</p>
+            </div>
+            <label class="toggle">
+              <span class="toggle-state-label" id="navIconsStateLabel">Images</span>
+              <input type="checkbox" id="navIconsToggle" aria-label="Home navigation style: On for Images, Off for Words" checked>
+              <span class="switch" aria-hidden="true"></span>
+            </label>
+          </div>
           <div class="row">
             <div class="left">
               <p class="label">Performance mode</p>
@@ -556,7 +576,7 @@
           <div class="row">
             <div class="left">
               <p class="label">Reset appearance settings</p>
-              <p class="hint">Clears colors, image, custom presets, and performance mode in this browser.</p>
+              <p class="hint">Clears colors, image, custom presets, navigation icon preference, and performance mode in this browser.</p>
             </div>
             <button class="btn-danger" id="resetAllBtn" type="button">Reset</button>
           </div>
@@ -610,11 +630,14 @@
     const HOME_URL = "/start27.html";
     const SETTINGS_URL = "/settings.html";
     const customPresetKey = "customBackgroundPresets";
+    const navIconsKey = "navIcons";
     const toastEl = document.getElementById("toast");
     const bgUrlInput = document.getElementById("bgUrlInput");
     const bgCurrent = document.getElementById("bgCurrent");
     const darkToggle = document.getElementById("darkModeToggle");
     const performanceToggle = document.getElementById("performanceToggle");
+    const navIconsToggle = document.getElementById("navIconsToggle");
+    const navIconsStateLabel = document.getElementById("navIconsStateLabel");
     const presetGrid = document.getElementById("presetsGrid");
 
     function toast(message) {
@@ -622,6 +645,24 @@
       toastEl.classList.add("show");
       clearTimeout(window.__toastT);
       window.__toastT = setTimeout(() => toastEl.classList.remove("show"), 1600);
+    }
+
+    // Debounced Cloud Sync Stabilizer
+    let syncTimer = null;
+    function triggerStableSync(changedKey) {
+      clearTimeout(syncTimer);
+      syncTimer = setTimeout(() => {
+        try {
+          if (window.siteStorage && typeof window.siteStorage.sync === "function") {
+            window.siteStorage.sync();
+          } else if (typeof window.syncSiteData === "function") {
+            window.syncSiteData();
+          }
+          window.dispatchEvent(new CustomEvent("site-storage-updated", { detail: { key: changedKey } }));
+        } catch (err) {
+          console.warn("Cloud sync deferred:", err);
+        }
+      }, 250);
     }
 
     function readCustomPresets() {
@@ -641,6 +682,7 @@
 
     function saveCustomPresets() {
       siteStorage.setItem(customPresetKey, JSON.stringify(customPresets));
+      triggerStableSync(customPresetKey);
     }
 
     function refreshUI() {
@@ -657,15 +699,24 @@
       bgUrlInput.value = savedBackground && !savedBackground.startsWith("#") ? savedBackground : "";
       darkToggle.checked = document.documentElement.classList.contains("dark");
       performanceToggle.checked = siteStorage.getItem("performanceMode") === "on";
+
+      // On = Images ("on" or unset), Off = Words ("off")
+      const navIconsMode = siteStorage.getItem(navIconsKey) || "on";
+      const imagesOn = navIconsMode !== "off";
+      navIconsToggle.checked = imagesOn;
+      if (navIconsStateLabel) {
+        navIconsStateLabel.textContent = imagesOn ? "Images" : "Words";
+      }
     }
 
     function selectPreset(color) {
       siteStorage.setItem("backgroundUrl", color);
       document.body.style.backgroundImage = "";
-      window.applySiteAppearance();
+      if (typeof window.applySiteAppearance === "function") window.applySiteAppearance();
       siteStorage.setItem("theme",
         document.documentElement.classList.contains("dark") ? "dark" : "light");
       refreshUI();
+      triggerStableSync("backgroundUrl");
       toast("Color applied across the site");
     }
 
@@ -695,7 +746,7 @@
           if ((siteStorage.getItem("backgroundUrl") || "").toLowerCase() === item.color.toLowerCase()) {
             siteStorage.setItem("backgroundUrl", "#f6f7fb");
             siteStorage.setItem("theme", "light");
-            window.applySiteAppearance();
+            if (typeof window.applySiteAppearance === "function") window.applySiteAppearance();
           }
           renderCustomPresets();
           refreshUI();
@@ -733,11 +784,19 @@
       if (document.querySelector('.preset-chip[data-val="' + color + '"]')) {
         return toast("That color is already saved");
       }
-      customPresets.push({ id: crypto.randomUUID(), name, color });
+      customPresets.push({ id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()), name, color });
       saveCustomPresets();
       renderCustomPresets();
       selectPreset(color);
       nameInput.value = "";
+    });
+
+    navIconsToggle.addEventListener("change", () => {
+      const mode = navIconsToggle.checked ? "on" : "off";
+      siteStorage.setItem(navIconsKey, mode);
+      refreshUI();
+      triggerStableSync(navIconsKey);
+      toast(navIconsToggle.checked ? "Navigation set to Images" : "Navigation set to Words");
     });
 
     darkToggle.addEventListener("change", () => {
@@ -745,8 +804,9 @@
         siteStorage.removeItem("backgroundUrl");
       }
       siteStorage.setItem("theme", darkToggle.checked ? "dark" : "light");
-      window.applySiteAppearance();
+      if (typeof window.applySiteAppearance === "function") window.applySiteAppearance();
       refreshUI();
+      triggerStableSync("theme");
       toast("Theme saved");
     });
 
@@ -769,9 +829,10 @@
       const url = parseImageUrl(bgUrlInput.value.trim());
       if (!url) return toast("Enter a valid image URL");
       siteStorage.setItem("backgroundUrl", url);
-      window.applySiteAppearance();
+      if (typeof window.applySiteAppearance === "function") window.applySiteAppearance();
       previewImage(url);
       refreshUI();
+      triggerStableSync("backgroundUrl");
       toast("Home background saved");
     });
     document.getElementById("previewBgBtn").addEventListener("click", () => {
@@ -784,33 +845,37 @@
       const saved = siteStorage.getItem("backgroundUrl") || "";
       if (saved && !saved.startsWith("#")) siteStorage.removeItem("backgroundUrl");
       previewImage("");
-      window.applySiteAppearance();
+      if (typeof window.applySiteAppearance === "function") window.applySiteAppearance();
       refreshUI();
+      triggerStableSync("backgroundUrl");
       toast("Home image removed");
     });
 
     performanceToggle.addEventListener("change", () => {
       siteStorage.setItem("performanceMode", performanceToggle.checked ? "on" : "off");
-      window.applySiteAppearance();
+      if (typeof window.applySiteAppearance === "function") window.applySiteAppearance();
+      triggerStableSync("performanceMode");
       toast(performanceToggle.checked ? "Performance mode on" : "Performance mode off");
     });
 
     document.getElementById("resetAllBtn").addEventListener("click", () => {
       if (!confirm("Reset appearance settings in this browser?")) return;
-      ["theme", "backgroundUrl", customPresetKey, "performanceMode"].forEach(
+      ["theme", "backgroundUrl", customPresetKey, "performanceMode", navIconsKey].forEach(
         key => siteStorage.removeItem(key)
       );
       customPresets = [];
       previewImage("");
-      window.applySiteAppearance();
+      if (typeof window.applySiteAppearance === "function") window.applySiteAppearance();
       renderCustomPresets();
       refreshUI();
+      triggerStableSync("reset");
       toast("Appearance reset");
     });
 
     document.getElementById("homeButton").addEventListener("click", () => {
       location.href = HOME_URL;
     });
+
     function openSettingsInBlank(features) {
       const popup = window.open("about:blank", "_blank", features);
       if (!popup) {
@@ -841,8 +906,33 @@
         customPresets = readCustomPresets();
         renderCustomPresets();
       }
-      if (event.key === null || ["theme", "backgroundUrl", "performanceMode"].includes(event.key)) refreshUI();
+      if (event.key === null || ["theme", "backgroundUrl", "performanceMode", navIconsKey].includes(event.key)) {
+        refreshUI();
+      }
     });
+
+    // Re-sync automatically when connection returns
+    window.addEventListener("online", () => triggerStableSync("reconnect"));
+
+    // Status fallback so device/cloud indicators never stay stuck on "Checking..."
+    setTimeout(() => {
+      const devStatus = document.querySelector("[data-device-status]");
+      if (devStatus && devStatus.textContent.includes("Checking")) {
+        try {
+          localStorage.setItem("__storage_test", "1");
+          localStorage.removeItem("__storage_test");
+          devStatus.textContent = "Active and saving locally";
+        } catch {
+          devStatus.textContent = "Limited (session only)";
+        }
+      }
+      const cloudStatus = document.querySelector("[data-cloud-indicator]");
+      if (cloudStatus && cloudStatus.textContent.includes("Checking")) {
+        cloudStatus.textContent = navigator.onLine
+          ? "Ready · Sign in to sync across devices"
+          : "Offline · Changes saved on this device";
+      }
+    }, 3500);
 
     renderCustomPresets();
     const savedImage = siteStorage.getItem("backgroundUrl") || "";
