@@ -175,6 +175,41 @@ test('concurrent remote edit is not overwritten by a stale device', async () => 
   assert.equal(h.device.getItem('theme'), 'dark');
   h.controller.disconnect();
 });
+
+test('reconnecting uploads a deliberate local removal of the last setting', async () => {
+  const h = setup({ theme: 'dark' }, { data: { theme: 'dark' }, revision: 'old' });
+  await h.controller.connect('alice');
+  h.device.removeItem('theme');
+  await h.controller.connect('alice');
+  assert.deepEqual(h.cloud().data, {});
+  assert.deepEqual(readLocal(h.device), {});
+  assert.equal(h.controller.phase, 'synced');
+});
+
+test('clearing a signed-out device restores the cloud copy at the next sign-in', async () => {
+  const h = setup({ theme: 'dark' }, { data: { theme: 'dark' }, revision: 'old' });
+  await h.controller.connect('alice');
+  h.controller.disconnect();
+  h.device.removeItem('theme');
+  h.adapter.setOwner(null);
+  await h.controller.connect('alice');
+  assert.equal(h.device.getItem('theme'), 'dark');
+  assert.equal(h.writes(), 0);
+});
+
+test('a stale upload respects the device mode selected on another browser', async () => {
+  const h = setup({ theme: 'dark' }, { data: { theme: 'dark' }, revision: 'old' });
+  await h.controller.connect('alice');
+  h.device.setItem('theme', 'light');
+  h.setCloud({ data: { theme: 'dark' }, revision: 'new', mode: 'device' });
+  await h.controller.save();
+  assert.equal(h.controller.phase, 'device');
+  assert.equal(h.controller.mode, 'device');
+  assert.equal(h.device.getItem('theme'), 'light');
+  await h.controller.chooseLocal();
+  assert.equal(h.cloud().mode, 'device');
+  assert.equal(h.writes(), 0);
+});
 test('newer cloud data requires another choice even after clicking use cloud', async () => {
   const h = setup({ theme: 'light' }, { data: { theme: 'dark' }, revision: 'old' });
   await h.controller.connect('alice');
@@ -232,6 +267,7 @@ test('two-second debounce batches local changes into one upload', async () => {
   await new Promise(resolve => setTimeout(resolve, 2200));
   assert.equal(h.writes(), 1);
   assert(sameData(h.cloud().data, readLocal(h.device)));
+  assert.equal(h.controller.timer, null, 'reconnect and focus checks can run after a scheduled save');
   h.controller.disconnect();
 });
 test('delete all clears both copies and leaves a marker that blocks stale restoration', async () => {

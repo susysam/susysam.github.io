@@ -104,7 +104,7 @@ export class SyncController {
     this.adapter.status({ phase, message, signedIn: !!this.uid, mode: this.mode });
   }
   disconnect(silent = false) {
-    clearTimeout(this.timer);
+    this.cancelScheduledSave();
     this.generation++;
     this.uid = null;
     this.ready = false;
@@ -146,9 +146,9 @@ export class SyncController {
       if (owner && owner !== uid && Object.keys(local).length) {
         return this.conflict(remote, 'This device has data from another account. Choose a copy before linking it to this account.');
       }
-      const lastSynced = this.adapter.getLastSynced?.(uid);
-      if (remote && !sameData(remote.data, local) &&
-          (!Object.keys(local).length || (lastSynced && sameData(lastSynced, local)))) {
+      const lastSynced = owner === uid ? this.adapter.getLastSynced?.(uid) : null;
+      const localIsUnchanged = lastSynced ? sameData(lastSynced, local) : !Object.keys(local).length;
+      if (remote && !sameData(remote.data, local) && localIsUnchanged) {
         this.adapter.writeLocal(remote.data);
         this.adapter.setLastSynced?.(uid, remote.data);
         this.adapter.setDeletionMarker?.(uid, !Object.keys(remote.data).length);
@@ -156,7 +156,7 @@ export class SyncController {
         this.ready = true;
         return this.status('synced', 'Synced');
       }
-      if (remote && lastSynced && owner === uid && !this.adapter.getDeletionMarker?.(uid) &&
+      if (remote && lastSynced && !this.adapter.getDeletionMarker?.(uid) &&
           sameData(lastSynced, remote.data) && !sameData(remote.data, local)) {
         this.ready = true;
         await this.save();
@@ -171,12 +171,16 @@ export class SyncController {
   }
   changed() {
     if (!this.uid || this.mode !== 'cloud' || !this.ready) return;
-    clearTimeout(this.timer);
+    this.cancelScheduledSave();
     this.status('pending', 'Cloud changes pending…');
     this.timer = setTimeout(() => { void this.save(); }, 2000);
   }
-  async save() {
+  cancelScheduledSave() {
     clearTimeout(this.timer);
+    this.timer = null;
+  }
+  async save() {
+    this.cancelScheduledSave();
     if (!this.uid || this.mode !== 'cloud' || !this.ready) return;
     if (this.pending) {
       const generation = this.generation;
@@ -205,7 +209,12 @@ export class SyncController {
       else this.changed();
     } catch (error) {
       if (generation !== this.generation) return;
-      if (error instanceof CloudConflict && error.remote && error.remote.mode !== 'device' &&
+      if (error instanceof CloudConflict && error.remote?.mode === 'device') {
+        this.mode = 'device';
+        this.base = error.remote.revision;
+        this.ready = false;
+        this.status('device', 'Saved on this device');
+      } else if (error instanceof CloudConflict && error.remote &&
           sameData(error.remote.data, this.adapter.readLocal())) {
         this.base = error.remote.revision;
         this.adapter.setLastSynced?.(uid, error.remote.data);
@@ -252,7 +261,7 @@ export class SyncController {
     if (this.mode === mode) return;
     const uid = this.uid;
     const generation = this.generation;
-    clearTimeout(this.timer);
+    this.cancelScheduledSave();
     this.ready = false;
     if (this.pending) { try { await this.pending; } catch {} }
     if (generation !== this.generation) return;
@@ -297,7 +306,7 @@ export class SyncController {
     }
     const uid = this.uid;
     const generation = this.generation;
-    clearTimeout(this.timer);
+    this.cancelScheduledSave();
     this.ready = false;
     if (this.pending) { try { await this.pending; } catch {} }
     if (generation !== this.generation) throw new Error('Account changed. Please try again.');
@@ -308,6 +317,7 @@ export class SyncController {
       if (generation !== this.generation) throw new Error('Account changed. Please try again.');
       this.adapter.writeLocal({});
       this.base = remote.revision;
+      this.mode = remote.mode || this.mode;
       this.ready = this.mode === 'cloud';
       this.adapter.setOwner(uid);
       this.adapter.setLastSynced?.(uid, {});

@@ -87,9 +87,10 @@ function check(value, message) { assert(value, message); checks++; }
   }), 'logout follows Movie + TV and the settings gear');
   check(await page.locator('.navbar.icons-on .nav-feature-link').evaluateAll(links=>links.length===3 && links.every(link=>{
     const image=link.querySelector('img');
-    return image?.complete && image.naturalWidth>0 && image.getBoundingClientRect().width===60 &&
-      getComputedStyle(link).backgroundColor==='rgba(0, 0, 0, 0)';
-  })), 'navigation icons fill their buttons without extra backgrounds');
+    const style=getComputedStyle(link);
+    return image?.complete && image.naturalWidth>0 && link.clientWidth===60 && link.clientHeight===60 &&
+      style.borderRadius==='12px' && style.overflow==='hidden' && style.backgroundColor==='rgba(0, 0, 0, 0)';
+  })), 'navigation icons share one rounded square without extra backgrounds');
   check(await page.locator('.page-sync-footer').isHidden(), 'cloud account has no home sync message');
   check(await page.locator('[data-account-logout]').evaluate(el=>getComputedStyle(el).backgroundColor) !== await page.locator('.navbar a').first().evaluate(el=>getComputedStyle(el).backgroundColor), 'logout color differs from navigation');
   check(await page.locator('[data-timezone-select]').count() === 0, 'Home clock is display-only');
