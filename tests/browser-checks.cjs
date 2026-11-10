@@ -85,7 +85,11 @@ function check(value, message) { assert(value, message); checks++; }
     const logout=nav.querySelector('[data-account-logout]');
     return movie?.nextElementSibling===gear && gear?.nextElementSibling===logout;
   }), 'logout follows Movie + TV and the settings gear');
-  check(await page.locator('.nav-link-icon').first().evaluate(img=>img.getBoundingClientRect().width >= 90), 'navigation artwork is enlarged within its button');
+  check(await page.locator('.navbar.icons-on .nav-feature-link').evaluateAll(links=>links.length===3 && links.every(link=>{
+    const image=link.querySelector('img');
+    return image?.complete && image.naturalWidth>0 && image.getBoundingClientRect().width===60 &&
+      getComputedStyle(link).backgroundColor==='rgba(0, 0, 0, 0)';
+  })), 'navigation icons fill their buttons without extra backgrounds');
   check(await page.locator('.page-sync-footer').isHidden(), 'cloud account has no home sync message');
   check(await page.locator('[data-account-logout]').evaluate(el=>getComputedStyle(el).backgroundColor) !== await page.locator('.navbar a').first().evaluate(el=>getComputedStyle(el).backgroundColor), 'logout color differs from navigation');
   check(await page.locator('[data-timezone-select]').count() === 0, 'Home clock is display-only');

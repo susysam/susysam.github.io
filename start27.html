@@ -123,19 +123,23 @@
 
     /* ── Icon Mode (On = Images, Off = Words) ── */
     .navbar.icons-on a.nav-feature-link {
-      padding: 8px !important;
+      padding: 0 !important;
       width: 60px !important;
       height: 60px !important;
       min-width: 60px !important;
       border-radius: 12px !important;
       overflow: hidden;
+      background: transparent !important;
+    }
+
+    .navbar.icons-on a.nav-feature-link:hover {
+      box-shadow: none;
     }
 
     .nav-link-icon {
-      width: 46px;
-      height: 46px;
+      width: 60px;
+      height: 60px;
       object-fit: contain;
-      transform: scale(2.1);
       display: none !important;
       pointer-events: none;
     }
